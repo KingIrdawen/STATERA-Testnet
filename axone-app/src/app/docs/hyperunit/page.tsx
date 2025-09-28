@@ -1,5 +1,6 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Link from 'next/link';
 
 export default function HyperunitPage() {
   return (
@@ -118,7 +119,7 @@ export default function HyperunitPage() {
             {/* Breadcrumb */}
             <nav className="mb-8">
               <ol className="flex items-center space-x-2 text-sm text-gray-400">
-                <li><a href="/" className="hover:text-white transition-colors">Axone</a></li>
+                <li><Link href="/" className="hover:text-white transition-colors">Axone</Link></li>
                 <li className="text-gray-600">/</li>
                 <li><a href="/docs" className="hover:text-white transition-colors">Docs</a></li>
                 <li className="text-gray-600">/</li>
@@ -141,7 +142,7 @@ export default function HyperunitPage() {
               <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-8">
                 <h2 className="text-2xl font-bold text-white mb-4">🛡️ Axone x HyperUnit – Transparency and security at the heart of our Indexes</h2>
                 <p className="text-gray-300 leading-relaxed mb-4">
-                  Trust is the foundation of any investment. That's why <strong className="text-white">Axone indexes</strong> rely directly on <strong className="text-white">HyperUnit</strong>, guaranteeing the use of <strong className="text-white">native, safe and transparent assets</strong>.
+                  Trust is the foundation of any investment. That&apos;s why <strong className="text-white">Axone indexes</strong> rely directly on <strong className="text-white">HyperUnit</strong>, guaranteeing the use of <strong className="text-white">native, safe and transparent assets</strong>.
                 </p>
               </div>
 

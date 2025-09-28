@@ -1,0 +1,7 @@
+{
+  "buildCommand": "cd axone-app && npm run build",
+  "outputDirectory": "axone-app/.next",
+  "installCommand": "cd axone-app && npm install",
+  "devCommand": "cd axone-app && npm run dev",
+  "framework": "nextjs"
+}

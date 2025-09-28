@@ -1,5 +1,6 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Link from 'next/link';
 
 export default function SmartRebalancingPage() {
   return (
@@ -118,7 +119,7 @@ export default function SmartRebalancingPage() {
             {/* Breadcrumb */}
             <nav className="mb-8">
               <ol className="flex items-center space-x-2 text-sm text-gray-400">
-                <li><a href="/" className="hover:text-white transition-colors">Axone</a></li>
+                <li><Link href="/" className="hover:text-white transition-colors">Axone</Link></li>
                 <li className="text-gray-600">/</li>
                 <li><a href="/docs" className="hover:text-white transition-colors">Docs</a></li>
                 <li className="text-gray-600">/</li>

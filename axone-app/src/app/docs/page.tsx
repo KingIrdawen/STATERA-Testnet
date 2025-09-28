@@ -1,5 +1,6 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Link from 'next/link';
 
 export default function DocsPage() {
   return (
@@ -118,7 +119,7 @@ export default function DocsPage() {
             {/* Breadcrumb */}
             <nav className="mb-8">
               <ol className="flex items-center space-x-2 text-sm text-gray-400">
-                <li><a href="/" className="hover:text-white transition-colors">Axone</a></li>
+                <li><Link href="/" className="hover:text-white transition-colors">Axone</Link></li>
                 <li className="text-gray-600">/</li>
                 <li><a href="/docs" className="hover:text-white transition-colors">Docs</a></li>
                 <li className="text-gray-600">/</li>
@@ -141,7 +142,7 @@ export default function DocsPage() {
               <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-8">
                 <h2 className="text-2xl font-bold text-white mb-4">🌐 Axone Index – Web3 investment, reinvented</h2>
                 <p className="text-gray-300 leading-relaxed mb-4">
-                  The crypto universe evolves fast, but investing intelligently shouldn't be a puzzle. With <strong className="text-white">Axone Index</strong>, we've reimagined how to expose yourself to the market.
+                  The crypto universe evolves fast, but investing intelligently shouldn&apos;t be a puzzle. With <strong className="text-white">Axone Index</strong>, we&apos;ve reimagined how to expose yourself to the market.
                 </p>
               </div>
 
@@ -170,7 +171,7 @@ export default function DocsPage() {
 
               <div className="mb-8">
                 <p className="text-gray-300 leading-relaxed">
-                  With Axone, you save time, reduce your risks, and enjoy Web3's potential without the usual friction.
+                  With Axone, you save time, reduce your risks, and enjoy Web3&apos;s potential without the usual friction.
                 </p>
               </div>
 

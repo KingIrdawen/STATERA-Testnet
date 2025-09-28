@@ -1,5 +1,6 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Link from 'next/link';
 
 export default function HypercorePage() {
   return (
@@ -118,7 +119,7 @@ export default function HypercorePage() {
             {/* Breadcrumb */}
             <nav className="mb-8">
               <ol className="flex items-center space-x-2 text-sm text-gray-400">
-                <li><a href="/" className="hover:text-white transition-colors">Axone</a></li>
+                <li><Link href="/" className="hover:text-white transition-colors">Axone</Link></li>
                 <li className="text-gray-600">/</li>
                 <li><a href="/docs" className="hover:text-white transition-colors">Docs</a></li>
                 <li className="text-gray-600">/</li>
@@ -141,7 +142,7 @@ export default function HypercorePage() {
               <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-8">
                 <h2 className="text-2xl font-bold text-white mb-4">💧 Axone x Hypercore – The power of native liquidity</h2>
                 <p className="text-gray-300 leading-relaxed mb-4">
-                  An index's performance depends largely on the quality of its liquidity. That's why <strong className="text-white">Axone relies directly on Hypercore</strong>, Hyperliquid's liquidity engine, to offer a frictionless experience.
+                  An index&apos;s performance depends largely on the quality of its liquidity. That&apos;s why <strong className="text-white">Axone relies directly on Hypercore</strong>, Hyperliquid&apos;s liquidity engine, to offer a frictionless experience.
                 </p>
               </div>
 
