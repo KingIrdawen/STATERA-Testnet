@@ -1,0 +1,43 @@
+Dépendances principales
+
+Package	Version	Description
+@rainbow-me/rainbowkit	^1.3.0	Interface de connexion wallet Ethereum
+@tanstack/react-query	^5.0.0	Gestion d'état et cache des données
+dotenv	^17.2.1	Variables d'environnement
+ethers	^6.10.0	Bibliothèque Ethereum
+next	^15.0.0	Framework React full-stack
+pino-pretty	^13.1.1	Formatage des logs
+react	^18.2.0	Bibliothèque UI
+react-dom	^18.2.0	Rendu React DOM
+viem	^1.21.4	Client Ethereum TypeScript
+wagmi	^1.4.13	Hooks React pour Ethereum
+
+
+Dépendances de développement
+
+Package	Version	Description
+@types/node	^20.0.0	Types TypeScript pour Node.js
+@types/react	^18.2.0	Types TypeScript pour React
+@types/react-dom	^18.2.0	Types TypeScript pour React DOM
+autoprefixer	^10.4.17	Préfixes CSS automatiques
+eslint	^8.0.0	Linter JavaScript/TypeScript
+eslint-config-next	^15.0.0	Configuration ESLint pour Next.js
+postcss	^8.4.27	Processeur CSS
+prettier	^3.0.0	Formateur de code
+tailwindcss	^3.3.3	Framework CSS utility-first
+typescript	^5.3.3	Compilateur TypeScript
+
+
+Sitemap du site axone
+Pages principales
+
+Route	Page	Description
+/	Landing Page	Page d'accueil avec présentation du projet
+/app	Vault Dashboard	Interface principale des vaults
+/portfolio	Portfolio	Gestion du portefeuille utilisateur
+/referral	Referral System	Système de parrainage
+/sale	Token Sale	Vente de tokens AXONE
+/staking	Staking	Mise en jeu des tokens
+/admin	Admin Panel	Interface d'administration
+/index/[id]	Dynamic Page	Page dynamique avec paramètre ID
+

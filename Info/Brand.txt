@@ -1,0 +1,17 @@
+Palette de couleurs AXONE
+Sandy Brown
+/* Couleur principale */
+sandy-brown: #fab062
+
+/* Variantes */
+sandy-brown-light: #fdd4a3
+sandy-brown-dark: #e89a4a
+Flounce
+3a7373
+Stellar Green
+/* Couleur principale */
+stellar-green: #011f26
+
+/* Variantes */
+stellar-green-light: #023238
+stellar-green-dark: #001a1f
