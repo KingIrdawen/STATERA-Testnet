@@ -142,7 +142,7 @@ export default function SmartRebalancingPage() {
               <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-8">
                 <h2 className="text-2xl font-bold text-white mb-4">⚡ Smart Rebalancing – The intelligence behind our Indexes</h2>
                 <p className="text-gray-300 leading-relaxed mb-4">
-                  Crypto markets evolve fast, and your investments must keep pace. That's why <strong className="text-white">Axone indexes</strong> don't just sit passively: they are <strong className="text-white">dynamic and intelligent</strong>.
+                  Crypto markets evolve fast, and your investments must keep pace. That&apos;s why <strong className="text-white">Axone indexes</strong> don&apos;t just sit passively: they are <strong className="text-white">dynamic and intelligent</strong>.
                 </p>
               </div>
 

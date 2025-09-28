@@ -149,7 +149,7 @@ export default function HyperunitPage() {
               <div className="mb-8">
                 <h3 className="text-xl font-bold text-white mb-4">🔹 No unnecessary intermediaries. No fragile bridges. No avoidable failure points.</h3>
                 <p className="text-gray-300 leading-relaxed mb-6">
-                  Thanks to HyperUnit, our products fully align with Hyperliquid's philosophy:
+                  Thanks to HyperUnit, our products fully align with Hyperliquid&apos;s philosophy:
                 </p>
                 
                 <ul className="space-y-3 text-gray-300">

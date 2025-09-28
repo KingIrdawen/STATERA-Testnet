@@ -36,7 +36,7 @@ export default function TypewriterText({ text, speed = 50, className = "" }: Typ
       setDisplayedText('');
       setCurrentIndex(0);
     }
-  }, [inView]);
+  }, [inView, currentIndex]);
 
   return (
     <h2 
