@@ -18,7 +18,7 @@ interface TextZoneProps {
   className?: string;
 }
 
-export function TextZone({ children, className = "", bgColor = "bg-[#011f26]", alignRight = false }: TextZoneProps & { bgColor?: string; alignRight?: boolean }) {
+export function TextZone({ children, className = "", bgColor = "bg-black", alignRight = false }: TextZoneProps & { bgColor?: string; alignRight?: boolean }) {
   const justifyClass = alignRight ? "justify-end" : "justify-start";
   return (
     <div className={`flex-1 ${bgColor} flex items-center ${justifyClass} ${className}`}>
@@ -37,7 +37,7 @@ interface AnimationZoneProps {
   fullWidth?: boolean;
 }
 
-export function AnimationZone({ children, className = "", fullWidth = false, bgColor = "bg-gray-50" }: AnimationZoneProps & { bgColor?: string }) {
+export function AnimationZone({ children, className = "", fullWidth = false, bgColor = "bg-black" }: AnimationZoneProps & { bgColor?: string }) {
   if (fullWidth) {
     return (
       <div className={`flex-1 ${bgColor} flex items-center justify-center ${className}`}>
