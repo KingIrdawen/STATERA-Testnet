@@ -14,9 +14,9 @@ export default function Header() {
               <Image
                 src="/Logo-Axone.webp"
                 alt="AXONE Logo"
-                width={120}
-                height={40}
-                className="h-8 w-auto md:h-10"
+                width={150}
+                height={50}
+                className="h-10 w-auto md:h-12"
                 priority
               />
               <span className="text-white font-bold text-xl md:text-2xl tracking-tight">Axone</span>
