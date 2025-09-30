@@ -93,7 +93,7 @@ export default function Home() {
               </video>
             </AnimationZone>
 
-            <TextZone bgColor="bg-black" alignRight>
+            <TextZone bgColor="bg-[#011f26]" alignRight>
               <div className="text-left">
                 <TypewriterText 
                   text="Beyond vision, Axone is built on strong pillars that drive its uniqueness and long-term value"
@@ -119,8 +119,20 @@ export default function Home() {
             </TextZone>
 
             <AnimationZone bgColor="bg-black">
-              <div className="flex items-center justify-center h-full">
-                <h3 className="text-xl font-semibold text-white tracking-tight">Animation à intégrer</h3>
+              <div className="flex items-center justify-center h-full p-8">
+                <div className="max-w-md w-full">
+                  <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="w-full h-auto rounded-lg shadow-2xl"
+                  >
+                    <source src="/Animation goute noir.mov" type="video/quicktime" />
+                    <source src="/Animation goute noir.mov" type="video/mp4" />
+                    Votre navigateur ne supporte pas la lecture vidéo.
+                  </video>
+                </div>
               </div>
             </AnimationZone>
           </Section>
@@ -168,7 +180,7 @@ export default function Home() {
           </Section>
 
           {/* Section 7 - Growth Strategy */}
-          <section className="bg-black py-16">
+          <section className="bg-[#011f26] py-16">
             <div className="max-w-7xl mx-auto px-36 md:px-48">
               <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-12 inline-block bg-gradient-to-r from-[#fab062] to-[#3a7373] bg-clip-text text-transparent transition-colors duration-300">
                 Growth Strategy
