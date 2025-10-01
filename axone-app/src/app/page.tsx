@@ -1,82 +1,116 @@
+'use client';
+
 import Header from '@/components/Header';
 import Section, { TextZone, AnimationZone } from '@/components/Section';
-import MetricsSection from '@/components/MetricsSection';
 import TypewriterText from '@/components/TypewriterText';
 import AnimatedListItem from '@/components/AnimatedListItem';
 import Footer from '@/components/Footer';
 import AnimatedButton from '@/components/AnimatedButton';
+import AnimatedMetric from '@/components/AnimatedMetric';
+import { useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 
 export default function Home() {
+  const [visibleMetrics, setVisibleMetrics] = useState(0);
+  const { ref: sectionRef, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.3,
+  });
+
+  useEffect(() => {
+    if (inView) {
+      // Animate metrics one by one with delays
+      const metrics = [0, 1, 2, 3, 4];
+      metrics.forEach((index) => {
+        setTimeout(() => {
+          setVisibleMetrics(index + 1);
+        }, index * 300); // 300ms delay between each metric
+      });
+    }
+  }, [inView]);
+
+  const metrics = [
+    { value: '12', label: 'Vaults', description: 'Active investment vaults' },
+    { value: '2,847', label: 'Users', description: 'Active platform users' },
+    { value: '$4.2M', label: 'Volume Deposited', description: 'Total platform deposits' },
+    { value: '$4.2M', label: 'Total Value Locked', description: 'Assets under management' },
+    { value: '$1.3M', label: 'Amount Redistributed', description: 'Rewards distributed to users' }
+  ];
+
   return (
     <div className="min-h-screen bg-white">
       <Header />
       
       {/* Section 1 - Hero */}
-      <Section>
-        <TextZone>
-          <div className="text-left">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 inline-block bg-gradient-to-r from-[#fab062] to-[#4a8c8c] bg-clip-text text-transparent transition-colors duration-300">
-                A Decentralized<br />
-                Investment<br />
-                Solution
-              </h1>
-              
-              <p className="text-lg md:text-xl text-[#3a7373] mb-8 leading-relaxed font-medium">
-                Axone offers an innovative approach to investment by leveraging blockchain technology to automate and optimize portfolio management while delivering value to its users.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4">
-                <a
-                  href="/app"
-                  className="inline-flex items-center px-4 py-1.5 md:px-6 md:py-2 rounded-lg bg-[#fab062] text-[#011f26] font-semibold text-sm md:text-base shadow-[0_6px_12px_rgba(0,0,0,0.35),0_1px_0_rgba(255,255,255,0.3)_inset,0_-1px_0_rgba(0,0,0,0.15)_inset] transition-all duration-300 hover:bg-[#e89a4a] hover:scale-105 hover:shadow-[0_8px_16px_rgba(0,0,0,0.4),0_1px_0_rgba(255,255,255,0.4)_inset,0_-1px_0_rgba(0,0,0,0.2)_inset] focus:outline-none focus:ring-2 focus:ring-[#fab062] focus:ring-offset-2 focus:ring-offset-[#011f26] tracking-tight"
-                >
-                  Get Started
-                </a>
-
-                <a
-                  href="/learn"
-                  className="inline-flex items-center px-4 py-1.5 md:px-6 md:py-2 rounded-lg border-2 border-white text-white font-semibold text-sm md:text-base shadow-[0_6px_12px_rgba(0,0,0,0.35),0_1px_0_rgba(255,255,255,0.3)_inset,0_-1px_0_rgba(0,0,0,0.15)_inset] transition-all duration-300 hover:bg-white hover:text-[#011f26] hover:scale-105 hover:shadow-[0_8px_16px_rgba(0,0,0,0.4),0_1px_0_rgba(255,255,255,0.4)_inset,0_-1px_0_rgba(0,0,0,0.2)_inset] focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#011f26] tracking-tight"
-                >
-                  Learn More
-                </a>
-              </div>
-              </div>
-        </TextZone>
+      <section className="min-h-screen relative flex items-center justify-center overflow-hidden">
+        {/* Animation de fond */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover z-0"
+        >
+          <source src="/Animation intro.mp4" type="video/mp4" />
+          Votre navigateur ne supporte pas la lecture vidéo.
+        </video>
         
-        <AnimationZone fullWidth>
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover"
-          >
-            <source src="/Animation-holographie_neuronale.mp4" type="video/mp4" />
-            Votre navigateur ne supporte pas la lecture vidéo.
-          </video>
-        </AnimationZone>
-      </Section>
+        {/* Contenu au premier plan */}
+        <div className="relative z-10 max-w-4xl mx-auto px-8 text-center">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 inline-block bg-gradient-to-r from-[#fab062] to-[#4a8c8c] bg-clip-text text-transparent transition-colors duration-300">
+            A Decentralized<br />
+            Investment<br />
+            Solution
+          </h1>
+          
+          <p className="text-lg md:text-xl text-[#3a7373] mb-8 leading-relaxed font-medium">
+            Axone offers an innovative approach to investment by leveraging blockchain technology to automate and optimize portfolio management while delivering value to its users.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href="/app"
+              className="inline-flex items-center px-4 py-1.5 md:px-6 md:py-2 rounded-lg bg-[#fab062] text-[#011f26] font-semibold text-sm md:text-base shadow-[0_6px_12px_rgba(0,0,0,0.35),0_1px_0_rgba(255,255,255,0.3)_inset,0_-1px_0_rgba(0,0,0,0.15)_inset] transition-all duration-300 hover:bg-[#e89a4a] hover:scale-105 hover:shadow-[0_8px_16px_rgba(0,0,0,0.4),0_1px_0_rgba(255,255,255,0.4)_inset,0_-1px_0_rgba(0,0,0,0.2)_inset] focus:outline-none focus:ring-2 focus:ring-[#fab062] focus:ring-offset-2 focus:ring-offset-[#011f26] tracking-tight"
+            >
+              Get Started
+            </a>
 
-      {/* Section 2 - Features */}
-      <Section>
-        <TextZone>
-          <div className="text-left">
-            <p className="text-lg md:text-xl text-[#3a7373] mb-8 leading-relaxed font-medium">
-              Axone is a Web3 protocol for orchestrating and monetizing AI resources —
-              data, models, compute, and APIs — in a fully decentralized way.
-              With on-chain governance, smart rebalancing, and innovative
-              Hypercore/HyperUnit infrastructure, it transforms blockchain networks into a foundation for AI-driven economies.
-              Our platform enables seamless integration of artificial intelligence
-              capabilities across distributed networks, creating new opportunities for
-              value creation and technological advancement in the Web3 ecosystem.
-            </p>
+            <a
+              href="/learn"
+              className="inline-flex items-center px-4 py-1.5 md:px-6 md:py-2 rounded-lg border-2 border-white text-white font-semibold text-sm md:text-base shadow-[0_6px_12px_rgba(0,0,0,0.35),0_1px_0_rgba(255,255,255,0.3)_inset,0_-1px_0_rgba(0,0,0,0.15)_inset] transition-all duration-300 hover:bg-white hover:text-[#011f26] hover:scale-105 hover:shadow-[0_8px_16px_rgba(0,0,0,0.4),0_1px_0_rgba(255,255,255,0.4)_inset,0_-1px_0_rgba(0,0,0,0.2)_inset] focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#011f26] tracking-tight"
+            >
+              Learn More
+            </a>
           </div>
-        </TextZone>
-        
-        <AnimationZone fullWidth>
-          <MetricsSection />
-        </AnimationZone>
-      </Section>
+        </div>
+      </section>
+
+          {/* Section 2 - Metrics */}
+          <section ref={sectionRef} className="py-16 bg-black">
+            <div className="max-w-7xl mx-auto px-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+                {metrics.map((metric, index) => (
+                  <div 
+                    key={index}
+                    className={`transition-all duration-1000 ease-out ${
+                      index < visibleMetrics 
+                        ? 'opacity-100 translate-y-0' 
+                        : 'opacity-0 translate-y-8'
+                    }`}
+                  >
+                    <AnimatedMetric
+                      value={metric.value}
+                      label={metric.label}
+                      description={metric.description}
+                      isVisible={index < visibleMetrics}
+                      delay={0}
+                      duration={1500}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
 
           {/* Section 3 - Performance */}
           <Section>
