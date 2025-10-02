@@ -4,10 +4,10 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="bg-[#011f26] shadow-lg">
+    <footer className="bg-black shadow-lg">
       <div className="flex min-h-[60px] md:min-h-[80px]">
         {/* Section gauche - Logos sociaux */}
-        <div className="flex-1 bg-[#011f26] flex items-center justify-start">
+        <div className="flex-1 bg-black flex items-center justify-start">
           <div className="px-36 md:px-48">
             <div className="flex items-center gap-6">
               <Link
@@ -44,7 +44,7 @@ export default function Footer() {
         </div>
 
         {/* Section droite - Navigation */}
-        <div className="flex-1 bg-[#011f26] flex items-center justify-end">
+        <div className="flex-1 bg-black flex items-center justify-end">
           <div className="px-36 md:px-48">
             <div className="flex items-center gap-6">
               <Link

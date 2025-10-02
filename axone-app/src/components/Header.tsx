@@ -2,13 +2,30 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 export default function Header() {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsScrolled(scrollTop > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 bg-[#011f26] shadow-lg">
+    <header className={`sticky top-0 z-50 shadow-lg transition-all duration-300 ${
+      isScrolled 
+        ? 'bg-black/50 backdrop-blur-md' 
+        : 'bg-black'
+    }`}>
       <div className="flex min-h-[60px] md:min-h-[80px]">
         {/* Section gauche - Logo */}
-        <div className="flex-1 bg-[#011f26] flex items-center justify-start">
+        <div className="flex-1 flex items-center justify-start">
           <div className="px-36 md:px-48">
             <Link href="/" className="flex items-center gap-3">
               <Image
@@ -25,7 +42,7 @@ export default function Header() {
         </div>
 
         {/* Section droite - Navigation */}
-        <div className="flex-1 bg-[#011f26] flex items-center justify-end">
+        <div className="flex-1 flex items-center justify-end">
           <div className="px-36 md:px-48">
             <div className="flex items-center gap-6">
               <Link

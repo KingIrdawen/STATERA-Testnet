@@ -5,9 +5,10 @@ interface SectionProps {
   className?: string;
 }
 
-export default function Section({ children, className = "" }: SectionProps) {
+export default function Section({ children, className = "", reducedHeight = false }: SectionProps & { reducedHeight?: boolean }) {
+  const heightClass = reducedHeight ? "min-h-[60vh]" : "min-h-screen";
   return (
-    <section className={`min-h-screen flex ${className}`}>
+    <section className={`${heightClass} flex flex-col md:flex-row ${className}`}>
       {children}
     </section>
   );

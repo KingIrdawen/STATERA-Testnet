@@ -7,6 +7,9 @@ import AnimatedListItem from '@/components/AnimatedListItem';
 import Footer from '@/components/Footer';
 import AnimatedButton from '@/components/AnimatedButton';
 import AnimatedMetric from '@/components/AnimatedMetric';
+import ReliefImage from '@/components/ReliefImage';
+import ScrollAnimation from '@/components/ScrollAnimation';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
@@ -24,7 +27,7 @@ export default function Home() {
       metrics.forEach((index) => {
         setTimeout(() => {
           setVisibleMetrics(index + 1);
-        }, index * 300); // 300ms delay between each metric
+        }, index * 600); // 600ms delay between each metric
       });
     }
   }, [inView]);
@@ -127,7 +130,7 @@ export default function Home() {
               </video>
             </AnimationZone>
 
-            <TextZone bgColor="bg-[#011f26]" alignRight>
+            <TextZone bgColor="bg-black" alignRight>
               <div className="text-left">
                 <TypewriterText 
                   text="Beyond vision, Axone is built on strong pillars that drive its uniqueness and long-term value"
@@ -139,82 +142,166 @@ export default function Home() {
           </Section>
 
           {/* Section 4 - Smart Rebalancing */}
-          <Section>
-            <TextZone>
+          <Section reducedHeight={true}>
+            <TextZone bgColor="bg-black">
               <div className="text-left">
-                <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6 inline-block bg-gradient-to-r from-[#fab062] to-[#3a7373] bg-clip-text text-transparent transition-colors duration-300">
-                  Smart Rebalancing
-                </h2>
+                <ScrollAnimation delay={0}>
+                  <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6 inline-block bg-gradient-to-r from-[#fab062] to-[#3a7373] bg-clip-text text-transparent transition-colors duration-300">
+                    Smart Rebalancing
+                  </h2>
 
-                <p className="text-lg md:text-xl text-[#3a7373] mb-8 leading-relaxed font-medium">
-                  Axone delivers smart, dynamic crypto indexes that automatically rebalance every hour to secure gains and optimize allocations. It automates the strategies of top traders, ensuring your portfolio adapts effortlessly to fast-moving markets.
-                </p>
+                  <p className="text-lg md:text-xl text-[#3a7373] mb-8 leading-relaxed font-medium">
+                    Axone delivers smart, dynamic crypto indexes that automatically rebalance every hour to secure gains and optimize allocations. It automates the strategies of top traders, ensuring your portfolio adapts effortlessly to fast-moving markets.
+                  </p>
+                </ScrollAnimation>
               </div>
             </TextZone>
 
             <AnimationZone bgColor="bg-black">
               <div className="flex items-center justify-center h-full p-8">
                 <div className="max-w-md w-full">
-                  <video
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="w-full h-auto rounded-lg shadow-2xl"
-                  >
-                    <source src="/Animation goute noir.mov" type="video/quicktime" />
-                    <source src="/Animation goute noir.mov" type="video/mp4" />
-                    Votre navigateur ne supporte pas la lecture vidéo.
-                  </video>
+                  <ReliefImage
+                    src="/image_smart-rebalancing.webp"
+                    alt="Smart Rebalancing"
+                    width={400}
+                    height={300}
+                    className="overflow-hidden hover:scale-[1.08] transition-transform duration-300"
+                  />
                 </div>
               </div>
             </AnimationZone>
           </Section>
 
-          {/* Section 5 - Hypercore/HyperUnit */}
-          <Section>
+          {/* Section 5 - Controlled Inflation */}
+          <Section reducedHeight={true}>
             <AnimationZone bgColor="bg-black">
-              <div className="flex items-center justify-center h-full">
-                <h3 className="text-xl font-semibold text-white tracking-tight">Animation à intégrer</h3>
+              <div className="flex items-center justify-center h-full p-8">
+                <div className="max-w-2xl w-full">
+          <Image
+                    src="/image_inflation.webp"
+                    alt="Controlled Inflation"
+                    width={750}
+                    height={600}
+                    className="w-full h-auto scale-[2]"
+                  />
+                </div>
               </div>
             </AnimationZone>
 
-            <TextZone alignRight>
+            <TextZone bgColor="bg-black">
               <div className="text-left">
-                <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6 inline-block bg-gradient-to-r from-[#fab062] to-[#3a7373] bg-clip-text text-transparent transition-colors duration-300">
-                  Hypercore/HyperUnit
-                </h2>
+                <ScrollAnimation delay={200}>
+                  <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6 inline-block bg-gradient-to-r from-[#fab062] to-[#3a7373] bg-clip-text text-transparent transition-colors duration-300">
+                    Controlled Inflation
+                  </h2>
 
-                <p className="text-lg md:text-xl text-[#3a7373] mb-8 leading-relaxed font-medium">
-                  Axone leverages Hypercore, the liquidity engine of Hyperliquid, to deliver seamless, high-performance trading. By tapping into native market depth, our indexes ensure minimal fees, instant execution, and maximum efficiency for every transaction.
-                </p>
+                  <p className="text-lg md:text-xl text-[#3a7373] mb-8 leading-relaxed font-medium">
+                    Axone introduces a fixed 3% annual inflation fully redistributed to index holders, turning growth into direct rewards for the community. This mechanism strengthens engagement, boosts index value over time, and fuels a virtuous cycle of adoption and shared prosperity.
+                  </p>
+                </ScrollAnimation>
               </div>
             </TextZone>
           </Section>
 
           {/* Section 6 - The AXONE Token */}
-          <Section>
-            <TextZone>
+          <Section reducedHeight={true}>
+            <TextZone bgColor="bg-black">
               <div className="text-left">
-                <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6 inline-block bg-gradient-to-r from-[#fab062] to-[#3a7373] bg-clip-text text-transparent transition-colors duration-300">
-                  The AXONE Token
-                </h2>
+                <ScrollAnimation delay={400}>
+                  <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6 inline-block bg-gradient-to-r from-[#fab062] to-[#3a7373] bg-clip-text text-transparent transition-colors duration-300">
+                    The AXONE Token
+                  </h2>
 
-                <p className="text-lg md:text-xl text-[#3a7373] mb-8 leading-relaxed font-medium">
-                  The Axone token ($AXN) is designed as a core value driver, tightly integrated with our ecosystem and indexes. It powers the protocol, captures platform growth, and rewards holders—making it a stake in building a simpler, more efficient, and accessible Web3.
-                </p>
+                  <p className="text-lg md:text-xl text-[#3a7373] mb-8 leading-relaxed font-medium">
+                    The Axone token ($AXN) is designed as a core value driver, tightly integrated with our ecosystem and indexes. It powers the protocol, captures platform growth, and rewards holders—making it a stake in building a simpler, more efficient, and accessible Web3.
+                  </p>
+                </ScrollAnimation>
               </div>
             </TextZone>
 
             <AnimationZone bgColor="bg-black">
-              <div className="flex items-center justify-center h-full">
-                <h3 className="text-xl font-semibold text-white tracking-tight">Animation à intégrer</h3>
+              <div className="flex items-center justify-center h-full p-8">
+                <div className="max-w-2xl w-full">
+          <Image
+                    src="/image_token-axone.webp"
+                    alt="The AXONE Token"
+                    width={750}
+                    height={600}
+                    className="w-full h-auto scale-[1.5]"
+                  />
+                </div>
               </div>
             </AnimationZone>
           </Section>
 
-          {/* Section 7 - Growth Strategy */}
-          <section className="bg-[#011f26] py-16">
+          {/* Section 7 - Revenue */}
+          <Section reducedHeight={true}>
+            <AnimationZone bgColor="bg-black">
+              <div className="flex items-center justify-center h-full p-8">
+                <div className="max-w-2xl w-full">
+                  <ReliefImage
+                    src="/image_redistribution.webp"
+                    alt="Revenue"
+                    width={750}
+                    height={600}
+                    className="w-full h-auto scale-[1.5] overflow-hidden hover:scale-[1.6] transition-transform duration-300"
+                  />
+                </div>
+              </div>
+            </AnimationZone>
+
+            <TextZone bgColor="bg-black">
+              <div className="text-left">
+                <ScrollAnimation delay={600}>
+                  <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6 inline-block bg-gradient-to-r from-[#fab062] to-[#3a7373] bg-clip-text text-transparent transition-colors duration-300">
+                    Revenue
+                  </h2>
+
+                  <p className="text-lg md:text-xl text-[#3a7373] mb-8 leading-relaxed font-medium">
+                    Axone creates a virtuous cycle where every new index directly fuels demand and value for the $AXN token. Through fees, buybacks, and inflation rewards, the system ties product adoption to token growth, generating sustainable revenue and long-term community benefits.
+                  </p>
+                </ScrollAnimation>
+              </div>
+            </TextZone>
+          </Section>
+
+          {/* Section 8 - Buyback and Burn */}
+          <Section reducedHeight={true}>
+            <TextZone bgColor="bg-black">
+              <div className="text-left">
+                <ScrollAnimation delay={800}>
+                  <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6 inline-block bg-gradient-to-r from-[#fab062] to-[#3a7373] bg-clip-text text-transparent transition-colors duration-300">
+                    Buyback and Burn
+                  </h2>
+
+                  <p className="text-lg md:text-xl text-[#3a7373] mb-8 leading-relaxed font-medium">
+                    Axone&apos;s Buyback & Burn mechanism uses 50% of daily fees to repurchase and permanently remove $AXN tokens, creating built-in scarcity. This progressive reduction in supply strengthens index exposure, offsets inflation, and drives long-term value for the community.
+                  </p>
+                </ScrollAnimation>
+              </div>
+            </TextZone>
+
+            <AnimationZone bgColor="bg-black">
+              <div className="flex items-center justify-center h-full p-8">
+                <div className="max-w-2xl w-full">
+          <Image
+                    src="/image_buyback-and-burn.webp"
+                    alt="Buyback and Burn"
+                    width={750}
+                    height={600}
+                    className="w-full h-auto scale-[1.1] object-cover rounded-3xl"
+                    style={{ 
+                      aspectRatio: '4/3',
+                      objectPosition: 'center 37%'
+                    }}
+                  />
+                </div>
+              </div>
+            </AnimationZone>
+          </Section>
+
+          {/* Section 9 - Growth Strategy */}
+          <section className="bg-black py-16">
             <div className="max-w-7xl mx-auto px-36 md:px-48">
               <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-12 inline-block bg-gradient-to-r from-[#fab062] to-[#3a7373] bg-clip-text text-transparent transition-colors duration-300">
                 Growth Strategy
