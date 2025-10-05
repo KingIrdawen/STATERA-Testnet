@@ -19,17 +19,17 @@ export default function HyperunitPage() {
                 <h3 className="text-sm font-semibold text-[#fab062] uppercase tracking-wide mb-3">PROTOCOL CONCEPTS</h3>
                 <ul className="space-y-1">
                   <li>
-                    <a href="/docs" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🎯 Overview
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/smart-rebalancing" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/smart-rebalancing" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       ⚖️ Smart Rebalancing
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/hypercore" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/hypercore" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🌊 Axone x Hypercore
                     </a>
                   </li>
@@ -46,37 +46,37 @@ export default function HyperunitPage() {
                 <h3 className="text-sm font-semibold text-[#fab062] uppercase tracking-wide mb-3">Token Design</h3>
                 <ul className="space-y-1">
                   <li>
-                    <a href="/docs/token-axone" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/token-axone" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       ⭐ The Axone Token
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/launch" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/launch" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🚀 Launch
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/revenue" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/revenue" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       💠 Revenue
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/fees" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/fees" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       💰 Fee Management
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/inflation" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/inflation" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       📈 Controlled Inflation
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/value-sharing" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/value-sharing" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🔥 Value Sharing
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/buyback-burn" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/buyback-burn" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🌀 Buyback & Burn
                     </a>
                   </li>
@@ -88,22 +88,22 @@ export default function HyperunitPage() {
                 <h3 className="text-sm font-semibold text-[#fab062] uppercase tracking-wide mb-3">Growth Strategy</h3>
                 <ul className="space-y-1">
                   <li>
-                    <a href="/docs/introduction" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/introduction" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🌾 Introduction
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/epoch-0" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/epoch-0" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🌟 Epoch 0
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/epoch-1" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/epoch-1" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🌍 Epoch 1
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/epoch-2" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/epoch-2" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🚀 Epoch 2
                     </a>
                   </li>
@@ -132,7 +132,7 @@ export default function HyperunitPage() {
             {/* Page Title */}
             <div className="mb-8">
               <h1 className="text-4xl font-bold text-white mb-4">🛡️ Axone x HyperUnit</h1>
-              <p className="text-xl text-gray-300 leading-relaxed">
+              <p className="text-xl text-[#5a9a9a] leading-relaxed">
                 Axone x HyperUnit – Transparency and security at the heart of our Indexes
               </p>
             </div>
@@ -141,18 +141,18 @@ export default function HyperunitPage() {
             <div className="prose prose-invert max-w-none">
               <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-8">
                 <h2 className="text-2xl font-bold text-white mb-4">🛡️ Axone x HyperUnit – Transparency and security at the heart of our Indexes</h2>
-                <p className="text-gray-300 leading-relaxed mb-4">
+                <p className="text-[#5a9a9a] leading-relaxed mb-4">
                   Trust is the foundation of any investment. That&apos;s why <strong className="text-white">Axone indexes</strong> rely directly on <strong className="text-white">HyperUnit</strong>, guaranteeing the use of <strong className="text-white">native, safe and transparent assets</strong>.
                 </p>
               </div>
 
               <div className="mb-8">
                 <h3 className="text-xl font-bold text-white mb-4">🔹 No unnecessary intermediaries. No fragile bridges. No avoidable failure points.</h3>
-                <p className="text-gray-300 leading-relaxed mb-6">
+                <p className="text-[#5a9a9a] leading-relaxed mb-6">
                   Thanks to HyperUnit, our products fully align with Hyperliquid&apos;s philosophy:
                 </p>
                 
-                <ul className="space-y-3 text-gray-300">
+                <ul className="space-y-3 text-[#5a9a9a]">
                   <li className="flex items-start">
                     <span className="text-[#fab062] mr-3 mt-1">•</span>
                     <span><strong className="text-white">Enhanced security</strong> through solid and proven protocols.</span>

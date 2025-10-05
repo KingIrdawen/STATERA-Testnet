@@ -58,16 +58,21 @@ export default function AnimatedMetric({
           setAnimatedValue(formattedValue + suffix);
           
           if (progress < 1) {
-            timeoutRef.current = setTimeout(animate, 16); // ~60fps
+            requestAnimationFrame(animate);
+          } else {
+            setIsAnimating(false);
           }
         };
         
         // Start animation after delay
-        timeoutRef.current = setTimeout(animate, delay);
+        timeoutRef.current = setTimeout(() => {
+          requestAnimationFrame(animate);
+        }, delay);
       } else {
         // Non-numeric value, show immediately
         timeoutRef.current = setTimeout(() => {
           setAnimatedValue(value);
+          setIsAnimating(false);
         }, delay);
       }
     } else if (!isVisible) {
@@ -86,7 +91,7 @@ export default function AnimatedMetric({
         timeoutRef.current = null;
       }
     };
-  }, [isVisible, value, delay, duration, isAnimating]);
+  }, [isVisible, value, delay, duration]);
 
   return (
     <div className="text-center">

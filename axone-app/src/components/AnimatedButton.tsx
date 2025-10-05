@@ -12,6 +12,7 @@ interface AnimatedButtonProps {
 
 export default function AnimatedButton({ href, children, className = "", delay = 0 }: AnimatedButtonProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const [animationKey, setAnimationKey] = useState(0);
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.7,
@@ -26,6 +27,17 @@ export default function AnimatedButton({ href, children, className = "", delay =
     }
   }, [inView, delay]);
 
+  useEffect(() => {
+    if (isVisible) {
+      // Start breathing animation every 4 seconds
+      const breathingInterval = setInterval(() => {
+        setAnimationKey(prev => prev + 1); // Force re-render to restart animation
+      }, 4000); // Breathing every 4 seconds
+
+      return () => clearInterval(breathingInterval);
+    }
+  }, [isVisible]);
+
   return (
     <div
       ref={ref}
@@ -35,7 +47,8 @@ export default function AnimatedButton({ href, children, className = "", delay =
     >
       <a
         href={href}
-        className={`${className} transform transition-all duration-300 hover:scale-105 hover:shadow-2xl`}
+        key={animationKey}
+        className={`${className} transform transition-all duration-300 hover:scale-105 hover:shadow-2xl breathing-animation`}
       >
         {children}
       </a>

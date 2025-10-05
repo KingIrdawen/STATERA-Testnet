@@ -39,7 +39,7 @@ function AnimatedListItem({ number, title, description, delay }: AnimatedListIte
       </div>
       <div>
         <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
-        <p className="text-lg text-[#3a7373] leading-relaxed">
+        <p className="text-lg text-[#5a9a9a] leading-relaxed">
           {description}
         </p>
       </div>

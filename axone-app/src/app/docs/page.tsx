@@ -24,17 +24,17 @@ export default function DocsPage() {
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/smart-rebalancing" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/smart-rebalancing" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       ⚖️ Smart Rebalancing
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/hypercore" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/hypercore" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🌊 Axone x Hypercore
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/hyperunit" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/hyperunit" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🛡️ Axone x HyperUnit
                     </a>
                   </li>
@@ -46,37 +46,37 @@ export default function DocsPage() {
                 <h3 className="text-sm font-semibold text-[#fab062] uppercase tracking-wide mb-3">Token Design</h3>
                 <ul className="space-y-1">
                   <li>
-                    <a href="#token-axone" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="#token-axone" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       ⭐ The Axone Token
                     </a>
                   </li>
                   <li>
-                    <a href="#launch" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="#launch" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🚀 Launch
                     </a>
                   </li>
                   <li>
-                    <a href="#revenue" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="#revenue" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       💠 Revenue
                     </a>
                   </li>
                   <li>
-                    <a href="#fees" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="#fees" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       💰 Fee Management
                     </a>
                   </li>
                   <li>
-                    <a href="#inflation" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="#inflation" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       📈 Controlled Inflation
                     </a>
                   </li>
                   <li>
-                    <a href="#value-sharing" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="#value-sharing" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🔥 Value Sharing
                     </a>
                   </li>
                   <li>
-                    <a href="#buyback-burn" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="#buyback-burn" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🌀 Buyback & Burn
                     </a>
                   </li>
@@ -88,22 +88,22 @@ export default function DocsPage() {
                 <h3 className="text-sm font-semibold text-[#fab062] uppercase tracking-wide mb-3">Growth Strategy</h3>
                 <ul className="space-y-1">
                   <li>
-                    <a href="#introduction" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="#introduction" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🌾 Introduction
                     </a>
                   </li>
                   <li>
-                    <a href="#epoch-0" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="#epoch-0" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🌟 Epoch 0
                     </a>
                   </li>
                   <li>
-                    <a href="#epoch-1" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="#epoch-1" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🌍 Epoch 1
                     </a>
                   </li>
                   <li>
-                    <a href="#epoch-2" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="#epoch-2" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🚀 Epoch 2
                     </a>
                   </li>
@@ -132,7 +132,7 @@ export default function DocsPage() {
             {/* Page Title */}
             <div className="mb-8">
               <h1 className="text-4xl font-bold text-white mb-4">🎯 Overview</h1>
-              <p className="text-xl text-gray-300 leading-relaxed">
+              <p className="text-xl text-[#5a9a9a] leading-relaxed">
                 Axone Index – Web3 investment, reinvented
               </p>
             </div>
@@ -141,19 +141,19 @@ export default function DocsPage() {
             <div className="prose prose-invert max-w-none">
               <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-8">
                 <h2 className="text-2xl font-bold text-white mb-4">🌐 Axone Index – Web3 investment, reinvented</h2>
-                <p className="text-gray-300 leading-relaxed mb-4">
+                <p className="text-[#5a9a9a] leading-relaxed mb-4">
                   The crypto universe evolves fast, but investing intelligently shouldn&apos;t be a puzzle. With <strong className="text-white">Axone Index</strong>, we&apos;ve reimagined how to expose yourself to the market.
                 </p>
               </div>
 
               <div className="mb-8">
                 <h3 className="text-xl font-bold text-white mb-4">🔹 One asset in, instant exposure to multiple crypto projects.</h3>
-                <p className="text-gray-300 leading-relaxed mb-6">
+                <p className="text-[#5a9a9a] leading-relaxed mb-6">
                   No more hunting for liquid marketplaces, manual swap management, or endless analysis of hidden fees. Axone bundles everything into a single product, designed to maximize efficiency and reduce complexity.
                 </p>
                 
                 <h3 className="text-xl font-bold text-white mb-4">Our indices allow you to:</h3>
-                <ul className="space-y-3 text-gray-300">
+                <ul className="space-y-3 text-[#5a9a9a]">
                   <li className="flex items-start">
                     <span className="text-[#fab062] mr-3 mt-1">•</span>
                     <span><strong className="text-white">Simplify</strong> your investments, in one click.</span>
@@ -170,7 +170,7 @@ export default function DocsPage() {
               </div>
 
               <div className="mb-8">
-                <p className="text-gray-300 leading-relaxed">
+                <p className="text-[#5a9a9a] leading-relaxed">
                   With Axone, you save time, reduce your risks, and enjoy Web3&apos;s potential without the usual friction.
                 </p>
               </div>

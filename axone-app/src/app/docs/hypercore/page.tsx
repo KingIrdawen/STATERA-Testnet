@@ -19,12 +19,12 @@ export default function HypercorePage() {
                 <h3 className="text-sm font-semibold text-[#fab062] uppercase tracking-wide mb-3">PROTOCOL CONCEPTS</h3>
                 <ul className="space-y-1">
                   <li>
-                    <a href="/docs" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🎯 Overview
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/smart-rebalancing" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/smart-rebalancing" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       ⚖️ Smart Rebalancing
                     </a>
                   </li>
@@ -34,7 +34,7 @@ export default function HypercorePage() {
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/hyperunit" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/hyperunit" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🛡️ Axone x HyperUnit
                     </a>
                   </li>
@@ -46,37 +46,37 @@ export default function HypercorePage() {
                 <h3 className="text-sm font-semibold text-[#fab062] uppercase tracking-wide mb-3">Token Design</h3>
                 <ul className="space-y-1">
                   <li>
-                    <a href="/docs/token-axone" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/token-axone" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       ⭐ The Axone Token
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/launch" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/launch" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🚀 Launch
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/revenue" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/revenue" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       💠 Revenue
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/fees" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/fees" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       💰 Fee Management
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/inflation" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/inflation" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       📈 Controlled Inflation
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/value-sharing" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/value-sharing" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🔥 Value Sharing
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/buyback-burn" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/buyback-burn" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🌀 Buyback & Burn
                     </a>
                   </li>
@@ -88,22 +88,22 @@ export default function HypercorePage() {
                 <h3 className="text-sm font-semibold text-[#fab062] uppercase tracking-wide mb-3">Growth Strategy</h3>
                 <ul className="space-y-1">
                   <li>
-                    <a href="/docs/introduction" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/introduction" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🌾 Introduction
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/epoch-0" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/epoch-0" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🌟 Epoch 0
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/epoch-1" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/epoch-1" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🌍 Epoch 1
                     </a>
                   </li>
                   <li>
-                    <a href="/docs/epoch-2" className="block px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors">
+                    <a href="/docs/epoch-2" className="block px-3 py-2 text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md transition-colors">
                       🚀 Epoch 2
                     </a>
                   </li>
@@ -132,7 +132,7 @@ export default function HypercorePage() {
             {/* Page Title */}
             <div className="mb-8">
               <h1 className="text-4xl font-bold text-white mb-4">🌊 Axone x Hypercore</h1>
-              <p className="text-xl text-gray-300 leading-relaxed">
+              <p className="text-xl text-[#5a9a9a] leading-relaxed">
                 Axone x Hypercore – The power of native liquidity
               </p>
             </div>
@@ -141,14 +141,14 @@ export default function HypercorePage() {
             <div className="prose prose-invert max-w-none">
               <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-8">
                 <h2 className="text-2xl font-bold text-white mb-4">💧 Axone x Hypercore – The power of native liquidity</h2>
-                <p className="text-gray-300 leading-relaxed mb-4">
+                <p className="text-[#5a9a9a] leading-relaxed mb-4">
                   An index&apos;s performance depends largely on the quality of its liquidity. That&apos;s why <strong className="text-white">Axone relies directly on Hypercore</strong>, Hyperliquid&apos;s liquidity engine, to offer a frictionless experience.
                 </p>
               </div>
 
               <div className="mb-8">
                 <h3 className="text-xl font-bold text-white mb-4">🔹 Reduced fees. Minimal slippage. Instant execution.</h3>
-                <p className="text-gray-300 leading-relaxed mb-6">
+                <p className="text-[#5a9a9a] leading-relaxed mb-6">
                   By connecting to the very source of liquidity, our indexes benefit from the best market conditions, guaranteeing every investor maximum efficiency with every transaction.
                 </p>
               </div>

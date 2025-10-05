@@ -11,6 +11,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "AXONE - Plateforme de gestion de vaults crypto",
   description: "La plateforme de gestion de vaults crypto nouvelle génération. Maximisez vos rendements avec notre technologie blockchain avancée.",
+  icons: {
+    icon: '/favicon.webp',
+    shortcut: '/favicon.webp',
+    apple: '/favicon.webp',
+  },
 };
 
 export default function RootLayout({

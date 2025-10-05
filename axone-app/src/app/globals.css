@@ -14,6 +14,7 @@
   --color-stellar-green: #011f26;
   --color-sandy-brown: #fab062;
   --color-sandy-brown-dark: #e89a4a;
+  --color-flounce: #5a9a9a;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -29,4 +30,21 @@ body {
   font-family: var(--font-inter), system-ui, sans-serif;
   font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   font-variation-settings: normal;
+}
+
+/* Animation de respiration pour le bouton Launch App */
+@keyframes breathe {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.breathing-animation {
+  animation: breathe 1s ease-in-out;
 }
