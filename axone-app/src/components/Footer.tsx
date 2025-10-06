@@ -4,10 +4,23 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="bg-black shadow-lg">
-      <div className="flex min-h-[60px] md:min-h-[80px]">
+    <footer className="relative shadow-lg overflow-hidden">
+      {/* Image de fond */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: 'url(/image_Axone_bas_page.webp)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      />
+      
+      {/* Overlay pour améliorer la lisibilité */}
+      <div className="absolute inset-0 bg-black/30" />
+      
+      <div className="relative z-10 flex min-h-[200px] md:min-h-[250px]">
         {/* Section gauche - Logos sociaux */}
-        <div className="flex-1 bg-black flex items-center justify-start">
+        <div className="flex-1 flex items-end justify-start pb-8">
           <div className="px-36 md:px-48">
             <div className="flex items-center gap-6">
               <Link
@@ -44,7 +57,7 @@ export default function Footer() {
         </div>
 
         {/* Section droite - Navigation */}
-        <div className="flex-1 bg-black flex items-center justify-end">
+        <div className="flex-1 flex items-end justify-end pb-8">
           <div className="px-36 md:px-48">
             <div className="flex items-center gap-6">
               <Link
