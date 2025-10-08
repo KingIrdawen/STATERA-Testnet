@@ -94,12 +94,11 @@ export default function AnimatedMetric({
   }, [isVisible, value, delay, duration]);
 
   return (
-    <div className="text-center">
+    <div className="text-center flex flex-col items-center">
       <div className="text-4xl font-bold text-white mb-2 min-h-[3rem] flex items-center justify-center">
         {animatedValue}
       </div>
-      <div className="text-lg font-bold text-white mb-1">{label}</div>
-      <div className="text-sm text-gray-400">{description}</div>
+      <div className="text-lg font-bold text-white mb-1 text-center whitespace-nowrap">{label}</div>
     </div>
   );
 }

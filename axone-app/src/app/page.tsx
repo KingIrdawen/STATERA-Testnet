@@ -14,7 +14,7 @@ import { useInView } from 'react-intersection-observer';
 
 export default function Home() {
   const [visibleMetrics, setVisibleMetrics] = useState(0);
-  const { ref: sectionRef, inView } = useInView({
+  const { ref: metricsRef, inView } = useInView({
     triggerOnce: true,
     threshold: 0.3,
   });
@@ -26,7 +26,7 @@ export default function Home() {
       metrics.forEach((index) => {
         setTimeout(() => {
           setVisibleMetrics(index + 1);
-        }, index * 600); // 600ms delay between each metric
+        }, index * 800); // 800ms delay between each metric (slower)
       });
     }
   }, [inView]);
@@ -65,7 +65,7 @@ export default function Home() {
             Solution
           </h1>
           
-          <p className="text-lg md:text-xl text-[#5a9a9a] mb-8 leading-relaxed font-medium">
+          <p className="text-lg md:text-xl text-[#5a9a9a] mb-8 leading-relaxed font-medium font-bold">
             Axone offers an innovative approach to investment by leveraging blockchain technology to automate and optimize portfolio management while delivering value to its users.
           </p>
           
@@ -87,50 +87,62 @@ export default function Home() {
         </div>
       </section>
 
-          {/* Section 2 - Metrics */}
-          <section ref={sectionRef} className="py-16 bg-black">
-            <div className="max-w-7xl mx-auto px-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-                {metrics.map((metric, index) => (
-                  <div 
-                    key={index}
-                    className={`transition-all duration-1000 ease-out ${
-                      index < visibleMetrics 
-                        ? 'opacity-100 translate-y-0' 
-                        : 'opacity-0 translate-y-8'
-                    }`}
-                  >
-                    <AnimatedMetric
-                      value={metric.value}
-                      label={metric.label}
-                      description={metric.description}
-                      isVisible={index < visibleMetrics}
-                      delay={0}
-                      duration={1500}
-                    />
+          {/* Section 2 - Performance */}
+          <Section reducedHeight>
+            <AnimationZone bgColor="bg-black">
+              <div className="flex items-center justify-center h-full p-8" ref={metricsRef}>
+                <div className="w-full max-w-none px-12">
+                  {/* Ligne du haut - 3 métriques */}
+                  <div className="grid grid-cols-3 gap-28 mb-16">
+                    {metrics.slice(0, 3).map((metric, index) => (
+                      <div 
+                        key={index}
+                        className={`transition-all duration-1000 ease-out ${
+                          index < visibleMetrics 
+                            ? 'opacity-100 translate-y-0' 
+                            : 'opacity-0 translate-y-8'
+                        }`}
+                      >
+                        <AnimatedMetric
+                          value={metric.value}
+                          label={metric.label}
+                          description={metric.description}
+                          isVisible={index < visibleMetrics}
+                          delay={0}
+                          duration={1500}
+                        />
+                      </div>
+                    ))}
                   </div>
-                ))}
+                  
+                  {/* Ligne du bas - 2 métriques */}
+                  <div className="grid grid-cols-2 gap-36 justify-center max-w-none mx-auto">
+                    {metrics.slice(3, 5).map((metric, index) => (
+                      <div 
+                        key={index + 3}
+                        className={`transition-all duration-1000 ease-out ${
+                          (index + 3) < visibleMetrics 
+                            ? 'opacity-100 translate-y-0' 
+                            : 'opacity-0 translate-y-8'
+                        }`}
+                      >
+                        <AnimatedMetric
+                          value={metric.value}
+                          label={metric.label}
+                          description={metric.description}
+                          isVisible={(index + 3) < visibleMetrics}
+                          delay={0}
+                          duration={1500}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
-            </div>
-          </section>
-
-          {/* Section 3 - Performance */}
-          <Section>
-            <AnimationZone bgColor="bg-black" fullWidth>
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-full h-full object-cover"
-              >
-                <source src="/Animtion_Logo_Axone.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
             </AnimationZone>
 
-            <TextZone bgColor="bg-black" alignRight>
-              <div className="text-left">
+            <TextZone bgColor="bg-black">
+              <div className="text-center">
                 <TypewriterText 
                   text="Beyond vision, Axone is built on strong pillars that drive its uniqueness and long-term value"
                   speed={30}
@@ -140,8 +152,8 @@ export default function Home() {
             </TextZone>
           </Section>
 
-          {/* Section 4 - Smart Rebalancing */}
-          <Section>
+          {/* Section 3 - Smart Rebalancing */}
+          <Section reducedHeight>
             <TextZone bgColor="bg-black">
               <div className="text-left">
                 <ScrollAnimation delay={0}>
@@ -149,7 +161,7 @@ export default function Home() {
                     Smart Rebalancing
                   </h2>
 
-                  <p className="text-lg md:text-xl text-[#5a9a9a] mb-8 leading-relaxed font-medium">
+                  <p className="text-lg md:text-xl text-[#5a9a9a] mb-8 leading-relaxed font-medium max-w-md">
                     Axone delivers smart, dynamic crypto indexes that automatically rebalance every hour to secure gains and optimize allocations. It automates the strategies of top traders, ensuring your portfolio adapts effortlessly to fast-moving markets.
                   </p>
                 </ScrollAnimation>
@@ -160,28 +172,28 @@ export default function Home() {
               <div className="flex items-center justify-center h-full p-8">
                 <div className="max-w-xl w-full">
                   <Image
-                    src="/image_smart-rebalancing.webp"
+                    src="/image_rebalance_launch.png"
                     alt="Smart Rebalancing"
                     width={750}
                     height={600}
-                    className="w-full h-auto scale-[1.2]"
+                    className="w-full h-auto scale-[1.0] transform -translate-y-4"
                   />
                 </div>
               </div>
             </AnimationZone>
           </Section>
 
-          {/* Section 5 - Controlled Inflation */}
-          <Section>
+          {/* Section 4 - Controlled Inflation */}
+          <Section reducedHeight>
             <AnimationZone bgColor="bg-black">
               <div className="flex items-center justify-center h-full p-8">
                 <div className="max-w-2xl w-full">
-          <Image
-                    src="/image_inflation.webp"
+                  <Image
+                    src="/image_inflation_launch.png"
                     alt="Controlled Inflation"
                     width={750}
                     height={600}
-                    className="w-full h-auto scale-[2]"
+                    className="w-full h-auto scale-[0.9] transform -translate-y-12"
                   />
                 </div>
               </div>
@@ -189,12 +201,12 @@ export default function Home() {
 
             <TextZone bgColor="bg-black">
               <div className="text-left">
-                <ScrollAnimation delay={200}>
+                <ScrollAnimation delay={100}>
                   <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6 inline-block bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent transition-colors duration-300">
                     Controlled Inflation
                   </h2>
 
-                  <p className="text-lg md:text-xl text-[#5a9a9a] mb-8 leading-relaxed font-medium">
+                  <p className="text-lg md:text-xl text-[#5a9a9a] mb-8 leading-relaxed font-medium max-w-md">
                     Axone introduces a fixed 3% annual inflation fully redistributed to index holders, turning growth into direct rewards for the community. This mechanism strengthens engagement, boosts index value over time, and fuels a virtuous cycle of adoption and shared prosperity.
                   </p>
                 </ScrollAnimation>
@@ -202,11 +214,11 @@ export default function Home() {
             </TextZone>
           </Section>
 
-          {/* Section 6 - The AXONE Token */}
-          <Section>
+          {/* Section 5 - The AXONE Token */}
+          <Section reducedHeight>
             <TextZone bgColor="bg-black">
               <div className="text-left">
-                <ScrollAnimation delay={400}>
+                <ScrollAnimation delay={200}>
                   <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6 inline-block bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent transition-colors duration-300">
                     The AXONE Token
                   </h2>
@@ -229,7 +241,7 @@ export default function Home() {
             <AnimationZone bgColor="bg-black">
               <div className="flex items-center justify-center h-full p-8 pb-2">
                 <div className="max-w-2xl w-full">
-                  <Image
+          <Image
                     src="/image_axone_launch_variante.png"
                     alt="The AXONE Token"
                     width={750}
@@ -241,12 +253,12 @@ export default function Home() {
             </AnimationZone>
           </Section>
 
-          {/* Section 7 - Revenue */}
-          <Section>
+          {/* Section 6 - Revenue */}
+          <Section reducedHeight>
             <AnimationZone bgColor="bg-black">
               <div className="flex items-center justify-center h-full p-8">
                 <div className="max-w-2xl w-full">
-                  <Image
+          <Image
                     src="/image_revenus_intelligent_launch.png"
                     alt="Revenue"
                     width={750}
@@ -259,7 +271,7 @@ export default function Home() {
 
             <TextZone bgColor="bg-black">
               <div className="text-left">
-                <ScrollAnimation delay={600}>
+                <ScrollAnimation delay={300}>
                   <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6 inline-block bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent transition-colors duration-300">
                     Revenue
                   </h2>
@@ -279,11 +291,11 @@ export default function Home() {
             </TextZone>
           </Section>
 
-          {/* Section 8 - Buyback and Burn */}
-          <Section>
+          {/* Section 7 - Buyback and Burn */}
+          <Section reducedHeight>
             <TextZone bgColor="bg-black">
               <div className="text-left">
-                <ScrollAnimation delay={800}>
+                <ScrollAnimation delay={400}>
                   <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6 inline-block bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent transition-colors duration-300">
                     Buyback and Burn
                   </h2>
@@ -306,7 +318,7 @@ export default function Home() {
             <AnimationZone bgColor="bg-black">
               <div className="flex items-start justify-center h-full p-4 pt-0">
                 <div className="max-w-2xl w-full">
-                  <Image
+          <Image
                     src="/image_reseau_neuronal_incandescent.png"
                     alt="Buyback and Burn"
                     width={750}

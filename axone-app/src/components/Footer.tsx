@@ -4,9 +4,25 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="bg-black shadow-lg">
+    <footer className="relative bg-black shadow-lg overflow-hidden">
+      {/* Image de fond */}
+      <div 
+        className="absolute inset-0 bg-center bg-no-repeat"
+        style={{
+          backgroundImage: 'url(/image_axone_bas_page.jpg)',
+          backgroundSize: '100% 100%',
+          backgroundPosition: 'center',
+          minHeight: '100%',
+          height: '100%',
+        }}
+      />
+      {/* Overlay pour assurer la lisibilité */}
+      <div className="absolute inset-0 bg-black/30" />
       
-      <div className="flex min-h-[60px] md:min-h-[80px]">
+      {/* Contenu du footer */}
+      <div className="relative z-10">
+      
+      <div className="flex min-h-[300px] md:min-h-[400px] items-start pt-4">
         {/* Section gauche - Logos sociaux */}
         <div className="flex-1 flex items-center justify-start">
           <div className="px-36 md:px-48">
@@ -64,6 +80,7 @@ export default function Footer() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </footer>
   );
