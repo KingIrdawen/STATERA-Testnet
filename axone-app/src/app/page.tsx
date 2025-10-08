@@ -212,21 +212,29 @@ export default function Home() {
                   </h2>
 
                   <p className="text-lg md:text-xl text-[#5a9a9a] mb-8 leading-relaxed font-medium">
-                    The Axone token ($AXN) is designed as a core value driver, tightly integrated with our ecosystem and indexes. It powers the protocol, captures platform growth, and rewards holders—making it a stake in building a simpler, more efficient, and accessible Web3.
+                    The Axone token ($AXN) is designed as a core<br />
+                    value driver, tightly integrated with our<br />
+                    ecosystem and indexes. It powers the protocol,<br />
+                    captures platform growth, and rewards holders—<br />
+                    making it a stake in building a simpler, more<br />
+                    efficient, and accessible Web3. The token serves<br />
+                    as the backbone of our decentralized<br />
+                    infrastructure, enabling seamless transactions<br />
+                    and governance while providing holders with direct value accrual.
                   </p>
                 </ScrollAnimation>
               </div>
             </TextZone>
 
             <AnimationZone bgColor="bg-black">
-              <div className="flex items-center justify-center h-full p-8">
+              <div className="flex items-center justify-center h-full p-8 pb-2">
                 <div className="max-w-2xl w-full">
-          <Image
-                    src="/image_token-axone.webp"
+                  <Image
+                    src="/image_axone_launch_variante.png"
                     alt="The AXONE Token"
                     width={750}
                     height={600}
-                    className="w-full h-auto scale-[1.5]"
+                    className="w-full h-auto scale-[1.5] transform translate-y-4"
                   />
                 </div>
               </div>
@@ -239,11 +247,11 @@ export default function Home() {
               <div className="flex items-center justify-center h-full p-8">
                 <div className="max-w-2xl w-full">
                   <Image
-                    src="/image_redistribution.webp"
+                    src="/image_revenus_intelligent_launch.png"
                     alt="Revenue"
                     width={750}
                     height={600}
-                    className="w-full h-auto scale-[1.8]"
+                    className="w-full h-auto scale-[1.0]"
                   />
                 </div>
               </div>
@@ -257,7 +265,14 @@ export default function Home() {
                   </h2>
 
                   <p className="text-lg md:text-xl text-[#5a9a9a] mb-8 leading-relaxed font-medium">
-                    Axone creates a virtuous cycle where every new index directly fuels demand and value for the $AXN token. Through fees, buybacks, and inflation rewards, the system ties product adoption to token growth, generating sustainable revenue and long-term community benefits.
+                    Axone creates a virtuous cycle where every new<br />
+                    index directly fuels demand and value for the<br />
+                    $AXN token. Through fees, buybacks, and<br />
+                    inflation rewards, the system ties product<br />
+                    adoption to token growth, generating sustainable<br />
+                    revenue and long-term community benefits.<br />
+                    This mechanism ensures that platform success<br />
+                    translates directly into token value appreciation for all holders.
                   </p>
                 </ScrollAnimation>
               </div>
@@ -274,25 +289,29 @@ export default function Home() {
                   </h2>
 
                   <p className="text-lg md:text-xl text-[#5a9a9a] mb-8 leading-relaxed font-medium">
-                    Axone&apos;s Buyback & Burn mechanism uses 50% of daily fees to repurchase and permanently remove $AXN tokens, creating built-in scarcity. This progressive reduction in supply strengthens index exposure, offsets inflation, and drives long-term value for the community.
+                    Axone&apos;s Buyback & Burn mechanism uses 50%<br />
+                    of daily fees to repurchase and permanently<br />
+                    remove $AXN tokens, creating built-in scarcity.<br />
+                    This progressive reduction in supply strengthens<br />
+                    index exposure, offsets inflation, and drives<br />
+                    long-term value for the community. The mechanism<br />
+                    ensures continuous token appreciation through<br />
+                    controlled deflation, making $AXN tokens more<br />
+                    valuable over time for all holders.
                   </p>
                 </ScrollAnimation>
               </div>
             </TextZone>
 
             <AnimationZone bgColor="bg-black">
-              <div className="flex items-center justify-center h-full p-8">
+              <div className="flex items-start justify-center h-full p-4 pt-0">
                 <div className="max-w-2xl w-full">
-          <Image
-                    src="/image_buyback-and-burn.webp"
+                  <Image
+                    src="/image_reseau_neuronal_incandescent.png"
                     alt="Buyback and Burn"
                     width={750}
                     height={600}
-                    className="w-full h-auto scale-[1.1] object-cover rounded-3xl"
-                    style={{ 
-                      aspectRatio: '4/3',
-                      objectPosition: 'center 37%'
-                    }}
+                    className="w-full h-auto scale-[1.0] transform -translate-y-8"
                   />
                 </div>
               </div>
