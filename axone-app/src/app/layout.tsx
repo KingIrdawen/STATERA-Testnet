@@ -25,10 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body
-        className={`${inter.variable} font-sans antialiased`}
-        style={{ fontFamily: 'var(--font-inter), system-ui, sans-serif' }}
-      >
+      <body className={`${inter.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>

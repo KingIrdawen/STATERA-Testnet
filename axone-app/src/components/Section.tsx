@@ -6,7 +6,7 @@ interface SectionProps {
 }
 
 export default function Section({ children, className = "", reducedHeight = false }: SectionProps & { reducedHeight?: boolean }) {
-  const heightClass = reducedHeight ? "min-h-[60vh]" : "min-h-screen";
+  const heightClass = reducedHeight ? "min-h-[60vh]" : "min-h-[100dvh]";
   return (
     <section className={`${heightClass} flex flex-col md:flex-row ${className}`}>
       {children}
@@ -23,7 +23,7 @@ export function TextZone({ children, className = "", bgColor = "bg-[#011f26]", a
   const justifyClass = alignRight ? "justify-end" : "justify-start";
   return (
     <div className={`flex-1 ${bgColor} flex items-center ${justifyClass} ${className}`}>
-      <div className="px-36 md:px-48">
+      <div className="px-8 sm:px-16 md:px-36 lg:px-48">
         <div className="max-w-2xl">
           {children}
         </div>
@@ -51,7 +51,7 @@ export function AnimationZone({ children, className = "", fullWidth = false, bgC
 
   return (
     <div className={`flex-1 ${bgColor} flex items-center justify-end ${className}`}>
-      <div className="px-36 md:px-48">
+      <div className="px-8 sm:px-16 md:px-36 lg:px-48">
         <div className="max-w-lg">
           {children}
         </div>

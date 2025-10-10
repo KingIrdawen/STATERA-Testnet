@@ -95,10 +95,10 @@ export default function AnimatedMetric({
 
   return (
     <div className="text-center flex flex-col items-center">
-      <div className="text-4xl font-bold text-white mb-2 min-h-[3rem] flex items-center justify-center">
+      <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2 min-h-[2rem] sm:min-h-[2.5rem] md:min-h-[3rem] flex items-center justify-center">
         {animatedValue}
       </div>
-      <div className="text-lg font-bold text-white mb-1 text-center whitespace-nowrap">{label}</div>
+      <div className="text-sm sm:text-base md:text-lg font-bold text-white mb-1 text-center whitespace-nowrap">{label}</div>
     </div>
   );
 }
