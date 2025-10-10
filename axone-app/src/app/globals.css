@@ -9,10 +9,11 @@
 
 html, body {
   overflow-x: hidden;
+  background-color: black;
 }
 
 body {
-  background-color: var(--background);
+  background-color: black;
 }
 
 @theme inline {
