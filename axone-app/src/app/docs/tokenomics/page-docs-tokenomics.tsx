@@ -24,7 +24,7 @@ export default function DocsTokenomicsPage() {
         <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-8">
           <h2 className="text-2xl font-bold text-white mb-4">Economic Structure</h2>
           <p className="text-[#5a9a9a] leading-relaxed mb-4">
-            Axone's tokenomics are designed to create a sustainable and balanced economic ecosystem, with fair distribution and long-term value creation mechanisms.
+            Axone&apos;s tokenomics are designed to create a sustainable and balanced economic ecosystem, with fair distribution and long-term value creation mechanisms.
           </p>
           <p className="text-[#5a9a9a] leading-relaxed">
             Placeholder content. Will be replaced later with the final detailed text about AXN token tokenomics.

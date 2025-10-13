@@ -16,7 +16,7 @@ export default function DocsEpoque2Page() {
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-white mb-4">Epoch 2</h1>
         <p className="text-xl text-[#5a9a9a] leading-relaxed">
-          Axone's innovation phase: AI-driven investment strategies and institutional products.
+          Axone&apos;s innovation phase: AI-driven investment strategies and institutional products.
         </p>
       </div>
 

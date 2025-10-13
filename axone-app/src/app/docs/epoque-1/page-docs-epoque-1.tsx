@@ -16,7 +16,7 @@ export default function DocsEpoque1Page() {
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-white mb-4">Epoch 1</h1>
         <p className="text-xl text-[#5a9a9a] leading-relaxed">
-          Axone's expansion phase: developing advanced capabilities and expanding across multiple blockchain networks.
+          Axone&apos;s expansion phase: developing advanced capabilities and expanding across multiple blockchain networks.
         </p>
       </div>
 

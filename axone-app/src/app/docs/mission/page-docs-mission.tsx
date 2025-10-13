@@ -27,7 +27,7 @@ export default function DocsMissionPage() {
             Axone is committed to providing transparent, secure, and high-performance investment solutions for all users, whether they are beginners or experienced in the crypto ecosystem.
           </p>
           <p className="text-[#5a9a9a] leading-relaxed">
-            Placeholder content. Will be replaced later with the final detailed text about Axone's mission.
+            Placeholder content. Will be replaced later with the final detailed text about Axone&apos;s mission.
           </p>
         </div>
       </div>

@@ -27,7 +27,7 @@ export default function DocsVisionValeursPage() {
             Axone aspires to become the global reference for automated crypto portfolio management, creating an ecosystem where blockchain technology serves financial inclusion and investment democratization.
           </p>
           <p className="text-[#5a9a9a] leading-relaxed">
-            Placeholder content. Will be replaced later with the final detailed text about Axone's vision and values.
+            Placeholder content. Will be replaced later with the final detailed text about Axone&apos;s vision and values.
           </p>
         </div>
       </div>

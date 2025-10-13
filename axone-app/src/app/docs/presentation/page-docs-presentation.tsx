@@ -27,7 +27,7 @@ export default function DocsPresentationPage() {
             Axone is an innovative platform that automates and optimizes crypto portfolio management through blockchain technology. Our mission is to democratize access to advanced investment strategies while maximizing returns for our users.
           </p>
           <p className="text-[#5a9a9a] leading-relaxed">
-            Placeholder content. Will be replaced later with the final detailed text about Axone's introduction.
+            Placeholder content. Will be replaced later with the final detailed text about Axone&apos;s introduction.
           </p>
         </div>
       </div>

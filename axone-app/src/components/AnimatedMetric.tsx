@@ -5,7 +5,7 @@ import React, { useState, useEffect, useRef } from 'react';
 interface AnimatedMetricProps {
   value: string;
   label: string;
-  description: string;
+  description?: string;
   isVisible: boolean;
   delay?: number;
   duration?: number;
@@ -16,16 +16,18 @@ export default function AnimatedMetric({
   label, 
   description, 
   isVisible, 
-  delay = 0,
+  delay = 0, 
   duration = 1000 
 }: AnimatedMetricProps) {
+  // Suppress unused variable warning
+  void description;
   const [animatedValue, setAnimatedValue] = useState('0');
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [hasAnimated, setHasAnimated] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    if (isVisible && !isAnimating) {
-      setIsAnimating(true);
+    if (isVisible && !hasAnimated) {
+      setHasAnimated(true);
       
       // Parse numeric value for animation
       const numericValue = parseFloat(value.replace(/[^0-9.]/g, ''));
@@ -59,8 +61,6 @@ export default function AnimatedMetric({
           
           if (progress < 1) {
             requestAnimationFrame(animate);
-          } else {
-            setIsAnimating(false);
           }
         };
         
@@ -72,13 +72,12 @@ export default function AnimatedMetric({
         // Non-numeric value, show immediately
         timeoutRef.current = setTimeout(() => {
           setAnimatedValue(value);
-          setIsAnimating(false);
         }, delay);
       }
     } else if (!isVisible) {
       // Reset when not visible
       setAnimatedValue('0');
-      setIsAnimating(false);
+      setHasAnimated(false);
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
@@ -91,7 +90,7 @@ export default function AnimatedMetric({
         timeoutRef.current = null;
       }
     };
-  }, [isVisible, value, delay, duration]);
+  }, [isVisible, value, delay, duration, hasAnimated]);
 
   return (
     <div className="text-center flex flex-col items-center">

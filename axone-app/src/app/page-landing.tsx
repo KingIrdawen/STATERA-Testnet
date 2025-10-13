@@ -146,16 +146,16 @@ export default function Home() {
                   <div className="grid grid-cols-1 lg:hidden gap-8 sm:gap-12 md:gap-16 lg:gap-24 xl:gap-28 justify-center max-w-none mx-auto">
                     <div 
                       className={`transition-all duration-1000 ease-out ${
-                        4 < visibleMetrics 
+                        2 < visibleMetrics 
                           ? 'opacity-100 translate-y-0' 
                           : 'opacity-0 translate-y-8'
                       }`}
                     >
                       <AnimatedMetric
-                        value={metrics[4].value}
-                        label={metrics[4].label}
-                        description={metrics[4].description}
-                        isVisible={4 < visibleMetrics}
+                        value={metrics[2].value}
+                        label={metrics[2].label}
+                        description={metrics[2].description}
+                        isVisible={2 < visibleMetrics}
                         delay={0}
                         duration={1500}
                       />

@@ -16,7 +16,7 @@ export default function DocsStrategieCroissancePage() {
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-white mb-4">Growth Strategy - Roadmap</h1>
         <p className="text-xl text-[#5a9a9a] leading-relaxed">
-          Axone's roadmap to become the reference platform for automated crypto portfolio management.
+          Axone&apos;s roadmap to become the reference platform for automated crypto portfolio management.
         </p>
       </div>
 
@@ -24,7 +24,7 @@ export default function DocsStrategieCroissancePage() {
         <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-8">
           <h2 className="text-2xl font-bold text-white mb-4">Long-term Vision</h2>
           <p className="text-[#5a9a9a] leading-relaxed mb-4">
-            Axone develops a structured growth strategy across multiple epochs, each aiming to strengthen the platform's position in the automated crypto investment solutions market.
+            Axone develops a structured growth strategy across multiple epochs, each aiming to strengthen the platform&apos;s position in the automated crypto investment solutions market.
           </p>
           <p className="text-[#5a9a9a] leading-relaxed">
             Placeholder content. Will be replaced later with the final detailed text about growth strategy and roadmap.

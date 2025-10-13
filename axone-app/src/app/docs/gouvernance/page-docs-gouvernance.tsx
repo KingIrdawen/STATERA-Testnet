@@ -16,7 +16,7 @@ export default function DocsGouvernancePage() {
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-white mb-4">Protocol Governance</h1>
         <p className="text-xl text-[#5a9a9a] leading-relaxed">
-          Axone's decentralized governance system allows AXN token holders to participate in protocol decisions.
+          Axone&apos;s decentralized governance system allows AXN token holders to participate in protocol decisions.
         </p>
       </div>
 

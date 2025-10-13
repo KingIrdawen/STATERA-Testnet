@@ -16,7 +16,7 @@ export default function DocsEpoque0Page() {
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-white mb-4">Epoch 0</h1>
         <p className="text-xl text-[#5a9a9a] leading-relaxed">
-          Axone's foundation phase: establishing core infrastructure and launching initial products.
+          Axone&apos;s foundation phase: establishing core infrastructure and launching initial products.
         </p>
       </div>
 
