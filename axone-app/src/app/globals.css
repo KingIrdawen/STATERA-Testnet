@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "@rainbow-me/rainbowkit/styles.css";
 
 :root {
   --background: #ffffff;
@@ -78,4 +79,161 @@ body {
   video {
     display: none;
   }
+}
+
+/* Styles personnalisés pour RainbowKit */
+[data-rk] {
+  --rk-fonts-body: var(--font-inter), system-ui, sans-serif;
+  --rk-fonts-heading: var(--font-inter), system-ui, sans-serif;
+  --rk-colors-accentColor: #fab062;
+  --rk-colors-accentColorForeground: #000000;
+  --rk-colors-actionButtonBorder: #333333;
+  --rk-colors-actionButtonBorderMobile: #333333;
+  --rk-colors-actionButtonSecondaryBackground: #1a1a1a;
+  --rk-colors-closeButton: #666666;
+  --rk-colors-closeButtonBackground: #1a1a1a;
+  --rk-colors-connectButtonBackground: #fab062;
+  --rk-colors-connectButtonBackgroundError: #ff6b6b;
+  --rk-colors-connectButtonInnerBackground: #000000;
+  --rk-colors-connectButtonText: #000000;
+  --rk-colors-connectButtonTextError: #ffffff;
+  --rk-colors-connectionIndicator: #4ade80;
+  --rk-colors-error: #ff6b6b;
+  --rk-colors-generalBorder: #333333;
+  --rk-colors-generalBorderDim: #222222;
+  --rk-colors-menuBackground: #1a1a1a;
+  --rk-colors-menuText: #ffffff;
+  --rk-colors-modalBackdrop: rgba(0, 0, 0, 0.8);
+  --rk-colors-modalBackground: #1a1a1a;
+  --rk-colors-modalBorder: #333333;
+  --rk-colors-modalText: #ffffff;
+  --rk-colors-modalTextDim: #999999;
+  --rk-colors-modalTextSecondary: #666666;
+  --rk-colors-profileAction: #333333;
+  --rk-colors-profileActionHover: #444444;
+  --rk-colors-profileForeground: #ffffff;
+  --rk-colors-selectedOptionBorder: #fab062;
+  --rk-colors-standby: #fab062;
+}
+
+/* Force les styles RainbowKit */
+[data-rk] * {
+  --rk-colors-connectButtonBackground: #fab062 !important;
+  --rk-colors-connectButtonText: #000000 !important;
+}
+
+/* Styles pour le bouton Connect Wallet non connecté */
+[data-rk] button[data-testid="rk-connect-button"] {
+  background-color: #fab062 !important;
+  color: #000000 !important;
+}
+
+/* Styles pour le bouton Connect Wallet connecté (menu button) */
+[data-rk] button[data-testid="rk-account-button"] {
+  background-color: transparent !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Styles pour le texte du wallet connecté */
+[data-rk] button[data-testid="rk-account-button"] span {
+  color: #ffffff !important;
+}
+
+/* Styles pour tous les éléments du bouton connecté */
+[data-rk] button[data-testid="rk-account-button"] * {
+  color: #ffffff !important;
+}
+
+/* Supprimer les bordures et backgrounds du bouton connecté */
+[data-rk] button[data-testid="rk-account-button"]:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border: none !important;
+}
+
+/* Styles pour le contenu du bouton connecté */
+[data-rk] button[data-testid="rk-account-button"] div {
+  color: #ffffff !important;
+}
+
+/* Styles spécifiques pour RainbowKit - bouton connecté */
+[data-rk] [data-testid="rk-account-button"] {
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+}
+
+[data-rk] [data-testid="rk-account-button"] > div {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+
+[data-rk] [data-testid="rk-account-button"] span {
+  color: #ffffff !important;
+}
+
+/* Supprimer toutes les bordures et backgrounds du bouton connecté */
+[data-rk] button[data-testid="rk-account-button"],
+[data-rk] button[data-testid="rk-account-button"] *,
+[data-rk] [data-testid="rk-account-button"],
+[data-rk] [data-testid="rk-account-button"] * {
+  background-color: transparent !important;
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+}
+
+/* Styles pour le bouton de réseau (chaîne) */
+[data-rk] button[data-testid="rk-chain-button"] {
+  background-color: transparent !important;
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+}
+
+[data-rk] button[data-testid="rk-chain-button"] * {
+  background-color: transparent !important;
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+}
+
+/* Styles pour tous les boutons RainbowKit connectés */
+[data-rk] button[data-testid^="rk-"] {
+  background-color: transparent !important;
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+}
+
+[data-rk] button[data-testid^="rk-"] * {
+  background-color: transparent !important;
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+}
+
+/* Styles spécifiques pour les éléments de réseau */
+[data-rk] [class*="chain"] {
+  background-color: transparent !important;
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+}
+
+[data-rk] [class*="network"] {
+  background-color: transparent !important;
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+}
+
+/* Styles pour les icônes de réseau */
+[data-rk] img[alt*="chain"],
+[data-rk] img[alt*="network"],
+[data-rk] svg {
+  background-color: transparent !important;
+  background: transparent !important;
+  border: none !important;
 }
