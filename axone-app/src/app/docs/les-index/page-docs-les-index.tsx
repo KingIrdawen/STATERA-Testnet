@@ -22,12 +22,8 @@ export default function DocsLesIndexPage() {
 
       <div className="prose prose-invert max-w-none">
         <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-8">
-          <h2 className="text-2xl font-bold text-white mb-4">Types of Indexes</h2>
-          <p className="text-[#5a9a9a] leading-relaxed mb-4">
-            Axone offers a variety of specialized indexes, each designed to meet specific investment objectives and different risk profiles.
-          </p>
           <p className="text-[#5a9a9a] leading-relaxed">
-            Placeholder content. Will be replaced later with the final detailed text about the different types of Axone indexes.
+            Content coming soon...
           </p>
         </div>
       </div>

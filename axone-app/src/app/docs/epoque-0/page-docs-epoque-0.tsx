@@ -22,12 +22,8 @@ export default function DocsEpoque0Page() {
 
       <div className="prose prose-invert max-w-none">
         <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-8">
-          <h2 className="text-2xl font-bold text-white mb-4">Foundation Phase</h2>
-          <p className="text-[#5a9a9a] leading-relaxed mb-4">
-            Epoch 0 marks the beginning of the Axone adventure, with the implementation of technical infrastructure, launch of initial indexes, and building a strong community of early users.
-          </p>
           <p className="text-[#5a9a9a] leading-relaxed">
-            Placeholder content. Will be replaced later with the final detailed text about Epoch 0.
+            Content coming soon...
           </p>
         </div>
       </div>

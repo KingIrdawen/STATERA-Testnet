@@ -22,12 +22,8 @@ export default function DocsFonctionnementRevenusPage() {
 
       <div className="prose prose-invert max-w-none">
         <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-8">
-          <h2 className="text-2xl font-bold text-white mb-4">Economic Model</h2>
-          <p className="text-[#5a9a9a] leading-relaxed mb-4">
-            The Axone protocol operates according to a sustainable economic model that aligns the interests of all participants while generating revenue for the continuous development of the platform.
-          </p>
           <p className="text-[#5a9a9a] leading-relaxed">
-            Placeholder content. Will be replaced later with the final detailed text about protocol functioning and revenue.
+            Content coming soon...
           </p>
         </div>
       </div>

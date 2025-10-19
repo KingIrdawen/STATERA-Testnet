@@ -22,12 +22,8 @@ export default function DocsMaitriseInflationPage() {
 
       <div className="prose prose-invert max-w-none">
         <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-8">
-          <h2 className="text-2xl font-bold text-white mb-4">Anti-Inflation Mechanisms</h2>
-          <p className="text-[#5a9a9a] leading-relaxed mb-4">
-            Axone implements several mechanisms to control AXN token inflation, including burn programs, deflation mechanisms, and balanced supply management.
-          </p>
           <p className="text-[#5a9a9a] leading-relaxed">
-            Placeholder content. Will be replaced later with the final detailed text about inflation control.
+            Content coming soon...
           </p>
         </div>
       </div>

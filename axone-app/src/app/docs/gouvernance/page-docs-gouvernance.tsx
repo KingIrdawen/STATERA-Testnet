@@ -22,12 +22,8 @@ export default function DocsGouvernancePage() {
 
       <div className="prose prose-invert max-w-none">
         <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-8">
-          <h2 className="text-2xl font-bold text-white mb-4">Governance Mechanism</h2>
-          <p className="text-[#5a9a9a] leading-relaxed mb-4">
-            Axone governance operates according to a decentralized model where AXN token holders can propose and vote on protocol evolutions, ensuring community-driven and transparent development.
-          </p>
           <p className="text-[#5a9a9a] leading-relaxed">
-            Placeholder content. Will be replaced later with the final detailed text about protocol governance.
+            Content coming soon...
           </p>
         </div>
       </div>

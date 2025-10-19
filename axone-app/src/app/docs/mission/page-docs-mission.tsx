@@ -16,18 +16,18 @@ export default function DocsMissionPage() {
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-white mb-4">Mission</h1>
         <p className="text-xl text-[#5a9a9a] leading-relaxed">
-          Our mission is to democratize access to advanced crypto investment strategies by automating portfolio management.
+          Axone indices enable investors of all levels to access sophisticated investment strategies—automatically managed to maximize returns, without effort and without trusted intermediaries.
         </p>
       </div>
 
       <div className="prose prose-invert max-w-none">
         <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-8">
-          <h2 className="text-2xl font-bold text-white mb-4">Our Commitment</h2>
+          <h2 className="text-2xl font-bold text-white mb-4">Accessible Investment Strategies</h2>
           <p className="text-[#5a9a9a] leading-relaxed mb-4">
-            Axone is committed to providing transparent, secure, and high-performance investment solutions for all users, whether they are beginners or experienced in the crypto ecosystem.
+            Whether you&apos;re a beginner or an expert, Axone allows you to invest in diversified indices (e.g., 50% BTC / 50% HYPE), automatically rebalanced.
           </p>
           <p className="text-[#5a9a9a] leading-relaxed">
-            Placeholder content. Will be replaced later with the final detailed text about Axone&apos;s mission.
+            Our platform eliminates the complexity of manual portfolio management while ensuring optimal performance through intelligent automation and smart rebalancing mechanisms.
           </p>
         </div>
       </div>

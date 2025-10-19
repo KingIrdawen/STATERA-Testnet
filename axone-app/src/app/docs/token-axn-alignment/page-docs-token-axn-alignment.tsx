@@ -16,18 +16,34 @@ export default function DocsTokenAxnAlignmentPage() {
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-white mb-4">AXN Token, Alignment Reward</h1>
         <p className="text-xl text-[#5a9a9a] leading-relaxed">
-          How the AXN token rewards the alignment of interests between users and the Axone protocol.
+          The AXN token is not just an access or speculative token. It is Axone&apos;s alignment currency—an asset that rewards those who believe in the protocol.
         </p>
       </div>
 
       <div className="prose prose-invert max-w-none">
         <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-8">
-          <h2 className="text-2xl font-bold text-white mb-4">Alignment Mechanism</h2>
+          <h2 className="text-2xl font-bold text-white mb-4">More Than a Token</h2>
           <p className="text-[#5a9a9a] leading-relaxed mb-4">
-            The AXN token serves as an alignment mechanism between different actors in the Axone ecosystem, ensuring that all participants benefit from protocol growth.
+            The AXN token is not just an access or speculative token.
           </p>
-          <p className="text-[#5a9a9a] leading-relaxed">
-            Placeholder content. Will be replaced later with the final detailed text about the AXN token and interest alignment.
+          <p className="text-[#5a9a9a] leading-relaxed mb-4">
+            It is Axone&apos;s alignment currency—an asset that rewards those who believe in the protocol, participate in it, and contribute to its growth.
+          </p>
+          <p className="text-[#5a9a9a] leading-relaxed mb-4">
+            Every AXN holder is morally and economically aligned with Axone&apos;s success.
+          </p>
+
+          <h2 className="text-2xl font-bold text-white mb-4 mt-8">Value Capture</h2>
+          <p className="text-[#5a9a9a] leading-relaxed mb-4">
+            Whether you use an index, stake your liquid token, or engage with the ecosystem, AXN allows you to capture a share of the value you help create.
+          </p>
+
+          <h2 className="text-2xl font-bold text-white mb-4 mt-8">Proof of Commitment</h2>
+          <p className="text-[#5a9a9a] leading-relaxed mb-4">
+            This is not just a token.
+          </p>
+          <p className="text-[#5a9a9a] leading-relaxed font-semibold">
+            It is proof of commitment—and a reward for those who choose to build with us.
           </p>
         </div>
       </div>

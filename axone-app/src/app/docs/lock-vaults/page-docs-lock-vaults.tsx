@@ -22,12 +22,8 @@ export default function DocsLockVaultsPage() {
 
       <div className="prose prose-invert max-w-none">
         <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-8">
-          <h2 className="text-2xl font-bold text-white mb-4">How Lock Vaults Work</h2>
-          <p className="text-[#5a9a9a] leading-relaxed mb-4">
-            Lock Vaults are advanced staking mechanisms that allow users to lock their AXN tokens for specific periods, in exchange for rewards proportional to the lock duration.
-          </p>
           <p className="text-[#5a9a9a] leading-relaxed">
-            Placeholder content. Will be replaced later with the final detailed text about Lock Vaults.
+            Content coming soon...
           </p>
         </div>
       </div>
