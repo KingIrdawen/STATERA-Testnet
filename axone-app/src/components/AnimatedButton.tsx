@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useInView } from 'react-intersection-observer';
 
 interface AnimatedButtonProps {
@@ -45,13 +46,13 @@ export default function AnimatedButton({ href, children, className = "", delay =
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}
     >
-      <a
+      <Link
         href={href}
         key={animationKey}
         className={`${className} transform transition-all duration-300 hover:scale-105 hover:shadow-2xl breathing-animation`}
       >
         {children}
-      </a>
+      </Link>
     </div>
   );
 }
