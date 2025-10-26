@@ -28,7 +28,7 @@ export default function ComingSoon() {
         <div className="mb-8">
           <Link href="/" className="inline-block">
             <Image
-              src="/Logo-Axone.webp"
+              src="/Logo-Axone.png"
               alt="AXONE Logo"
               width={200}
               height={67}

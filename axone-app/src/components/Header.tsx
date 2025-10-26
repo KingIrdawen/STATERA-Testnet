@@ -29,7 +29,7 @@ export default function Header() {
           <div className="px-4 sm:px-8 md:px-36 lg:px-48">
             <Link href="/" className="flex items-center gap-2 sm:gap-3">
               <Image
-                src="/Logo-Axone.webp"
+                src="/Logo-Axone.png"
                 alt="AXONE Logo"
                 width={150}
                 height={50}

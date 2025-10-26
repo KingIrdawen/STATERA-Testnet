@@ -1,0 +1,117 @@
+[
+  {
+    "id": "1761495070461",
+    "name": "BTC50DEF",
+    "description": "",
+    "riskLevel": "low",
+    "apy": 5,
+    "usdcAddress": "",
+    "vaultAddress": "",
+    "coreInteractionHandlerAddress": "",
+    "l1ReadAddress": "",
+    "tokens": [
+      {
+        "symbol": "BTC",
+        "name": "",
+        "allocation": 50,
+        "logo": "",
+        "tokenId": ""
+      },
+      {
+        "symbol": "HYPE",
+        "name": "",
+        "allocation": 50,
+        "logo": "",
+        "tokenId": ""
+      }
+    ]
+  },
+  {
+    "id": "1761495489562",
+    "name": "BTC100OFF",
+    "description": "",
+    "riskLevel": "medium",
+    "apy": 2,
+    "usdcAddress": "",
+    "vaultAddress": "",
+    "coreInteractionHandlerAddress": "",
+    "l1ReadAddress": "",
+    "tokens": [
+      {
+        "symbol": "BTC",
+        "name": "",
+        "allocation": 100,
+        "logo": "",
+        "tokenId": ""
+      }
+    ]
+  },
+  {
+    "id": "1761495877022",
+    "name": "TEST 1",
+    "description": "",
+    "riskLevel": "high",
+    "apy": 7,
+    "usdcAddress": "",
+    "vaultAddress": "",
+    "coreInteractionHandlerAddress": "",
+    "l1ReadAddress": "",
+    "tokens": [
+      {
+        "symbol": "AXN",
+        "name": "",
+        "allocation": 100,
+        "logo": "",
+        "tokenId": ""
+      }
+    ]
+  },
+  {
+    "id": "1761495895189",
+    "name": "TEST 2",
+    "description": "",
+    "riskLevel": "low",
+    "apy": 12,
+    "usdcAddress": "",
+    "vaultAddress": "",
+    "coreInteractionHandlerAddress": "",
+    "l1ReadAddress": "",
+    "tokens": [
+      {
+        "symbol": "ETH",
+        "name": "",
+        "allocation": 20,
+        "logo": "",
+        "tokenId": ""
+      },
+      {
+        "symbol": "BTC",
+        "name": "",
+        "allocation": 20,
+        "logo": "",
+        "tokenId": ""
+      },
+      {
+        "symbol": "USDC",
+        "name": "",
+        "allocation": 20,
+        "logo": "",
+        "tokenId": ""
+      },
+      {
+        "symbol": "HYPE",
+        "name": "",
+        "allocation": 20,
+        "logo": "",
+        "tokenId": ""
+      },
+      {
+        "symbol": "VVV",
+        "name": "",
+        "allocation": 20,
+        "logo": "",
+        "tokenId": ""
+      }
+    ]
+  }
+]

@@ -1,19 +1,31 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Footer from '@/components/Footer';
 import { Index, Token } from '@/types/index';
+import { useStrategies } from '@/hooks/useStrategies';
 
 export default function AdminPage() {
-  const [indexes, setIndexes] = useState<Index[]>([]);
+  const { strategies, loading, createStrategy, updateStrategy, deleteStrategy } = useStrategies();
   const [editingIndex, setEditingIndex] = useState<Index | null>(null);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    description: string;
+    riskLevel: 'low' | 'medium' | 'high';
+    apy?: number;
+    usdcAddress: string;
+    vaultAddress: string;
+    coreInteractionHandlerAddress: string;
+    l1ReadAddress: string;
+    tokens: Token[];
+  }>({
     name: '',
     description: '',
-    riskLevel: 'faible' as 'faible' | 'moyen' | 'élevé',
+    riskLevel: 'low',
+    apy: undefined,
     usdcAddress: '',
     vaultAddress: '',
     coreInteractionHandlerAddress: '',
@@ -21,33 +33,7 @@ export default function AdminPage() {
     tokens: [{ symbol: '', name: '', allocation: 0, logo: '', tokenId: '' }]
   });
 
-  // Charger les index depuis localStorage
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const savedIndexes = localStorage.getItem('axone-indexes');
-      if (savedIndexes) {
-        try {
-          setIndexes(JSON.parse(savedIndexes));
-        } catch (error) {
-          console.error('Error parsing saved indexes:', error);
-        }
-      }
-    }
-  }, []);
-
-  // Sauvegarder les index dans localStorage
-  const saveIndexes = (newIndexes: Index[]) => {
-    setIndexes(newIndexes);
-    if (typeof window !== 'undefined') {
-      try {
-        localStorage.setItem('axone-indexes', JSON.stringify(newIndexes));
-      } catch (error) {
-        console.error('Error saving indexes:', error);
-      }
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Validation
@@ -62,6 +48,7 @@ export default function AdminPage() {
       name: formData.name,
       description: formData.description,
       riskLevel: formData.riskLevel,
+      apy: formData.apy,
       usdcAddress: formData.usdcAddress,
       vaultAddress: formData.vaultAddress,
       coreInteractionHandlerAddress: formData.coreInteractionHandlerAddress,
@@ -69,29 +56,32 @@ export default function AdminPage() {
       tokens: formData.tokens.filter(token => token.symbol)
     };
 
-    if (editingIndex) {
-      // Modifier un index existant
-      const updatedIndexes = indexes.map(index => 
-        index.id === editingIndex.id ? newIndex : index
-      );
-      saveIndexes(updatedIndexes);
-    } else {
-      // Ajouter un nouvel index
-      saveIndexes([...indexes, newIndex]);
-    }
+    try {
+      if (editingIndex) {
+        // Modifier une stratégie existante
+        await updateStrategy(newIndex);
+      } else {
+        // Ajouter une nouvelle stratégie
+        await createStrategy(newIndex);
+      }
 
-    // Réinitialiser le formulaire
-    setFormData({
-      name: '',
-      description: '',
-      riskLevel: 'faible',
-      usdcAddress: '',
-      vaultAddress: '',
-      coreInteractionHandlerAddress: '',
-      l1ReadAddress: '',
-      tokens: [{ symbol: '', name: '', allocation: 0, logo: '', tokenId: '' }]
-    });
-    setEditingIndex(null);
+      // Réinitialiser le formulaire
+      setFormData({
+        name: '',
+        description: '',
+        riskLevel: 'low',
+        apy: undefined,
+        usdcAddress: '',
+        vaultAddress: '',
+        coreInteractionHandlerAddress: '',
+        l1ReadAddress: '',
+        tokens: [{ symbol: '', name: '', allocation: 0, logo: '', tokenId: '' }]
+      });
+      setEditingIndex(null);
+    } catch (error) {
+      console.error('Error saving strategy:', error);
+      alert('Erreur lors de la sauvegarde de la stratégie');
+    }
   };
 
   const handleEdit = (index: Index) => {
@@ -100,6 +90,7 @@ export default function AdminPage() {
       name: index.name,
       description: index.description || '',
       riskLevel: index.riskLevel,
+      apy: index.apy,
       usdcAddress: index.usdcAddress || '',
       vaultAddress: index.vaultAddress || '',
       coreInteractionHandlerAddress: index.coreInteractionHandlerAddress || '',
@@ -108,10 +99,14 @@ export default function AdminPage() {
     });
   };
 
-  const handleDelete = (indexId: string) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet index ?')) {
-      const updatedIndexes = indexes.filter(index => index.id !== indexId);
-      saveIndexes(updatedIndexes);
+  const handleDelete = async (indexId: string) => {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette stratégie ?')) {
+      try {
+        await deleteStrategy(indexId);
+      } catch (error) {
+        console.error('Error deleting strategy:', error);
+        alert('Erreur lors de la suppression de la stratégie');
+      }
     }
   };
 
@@ -149,7 +144,7 @@ export default function AdminPage() {
         <div className="flex items-center justify-between px-4 sm:px-8 md:px-36 lg:px-48 py-4">
           <Link href="/" className="flex items-center gap-3 sm:gap-4">
             <Image
-              src="/Logo-Axone.webp"
+              src="/Logo-Axone.png"
               alt="Axone Logo"
               width={48}
               height={48}
@@ -201,7 +196,7 @@ export default function AdminPage() {
               </span>
             </h1>
             <p className="text-lg text-[#5a9a9a] mb-8">
-              Gérer les index crypto
+              Gérer les strategies crypto
             </p>
           </div>
 
@@ -209,14 +204,14 @@ export default function AdminPage() {
             {/* Formulaire */}
             <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
               <h2 className="text-2xl font-bold text-white mb-6">
-                {editingIndex ? 'Modifier l&apos;index' : 'Créer un nouvel index'}
+                {editingIndex ? 'Modifier la stratégie' : 'Créer une nouvelle stratégie'}
               </h2>
               
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Nom de l'index */}
+                {/* Nom de la stratégie */}
                 <div>
                   <label className="block text-white font-semibold mb-2">
-                    Nom de l&apos;index
+                    Nom de la stratégie
                   </label>
                   <input
                     type="text"
@@ -246,13 +241,29 @@ export default function AdminPage() {
                   </label>
                   <select
                     value={formData.riskLevel}
-                    onChange={(e) => setFormData({ ...formData, riskLevel: e.target.value as 'faible' | 'moyen' | 'élevé' })}
+                    onChange={(e) => setFormData({ ...formData, riskLevel: e.target.value as 'low' | 'medium' | 'high' })}
                     className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-[#fab062] focus:outline-none"
                   >
-                    <option value="faible">Faible</option>
-                    <option value="moyen">Moyen</option>
-                    <option value="élevé">Élevé</option>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
                   </select>
+                </div>
+
+                {/* APY */}
+                <div>
+                  <label className="block text-white font-semibold mb-2">
+                    APY (%)
+                  </label>
+                  <input
+                    type="number"
+                    value={formData.apy || ''}
+                    onChange={(e) => setFormData({ ...formData, apy: e.target.value ? Number(e.target.value) : undefined })}
+                    className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-[#fab062] focus:outline-none"
+                    placeholder="Ex: 12.5"
+                    step="0.01"
+                    min="0"
+                  />
                 </div>
 
                 {/* Adresses */}
@@ -339,10 +350,10 @@ export default function AdminPage() {
                         />
                         <input
                           type="number"
-                          placeholder="%"
+                          placeholder="Allocation %"
                           value={token.allocation}
                           onChange={(e) => updateTokenField(index, 'allocation', Number(e.target.value))}
-                          className="w-20 px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white text-sm focus:border-[#fab062] focus:outline-none"
+                          className="w-28 px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white text-sm focus:border-[#fab062] focus:outline-none"
                           min="0"
                           max="100"
                         />
@@ -385,7 +396,7 @@ export default function AdminPage() {
                         setFormData({
                           name: '',
                           description: '',
-                          riskLevel: 'faible',
+                          riskLevel: 'low',
                           usdcAddress: '',
                           vaultAddress: '',
                           coreInteractionHandlerAddress: '',
@@ -405,11 +416,14 @@ export default function AdminPage() {
             {/* Liste des index existants */}
             <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
               <h2 className="text-2xl font-bold text-white mb-6">
-                Index existants ({indexes.length})
+                Strategies existantes ({strategies.length})
               </h2>
               
-              <div className="space-y-4">
-                {indexes.map((index) => (
+              {loading ? (
+                <p className="text-[#5a9a9a] text-center py-8">Chargement...</p>
+              ) : (
+                <div className="space-y-4">
+                  {strategies.map((index) => (
                   <div key={index.id} className="bg-gray-800 rounded-lg p-4">
                     <div className="flex justify-between items-start mb-2">
                       <h3 className="text-lg font-semibold text-white">{index.name}</h3>
@@ -462,14 +476,15 @@ export default function AdminPage() {
                       </div>
                     </div>
                   </div>
-                ))}
-                
-                {indexes.length === 0 && (
-                  <p className="text-[#5a9a9a] text-center py-8">
-                    Aucun index créé pour le moment
-                  </p>
-                )}
-              </div>
+                  ))}
+                  
+                  {strategies.length === 0 && (
+                    <p className="text-[#5a9a9a] text-center py-8">
+                      Aucune stratégie créée pour le moment
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>

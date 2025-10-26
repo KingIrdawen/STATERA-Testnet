@@ -203,7 +203,7 @@ export default function Home() {
               <div className="flex items-center justify-center h-full p-8">
                 <div className="overflow-hidden w-full">
                   <Image
-                    src="/image_rebalance_launch.png"
+                    src="/image_Rebalance launch.png"
                     alt="Smart Rebalancing"
                     width={750}
                     height={600}
@@ -219,14 +219,14 @@ export default function Home() {
           <Section reducedHeight>
             <AnimationZone bgColor="bg-black" className="order-2 md:order-none">
               <div className="flex items-center justify-center h-full p-8">
-                <div className="overflow-hidden w-full">
+                <div className="w-full">
                   <Image
-                    src="/image_inflation_launch.png"
+                    src="/image_Inflation launch.png"
                     alt="Controlled Inflation"
                     width={750}
                     height={600}
                     sizes="(min-width: 1280px) 750px, (min-width: 768px) 70vw, 92vw"
-                    className="w-full h-auto sm:scale-[0.7] md:scale-75 lg:scale-[0.8] xl:scale-[0.85] transform -translate-y-12"
+                    className="w-full h-auto sm:scale-[1.1] md:scale-[1.2] lg:scale-[1.3] xl:scale-[1.4] transform -translate-y-12"
                   />
                 </div>
               </div>
@@ -283,14 +283,14 @@ export default function Home() {
           <Section reducedHeight>
             <AnimationZone bgColor="bg-black" className="order-2 md:order-none">
               <div className="flex items-center justify-center h-full p-8">
-                <div className="overflow-hidden w-full">
+                <div className="w-full">
                   <Image
-                    src="/image_revenus_intelligent_launch.png"
+                    src="/image_revenus intellingent launch.png"
                     alt="Revenue"
                     width={750}
                     height={600}
                     sizes="(min-width: 1280px) 750px, (min-width: 768px) 70vw, 92vw"
-                    className="w-full h-auto sm:scale-75 md:scale-80 lg:scale-85 xl:scale-90"
+                    className="w-full h-auto sm:scale-[1.1] md:scale-[1.2] lg:scale-[1.3] xl:scale-[1.4]"
                   />
                 </div>
               </div>
@@ -329,14 +329,14 @@ export default function Home() {
 
             <AnimationZone bgColor="bg-black" className="order-2 md:order-none">
               <div className="flex items-start justify-center h-full p-4 pt-0">
-                <div className="overflow-hidden w-full">
+                <div className="w-full">
                   <Image
                     src="/image_reseau_neuronal_incandescent.png"
                     alt="Buyback and Burn"
                     width={750}
                     height={600}
                     sizes="(min-width: 1280px) 750px, (min-width: 768px) 70vw, 92vw"
-                    className="w-full h-auto sm:scale-75 md:scale-80 lg:scale-85 xl:scale-90 transform -translate-y-8"
+                    className="w-full h-auto sm:scale-[0.6] md:scale-[0.64] lg:scale-[0.68] xl:scale-[0.72] transform -translate-y-8"
                   />
                 </div>
               </div>

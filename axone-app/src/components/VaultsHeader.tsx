@@ -11,7 +11,7 @@ export default function VaultsHeader() {
         {/* Logo et nom */}
         <Link href="/" className="flex items-center gap-3 sm:gap-4">
           <Image
-            src="/Logo-Axone.webp"
+            src="/Logo-Axone.png"
             alt="Axone Logo"
             width={48}
             height={48}
