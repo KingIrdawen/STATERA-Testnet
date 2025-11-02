@@ -1,16 +1,399 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useAccount } from 'wagmi';
 import Footer from '@/components/Footer';
 import { Index, getRiskColor, getRiskBgColor } from '@/types/index';
 import AxoneLayersIcon from '../../icons/AxoneLayersIcon';
 import { useStrategies } from '@/hooks/useStrategies';
+import { useStrategyData } from '@/hooks/useStrategyData';
+import { useVaultActions } from '@/hooks/useVaultActions';
+import { usePoints } from '@/hooks/usePoints';
+import { useRanking } from '@/hooks/useRanking';
+
+// Composant pour l'onglet Points
+function PointsTabContent() {
+  const { points, isLoading, error, address } = usePoints()
+  const { userRanking } = useRanking()
+
+  if (!address) {
+    return (
+      <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 sm:p-8">
+        <div className="text-center">
+          <p className="text-[#5a9a9a] text-lg mb-4">Please connect your wallet to view your points</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-8 inline-block min-w-[300px]">
+      <div className="text-center">
+        <h3 className="text-2xl font-bold text-white mb-6">Your Points</h3>
+        {isLoading ? (
+          <p className="text-[#5a9a9a] text-lg">Loading...</p>
+        ) : error ? (
+          <p className="text-red-400 text-lg">Error loading points</p>
+        ) : (
+          <div className="space-y-6">
+            <div className="inline-block px-8 py-4 bg-gradient-to-r from-[#fab062] to-[#5a9a9a] rounded-lg">
+              <p className="text-4xl font-bold text-black">{parseFloat(points).toLocaleString('fr-FR', { useGrouping: true })}</p>
+            </div>
+            {userRanking && (
+              <div>
+                <p className="text-gray-400 text-sm mb-1">Ranking Position</p>
+                <p className="text-2xl font-bold text-white">#{userRanking.rank}</p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// Composant pour l'onglet Ranking
+function RankingTabContent() {
+  const { ranking, userRanking, searchQuery, setSearchQuery, isLoading, lastUpdate } = useRanking()
+  const { address } = useAccount()
+
+  return (
+    <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 sm:p-8">
+      {/* Barre de recherche */}
+      <div className="mb-6">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search by address or rank..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full px-4 py-2 pl-10 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:border-[#fab062] focus:outline-none text-sm h-10"
+          />
+          <svg
+            className="absolute left-3 top-2.5 h-4 w-4 text-gray-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+        {lastUpdate && (
+          <p className="text-gray-500 text-xs mt-2">
+            Last updated: {lastUpdate.toLocaleTimeString()}
+          </p>
+        )}
+      </div>
+
+      {/* Ligne de l'utilisateur connecté si présent */}
+      {userRanking && address && (
+        <div className="mb-6 p-4 bg-gradient-to-r from-[#fab062]/20 to-[#5a9a9a]/20 border border-[#fab062]/50 rounded-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <span className="text-2xl font-bold text-[#fab062]">#{userRanking.rank}</span>
+              <div>
+                <p className="text-white font-semibold">
+                  {userRanking.address.slice(0, 6)}...{userRanking.address.slice(-4)}
+                </p>
+                <p className="text-gray-400 text-xs">Your ranking</p>
+              </div>
+            </div>
+            <span className="text-2xl font-bold text-white">{parseFloat(userRanking.points).toLocaleString('fr-FR', { useGrouping: true })}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Classement complet */}
+      <div className="space-y-2">
+        {isLoading ? (
+          <div className="text-center py-12">
+            <p className="text-[#5a9a9a] text-lg">Loading ranking...</p>
+          </div>
+        ) : ranking.length > 0 ? (
+          <>
+            {/* En-tête du tableau */}
+            <div className="grid grid-cols-12 gap-4 px-4 py-2 border-b border-gray-700">
+              <div className="col-span-1 text-gray-400 text-sm font-semibold">#</div>
+              <div className="col-span-8 text-gray-400 text-sm font-semibold">Address</div>
+              <div className="col-span-3 text-right text-gray-400 text-sm font-semibold">Points</div>
+            </div>
+            {/* Lignes du classement */}
+            {ranking.map((entry, index) => {
+              const isUser = address && entry.address.toLowerCase() === address.toLowerCase()
+              return (
+                <div
+                  key={entry.address}
+                  className={`grid grid-cols-12 gap-4 px-4 py-3 rounded-lg transition-colors ${
+                    isUser
+                      ? 'bg-[#fab062]/10 border border-[#fab062]/30'
+                      : 'hover:bg-gray-800/50'
+                  }`}
+                >
+                  <div className={`col-span-1 text-sm font-bold ${isUser ? 'text-[#fab062]' : 'text-gray-300'}`}>
+                    {entry.rank}
+                  </div>
+                  <div className={`col-span-8 text-sm ${isUser ? 'text-white font-semibold' : 'text-gray-300'}`}>
+                    {entry.address.slice(0, 6)}...{entry.address.slice(-4)}
+                    {isUser && <span className="ml-2 text-[#fab062] text-xs">(You)</span>}
+                  </div>
+                  <div className={`col-span-3 text-right text-sm font-bold ${isUser ? 'text-[#fab062]' : 'text-white'}`}>
+                    {parseFloat(entry.points).toLocaleString('fr-FR', { useGrouping: true })}
+                  </div>
+                </div>
+              )
+            })}
+          </>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-[#5a9a9a] text-lg mb-4">No ranking data available</p>
+            <p className="text-gray-500 text-sm">The ranking will be displayed here once the contract is configured</p>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// Composant pour afficher une stratégie avec ses données
+function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; showWithdraw?: boolean }) {
+  const { data, isLoading, isConfigured, address } = useStrategyData(strategy);
+  const { deposit, withdraw, isPending, isConfirming, isSuccess, error } = useVaultActions(strategy);
+  const [depositAmount, setDepositAmount] = useState('');
+  const [withdrawAmount, setWithdrawAmount] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  
+  // Calculer Total Value Deposited (coreEquityUsd ou vaultTotalSupply * pps)
+  const totalValueDeposited = data
+    ? parseFloat(data.coreEquityUsd) || 
+      (parseFloat(data.vaultTotalSupply) * parseFloat(data.pps) || 0)
+    : 0;
+  
+  // Calculer Your deposits (vaultShares * pps)
+  const yourDeposits = data
+    ? parseFloat(data.vaultShares) * parseFloat(data.pps) || 0
+    : 0;
+  
+  // Calculer Shares (vaultShares / vaultTotalSupply)
+  const shares = data && parseFloat(data.vaultTotalSupply) > 0
+    ? parseFloat(data.vaultShares) / parseFloat(data.vaultTotalSupply)
+    : 0;
+
+  // Gérer le dépôt
+  const handleDeposit = async () => {
+    if (!depositAmount || parseFloat(depositAmount) <= 0) {
+      setErrorMessage('Please enter a valid amount');
+      return;
+    }
+
+    if (!address) {
+      setErrorMessage('Please connect your wallet');
+      return;
+    }
+
+    if (!strategy?.usdcAddress || !strategy?.vaultAddress) {
+      setErrorMessage('Strategy is not fully configured. Please set all contract addresses.');
+      return;
+    }
+
+    if (!data?.usdcBalance || parseFloat(depositAmount) > parseFloat(data.usdcBalance)) {
+      setErrorMessage('Insufficient USDC balance');
+      return;
+    }
+
+    setErrorMessage(null);
+    try {
+      // Utiliser les décimales réelles depuis les données si disponibles
+      const usdcDecimals = data.usdcDecimals || 6;
+      await deposit(depositAmount, usdcDecimals);
+      setDepositAmount(''); // Reset après succès
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Failed to deposit');
+    }
+  };
+
+  // Gérer le retrait
+  const handleWithdraw = async () => {
+    if (!withdrawAmount || parseFloat(withdrawAmount) <= 0) {
+      setErrorMessage('Please enter a valid amount');
+      return;
+    }
+
+    if (!address) {
+      setErrorMessage('Please connect your wallet');
+      return;
+    }
+
+    if (!strategy?.vaultAddress) {
+      setErrorMessage('Strategy vault address is not configured.');
+      return;
+    }
+
+    if (parseFloat(withdrawAmount) > parseFloat(data?.vaultShares || '0')) {
+      setErrorMessage('Insufficient shares');
+      return;
+    }
+
+    setErrorMessage(null);
+    try {
+      // Utiliser les décimales réelles depuis les données si disponibles
+      const vaultDecimals = data?.vaultDecimals || 18;
+      await withdraw(withdrawAmount, vaultDecimals);
+      setWithdrawAmount(''); // Reset après succès
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Failed to withdraw');
+    }
+  };
+
+  // Reset les erreurs quand la transaction réussit
+  useEffect(() => {
+    if (isSuccess) {
+      setErrorMessage(null);
+      // Recharger les données après succès
+      // Le composant parent devrait recharger via useStrategyData
+    }
+  }, [isSuccess]);
+
+  return (
+    <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 hover:border-[#fab062]/50 transition-colors h-full flex flex-col">
+      {/* En-tête de la stratégie */}
+      <div className="flex justify-between items-start mb-4">
+        <h4 className="text-xl font-bold bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent">{strategy.name}</h4>
+        <span className={`px-3 py-1 rounded-full text-sm font-semibold border ${getRiskBgColor(strategy.riskLevel)} ${getRiskColor(strategy.riskLevel)}`}>
+          {strategy.riskLevel}
+        </span>
+      </div>
+      
+      {/* Description */}
+      {strategy.description && (
+        <p className="text-[#5a9a9a] text-sm mb-4">{strategy.description}</p>
+      )}
+      
+      {/* Tokens et répartition avec APY */}
+      <div className="mb-4">
+        {/* Header avec Token Allocation et APY */}
+        <div className="flex items-center justify-between mb-3">
+          <h5 className="text-white font-semibold">Token Allocation</h5>
+          <h5 className="text-white font-semibold">APY: {strategy.apy !== undefined ? `${strategy.apy}%` : '-'}</h5>
+        </div>
+        
+        {/* Liste des tokens */}
+        <div className="space-y-1">
+          {strategy.tokens.map((token, i) => (
+            <div key={i} className="flex items-center">
+              <span className="text-white text-sm">{token.symbol}</span>
+              <span className="text-[#fab062] font-semibold text-sm ml-2">{token.allocation}%</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      {/* Informations depuis les smart contracts */}
+      {isLoading && isConfigured && (
+        <div className="mb-4 text-center">
+          <p className="text-[#5a9a9a] text-sm">Loading contract data...</p>
+        </div>
+      )}
+      
+      {/* Bouton de dépôt */}
+      <div className="mt-auto">
+        {/* Total Value Deposited et Your deposits */}
+        <div className="mb-4">
+          <div className="mb-2 flex justify-between items-center">
+            <span className="text-white font-semibold text-sm">Total Value Deposited</span>
+            <span className="text-white font-bold">
+              {isLoading ? '...' : `$${totalValueDeposited.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+            </span>
+          </div>
+          <div className="mb-2 flex justify-between items-center">
+            <span className="text-gray-400 text-sm">Your deposits in this strategy</span>
+            <span className="text-gray-400 font-bold">
+              {isLoading ? '...' : `$${yourDeposits.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-400 text-sm">Shares in this strategy</span>
+            <span className="text-gray-400 font-bold">
+              {isLoading ? '...' : shares.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 6 })}
+            </span>
+          </div>
+        </div>
+        
+        <div className="flex items-center justify-between mb-2">
+          <label className="block text-white text-sm font-semibold">
+            Deposit Amount
+          </label>
+          <span className="text-gray-400 text-xs">
+            Balance: {isLoading ? '...' : `${data?.usdcBalance || '0'} USDC`}
+          </span>
+        </div>
+        {errorMessage && (
+          <div className="mb-2 p-2 bg-red-900/20 border border-red-500/50 rounded text-red-400 text-xs">
+            {errorMessage}
+          </div>
+        )}
+        {isSuccess && (
+          <div className="mb-2 p-2 bg-green-900/20 border border-green-500/50 rounded text-green-400 text-xs">
+            Transaction successful!
+          </div>
+        )}
+        <div className="flex gap-2">
+          <input
+            type="number"
+            placeholder="0.00"
+            value={depositAmount}
+            onChange={(e) => setDepositAmount(e.target.value)}
+            disabled={isPending || isConfirming}
+            className="flex-1 px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm focus:border-[#fab062] focus:outline-none min-w-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
+            min="0"
+            step="0.01"
+          />
+          <button
+            onClick={handleDeposit}
+            disabled={isPending || isConfirming || !isConfigured || !address || !depositAmount}
+            className="px-3 py-2 bg-gradient-to-r from-[#fab062] to-[#5a9a9a] text-black font-semibold rounded-lg hover:opacity-90 transition-opacity text-sm whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isPending ? 'Approving...' : isConfirming ? 'Confirming...' : 'Deposit'}
+          </button>
+        </div>
+        
+        {/* Bouton de retrait (si showWithdraw est true) */}
+        {showWithdraw && (
+          <div className="space-y-2 mt-4">
+            <label className="block text-white text-sm font-semibold">
+              Withdraw Amount (Shares)
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="number"
+                placeholder="0.00"
+                value={withdrawAmount}
+                onChange={(e) => setWithdrawAmount(e.target.value)}
+                disabled={isPending || isConfirming}
+                className="flex-1 px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm focus:border-[#fab062] focus:outline-none min-w-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
+                min="0"
+                step="0.01"
+              />
+              <button
+                onClick={handleWithdraw}
+                disabled={isPending || isConfirming || !isConfigured || !address || !withdrawAmount}
+                className="px-3 py-2 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors text-sm whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isPending ? 'Processing...' : isConfirming ? 'Confirming...' : 'Withdraw'}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState('Strategy');
+  const [activePointsTab, setActivePointsTab] = useState('Points');
   const { strategies, loading } = useStrategies();
   const [activePage, setActivePage] = useState('dashboard');
   
@@ -72,113 +455,8 @@ export default function DashboardPage() {
               </div>
             ) : strategiesWithDeposits.length > 0 ? (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {strategiesWithDeposits.map((index) => (
-                  <div key={index.id} className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 hover:border-[#fab062]/50 transition-colors h-full flex flex-col">
-                    {/* En-tête de l'index */}
-                    <div className="flex justify-between items-start mb-4">
-                      <h4 className="text-xl font-bold bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent">{index.name}</h4>
-                      <span className={`px-3 py-1 rounded-full text-sm font-semibold border ${getRiskBgColor(index.riskLevel)} ${getRiskColor(index.riskLevel)}`}>
-                        {index.riskLevel}
-                      </span>
-                    </div>
-                    
-                    {/* Description */}
-                    {index.description && (
-                      <p className="text-[#5a9a9a] text-sm mb-4">{index.description}</p>
-                    )}
-                    
-                    {/* Montant déposé */}
-                    <div className="mb-4 p-3 bg-gray-800 rounded-lg">
-                      <div className="flex justify-between items-center">
-                        <span className="text-white font-semibold text-sm">Your Deposit</span>
-                        <span className="text-[#fab062] font-bold">
-                          $0.00
-                        </span>
-                      </div>
-                      <div className="text-xs text-gray-400 mt-1">
-                        Wallet balance
-                      </div>
-                    </div>
-                    
-                    {/* Tokens et répartition avec APY */}
-                    <div className="mb-4">
-                      {/* Header avec Token Allocation et APY */}
-                      <div className="flex items-center justify-between mb-3">
-                        <h5 className="text-white font-semibold">Token Allocation</h5>
-                        <h5 className="text-white font-semibold">APY: {index.apy !== undefined ? `${index.apy}%` : '-'}</h5>
-                      </div>
-                      
-                      {/* Liste des tokens */}
-                      <div className="space-y-1">
-                        {index.tokens.map((token, i) => (
-                          <div key={i} className="flex items-center">
-                            <span className="text-white text-sm">{token.symbol}</span>
-                            <span className="text-[#fab062] font-semibold text-sm ml-2">{token.allocation}%</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    
-                    {/* Boutons de dépôt et retrait */}
-                    <div className="space-y-3 mt-auto">
-                      {/* Total Value Deposited et Your deposits */}
-                      <div className="mb-4">
-                        <div className="mb-2 flex justify-between items-center">
-                          <span className="text-white font-semibold text-sm">Total Value Deposited</span>
-                          <span className="text-white font-bold">$0.00</span>
-                        </div>
-                        <div className="mb-2 flex justify-between items-center">
-                          <span className="text-gray-400 text-sm">Your deposits in this strategy</span>
-                          <span className="text-gray-400 font-bold">$0.00</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-gray-400 text-sm">Shares in this strategy</span>
-                          <span className="text-gray-400 font-bold">0.00</span>
-                        </div>
-                      </div>
-                      
-                      {/* Bouton de dépôt */}
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <label className="block text-white text-sm font-semibold">
-                            Deposit Amount
-                          </label>
-                          <span className="text-gray-400 text-xs">Balance: 0 USDC</span>
-                        </div>
-                        <div className="flex gap-2">
-                          <input
-                            type="number"
-                            placeholder="0.00"
-                            className="flex-1 px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm focus:border-[#fab062] focus:outline-none min-w-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            min="0"
-                            step="0.01"
-                          />
-                          <button className="px-3 py-2 bg-gradient-to-r from-[#fab062] to-[#5a9a9a] text-black font-semibold rounded-lg hover:opacity-90 transition-opacity text-sm whitespace-nowrap">
-                            Deposit
-                          </button>
-                        </div>
-                      </div>
-                      
-                      {/* Bouton de retrait */}
-                      <div className="space-y-2">
-                        <label className="block text-white text-sm font-semibold">
-                          Withdraw Amount
-                        </label>
-                        <div className="flex gap-2">
-                          <input
-                            type="number"
-                            placeholder="0.00"
-                            className="flex-1 px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm focus:border-[#fab062] focus:outline-none min-w-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            min="0"
-                            step="0.01"
-                          />
-                          <button className="px-3 py-2 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors text-sm whitespace-nowrap">
-                            Withdraw
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                {strategiesWithDeposits.map((strategy) => (
+                  <StrategyCard key={strategy.id} strategy={strategy} showWithdraw={true} />
                 ))}
               </div>
             ) : (
@@ -307,6 +585,39 @@ export default function DashboardPage() {
               <AxoneLayersIcon size={20} className="shrink-0" />
               <span className="font-semibold">Strategies</span>
             </button>
+            
+            <button
+              onClick={() => setActivePage('referral')}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                activePage === 'referral'
+                  ? 'text-white'
+                  : 'text-gray-500 hover:text-gray-300'
+              }`}
+            >
+              {/* Icône referral - bonhomme avec le haut du corps */}
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="shrink-0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                {/* Tête */}
+                <circle cx="10" cy="6" r="3" />
+                {/* Haut du corps */}
+                <path d="M6 12C6 10.3431 7.79086 9 10 9C12.2091 9 14 10.3431 14 12V16H6V12Z" />
+              </svg>
+              <span className="font-semibold">Referral</span>
+            </button>
+            
+            <button
+              onClick={() => setActivePage('points')}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                activePage === 'points'
+                  ? 'text-white'
+                  : 'text-gray-500 hover:text-gray-300'
+              }`}
+            >
+              {/* Icône points - étoile ou badge */}
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="shrink-0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M10 3L12.163 7.60714L17 8.34286L13.5 11.7857L14.326 16.5L10 14.3571L5.674 16.5L6.5 11.7857L3 8.34286L7.837 7.60714L10 3Z" />
+              </svg>
+              <span className="font-semibold">Points</span>
+            </button>
           </div>
         </aside>
 
@@ -416,77 +727,7 @@ export default function DashboardPage() {
                 <div className="max-w-4xl mx-auto">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {getFilteredStrategies().map((strategy) => (
-                      <div key={strategy.id} className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 hover:border-[#fab062]/50 transition-colors h-full flex flex-col">
-                        {/* En-tête de la stratégie */}
-                        <div className="flex justify-between items-start mb-4">
-                          <h4 className="text-xl font-bold bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent">{strategy.name}</h4>
-                          <span className={`px-3 py-1 rounded-full text-sm font-semibold border ${getRiskBgColor(strategy.riskLevel)} ${getRiskColor(strategy.riskLevel)}`}>
-                            {strategy.riskLevel}
-                          </span>
-                        </div>
-                        
-                        {/* Description */}
-                        {strategy.description && (
-                          <p className="text-[#5a9a9a] text-sm mb-4">{strategy.description}</p>
-                        )}
-                        
-                        {/* Tokens et répartition avec APY */}
-                        <div className="mb-4">
-                          {/* Header avec Token Allocation et APY */}
-                          <div className="flex items-center justify-between mb-3">
-                            <h5 className="text-white font-semibold">Token Allocation</h5>
-                            <h5 className="text-white font-semibold">APY: {strategy.apy !== undefined ? `${strategy.apy}%` : '-'}</h5>
-                          </div>
-                          
-                          {/* Liste des tokens */}
-                          <div className="space-y-1">
-                            {strategy.tokens.map((token, i) => (
-                              <div key={i} className="flex items-center">
-                                <span className="text-white text-sm">{token.symbol}</span>
-                                <span className="text-[#fab062] font-semibold text-sm ml-2">{token.allocation}%</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                        
-                        {/* Bouton de dépôt */}
-                        <div className="mt-auto">
-                          {/* Total Value Deposited et Your deposits */}
-                          <div className="mb-4">
-                            <div className="mb-2 flex justify-between items-center">
-                              <span className="text-white font-semibold text-sm">Total Value Deposited</span>
-                              <span className="text-white font-bold">$0.00</span>
-                            </div>
-                            <div className="mb-2 flex justify-between items-center">
-                              <span className="text-gray-400 text-sm">Your deposits in this strategy</span>
-                              <span className="text-gray-400 font-bold">$0.00</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <span className="text-gray-400 text-sm">Shares in this strategy</span>
-                              <span className="text-gray-400 font-bold">0.00</span>
-                            </div>
-                          </div>
-                          
-                          <div className="flex items-center justify-between mb-2">
-                            <label className="block text-white text-sm font-semibold">
-                              Deposit Amount
-                            </label>
-                            <span className="text-gray-400 text-xs">Balance: 0 USDC</span>
-                          </div>
-                          <div className="flex gap-2">
-                            <input
-                              type="number"
-                              placeholder="0.00"
-                              className="flex-1 px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm focus:border-[#fab062] focus:outline-none min-w-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                              min="0"
-                              step="0.01"
-                            />
-                            <button className="px-3 py-2 bg-gradient-to-r from-[#fab062] to-[#5a9a9a] text-black font-semibold rounded-lg hover:opacity-90 transition-opacity text-sm whitespace-nowrap">
-                              Deposit
-                            </button>
-                          </div>
-                        </div>
-                      </div>
+                      <StrategyCard key={strategy.id} strategy={strategy} />
                     ))}
                   </div>
                 </div>
@@ -497,6 +738,76 @@ export default function DashboardPage() {
                 </div>
               )}
             </div>
+          )}
+
+          {activePage === 'referral' && (
+            <div className="text-center">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 sm:mb-8">
+                <span className="bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent">
+                  Referral
+                </span>
+              </h1>
+              <p className="text-[#5a9a9a] text-lg leading-relaxed">
+                Content for Referral page coming soon...
+              </p>
+            </div>
+          )}
+
+          {activePage === 'points' && (
+            <>
+              {/* Titre Points avec gradient */}
+              <div className="text-center mb-12">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 sm:mb-8">
+                  <span className="bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent">
+                    Points
+                  </span>
+                </h1>
+              </div>
+
+              {/* Onglets Points */}
+              <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-12">
+                <button
+                  onClick={() => setActivePointsTab('Points')}
+                  className={`relative px-4 py-2 text-lg font-semibold transition-colors ${
+                    activePointsTab === 'Points'
+                      ? 'text-white'
+                      : 'text-[#5a9a9a] hover:text-white'
+                  }`}
+                >
+                  Points
+                  {/* Barre de soulignement avec gradient pour l'onglet actif */}
+                  {activePointsTab === 'Points' && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#fab062] to-[#5a9a9a]"></div>
+                  )}
+                </button>
+                <button
+                  onClick={() => setActivePointsTab('Ranking')}
+                  className={`relative px-4 py-2 text-lg font-semibold transition-colors ${
+                    activePointsTab === 'Ranking'
+                      ? 'text-white'
+                      : 'text-[#5a9a9a] hover:text-white'
+                  }`}
+                >
+                  Ranking
+                  {/* Barre de soulignement avec gradient pour l'onglet actif */}
+                  {activePointsTab === 'Ranking' && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#fab062] to-[#5a9a9a]"></div>
+                  )}
+                </button>
+              </div>
+
+              {/* Contenu des onglets Points */}
+              <div className="max-w-4xl mx-auto">
+                {activePointsTab === 'Points' && (
+                  <div className="flex justify-center">
+                    <PointsTabContent />
+                  </div>
+                )}
+                {activePointsTab === 'Ranking' && (
+                  <RankingTabContent />
+                )}
+              </div>
+            </>
           )}
         </div>
       </main>

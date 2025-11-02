@@ -15,7 +15,7 @@ export interface Index {
   apy?: number; // APY global de la stratégie en pourcentage
   usdcAddress: string;
   vaultAddress: string;
-  coreInteractionHandlerAddress: string;
+  handlerAddress: string;
   l1ReadAddress: string;
 }
 

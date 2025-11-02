@@ -18,7 +18,7 @@ export default function AdminPage() {
     apy?: number;
     usdcAddress: string;
     vaultAddress: string;
-    coreInteractionHandlerAddress: string;
+    handlerAddress: string;
     l1ReadAddress: string;
     tokens: Token[];
   }>({
@@ -28,7 +28,7 @@ export default function AdminPage() {
     apy: undefined,
     usdcAddress: '',
     vaultAddress: '',
-    coreInteractionHandlerAddress: '',
+    handlerAddress: '',
     l1ReadAddress: '',
     tokens: [{ symbol: '', name: '', allocation: 0, logo: '', tokenId: '' }]
   });
@@ -51,7 +51,7 @@ export default function AdminPage() {
       apy: formData.apy,
       usdcAddress: formData.usdcAddress,
       vaultAddress: formData.vaultAddress,
-      coreInteractionHandlerAddress: formData.coreInteractionHandlerAddress,
+      handlerAddress: formData.handlerAddress,
       l1ReadAddress: formData.l1ReadAddress,
       tokens: formData.tokens.filter(token => token.symbol)
     };
@@ -73,7 +73,7 @@ export default function AdminPage() {
         apy: undefined,
         usdcAddress: '',
         vaultAddress: '',
-        coreInteractionHandlerAddress: '',
+        handlerAddress: '',
         l1ReadAddress: '',
         tokens: [{ symbol: '', name: '', allocation: 0, logo: '', tokenId: '' }]
       });
@@ -93,7 +93,7 @@ export default function AdminPage() {
       apy: index.apy,
       usdcAddress: index.usdcAddress || '',
       vaultAddress: index.vaultAddress || '',
-      coreInteractionHandlerAddress: index.coreInteractionHandlerAddress || '',
+      handlerAddress: index.handlerAddress || '',
       l1ReadAddress: index.l1ReadAddress || '',
       tokens: index.tokens.length > 0 ? index.tokens : [{ symbol: '', name: '', allocation: 0, logo: '', tokenId: '' }]
     });
@@ -298,12 +298,12 @@ export default function AdminPage() {
 
                   <div>
                     <label className="block text-white font-semibold mb-2">
-                      Adresse CoreInteractionHandler
+                      Adresse CoreInteractionHandler (handlerAddress)
                     </label>
                     <input
                       type="text"
-                      value={formData.coreInteractionHandlerAddress}
-                      onChange={(e) => setFormData({ ...formData, coreInteractionHandlerAddress: e.target.value })}
+                      value={formData.handlerAddress}
+                      onChange={(e) => setFormData({ ...formData, handlerAddress: e.target.value })}
                       className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-[#fab062] focus:outline-none"
                       placeholder="0x..."
                     />
@@ -399,7 +399,7 @@ export default function AdminPage() {
                           riskLevel: 'low',
                           usdcAddress: '',
                           vaultAddress: '',
-                          coreInteractionHandlerAddress: '',
+                          handlerAddress: '',
                           l1ReadAddress: '',
                           tokens: [{ symbol: '', name: '', allocation: 0, logo: '', tokenId: '' }]
                         });
@@ -470,7 +470,7 @@ export default function AdminPage() {
                         <div className="mt-1 space-y-1 text-xs">
                           <div>USDC: {index.usdcAddress ? `${index.usdcAddress.slice(0, 6)}...${index.usdcAddress.slice(-4)}` : 'Non définie'}</div>
                           <div>Vault: {index.vaultAddress ? `${index.vaultAddress.slice(0, 6)}...${index.vaultAddress.slice(-4)}` : 'Non définie'}</div>
-                          <div>CoreHandler: {index.coreInteractionHandlerAddress ? `${index.coreInteractionHandlerAddress.slice(0, 6)}...${index.coreInteractionHandlerAddress.slice(-4)}` : 'Non définie'}</div>
+                          <div>CoreHandler: {index.handlerAddress ? `${index.handlerAddress.slice(0, 6)}...${index.handlerAddress.slice(-4)}` : 'Non définie'}</div>
                           <div>L1Read: {index.l1ReadAddress ? `${index.l1ReadAddress.slice(0, 6)}...${index.l1ReadAddress.slice(-4)}` : 'Non définie'}</div>
                         </div>
                       </div>

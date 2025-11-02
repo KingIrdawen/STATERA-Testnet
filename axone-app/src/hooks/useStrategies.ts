@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Index } from '@/types/index';
 
 export function useStrategies() {
@@ -7,94 +7,168 @@ export function useStrategies() {
   const [error, setError] = useState<string | null>(null);
 
   // Charger toutes les stratégies depuis l'API
-  const fetchStrategies = async () => {
+  const fetchStrategies = useCallback(async () => {
+    // S'assurer que nous sommes côté client
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     try {
       setLoading(true);
-      const response = await fetch('/api/strategies', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`Failed to fetch strategies: ${response.status} ${response.statusText}`);
-      }
-      const data = await response.json();
-      setStrategies(data.strategies || []);
       setError(null);
+      
+      // Construire l'URL - utiliser l'URL absolue si possible
+      const baseUrl = window.location.origin;
+      const apiUrl = `${baseUrl}/api/strategies`;
+      
+      // Utiliser un timeout pour éviter les appels qui traînent
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 secondes timeout
+      
+      try {
+        const response = await fetch(apiUrl, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          cache: 'no-store',
+          signal: controller.signal,
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (!response.ok) {
+          let errorText = '';
+          try {
+            errorText = await response.text();
+          } catch {
+            errorText = 'Unknown error';
+          }
+          throw new Error(`HTTP ${response.status}: ${errorText || response.statusText}`);
+        }
+        
+        const data = await response.json();
+        // Accepter soit data.strategies soit data directement (si c'est un tableau)
+        const strategiesList = Array.isArray(data) ? data : (data.strategies || []);
+        setStrategies(strategiesList);
+        setError(null);
+      } catch (fetchErr: any) {
+        clearTimeout(timeoutId);
+        if (fetchErr.name === 'AbortError') {
+          throw new Error('Request timeout: Server did not respond');
+        }
+        throw fetchErr;
+      }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch strategies';
       setError(errorMessage);
-      console.error('Error fetching strategies:', err);
-      // En cas d'erreur, initialiser avec un tableau vide au lieu de laisser une erreur
+      // Ne logger l'erreur que si c'est une erreur critique (pas juste un timeout ou réseau)
+      if (err instanceof Error && !err.message.includes('timeout') && !err.message.includes('Failed to fetch')) {
+        console.error('Error fetching strategies:', err);
+      }
+      // En cas d'erreur, initialiser avec un tableau vide pour ne pas bloquer l'interface
       setStrategies([]);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   // Créer une nouvelle stratégie
   const createStrategy = async (strategy: Index) => {
+    if (typeof window === 'undefined') {
+      throw new Error('Cannot create strategy on server side');
+    }
+
     try {
-      const response = await fetch('/api/strategies', {
+      const baseUrl = window.location.origin;
+      const response = await fetch(`${baseUrl}/api/strategies`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(strategy),
       });
       if (!response.ok) {
-        throw new Error('Failed to create strategy');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to create strategy');
       }
       const data = await response.json();
-      setStrategies([...strategies, data.strategy]);
-      return data.strategy;
+      // Re-fetch pour s'assurer que les données sont à jour
+      await fetchStrategies();
+      return data.strategy || strategy;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError(errorMessage);
+      console.error('Error creating strategy:', err);
       throw err;
     }
   };
 
   // Mettre à jour une stratégie
   const updateStrategy = async (strategy: Index) => {
+    if (typeof window === 'undefined') {
+      throw new Error('Cannot update strategy on server side');
+    }
+
     try {
-      const response = await fetch('/api/strategies', {
+      const baseUrl = window.location.origin;
+      const response = await fetch(`${baseUrl}/api/strategies`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(strategy),
       });
       if (!response.ok) {
-        throw new Error('Failed to update strategy');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to update strategy');
       }
       const data = await response.json();
-      setStrategies(strategies.map(s => s.id === strategy.id ? strategy : s));
-      return data.strategy;
+      // Re-fetch pour s'assurer que les données sont à jour
+      await fetchStrategies();
+      return data.strategy || strategy;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError(errorMessage);
+      console.error('Error updating strategy:', err);
       throw err;
     }
   };
 
   // Supprimer une stratégie
   const deleteStrategy = async (id: string) => {
+    if (typeof window === 'undefined') {
+      throw new Error('Cannot delete strategy on server side');
+    }
+
     try {
-      const response = await fetch(`/api/strategies?id=${id}`, {
+      const baseUrl = window.location.origin;
+      const response = await fetch(`${baseUrl}/api/strategies?id=${id}`, {
         method: 'DELETE',
       });
       if (!response.ok) {
-        throw new Error('Failed to delete strategy');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to delete strategy');
       }
-      setStrategies(strategies.filter(s => s.id !== id));
+      // Re-fetch pour s'assurer que les données sont à jour
+      await fetchStrategies();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError(errorMessage);
+      console.error('Error deleting strategy:', err);
       throw err;
     }
   };
 
   useEffect(() => {
-    // S'assurer que nous sommes côté client
+    // S'assurer que nous sommes côté client et que le DOM est prêt
     if (typeof window !== 'undefined') {
-      fetchStrategies();
+      // Attendre un peu pour s'assurer que le serveur est prêt
+      const timer = setTimeout(() => {
+        fetchStrategies().catch(() => {
+          // Erreur silencieuse - le hook gère déjà l'état d'erreur
+        });
+      }, 100);
+      
+      return () => clearTimeout(timer);
     }
-  }, []);
+  }, [fetchStrategies]);
 
   return {
     strategies,
