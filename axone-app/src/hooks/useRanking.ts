@@ -33,8 +33,8 @@ export function useRanking() {
       const baseUrl = window.location.origin
       const apiUrl = `${baseUrl}/api/ranking`
 
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 10000)
+              const controller = new AbortController()
+              const timeoutId = setTimeout(() => controller.abort(), 3000) // 3 secondes timeout (réduit pour accélérer)
 
       try {
         const response = await fetch(apiUrl, {
@@ -42,7 +42,8 @@ export function useRanking() {
           headers: {
             'Content-Type': 'application/json',
           },
-          cache: 'no-store',
+          cache: 'force-cache', // Utiliser le cache pour accélérer le chargement
+          next: { revalidate: 300 }, // Revalider toutes les 5 minutes
           signal: controller.signal,
         })
 
@@ -65,7 +66,10 @@ export function useRanking() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch ranking'
       setError(errorMessage)
-      console.error('Error fetching ranking:', err)
+      // Ne logger l'erreur que si c'est une erreur critique (pas juste un timeout ou réseau)
+      if (err instanceof Error && !err.message.includes('timeout') && !err.message.includes('Failed to fetch')) {
+        console.error('Error fetching ranking:', err)
+      }
       // En cas d'erreur, initialiser avec des données vides
       setRankingData({
         entries: [],
@@ -76,10 +80,24 @@ export function useRanking() {
     }
   }, [])
 
-  // Charger le ranking au montage du composant
+  // Charger le ranking au montage du composant et le rafraîchir périodiquement
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      fetchRanking()
+      // Charger immédiatement sans délai pour accélérer
+      fetchRanking().catch(() => {
+        // Erreur silencieuse - le hook gère déjà l'état d'erreur
+      })
+      
+      // Rafraîchir automatiquement toutes les heures pour récupérer les mises à jour du cron job
+      const interval = setInterval(() => {
+        fetchRanking().catch(() => {
+          // Erreur silencieuse - le hook gère déjà l'état d'erreur
+        })
+      }, 60 * 60 * 1000) // 1 heure
+      
+      return () => {
+        clearInterval(interval)
+      }
     }
   }, [fetchRanking])
 

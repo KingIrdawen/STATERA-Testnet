@@ -1,12 +1,16 @@
 import { useAccount, useReadContract } from 'wagmi'
-import { useMemo } from 'react'
+import { useMemo, useEffect, useState } from 'react'
 
 /**
  * Hook pour récupérer les points de l'utilisateur connecté
  * TODO: À configurer avec le smart contract une fois déployé
+ * 
+ * Note: Une fois le smart contract configuré, les points se mettront à jour automatiquement
+ * via useReadContract qui se rafraîchit automatiquement avec Wagmi
  */
 export function usePoints() {
   const { address } = useAccount()
+  const [refreshKey, setRefreshKey] = useState(0)
 
   // TODO: Remplacer par l'appel réel au smart contract
   // Exemple de structure future :
@@ -15,11 +19,26 @@ export function usePoints() {
   //   abi: pointsContractAbi,
   //   functionName: 'getUserPoints',
   //   args: [address],
+  //   query: {
+  //     enabled: !!address,
+  //     refetchInterval: 60 * 60 * 1000, // Rafraîchir toutes les heures
+  //   },
   // })
 
   const points = useMemo(() => {
     // Pour l'instant, retourner 0 en attendant le smart contract
     return '0'
+  }, [address, refreshKey])
+
+  // Rafraîchir automatiquement toutes les heures (une fois le smart contract configuré)
+  useEffect(() => {
+    if (!address) return
+
+    const interval = setInterval(() => {
+      setRefreshKey((prev) => prev + 1)
+    }, 60 * 60 * 1000) // 1 heure
+
+    return () => clearInterval(interval)
   }, [address])
 
   const isLoading = false

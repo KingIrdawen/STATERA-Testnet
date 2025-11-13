@@ -12,14 +12,14 @@ export default function VaultsHeader() {
         <Link href="/" className="flex items-center gap-3 sm:gap-4">
           <Image
             src="/Logo-Axone.png"
-            alt="Axone Logo"
-            width={48}
-            height={48}
+            alt="Statera Logo"
+            width={150}
+            height={50}
             className="h-8 w-auto sm:h-10 md:h-12"
             sizes="(min-width: 768px) 150px, 120px"
           />
           <span className="text-lg sm:text-xl md:text-2xl font-bold text-white">
-            Axone
+            Statera
           </span>
         </Link>
 
@@ -42,7 +42,7 @@ export default function VaultsHeader() {
             }}
             showBalance={{
               smallScreen: false,
-              largeScreen: true,
+              largeScreen: false, // Désactiver temporairement pour éviter les erreurs getBalance
             }}
           />
         </div>

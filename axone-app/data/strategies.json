@@ -4,24 +4,24 @@
     "name": "BTC50DEF",
     "description": "",
     "riskLevel": "low",
-    "usdcAddress": "0x9b5c8e1d837298a8af57e5962d1495d74d6dbc",
-    "vaultAddress": "0x5A972d1F38fC6fda9ad09695cABb88C45Aa38",
-    "handlerAddress": "0x481e6bBE5C5Bf55c21cb1D4b873cEdFdF4C7c7e6",
-    "l1ReadAddress": "0xB0abB10BE4bA3f7145a7e18fa7Ed13f18f7f",
+    "usdcAddress": "0xd9cbec81df392a88aeff575e962d149d57f4d6bc",
+    "vaultAddress": "0x5A972d1F33e8fC6fda9a0d90695c8Ab88C45aA38",
+    "handlerAddress": "0x481e6bB8E5C5BfF55c21cb1D4b873cEdFdF4C7e6",
+    "l1ReadAddress": "0xB0abB10Ebe4ba837Ff145a7eE18fa7E7d31F8fF7",
     "tokens": [
       {
         "symbol": "BTC",
         "name": "",
         "allocation": 50,
         "logo": "",
-        "tokenId": ""
+        "tokenId": "1129"
       },
       {
         "symbol": "HYPE",
         "name": "",
         "allocation": 50,
         "logo": "",
-        "tokenId": "0x0d01dc56dcaac6a6d901c959b4011ec"
+        "tokenId": "1105"
       }
     ]
   }

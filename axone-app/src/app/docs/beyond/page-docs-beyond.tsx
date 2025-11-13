@@ -1,22 +1,22 @@
 import Link from 'next/link';
 
-export default function DocsNextStepsPage() {
+export default function DocsBeyondPage() {
   return (
     <div>
       <nav className="mb-8">
         <ol className="flex items-center space-x-2 text-sm text-gray-400">
-          <li><Link href="/" className="hover:text-white transition-colors">Axone</Link></li>
+          <li><Link href="/" className="hover:text-white transition-colors">Statera</Link></li>
           <li className="text-gray-600">/</li>
           <li><Link href="/docs" className="hover:text-white transition-colors">Docs</Link></li>
           <li className="text-gray-600">/</li>
-          <li className="text-white">Next Steps</li>
+          <li className="text-white">Beyond</li>
         </ol>
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-white mb-4">Next Steps</h1>
+        <h1 className="text-4xl font-bold text-white mb-4">Beyond</h1>
         <p className="text-xl text-[#5a9a9a] leading-relaxed">
-          The future development roadmap and upcoming features for the Axone ecosystem.
+          The future vision of Statera beyond the initial roadmap.
         </p>
       </div>
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface AxoneLayersIconProps {
+interface StateraLayersIconProps {
   size?: number | string;
   strokeWidth?: number;
   color?: string;
@@ -8,13 +8,13 @@ interface AxoneLayersIconProps {
   title?: string;
 }
 
-export default function AxoneLayersIcon({
+export default function StateraLayersIcon({
   size = 24,
   strokeWidth = 1.5,
   color = 'currentColor',
   className = '',
   title,
-}: AxoneLayersIconProps) {
+}: StateraLayersIconProps) {
   // mêmes formes que dans ton code d'origine
   const pathTop    = 'M 12 12 L 21 7 L 12 2 L 3 7 Z';
   const pathMiddle = 'M 12 16 L 21 11 L 12 6 L 3 11 Z';
@@ -49,7 +49,7 @@ export default function AxoneLayersIcon({
         </mask>
       </defs>
 
-      {/* On dessine les trois couches, avec masques pour “couper” ce qui est recouvert */}
+      {/* On dessine les trois couches, avec masques pour "couper" ce qui est recouvert */}
       <g stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke">
         {/* Bas (masqué par milieu + haut) */}
         <g mask="url(#mask-bottom)">

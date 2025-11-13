@@ -1,4 +1,4 @@
-import { useAccount, useReadContracts, useBalance } from 'wagmi'
+import { useAccount, useReadContracts } from 'wagmi'
 import { Index } from '@/types/index'
 import { erc20Contract } from '@/contracts/erc20'
 import { vaultContract } from '@/contracts/vault'
@@ -85,11 +85,40 @@ export function useStrategyData(strategy: Index | null) {
 
   // Extraire tous les tokens avec un tokenId valide de la stratégie
   const tokensWithIds = strategy?.tokens
-    .filter((token) => token.tokenId && token.tokenId.trim() !== '')
-    .map((token) => ({
-      symbol: token.symbol,
-      tokenId: token.tokenId,
-    })) || []
+    .filter((token) => {
+      if (!token.tokenId || token.tokenId.trim() === '') return false;
+      // Vérifier si c'est un nombre valide (décimal ou hexadécimal)
+      const tokenIdStr = token.tokenId.trim();
+      // Si c'est en hexadécimal (commence par 0x), convertir en décimal
+      if (tokenIdStr.startsWith('0x')) {
+        try {
+          BigInt(tokenIdStr);
+          return true;
+        } catch {
+          return false;
+        }
+      }
+      // Sinon, vérifier si c'est un nombre
+      return !isNaN(parseInt(tokenIdStr));
+    })
+    .map((token) => {
+      const tokenIdStr = token.tokenId.trim();
+      // Convertir hexadécimal en décimal si nécessaire
+      let tokenId: string;
+      if (tokenIdStr.startsWith('0x')) {
+        try {
+          tokenId = BigInt(tokenIdStr).toString();
+        } catch {
+          tokenId = tokenIdStr;
+        }
+      } else {
+        tokenId = tokenIdStr;
+      }
+      return {
+        symbol: token.symbol,
+        tokenId,
+      };
+    }) || []
 
   // Extraire les tokenIds pour les tokens connus (pour les oracles spécifiques)
   const getTokenId = (symbol: string): string | undefined => {
@@ -178,6 +207,11 @@ export function useStrategyData(strategy: Index | null) {
     contracts,
     query: {
       enabled: isConfigured,
+      retry: 0, // Pas de retry pour accélérer - si ça échoue, on réessaiera au prochain render
+      staleTime: 300000, // 5 minutes - augmenté pour réduire les appels
+      gcTime: 600000, // 10 minutes de cache - augmenté pour garder les données plus longtemps
+      refetchOnWindowFocus: false, // Ne pas refetch quand on revient sur la fenêtre
+      refetchOnReconnect: false, // Ne pas refetch automatiquement après reconnexion
     },
   })
 
@@ -213,7 +247,9 @@ export function useStrategyData(strategy: Index | null) {
         usdcBalance: formatUnitsSafe(usdcBalance, usdcDecimals),
         usdcDecimals,
         vaultShares: formatUnitsSafe(vaultShares, vaultDecimals),
+        vaultSharesRaw: vaultShares, // Ajouter la valeur brute pour le débogage
         vaultTotalSupply: formatUnitsSafe(vaultTotalSupply, vaultDecimals),
+        vaultTotalSupplyRaw: vaultTotalSupply, // Ajouter la valeur brute pour le débogage
         vaultDecimals,
         coreBalances,
         coreEquityUsdRaw,
@@ -224,6 +260,23 @@ export function useStrategyData(strategy: Index | null) {
         pps: formatUnitsSafe(ppsRaw, 18),
       }
     : null
+
+  // Log de débogage désactivé pour réduire le bruit dans la console
+  // Décommenter si nécessaire pour le débogage
+  // if (isConfigured && data && formattedData) {
+  //   console.log('[useStrategyData] Debug:', {
+  //     vaultAddress: strategy?.vaultAddress,
+  //     userAddress: address,
+  //     vaultSharesRaw: formattedData.vaultSharesRaw?.toString(),
+  //     vaultSharesFormatted: formattedData.vaultShares,
+  //     vaultTotalSupplyRaw: formattedData.vaultTotalSupplyRaw?.toString(),
+  //     vaultTotalSupplyFormatted: formattedData.vaultTotalSupply,
+  //     ppsRaw: formattedData.ppsRaw?.toString(),
+  //     ppsFormatted: formattedData.pps,
+  //     vaultDecimals: formattedData.vaultDecimals,
+  //     calculatedDeposits: (parseFloat(formattedData.vaultShares) * parseFloat(formattedData.pps)).toFixed(6),
+  //   })
+  // }
 
   return {
     data: formattedData,

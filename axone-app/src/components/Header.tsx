@@ -30,14 +30,14 @@ export default function Header() {
             <Link href="/" className="flex items-center gap-2 sm:gap-3">
               <Image
                 src="/Logo-Axone.png"
-                alt="AXONE Logo"
+                alt="STATERA Logo"
                 width={150}
                 height={50}
                 sizes="(min-width: 768px) 150px, 120px"
                 className="h-8 w-auto sm:h-10 md:h-12"
                 priority
               />
-              <span className="text-white font-bold text-lg sm:text-xl md:text-2xl tracking-tight">Axone</span>
+              <span className="text-white font-bold text-lg sm:text-xl md:text-2xl tracking-tight">Statera</span>
             </Link>
           </div>
         </div>

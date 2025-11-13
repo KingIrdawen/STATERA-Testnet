@@ -7,7 +7,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount } from 'wagmi';
 import Footer from '@/components/Footer';
 import { Index, getRiskColor, getRiskBgColor } from '@/types/index';
-import AxoneLayersIcon from '../../icons/AxoneLayersIcon';
+import StateraLayersIcon from '../../icons/StateraLayersIcon';
 import { useStrategies } from '@/hooks/useStrategies';
 import { useStrategyData } from '@/hooks/useStrategyData';
 import { useVaultActions } from '@/hooks/useVaultActions';
@@ -157,13 +157,50 @@ function RankingTabContent() {
   )
 }
 
+// Fonction pour valider une adresse Ethereum
+function isValidAddress(address: string): boolean {
+  if (!address || address.trim() === '') return false;
+  const addr = address.trim();
+  // Vérifier que c'est une adresse hexadécimale valide (42 caractères avec 0x)
+  return /^0x[a-fA-F0-9]{40}$/.test(addr);
+}
+
+// Fonction pour vérifier les éléments manquants de la configuration
+function getMissingConfig(strategy: Index): string[] {
+  const missing: string[] = [];
+  if (!strategy.usdcAddress || strategy.usdcAddress.trim() === '') {
+    missing.push('USDC Address (empty)');
+  } else if (!isValidAddress(strategy.usdcAddress)) {
+    missing.push(`USDC Address (invalid: ${strategy.usdcAddress.slice(0, 20)}...)`);
+  }
+  if (!strategy.vaultAddress || strategy.vaultAddress.trim() === '') {
+    missing.push('Vault Address (empty)');
+  } else if (!isValidAddress(strategy.vaultAddress)) {
+    missing.push(`Vault Address (invalid: ${strategy.vaultAddress.slice(0, 20)}...)`);
+  }
+  if (!strategy.handlerAddress || strategy.handlerAddress.trim() === '') {
+    missing.push('Handler Address (empty)');
+  } else if (!isValidAddress(strategy.handlerAddress)) {
+    missing.push(`Handler Address (invalid: ${strategy.handlerAddress.slice(0, 20)}...)`);
+  }
+  if (!strategy.l1ReadAddress || strategy.l1ReadAddress.trim() === '') {
+    missing.push('L1Read Address (empty)');
+  } else if (!isValidAddress(strategy.l1ReadAddress)) {
+    missing.push(`L1Read Address (invalid: ${strategy.l1ReadAddress.slice(0, 20)}...)`);
+  }
+  return missing;
+}
+
 // Composant pour afficher une stratégie avec ses données
 function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; showWithdraw?: boolean }) {
-  const { data, isLoading, isConfigured, address } = useStrategyData(strategy);
-  const { deposit, withdraw, isPending, isConfirming, isSuccess, error } = useVaultActions(strategy);
+  const { data, isLoading, isConfigured, address, isError, error } = useStrategyData(strategy);
+  const { deposit, withdraw, isPending, isConfirming, isSuccess, error: vaultError } = useVaultActions(strategy);
   const [depositAmount, setDepositAmount] = useState('');
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  
+  // Vérifier les éléments manquants
+  const missingConfig = getMissingConfig(strategy);
   
   // Calculer Total Value Deposited (coreEquityUsd ou vaultTotalSupply * pps)
   const totalValueDeposited = data
@@ -291,9 +328,45 @@ function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; sho
       </div>
       
       {/* Informations depuis les smart contracts */}
+      {!address && (
+        <div className="mb-4 p-3 bg-yellow-900/20 border border-yellow-600/30 rounded-lg">
+          <p className="text-yellow-400 text-sm">Please connect your wallet to view strategy data</p>
+        </div>
+      )}
+      
+      {address && missingConfig.length > 0 && (
+        <div className="mb-4 p-3 bg-red-900/20 border border-red-600/30 rounded-lg">
+          <p className="text-red-400 text-sm font-semibold mb-1">Missing configuration:</p>
+          <ul className="text-red-300 text-xs list-disc list-inside">
+            {missingConfig.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+          <p className="text-red-300 text-xs mt-2">Please configure these addresses in the admin page.</p>
+        </div>
+      )}
+      
+      {address && isConfigured && isError && (
+        <div className="mb-4 p-3 bg-red-900/20 border border-red-600/30 rounded-lg">
+          <p className="text-red-400 text-sm font-semibold mb-1">Error loading contract data:</p>
+          <p className="text-red-300 text-xs">{error?.message || 'Unknown error'}</p>
+          <p className="text-red-300 text-xs mt-2">Please check that the contract addresses are correct and deployed on HyperEVM Testnet.</p>
+        </div>
+      )}
+      
       {isLoading && isConfigured && (
         <div className="mb-4 text-center">
           <p className="text-[#5a9a9a] text-sm">Loading contract data...</p>
+        </div>
+      )}
+      
+      {address && isConfigured && !isLoading && data && (
+        <div className="mb-4 p-3 bg-blue-900/20 border border-blue-600/30 rounded-lg">
+          <p className="text-blue-400 text-xs mb-1">Debug Info:</p>
+          <p className="text-blue-300 text-xs">Vault Total Supply: {data.vaultTotalSupply}</p>
+          <p className="text-blue-300 text-xs">Vault Shares: {data.vaultShares}</p>
+          <p className="text-blue-300 text-xs">PPS: {data.pps}</p>
+          <p className="text-blue-300 text-xs">Core Equity USD: {data.coreEquityUsd}</p>
         </div>
       )}
       
@@ -508,14 +581,14 @@ export default function DashboardPage() {
           <Link href="/" className="flex items-center gap-3 sm:gap-4">
             <Image
               src="/Logo-Axone.png"
-              alt="Axone Logo"
+              alt="Statera Logo"
               width={48}
               height={48}
               className="h-8 w-auto sm:h-10 md:h-12"
               sizes="(min-width: 768px) 150px, 120px"
             />
             <span className="text-lg sm:text-xl md:text-2xl font-bold text-white">
-              Axone
+              Statera
             </span>
           </Link>
 
@@ -544,7 +617,7 @@ export default function DashboardPage() {
               }}
               showBalance={{
                 smallScreen: false,
-                largeScreen: true,
+                largeScreen: false, // Désactiver pour éviter les erreurs getBalance
               }}
             />
           </div>
@@ -582,7 +655,7 @@ export default function DashboardPage() {
               }`}
             >
               {/* Icône pile de 3 feuilles en perspective */}
-              <AxoneLayersIcon size={20} className="shrink-0" />
+              <StateraLayersIcon size={20} className="shrink-0" />
               <span className="font-semibold">Strategies</span>
             </button>
             

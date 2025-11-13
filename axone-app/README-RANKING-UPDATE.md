@@ -58,7 +58,7 @@ Ajouter une ligne dans le crontab :
 
 ```bash
 # Mettre à jour le ranking toutes les heures
-0 * * * * cd /path/to/axone-app && npm run update-ranking
+0 * * * * cd /path/to/statera-app && npm run update-ranking
 ```
 
 Dans `package.json`, ajouter :

@@ -5,7 +5,7 @@ export default function DocsFonctionnementRevenusPage() {
     <div>
       <nav className="mb-8">
         <ol className="flex items-center space-x-2 text-sm text-gray-400">
-          <li><Link href="/" className="hover:text-white transition-colors">Axone</Link></li>
+          <li><Link href="/" className="hover:text-white transition-colors">Statera</Link></li>
           <li className="text-gray-600">/</li>
           <li><Link href="/docs" className="hover:text-white transition-colors">Docs</Link></li>
           <li className="text-gray-600">/</li>
@@ -14,16 +14,13 @@ export default function DocsFonctionnementRevenusPage() {
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-white mb-4">Protocol Functioning - Revenue</h1>
-        <p className="text-xl text-[#5a9a9a] leading-relaxed">
-          Understand how Axone generates revenue and redistributes value to its users.
-        </p>
+        <h1 className="text-4xl font-bold text-white mb-4">Protocol Mechanics – Revenue Generation</h1>
       </div>
 
       <div className="prose prose-invert max-w-none">
         <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-8">
           <p className="text-[#5a9a9a] leading-relaxed">
-            Content coming soon...
+            The Protocol Mechanics section explains how users can participate in Statera strategies and earn rewards.
           </p>
         </div>
       </div>

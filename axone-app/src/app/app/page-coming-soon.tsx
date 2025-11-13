@@ -29,7 +29,7 @@ export default function ComingSoon() {
           <Link href="/" className="inline-block">
             <Image
               src="/Logo-Axone.png"
-              alt="AXONE Logo"
+              alt="STATERA Logo"
               width={200}
               height={67}
               sizes="(min-width: 768px) 200px, 150px"
@@ -46,7 +46,7 @@ export default function ComingSoon() {
 
         {/* Sous-titre */}
         <p className="text-lg sm:text-xl md:text-2xl text-[#5a9a9a] mb-8 leading-relaxed font-medium max-w-2xl mx-auto">
-          The Axone application will be available soon. Stay connected to be among the first to discover our revolutionary platform.
+          The Statera application will be available soon. Stay connected to be among the first to discover our revolutionary platform.
         </p>
 
         {/* Bouton retour */}

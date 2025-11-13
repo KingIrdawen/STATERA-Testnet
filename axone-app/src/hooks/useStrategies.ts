@@ -23,7 +23,7 @@ export function useStrategies() {
       
       // Utiliser un timeout pour éviter les appels qui traînent
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 secondes timeout
+      const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 secondes timeout (réduit pour accélérer)
       
       try {
         const response = await fetch(apiUrl, {
@@ -31,7 +31,8 @@ export function useStrategies() {
           headers: {
             'Content-Type': 'application/json',
           },
-          cache: 'no-store',
+          cache: 'force-cache', // Utiliser le cache pour accélérer le chargement
+          next: { revalidate: 60 }, // Revalider toutes les 60 secondes
           signal: controller.signal,
         });
         
@@ -159,14 +160,10 @@ export function useStrategies() {
   useEffect(() => {
     // S'assurer que nous sommes côté client et que le DOM est prêt
     if (typeof window !== 'undefined') {
-      // Attendre un peu pour s'assurer que le serveur est prêt
-      const timer = setTimeout(() => {
-        fetchStrategies().catch(() => {
-          // Erreur silencieuse - le hook gère déjà l'état d'erreur
-        });
-      }, 100);
-      
-      return () => clearTimeout(timer);
+      // Charger immédiatement sans délai pour accélérer
+      fetchStrategies().catch(() => {
+        // Erreur silencieuse - le hook gère déjà l'état d'erreur
+      });
     }
   }, [fetchStrategies]);
 

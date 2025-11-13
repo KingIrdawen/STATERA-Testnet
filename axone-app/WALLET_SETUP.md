@@ -13,11 +13,11 @@ Pour que la connexion de wallet fonctionne, vous devez :
 ## Fonctionnalités implémentées
 
 - ✅ Connexion de wallet EVM avec RainbowKit
-- ✅ Support des chaînes principales (Ethereum, Polygon, Arbitrum, Optimism, Base, Sepolia)
+- ✅ Support de HyperEVM Testnet (Chain ID: 998)
 - ✅ Affichage de l'adresse du wallet connecté
 - ✅ Affichage du logo de la chaîne connectée
 - ✅ Bouton de déconnexion accessible en cliquant sur le wallet connecté
-- ✅ Styles personnalisés cohérents avec le design Axone
+- ✅ Styles personnalisés cohérents avec le design Statera
 - ✅ Responsive design
 
 ## Page Vaults

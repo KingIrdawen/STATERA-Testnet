@@ -145,14 +145,14 @@ export default function AdminPage() {
           <Link href="/" className="flex items-center gap-3 sm:gap-4">
             <Image
               src="/Logo-Axone.png"
-              alt="Axone Logo"
+              alt="Statera Logo"
               width={48}
               height={48}
               className="h-8 w-auto sm:h-10 md:h-12"
               sizes="(min-width: 768px) 150px, 120px"
             />
             <span className="text-lg sm:text-xl md:text-2xl font-bold text-white">
-              Axone
+              Statera
             </span>
           </Link>
 
@@ -179,7 +179,7 @@ export default function AdminPage() {
               }}
               showBalance={{
                 smallScreen: false,
-                largeScreen: true,
+                largeScreen: false, // Désactiver pour éviter les erreurs getBalance
               }}
             />
           </div>

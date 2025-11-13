@@ -5,7 +5,7 @@ export default function DocsRoadmapPage() {
     <div>
       <nav className="mb-8">
         <ol className="flex items-center space-x-2 text-sm text-gray-400">
-          <li><Link href="/" className="hover:text-white transition-colors">Axone</Link></li>
+          <li><Link href="/" className="hover:text-white transition-colors">Statera</Link></li>
           <li className="text-gray-600">/</li>
           <li><Link href="/docs" className="hover:text-white transition-colors">Docs</Link></li>
           <li className="text-gray-600">/</li>
@@ -16,7 +16,7 @@ export default function DocsRoadmapPage() {
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-white mb-4">Roadmap</h1>
         <p className="text-xl text-[#5a9a9a] leading-relaxed">
-          Axone&apos;s detailed roadmap with key development milestones and upcoming features.
+          Statera&apos;s detailed roadmap with key development milestones and upcoming features.
         </p>
       </div>
 

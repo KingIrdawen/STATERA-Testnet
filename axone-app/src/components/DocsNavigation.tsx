@@ -5,30 +5,30 @@ import { usePathname } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const pagesOrder = [
-  // Structure complète de la doc dans l'ordre de navigation
-  { slug: "/docs/presentation", label: "Introduction" },
+  // Structure complète de la doc dans l'ordre de navigation - correspond exactement à Documentation - 07-11-2025.md
+  { slug: "/docs/presentation", label: "Introduction Page" },
   { slug: "/docs/mission", label: "Mission" },
   { slug: "/docs/vision-valeurs", label: "Vision and Values" },
-  { slug: "/docs/token-axn-alignment", label: "AXN Token, Alignment Reward" },
+  { slug: "/docs/token-axn-alignment", label: "The STA Token: Rewarding Alignment" },
   { slug: "/docs/protocole", label: "Protocol" },
-  { slug: "/docs/index-axone", label: "What is an Axone Index?" },
-  { slug: "/docs/smart-rebalancing", label: "Smart Rebalancing - At the Heart of Axone Innovation" },
-  { slug: "/docs/hyperunit", label: "Axone x Hyperunit" },
-  { slug: "/docs/fonctionnement-revenus", label: "Protocol Functioning - Revenue" },
-  { slug: "/docs/les-index", label: "The Indexes: Invest in Dynamic Portfolios with One Click" },
-  { slug: "/docs/lock-vaults", label: "Lock Vaults: Earn AXN Rewards" },
-  { slug: "/docs/token-axn", label: "AXN Token - Capture Axone Protocol Value" },
+  { slug: "/docs/index-axone", label: "What is a Statera Index?" },
+  { slug: "/docs/smart-rebalancing", label: "Smart Rebalancing: The Core Innovation of Statera" },
+  { slug: "/docs/hyperunit", label: "Statera x HyperUnit" },
+  { slug: "/docs/fonctionnement-revenus", label: "Protocol Mechanics – Revenue Generation" },
+  { slug: "/docs/les-index", label: "Indices: invest in dynamic portfolios, with one click" },
+  { slug: "/docs/lock-vaults", label: "Strategy staking: transform your ERA token in STA rewards" },
+  { slug: "/docs/token-axn", label: "The STA token: capture the value of the Statera protocol" },
   { slug: "/docs/gouvernance", label: "Protocol Governance" },
-  { slug: "/docs/capture-croissance", label: "Growth Capture - Revenue Utilization" },
-  { slug: "/docs/maitrise-inflation", label: "Inflation Control" },
+  { slug: "/docs/capture-croissance", label: "Capturing Growth – Revenue Distribution" },
+  { slug: "/docs/maitrise-inflation", label: "Managing Inflation" },
   { slug: "/docs/tokenomics", label: "Tokenomics" },
-  { slug: "/docs/liquidity-mining", label: "Liquidity Mining: Reward Early Engagement" },
-  { slug: "/docs/strategie-croissance", label: "Growth Strategy - Roadmap" },
+  { slug: "/docs/liquidity-mining", label: "Liquidity Mining: Rewarding Early Engagement" },
+  { slug: "/docs/strategie-croissance", label: "Growth Strategy – Roadmap" },
   { slug: "/docs/roadmap", label: "Roadmap" },
   { slug: "/docs/epoque-0", label: "Epoch 0" },
   { slug: "/docs/epoque-1", label: "Epoch 1" },
   { slug: "/docs/epoque-2", label: "Epoch 2" },
-  { slug: "/docs/next-steps", label: "Next Steps" },
+  { slug: "/docs/beyond", label: "Beyond" },
 ];
 
 export default function DocsNavigation() {

@@ -74,7 +74,7 @@ export default function Home() {
           </h1>
           
           <p className="text-base sm:text-lg md:text-xl text-[#5a9a9a] mb-6 sm:mb-8 leading-relaxed font-medium">
-            Axone offers an innovative approach to investment by leveraging blockchain technology to automate and optimize portfolio management while delivering value to its users.
+            Statera offers an innovative approach to investment by leveraging blockchain technology to automate and optimize portfolio management while delivering value to its users.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
@@ -175,7 +175,7 @@ export default function Home() {
             <TextZone bgColor="bg-black">
               <div className="text-center">
                 <TypewriterText 
-                  text="Beyond vision, Axone is built on strong pillars that drive its uniqueness and long-term value"
+                  text="Beyond vision, Statera is built on strong pillars that drive its uniqueness and long-term value"
                   speed={30}
                   className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6 inline-block bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent transition-colors duration-300"
                 />
@@ -193,7 +193,7 @@ export default function Home() {
                   </h2>
 
                   <p className="text-lg md:text-xl text-[#5a9a9a] mb-8 leading-relaxed font-medium max-w-md">
-                    Axone delivers smart, dynamic crypto indexes that automatically rebalance every hour to secure gains and optimize allocations. It automates the strategies of top traders, ensuring your portfolio adapts effortlessly to fast-moving markets.
+                    Statera delivers smart, dynamic crypto indexes that automatically rebalance every hour to secure gains and optimize allocations. It automates the strategies of top traders, ensuring your portfolio adapts effortlessly to fast-moving markets.
                   </p>
                 </ScrollAnimation>
               </div>
@@ -240,24 +240,24 @@ export default function Home() {
                   </h2>
 
                   <p className="text-lg md:text-xl text-[#5a9a9a] mb-8 leading-relaxed font-medium max-w-md">
-                    Axone introduces a fixed 3% annual inflation fully redistributed to index holders, turning growth into direct rewards for the community. This mechanism strengthens engagement, boosts index value over time, and fuels a virtuous cycle of adoption and shared prosperity.
+                    Statera introduces a fixed 3% annual inflation fully redistributed to index holders, turning growth into direct rewards for the community. This mechanism strengthens engagement, boosts index value over time, and fuels a virtuous cycle of adoption and shared prosperity.
                   </p>
                 </ScrollAnimation>
               </div>
             </TextZone>
           </Section>
 
-          {/* Section 5 - The AXONE Token */}
+          {/* Section 5 - The STATERA Token */}
           <Section reducedHeight>
             <TextZone bgColor="bg-black" className="order-1 md:order-none">
               <div className="text-left">
                 <ScrollAnimation delay={200}>
                   <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6 inline-block bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent transition-colors duration-300">
-                    The AXONE Token
+                    The STATERA Token
                   </h2>
 
                   <p className="text-lg md:text-xl text-[#5a9a9a] mb-8 leading-relaxed font-medium">
-                    The Axone token ($AXN) is designed as a core value driver, tightly integrated with our ecosystem and indexes. It powers the protocol, captures platform growth, and rewards holders—making it a stake in building a simpler, more efficient, and accessible Web3. The token serves as the backbone of our decentralized infrastructure, enabling seamless transactions and governance while providing holders with direct value accrual.
+                    The Statera token ($AXN) is designed as a core value driver, tightly integrated with our ecosystem and indexes. It powers the protocol, captures platform growth, and rewards holders—making it a stake in building a simpler, more efficient, and accessible Web3. The token serves as the backbone of our decentralized infrastructure, enabling seamless transactions and governance while providing holders with direct value accrual.
                   </p>
                 </ScrollAnimation>
               </div>
@@ -268,7 +268,7 @@ export default function Home() {
                 <div className="overflow-hidden w-full">
                   <Image
                     src="/image_axone_launch_variante.png"
-                    alt="The AXONE Token"
+                    alt="The STATERA Token"
                     width={750}
                     height={600}
                     sizes="(min-width: 1280px) 750px, (min-width: 768px) 70vw, 92vw"
@@ -304,7 +304,7 @@ export default function Home() {
                   </h2>
 
                   <p className="text-lg md:text-xl text-[#5a9a9a] mb-8 leading-relaxed font-medium">
-                    Axone creates a virtuous cycle where every new index directly fuels demand and value for the $AXN token. Through fees, buybacks, and inflation rewards, the system ties product adoption to token growth, generating sustainable revenue and long-term community benefits. This mechanism ensures that platform success translates directly into token value appreciation for all holders.
+                    Statera creates a virtuous cycle where every new index directly fuels demand and value for the $AXN token. Through fees, buybacks, and inflation rewards, the system ties product adoption to token growth, generating sustainable revenue and long-term community benefits. This mechanism ensures that platform success translates directly into token value appreciation for all holders.
                   </p>
                 </ScrollAnimation>
               </div>
@@ -321,7 +321,7 @@ export default function Home() {
                   </h2>
 
                   <p className="text-lg md:text-xl text-[#5a9a9a] mb-8 leading-relaxed font-medium">
-                    Axone&apos;s Buyback & Burn mechanism uses 50% of daily fees to repurchase and permanently remove $AXN tokens, creating built-in scarcity. This progressive reduction in supply strengthens index exposure, offsets inflation, and drives long-term value for the community. The mechanism ensures continuous token appreciation through controlled deflation, making $AXN tokens more valuable over time for all holders.
+                    Statera&apos;s Buyback & Burn mechanism uses 50% of daily fees to repurchase and permanently remove $AXN tokens, creating built-in scarcity. This progressive reduction in supply strengthens index exposure, offsets inflation, and drives long-term value for the community. The mechanism ensures continuous token appreciation through controlled deflation, making $AXN tokens more valuable over time for all holders.
                   </p>
                 </ScrollAnimation>
               </div>
