@@ -56,6 +56,13 @@ export const vaultAbi = [
     inputs: [{ name: 'shares', type: 'uint256' }],
     outputs: [],
   },
+  {
+    name: 'getWithdrawFeeBpsForAmount',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [{ name: 'amount1e18', type: 'uint256' }],
+    outputs: [{ name: '', type: 'uint16' }],
+  },
 ] as const
 
 export function vaultContract(address: string) {

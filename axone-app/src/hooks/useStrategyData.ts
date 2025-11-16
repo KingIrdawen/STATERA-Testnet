@@ -378,6 +378,10 @@ export function useStrategyData(strategy: Index | null) {
         oraclePxBtc: formatUnitsSafe(oraclePxBtcRaw ? BigInt(oraclePxBtcRaw) : 0n, PX_DECIMALS.btc),
         oraclePxHype: formatUnitsSafe(oraclePxHypeRaw ? BigInt(oraclePxHypeRaw) : 0n, PX_DECIMALS.hype),
         oraclePxHypeRaw: oraclePxHypeRaw ? BigInt(oraclePxHypeRaw) : 0n,
+        // Valeurs formatées en USD (Number)
+        ppsUsd: ppsRaw ? Number(formatUnitsSafe(ppsRaw, 18)) : undefined,
+        oracleHypeUsd: oraclePxHypeRaw ? Number(oraclePxHypeRaw) / 1e8 : undefined,
+        oracleBtcUsd: oraclePxBtcRaw ? Number(oraclePxBtcRaw) / 1e8 : undefined,
       }
     : null
 

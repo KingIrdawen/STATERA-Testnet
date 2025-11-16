@@ -4,13 +4,16 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAccount } from 'wagmi';
+import { useAccount, useChainId, useSwitchChain } from 'wagmi';
 import Footer from '@/components/Footer';
 import { Index, getRiskColor, getRiskBgColor } from '@/types/index';
 import StateraLayersIcon from '../../icons/StateraLayersIcon';
 import { useStrategies } from '@/hooks/useStrategies';
 import { useStrategyData } from '@/hooks/useStrategyData';
 import { useVaultActions } from '@/hooks/useVaultActions';
+import { useWithdrawFeePreview } from '@/hooks/useWithdrawFeePreview';
+import { useStrategyApy } from '@/hooks/useStrategyApy';
+import { formatUsd, formatBps } from '@/lib/format';
 import { usePoints } from '@/hooks/usePoints';
 import { useRanking } from '@/hooks/useRanking';
 
@@ -197,6 +200,17 @@ function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; sho
   const [depositAmount, setDepositAmount] = useState('');
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  
+  // Hooks pour le réseau et le simulateur de frais
+  const chainId = useChainId();
+  const { switchChain } = useSwitchChain();
+  const { setAmountUsdStr, amountUsdStr, result: feeResult, isLoading: isFeeLoading } = useWithdrawFeePreview(strategy);
+  const { apy: estimatedApy } = useStrategyApy(strategy);
+  
+  // Chain ID attendu pour HyperEVM Testnet
+  const EXPECTED_CHAIN_ID = 998;
+  const isCorrectChain = chainId === EXPECTED_CHAIN_ID;
   
   // Vérifier les éléments manquants
   const missingConfig = getMissingConfig(strategy);
@@ -309,7 +323,11 @@ function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; sho
         {/* Header avec Token Allocation et APY */}
         <div className="flex items-center justify-between mb-3">
           <h5 className="text-white font-semibold">Token Allocation</h5>
-          <h5 className="text-white font-semibold">APY: {strategy.apy !== undefined ? `${strategy.apy}%` : '-'}</h5>
+          <h5 className="text-white font-semibold">
+            APY: {estimatedApy !== null && !isNaN(estimatedApy) 
+              ? `${estimatedApy.toFixed(2)}%` 
+              : (strategy.apy !== undefined ? `${strategy.apy}%` : '-')}
+          </h5>
         </div>
         
         {/* Liste des tokens */}
@@ -360,26 +378,17 @@ function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; sho
         </div>
       )}
       
-      {address && isConfigured && !isLoading && data && (
-        <div className="mb-4 p-3 bg-blue-900/20 border border-blue-600/30 rounded-lg">
-          <p className="text-blue-400 text-xs mb-1">Debug Info:</p>
-          <p className="text-blue-300 text-xs">Vault Address: {strategy.vaultAddress}</p>
-          <p className="text-blue-300 text-xs">Handler Address: {strategy.handlerAddress}</p>
-          <p className="text-blue-300 text-xs">L1Read Address: {strategy.l1ReadAddress}</p>
-          <p className="text-blue-300 text-xs">User Address: {address}</p>
-          <p className="text-blue-300 text-xs">Vault Total Supply: {data.vaultTotalSupply}</p>
-          <p className="text-blue-300 text-xs">Vault Shares: {data.vaultShares}</p>
-          <p className="text-blue-300 text-xs">PPS: {data.pps}</p>
-          <p className="text-blue-300 text-xs">NAV USD: {data.navUsd1e18}</p>
-          <p className="text-blue-300 text-xs">Vault HYPE Balance: {data.hypeBalance || '0'} HYPE</p>
-          <p className="text-blue-300 text-xs">Core Equity USD: {data.coreEquityUsd}</p>
-          <p className="text-blue-300 text-xs">Oracle Px HYPE: {data.oraclePxHype}</p>
-          <p className="text-blue-300 text-xs">Total HYPE Deposited: {data.totalHypeDeposited} HYPE</p>
-          <p className="text-blue-300 text-xs">User Deposits HYPE: {data.userDepositsHype} HYPE</p>
-          <p className="text-blue-300 text-xs">User Share: {(data.userShare * 100).toFixed(4)}%</p>
-          {isError && (
-            <p className="text-red-300 text-xs mt-2">Error: {error?.message || 'Unknown error'}</p>
-          )}
+      {/* Vérification du réseau */}
+      {address && !isCorrectChain && (
+        <div className="mb-4 p-3 bg-yellow-900/20 border border-yellow-600/30 rounded-lg">
+          <p className="text-yellow-400 text-sm font-semibold mb-2">Wrong Network</p>
+          <p className="text-yellow-300 text-xs mb-2">Please switch to HyperEVM Testnet (Chain ID: 998)</p>
+          <button
+            onClick={() => switchChain({ chainId: EXPECTED_CHAIN_ID })}
+            className="px-3 py-1.5 bg-yellow-600 text-black font-semibold rounded text-xs hover:bg-yellow-700 transition-colors"
+          >
+            Switch to HyperEVM Testnet
+          </button>
         </div>
       )}
       
@@ -400,11 +409,20 @@ function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; sho
             </span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-gray-400 text-sm">Your share in this strategy</span>
+            <span className="text-gray-400 text-sm">Your shares in this strategy</span>
             <span className="text-gray-400 font-bold">
-              {isLoading ? '...' : `${(userShare * 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 })}%`}
+              {isLoading ? '...' : `${parseFloat(data?.vaultShares || '0').toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 })}`}
             </span>
           </div>
+          {/* PPS Display */}
+          {address && isConfigured && !isLoading && data && (
+            <div className="mt-2 flex justify-between items-center">
+              <span className="text-gray-400 text-sm">Price Per Share (PPS)</span>
+              <span className="text-white font-semibold">
+                {formatUsd(data.ppsUsd, 4)}
+              </span>
+            </div>
+          )}
         </div>
         
         <div className="flex items-center justify-between mb-2">
@@ -470,6 +488,76 @@ function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; sho
                 {isPending ? 'Processing...' : isConfirming ? 'Confirming...' : 'Withdraw'}
               </button>
             </div>
+          </div>
+        )}
+        
+        {/* Section Advanced (Oracles et Simulateur de frais) - seulement pour l'onglet Strategy avec dépôts */}
+        {address && isConfigured && !isLoading && data && showWithdraw && (
+          <div className="mt-4">
+            <button
+              onClick={() => setShowAdvanced(!showAdvanced)}
+              className="w-full flex items-center justify-between p-2 bg-gray-800/50 border border-gray-700 rounded-lg hover:bg-gray-800 transition-colors"
+            >
+              <span className="text-gray-400 text-sm font-semibold">Advanced</span>
+              <span className="text-gray-500 text-xs">{showAdvanced ? '▼' : '▶'}</span>
+            </button>
+            
+            {showAdvanced && (
+              <div className="mt-2 p-3 bg-gray-800/30 border border-gray-700 rounded-lg space-y-4">
+                {/* Oracle Prices */}
+                <div>
+                  <p className="text-gray-400 text-xs font-semibold mb-2">Oracle Prices</p>
+                  <div className="space-y-1">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-500 text-xs">HYPE (oracle)</span>
+                      <span className="text-white text-sm font-mono">
+                        {formatUsd(data.oracleHypeUsd, 4)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-500 text-xs">BTC (oracle)</span>
+                      <span className="text-white text-sm font-mono">
+                        {formatUsd(data.oracleBtcUsd, 2)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Withdraw Fee Simulator */}
+                {showWithdraw && (
+                  <div className="pt-3 border-t border-gray-700">
+                    <p className="text-gray-400 text-xs font-semibold mb-2">Withdraw Fee Simulator</p>
+                    <div className="space-y-2">
+                      <input
+                        type="number"
+                        placeholder="Amount to withdraw (USD)"
+                        value={amountUsdStr}
+                        onChange={(e) => setAmountUsdStr(e.target.value)}
+                        className="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-lg text-white text-sm focus:border-[#fab062] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        min="0"
+                        step="0.01"
+                      />
+                      {feeResult.bps !== undefined && amountUsdStr && parseFloat(amountUsdStr) > 0 && (
+                        <div className="p-2 bg-gray-900/50 rounded text-xs">
+                          <span className="text-gray-400">Estimated withdraw fee: </span>
+                          <span className="text-white font-semibold">
+                            {formatUsd((parseFloat(amountUsdStr) * feeResult.bps) / 10000, 2)}
+                          </span>
+                        </div>
+                      )}
+                      {feeResult.error && (
+                        <div className="p-2 bg-red-900/20 border border-red-600/30 rounded text-red-400 text-xs">
+                          Error: {feeResult.error.message}
+                        </div>
+                      )}
+                      {isFeeLoading && (
+                        <div className="text-gray-500 text-xs">Loading fee...</div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>
