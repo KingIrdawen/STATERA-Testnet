@@ -54,6 +54,15 @@ Ce guide explique :
 
 ### Autres documentations
 
+- **📋 Contrats et informations requises** : [`REQUIREMENTS.md`](./REQUIREMENTS.md)
+  - Liste complète des contrats nécessaires
+  - Variables d'environnement
+  - Checklist de configuration
+  - Résolution des erreurs courantes
+- **🔍 Fichiers manquants** : [`MISSING-FILES.md`](./MISSING-FILES.md) - **NOUVEAU**
+  - Liste des fichiers à créer
+  - Checklist de démarrage
+  - Commandes pour créer les fichiers manquants
 - **Configuration Wallet** : [`WALLET_SETUP.md`](./WALLET_SETUP.md)
 - **Mise à jour du ranking** : [`README-RANKING-UPDATE.md`](./README-RANKING-UPDATE.md)
 

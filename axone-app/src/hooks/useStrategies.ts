@@ -86,14 +86,34 @@ export function useStrategies() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(strategy),
+        cache: 'no-store', // Forcer le rechargement sans cache
       });
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || 'Failed to create strategy');
       }
       const data = await response.json();
-      // Re-fetch pour s'assurer que les données sont à jour
-      await fetchStrategies();
+      // Re-fetch immédiatement sans cache pour s'assurer que les données sont à jour
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3000);
+      try {
+        const refreshResponse = await fetch(`${baseUrl}/api/strategies`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+          cache: 'no-store', // Pas de cache pour forcer le rechargement
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+        if (refreshResponse.ok) {
+          const refreshData = await refreshResponse.json();
+          const strategiesList = Array.isArray(refreshData) ? refreshData : (refreshData.strategies || []);
+          setStrategies(strategiesList);
+        }
+      } catch (refreshErr: any) {
+        clearTimeout(timeoutId);
+        // Si le refresh échoue, on fait quand même un fetchStrategies normal
+        await fetchStrategies();
+      }
       return data.strategy || strategy;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
@@ -115,14 +135,34 @@ export function useStrategies() {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(strategy),
+        cache: 'no-store', // Forcer le rechargement sans cache
       });
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || 'Failed to update strategy');
       }
       const data = await response.json();
-      // Re-fetch pour s'assurer que les données sont à jour
-      await fetchStrategies();
+      // Re-fetch immédiatement sans cache pour s'assurer que les données sont à jour
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3000);
+      try {
+        const refreshResponse = await fetch(`${baseUrl}/api/strategies`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+          cache: 'no-store', // Pas de cache pour forcer le rechargement
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+        if (refreshResponse.ok) {
+          const refreshData = await refreshResponse.json();
+          const strategiesList = Array.isArray(refreshData) ? refreshData : (refreshData.strategies || []);
+          setStrategies(strategiesList);
+        }
+      } catch (refreshErr: any) {
+        clearTimeout(timeoutId);
+        // Si le refresh échoue, on fait quand même un fetchStrategies normal
+        await fetchStrategies();
+      }
       return data.strategy || strategy;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
@@ -142,13 +182,33 @@ export function useStrategies() {
       const baseUrl = window.location.origin;
       const response = await fetch(`${baseUrl}/api/strategies?id=${id}`, {
         method: 'DELETE',
+        cache: 'no-store', // Forcer le rechargement sans cache
       });
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || 'Failed to delete strategy');
       }
-      // Re-fetch pour s'assurer que les données sont à jour
-      await fetchStrategies();
+      // Re-fetch immédiatement sans cache pour s'assurer que les données sont à jour
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3000);
+      try {
+        const refreshResponse = await fetch(`${baseUrl}/api/strategies`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+          cache: 'no-store', // Pas de cache pour forcer le rechargement
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+        if (refreshResponse.ok) {
+          const data = await refreshResponse.json();
+          const strategiesList = Array.isArray(data) ? data : (data.strategies || []);
+          setStrategies(strategiesList);
+        }
+      } catch (refreshErr: any) {
+        clearTimeout(timeoutId);
+        // Si le refresh échoue, on fait quand même un fetchStrategies normal
+        await fetchStrategies();
+      }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(errorMessage);

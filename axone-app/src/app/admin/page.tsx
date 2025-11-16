@@ -20,6 +20,7 @@ export default function AdminPage() {
     vaultAddress: string;
     handlerAddress: string;
     l1ReadAddress: string;
+    coreWriterAddress: string;
     tokens: Token[];
   }>({
     name: '',
@@ -30,6 +31,7 @@ export default function AdminPage() {
     vaultAddress: '',
     handlerAddress: '',
     l1ReadAddress: '',
+    coreWriterAddress: '0x3333333333333333333333333333333333333333', // Valeur par défaut
     tokens: [{ symbol: '', name: '', allocation: 0, logo: '', tokenId: '' }]
   });
 
@@ -53,6 +55,7 @@ export default function AdminPage() {
       vaultAddress: formData.vaultAddress,
       handlerAddress: formData.handlerAddress,
       l1ReadAddress: formData.l1ReadAddress,
+      coreWriterAddress: formData.coreWriterAddress || '0x3333333333333333333333333333333333333333',
       tokens: formData.tokens.filter(token => token.symbol)
     };
 
@@ -75,6 +78,7 @@ export default function AdminPage() {
         vaultAddress: '',
         handlerAddress: '',
         l1ReadAddress: '',
+        coreWriterAddress: '0x3333333333333333333333333333333333333333',
         tokens: [{ symbol: '', name: '', allocation: 0, logo: '', tokenId: '' }]
       });
       setEditingIndex(null);
@@ -95,6 +99,7 @@ export default function AdminPage() {
       vaultAddress: index.vaultAddress || '',
       handlerAddress: index.handlerAddress || '',
       l1ReadAddress: index.l1ReadAddress || '',
+      coreWriterAddress: index.coreWriterAddress || '0x3333333333333333333333333333333333333333',
       tokens: index.tokens.length > 0 ? index.tokens : [{ symbol: '', name: '', allocation: 0, logo: '', tokenId: '' }]
     });
   };
@@ -111,21 +116,32 @@ export default function AdminPage() {
   };
 
   const addTokenField = () => {
-    setFormData({
-      ...formData,
-      tokens: [...formData.tokens, { symbol: '', name: '', allocation: 0, logo: '', tokenId: '' }]
-    });
+    setFormData((prev) => ({
+      ...prev,
+      tokens: [...prev.tokens, { symbol: '', name: '', allocation: 0, logo: '', tokenId: '' }]
+    }));
   };
 
   const removeTokenField = (index: number) => {
-    const newTokens = formData.tokens.filter((_, i) => i !== index);
-    setFormData({ ...formData, tokens: newTokens });
+    setFormData((prev) => {
+      const newTokens = prev.tokens.filter((_, i) => i !== index);
+      // S'assurer qu'il reste au moins un token
+      if (newTokens.length === 0) {
+        return {
+          ...prev,
+          tokens: [{ symbol: '', name: '', allocation: 0, logo: '', tokenId: '' }]
+        };
+      }
+      return { ...prev, tokens: newTokens };
+    });
   };
 
   const updateTokenField = (index: number, field: keyof Token, value: string | number) => {
-    const newTokens = [...formData.tokens];
-    newTokens[index] = { ...newTokens[index], [field]: value };
-    setFormData({ ...formData, tokens: newTokens });
+    setFormData((prev) => {
+      const newTokens = [...prev.tokens];
+      newTokens[index] = { ...newTokens[index], [field]: value };
+      return { ...prev, tokens: newTokens };
+    });
   };
 
   const getRiskColor = (risk: string) => {
@@ -250,22 +266,6 @@ export default function AdminPage() {
                   </select>
                 </div>
 
-                {/* APY */}
-                <div>
-                  <label className="block text-white font-semibold mb-2">
-                    APY (%)
-                  </label>
-                  <input
-                    type="number"
-                    value={formData.apy || ''}
-                    onChange={(e) => setFormData({ ...formData, apy: e.target.value ? Number(e.target.value) : undefined })}
-                    className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-[#fab062] focus:outline-none"
-                    placeholder="Ex: 12.5"
-                    step="0.01"
-                    min="0"
-                  />
-                </div>
-
                 {/* Adresses */}
                 <div className="space-y-4">
                   <h3 className="text-white font-semibold text-lg">Adresses</h3>
@@ -316,10 +316,26 @@ export default function AdminPage() {
                     <input
                       type="text"
                       value={formData.l1ReadAddress}
-                      onChange={(e) => setFormData({ ...formData, l1ReadAddress: e.target.value })}
+                      onChange={(e) => setFormData((prev) => ({ ...prev, l1ReadAddress: e.target.value }))}
                       className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-[#fab062] focus:outline-none"
                       placeholder="0x..."
                     />
+                  </div>
+
+                  <div>
+                    <label className="block text-white font-semibold mb-2">
+                      Adresse CoreWriter
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.coreWriterAddress}
+                      onChange={(e) => setFormData((prev) => ({ ...prev, coreWriterAddress: e.target.value }))}
+                      className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-[#fab062] focus:outline-none"
+                      placeholder="0x3333333333333333333333333333333333333333"
+                    />
+                    <p className="text-gray-400 text-xs mt-1">
+                      Adresse système CoreWriter (par défaut: 0x3333...3333)
+                    </p>
                   </div>
                 </div>
 
@@ -401,6 +417,7 @@ export default function AdminPage() {
                           vaultAddress: '',
                           handlerAddress: '',
                           l1ReadAddress: '',
+                          coreWriterAddress: '0x3333333333333333333333333333333333333333',
                           tokens: [{ symbol: '', name: '', allocation: 0, logo: '', tokenId: '' }]
                         });
                       }}
@@ -472,6 +489,7 @@ export default function AdminPage() {
                           <div>Vault: {index.vaultAddress ? `${index.vaultAddress.slice(0, 6)}...${index.vaultAddress.slice(-4)}` : 'Non définie'}</div>
                           <div>CoreHandler: {index.handlerAddress ? `${index.handlerAddress.slice(0, 6)}...${index.handlerAddress.slice(-4)}` : 'Non définie'}</div>
                           <div>L1Read: {index.l1ReadAddress ? `${index.l1ReadAddress.slice(0, 6)}...${index.l1ReadAddress.slice(-4)}` : 'Non définie'}</div>
+                          <div>CoreWriter: {index.coreWriterAddress ? `${index.coreWriterAddress.slice(0, 6)}...${index.coreWriterAddress.slice(-4)}` : 'Non définie'}</div>
                         </div>
                       </div>
                     </div>

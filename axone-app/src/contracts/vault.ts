@@ -1,4 +1,4 @@
-// ABI simplifié pour le vault - à compléter selon votre contrat
+// ABI pour VaultContract - dépôts en HYPE natif
 export const vaultAbi = [
   {
     name: 'balanceOf',
@@ -29,18 +29,32 @@ export const vaultAbi = [
     outputs: [{ name: '', type: 'uint256' }],
   },
   {
+    name: 'nav1e18',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ name: '', type: 'uint256' }],
+  },
+  {
+    name: 'deposits',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [{ name: 'user', type: 'address' }],
+    outputs: [{ name: '', type: 'uint256' }],
+  },
+  {
     name: 'deposit',
     type: 'function',
-    stateMutability: 'nonpayable',
-    inputs: [{ name: 'amount', type: 'uint256' }],
-    outputs: [{ name: '', type: 'uint256' }],
+    stateMutability: 'payable',
+    inputs: [],
+    outputs: [],
   },
   {
     name: 'withdraw',
     type: 'function',
     stateMutability: 'nonpayable',
     inputs: [{ name: 'shares', type: 'uint256' }],
-    outputs: [{ name: '', type: 'uint256' }],
+    outputs: [],
   },
 ] as const
 

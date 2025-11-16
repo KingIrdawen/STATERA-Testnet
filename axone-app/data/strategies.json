@@ -1,27 +1,28 @@
 [
   {
-    "id": "1762104896326",
-    "name": "BTC50DEF",
-    "description": "",
+    "id": "1763313127105",
+    "name": "STRATEGY_1",
+    "description": "test stratégie_1",
     "riskLevel": "low",
-    "usdcAddress": "0xd9cbec81df392a88aeff575e962d149d57f4d6bc",
-    "vaultAddress": "0x5A972d1F33e8fC6fda9a0d90695c8Ab88C45aA38",
-    "handlerAddress": "0x481e6bB8E5C5BfF55c21cb1D4b873cEdFdF4C7e6",
-    "l1ReadAddress": "0xB0abB10Ebe4ba837Ff145a7eE18fa7E7d31F8fF7",
+    "usdcAddress": "0x0B80659a4076E9E93C7DbE0f10675A16a3e5C206",
+    "vaultAddress": "0x82A9ec1B0c949c80dC9fDddD530DF83AB5190D46",
+    "handlerAddress": "0x5Ac60985E55d2B33cc2a26286a7325202bA487db",
+    "l1ReadAddress": "0x71752E1caFa851f3Cdb34C1B8Dd5D4745d55403A",
+    "coreWriterAddress": "0x3333333333333333333333333333333333333333",
     "tokens": [
-      {
-        "symbol": "BTC",
-        "name": "",
-        "allocation": 50,
-        "logo": "",
-        "tokenId": "1129"
-      },
       {
         "symbol": "HYPE",
         "name": "",
         "allocation": 50,
         "logo": "",
         "tokenId": "1105"
+      },
+      {
+        "symbol": "BTC",
+        "name": "",
+        "allocation": 50,
+        "logo": "",
+        "tokenId": "1129"
       }
     ]
   }

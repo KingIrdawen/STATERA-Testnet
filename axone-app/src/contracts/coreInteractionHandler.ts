@@ -1,4 +1,4 @@
-// ABI simplifié pour CoreInteractionHandler - à compléter selon votre contrat
+// ABI pour CoreInteractionHandler - correspond au contrat réel
 export const coreInteractionHandlerAbi = [
   {
     name: 'equitySpotUsd1e18',
@@ -12,14 +12,14 @@ export const coreInteractionHandlerAbi = [
     type: 'function',
     stateMutability: 'view',
     inputs: [],
-    outputs: [{ name: '', type: 'uint256' }],
+    outputs: [{ name: '', type: 'uint64' }],
   },
   {
     name: 'oraclePxHype1e8',
     type: 'function',
     stateMutability: 'view',
     inputs: [],
-    outputs: [{ name: '', type: 'uint256' }],
+    outputs: [{ name: '', type: 'uint64' }],
   },
 ] as const
 

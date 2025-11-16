@@ -168,11 +168,10 @@ function isValidAddress(address: string): boolean {
 // Fonction pour vérifier les éléments manquants de la configuration
 function getMissingConfig(strategy: Index): string[] {
   const missing: string[] = [];
-  if (!strategy.usdcAddress || strategy.usdcAddress.trim() === '') {
-    missing.push('USDC Address (empty)');
-  } else if (!isValidAddress(strategy.usdcAddress)) {
-    missing.push(`USDC Address (invalid: ${strategy.usdcAddress.slice(0, 20)}...)`);
-  }
+  
+  // Note: usdcAddress n'est plus requis car les dépôts se font en HYPE natif
+  // On garde la vérification pour la compatibilité mais ce n'est plus obligatoire
+  
   if (!strategy.vaultAddress || strategy.vaultAddress.trim() === '') {
     missing.push('Vault Address (empty)');
   } else if (!isValidAddress(strategy.vaultAddress)) {
@@ -202,21 +201,18 @@ function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; sho
   // Vérifier les éléments manquants
   const missingConfig = getMissingConfig(strategy);
   
-  // Calculer Total Value Deposited (coreEquityUsd ou vaultTotalSupply * pps)
-  const totalValueDeposited = data
-    ? parseFloat(data.coreEquityUsd) || 
-      (parseFloat(data.vaultTotalSupply) * parseFloat(data.pps) || 0)
+  // Total HYPE déposé dans le vault (en HYPE, pas USD)
+  const totalHypeDeposited = data
+    ? parseFloat(data.totalHypeDeposited || '0')
     : 0;
   
-  // Calculer Your deposits (vaultShares * pps)
-  const yourDeposits = data
-    ? parseFloat(data.vaultShares) * parseFloat(data.pps) || 0
+  // Dépôts de l'utilisateur en HYPE
+  const userDepositsHype = data
+    ? parseFloat(data.userDepositsHype || '0')
     : 0;
   
-  // Calculer Shares (vaultShares / vaultTotalSupply)
-  const shares = data && parseFloat(data.vaultTotalSupply) > 0
-    ? parseFloat(data.vaultShares) / parseFloat(data.vaultTotalSupply)
-    : 0;
+  // Part de l'utilisateur (ratio shares / totalSupply)
+  const userShare = data?.userShare || 0;
 
   // Gérer le dépôt
   const handleDeposit = async () => {
@@ -230,21 +226,21 @@ function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; sho
       return;
     }
 
-    if (!strategy?.usdcAddress || !strategy?.vaultAddress) {
-      setErrorMessage('Strategy is not fully configured. Please set all contract addresses.');
+    if (!strategy?.vaultAddress) {
+      setErrorMessage('Strategy is not fully configured. Please set the vault address.');
       return;
     }
 
-    if (!data?.usdcBalance || parseFloat(depositAmount) > parseFloat(data.usdcBalance)) {
-      setErrorMessage('Insufficient USDC balance');
+    // Vérifier le solde HYPE natif
+    if (!data?.hypeBalance || parseFloat(depositAmount) > parseFloat(data.hypeBalance)) {
+      setErrorMessage('Insufficient HYPE balance');
       return;
     }
 
     setErrorMessage(null);
     try {
-      // Utiliser les décimales réelles depuis les données si disponibles
-      const usdcDecimals = data.usdcDecimals || 6;
-      await deposit(depositAmount, usdcDecimals);
+      // HYPE natif utilise 18 décimales
+      await deposit(depositAmount, 18);
       setDepositAmount(''); // Reset après succès
     } catch (err: any) {
       setErrorMessage(err.message || 'Failed to deposit');
@@ -366,40 +362,43 @@ function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; sho
           <p className="text-blue-300 text-xs">Vault Total Supply: {data.vaultTotalSupply}</p>
           <p className="text-blue-300 text-xs">Vault Shares: {data.vaultShares}</p>
           <p className="text-blue-300 text-xs">PPS: {data.pps}</p>
-          <p className="text-blue-300 text-xs">Core Equity USD: {data.coreEquityUsd}</p>
+          <p className="text-blue-300 text-xs">NAV USD: {data.navUsd1e18}</p>
+          <p className="text-blue-300 text-xs">Total HYPE Deposited: {data.totalHypeDeposited}</p>
+          <p className="text-blue-300 text-xs">User Deposits HYPE: {data.userDepositsHype}</p>
+          <p className="text-blue-300 text-xs">User Share: {data.userShare}</p>
         </div>
       )}
       
       {/* Bouton de dépôt */}
       <div className="mt-auto">
-        {/* Total Value Deposited et Your deposits */}
+        {/* Total HYPE Deposited et Your deposits */}
         <div className="mb-4">
           <div className="mb-2 flex justify-between items-center">
-            <span className="text-white font-semibold text-sm">Total Value Deposited</span>
+            <span className="text-white font-semibold text-sm">Total HYPE Deposited</span>
             <span className="text-white font-bold">
-              {isLoading ? '...' : `$${totalValueDeposited.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+              {isLoading ? '...' : `${totalHypeDeposited.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} HYPE`}
             </span>
           </div>
           <div className="mb-2 flex justify-between items-center">
             <span className="text-gray-400 text-sm">Your deposits in this strategy</span>
             <span className="text-gray-400 font-bold">
-              {isLoading ? '...' : `$${yourDeposits.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+              {isLoading ? '...' : `${userDepositsHype.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} HYPE`}
             </span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-gray-400 text-sm">Shares in this strategy</span>
+            <span className="text-gray-400 text-sm">Your share in this strategy</span>
             <span className="text-gray-400 font-bold">
-              {isLoading ? '...' : shares.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 6 })}
+              {isLoading ? '...' : `${(userShare * 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 })}%`}
             </span>
           </div>
         </div>
         
         <div className="flex items-center justify-between mb-2">
           <label className="block text-white text-sm font-semibold">
-            Deposit Amount
+            Deposit Amount (HYPE)
           </label>
           <span className="text-gray-400 text-xs">
-            Balance: {isLoading ? '...' : `${data?.usdcBalance || '0'} USDC`}
+            Balance: {isLoading ? '...' : `${data?.hypeBalance || '0'} HYPE`}
           </span>
         </div>
         {errorMessage && (
@@ -428,7 +427,7 @@ function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; sho
             disabled={isPending || isConfirming || !isConfigured || !address || !depositAmount}
             className="px-3 py-2 bg-gradient-to-r from-[#fab062] to-[#5a9a9a] text-black font-semibold rounded-lg hover:opacity-90 transition-opacity text-sm whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isPending ? 'Approving...' : isConfirming ? 'Confirming...' : 'Deposit'}
+            {isPending ? 'Processing...' : isConfirming ? 'Confirming...' : 'Deposit'}
           </button>
         </div>
         

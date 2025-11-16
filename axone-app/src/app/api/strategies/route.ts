@@ -6,7 +6,12 @@ import { Index } from '@/types/index';
 export async function GET() {
   try {
     const strategies = getStrategies();
-    return NextResponse.json({ strategies });
+    // Retourner directement le tableau pour compatibilité avec le code client
+    return NextResponse.json(strategies, {
+      headers: {
+        'Cache-Control': 'no-store, must-revalidate',
+      },
+    });
   } catch (error) {
     console.error('Error fetching strategies:', error);
     return NextResponse.json({ error: 'Failed to fetch strategies' }, { status: 500 });

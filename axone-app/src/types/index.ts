@@ -17,6 +17,7 @@ export interface Index {
   vaultAddress: string;
   handlerAddress: string;
   l1ReadAddress: string;
+  coreWriterAddress?: string; // Adresse CoreWriter (par défaut: 0x3333333333333333333333333333333333333333)
 }
 
 export const getRiskColor = (risk: string) => {
