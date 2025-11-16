@@ -1,4 +1,4 @@
-// ABI simplifié pour L1Read - à compléter selon votre contrat
+// ABI pour L1Read - correspond au contrat réel
 export const l1readAbi = [
   {
     name: 'spotBalance',
@@ -6,16 +6,16 @@ export const l1readAbi = [
     stateMutability: 'view',
     inputs: [
       { name: 'user', type: 'address' },
-      { name: 'tokenId', type: 'uint256' },
+      { name: 'token', type: 'uint64' }, // Le contrat utilise uint64, pas uint256
     ],
     outputs: [
       {
         name: '',
         type: 'tuple',
         components: [
-          { name: 'total', type: 'uint256' },
-          { name: 'hold', type: 'uint256' },
-          { name: 'entryNtl', type: 'uint256' },
+          { name: 'total', type: 'int128' }, // Le contrat retourne int128, pas uint256
+          { name: 'hold', type: 'int128' },
+          { name: 'entryNtl', type: 'int128' },
         ],
       },
     ],
@@ -24,20 +24,20 @@ export const l1readAbi = [
     name: 'tokenInfo',
     type: 'function',
     stateMutability: 'view',
-    inputs: [{ name: 'tokenId', type: 'uint256' }],
+    inputs: [{ name: 'token', type: 'uint32' }], // Le contrat utilise uint32, pas uint256
     outputs: [
       {
         name: '',
         type: 'tuple',
         components: [
           { name: 'name', type: 'string' },
-          { name: 'spots', type: 'uint256[]' },
-          { name: 'deployerTradingFeeShare', type: 'uint256' },
+          { name: 'spots', type: 'uint64[]' }, // Le contrat utilise uint64[], pas uint256[]
+          { name: 'deployerTradingFeeShare', type: 'uint64' },
           { name: 'deployer', type: 'address' },
           { name: 'evmContract', type: 'address' },
           { name: 'szDecimals', type: 'uint8' },
           { name: 'weiDecimals', type: 'uint8' },
-          { name: 'evmExtraWeiDecimals', type: 'uint8' },
+          { name: 'evmExtraWeiDecimals', type: 'int8' }, // Le contrat utilise int8, pas uint8
         ],
       },
     ],

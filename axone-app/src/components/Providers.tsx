@@ -18,12 +18,19 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         refetchOnWindowFocus: false, // Ne pas refetch quand on revient sur la fenêtre
         refetchOnReconnect: false, // Ne pas refetch automatiquement après reconnexion
         refetchOnMount: false, // Ne pas refetch au montage si les données sont en cache
-        // Ne pas logger les erreurs réseau non critiques
+        // Logger les erreurs RPC pour le débogage
         onError: (error) => {
-          // Ne logger que les erreurs critiques (pas les erreurs réseau normales)
+          // Logger toutes les erreurs RPC pour diagnostiquer le problème
           if (error && typeof error === 'object' && 'message' in error) {
             const errorMessage = String(error.message);
-            if (!errorMessage.includes('Failed to fetch') && !errorMessage.includes('timeout')) {
+            // Logger les erreurs "Failed to fetch" pour le débogage RPC
+            if (errorMessage.includes('Failed to fetch') || errorMessage.includes('HTTP request failed')) {
+              console.warn('[RPC Error]', {
+                message: errorMessage,
+                url: errorMessage.includes('rpc-testnet.hyperliquid.xyz') ? 'https://rpc-testnet.hyperliquid.xyz/evm' : 'unknown',
+                suggestion: 'Vérifiez que le RPC est accessible et que CORS est configuré correctement',
+              });
+            } else if (!errorMessage.includes('timeout')) {
               console.error('Query error:', error);
             }
           }

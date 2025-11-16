@@ -3,6 +3,10 @@ import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import { defineChain } from 'viem';
 
 // Configuration de la chaîne HyperEVM Testnet
+// Utiliser une variable d'environnement pour l'URL RPC si disponible, sinon utiliser l'URL par défaut
+// URL RPC correcte : https://rpc.hyperliquid-testnet.xyz/evm (avec tiret, pas rpc-testnet.hyperliquid.xyz)
+const rpcUrl = process.env.NEXT_PUBLIC_HYPEREVM_RPC_URL || 'https://rpc.hyperliquid-testnet.xyz/evm';
+
 export const hyperevmTestnet = defineChain({
   id: 998,
   name: 'HyperEVM Testnet',
@@ -13,11 +17,11 @@ export const hyperevmTestnet = defineChain({
   },
   rpcUrls: {
     default: {
-      http: ['https://rpc-testnet.hyperliquid.xyz/evm'],
+      http: [rpcUrl],
       webSocket: undefined, // Pas de WebSocket pour l'instant
     },
     public: {
-      http: ['https://rpc-testnet.hyperliquid.xyz/evm'],
+      http: [rpcUrl],
     },
   },
   blockExplorers: {

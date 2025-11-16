@@ -339,6 +339,10 @@ function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; sho
             ))}
           </ul>
           <p className="text-red-300 text-xs mt-2">Please configure these addresses in the admin page.</p>
+          <p className="text-yellow-300 text-xs mt-1">Current addresses:</p>
+          <p className="text-yellow-300 text-xs">Vault: {strategy.vaultAddress || 'Not set'}</p>
+          <p className="text-yellow-300 text-xs">Handler: {strategy.handlerAddress || 'Not set'}</p>
+          <p className="text-yellow-300 text-xs">L1Read: {strategy.l1ReadAddress || 'Not set'}</p>
         </div>
       )}
       
@@ -359,13 +363,23 @@ function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; sho
       {address && isConfigured && !isLoading && data && (
         <div className="mb-4 p-3 bg-blue-900/20 border border-blue-600/30 rounded-lg">
           <p className="text-blue-400 text-xs mb-1">Debug Info:</p>
+          <p className="text-blue-300 text-xs">Vault Address: {strategy.vaultAddress}</p>
+          <p className="text-blue-300 text-xs">Handler Address: {strategy.handlerAddress}</p>
+          <p className="text-blue-300 text-xs">L1Read Address: {strategy.l1ReadAddress}</p>
+          <p className="text-blue-300 text-xs">User Address: {address}</p>
           <p className="text-blue-300 text-xs">Vault Total Supply: {data.vaultTotalSupply}</p>
           <p className="text-blue-300 text-xs">Vault Shares: {data.vaultShares}</p>
           <p className="text-blue-300 text-xs">PPS: {data.pps}</p>
           <p className="text-blue-300 text-xs">NAV USD: {data.navUsd1e18}</p>
-          <p className="text-blue-300 text-xs">Total HYPE Deposited: {data.totalHypeDeposited}</p>
-          <p className="text-blue-300 text-xs">User Deposits HYPE: {data.userDepositsHype}</p>
-          <p className="text-blue-300 text-xs">User Share: {data.userShare}</p>
+          <p className="text-blue-300 text-xs">Vault HYPE Balance: {data.hypeBalance || '0'} HYPE</p>
+          <p className="text-blue-300 text-xs">Core Equity USD: {data.coreEquityUsd}</p>
+          <p className="text-blue-300 text-xs">Oracle Px HYPE: {data.oraclePxHype}</p>
+          <p className="text-blue-300 text-xs">Total HYPE Deposited: {data.totalHypeDeposited} HYPE</p>
+          <p className="text-blue-300 text-xs">User Deposits HYPE: {data.userDepositsHype} HYPE</p>
+          <p className="text-blue-300 text-xs">User Share: {(data.userShare * 100).toFixed(4)}%</p>
+          {isError && (
+            <p className="text-red-300 text-xs mt-2">Error: {error?.message || 'Unknown error'}</p>
+          )}
         </div>
       )}
       

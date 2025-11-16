@@ -147,6 +147,20 @@ export function useStrategyData(strategy: Index | null) {
     !!strategy.l1ReadAddress &&
     !!address
 
+  // Debug: vérifier la configuration
+  if (strategy && address) {
+    console.log('[useStrategyData] Configuration Check:', {
+      strategyName: strategy.name,
+      vaultAddress: strategy.vaultAddress,
+      handlerAddress: strategy.handlerAddress,
+      l1ReadAddress: strategy.l1ReadAddress,
+      userAddress: address,
+      tokensWithIdsCount: tokensWithIds.length,
+      tokensWithIds: tokensWithIds,
+      isConfigured,
+    })
+  }
+
   // Préparer les contrats pour les lectures
   const contracts = isConfigured
     ? [
@@ -183,18 +197,27 @@ export function useStrategyData(strategy: Index | null) {
           functionName: 'pps1e18' as const,
         },
         // Core balances pour TOUS les tokens de la stratégie avec un tokenId
-        ...tokensWithIds.flatMap((token) => [
-          {
-            ...l1readContract(strategy.l1ReadAddress),
-            functionName: 'spotBalance' as const,
-            args: [strategy.handlerAddress as `0x${string}`, BigInt(token.tokenId)],
-          },
-          {
-            ...l1readContract(strategy.l1ReadAddress),
-            functionName: 'tokenInfo' as const,
-            args: [BigInt(token.tokenId)],
-          },
-        ]),
+        ...tokensWithIds.flatMap((token) => {
+          const tokenIdNum = parseInt(token.tokenId)
+          // Vérifier que le tokenId est valide
+          if (isNaN(tokenIdNum) || tokenIdNum < 0 || tokenIdNum > Number.MAX_SAFE_INTEGER) {
+            console.warn(`[useStrategyData] Invalid tokenId for ${token.symbol}: ${token.tokenId}`)
+            return []
+          }
+          // spotBalance utilise uint64, tokenInfo utilise uint32
+          return [
+            {
+              ...l1readContract(strategy.l1ReadAddress),
+              functionName: 'spotBalance' as const,
+              args: [strategy.handlerAddress as `0x${string}`, BigInt(tokenIdNum)],
+            },
+            {
+              ...l1readContract(strategy.l1ReadAddress),
+              functionName: 'tokenInfo' as const,
+              args: [BigInt(tokenIdNum)],
+            },
+          ]
+        }),
         // Handler core equity (USD 1e18)
         {
           ...coreInteractionHandlerContract(strategy.handlerAddress),
@@ -225,6 +248,24 @@ export function useStrategyData(strategy: Index | null) {
     },
   })
 
+  // Debug: vérifier les contrats et leur état
+  if (isConfigured) {
+    console.log('[useStrategyData] Contracts Check:', {
+      contractsCount: contracts.length,
+      contractsPreview: contracts.slice(0, 5).map((c, i) => ({
+        index: i,
+        address: c.address,
+        functionName: c.functionName,
+        args: c.args,
+      })),
+      isLoading,
+      isError,
+      error: error?.message,
+      dataLength: data?.length,
+      enabled: isConfigured,
+    })
+  }
+
   // Formater les données
   let contractIndex = 0
   const vaultShares = data?.[contractIndex++]?.result as bigint | undefined
@@ -233,6 +274,41 @@ export function useStrategyData(strategy: Index | null) {
   const userDepositsHype = data?.[contractIndex++]?.result as bigint | undefined // Dépôts cumulés utilisateur en HYPE (1e18)
   const navUsd1e18 = data?.[contractIndex++]?.result as bigint | undefined // NAV totale en USD (1e18)
   const ppsRaw = data?.[contractIndex++]?.result as bigint | undefined // Prix par share en USD (1e18)
+
+  // Debug: vérifier les données brutes et les erreurs individuelles
+  if (isConfigured && data) {
+    const detailedResults = data.map((d, i) => {
+      const contract = contracts[i]
+      return {
+        index: i,
+        contractAddress: contract?.address,
+        functionName: contract?.functionName,
+        args: contract?.args,
+        status: d.status,
+        result: d.result?.toString() || 'null',
+        error: d.error ? {
+          message: d.error.message,
+          name: d.error.name,
+          cause: d.error.cause,
+          stack: d.error.stack,
+        } : null,
+      }
+    })
+    
+    console.log('[useStrategyData] Raw Data Check:', {
+      dataLength: data.length,
+      contractsLength: contracts.length,
+      vaultSharesRaw: vaultShares?.toString(),
+      vaultTotalSupplyRaw: vaultTotalSupply?.toString(),
+      userDepositsHypeRaw: userDepositsHype?.toString(),
+      navUsd1e18Raw: navUsd1e18?.toString(),
+      ppsRaw: ppsRaw?.toString(),
+      detailedResults,
+      errorsCount: data.filter(d => d.error).length,
+      successCount: data.filter(d => d.status === 'success').length,
+      failureCount: data.filter(d => d.status === 'failure').length,
+    })
+  }
 
   // Core balances pour TOUS les tokens de la stratégie (dynamiques)
   const coreBalances: Record<string, CoreBalanceData> = {}
@@ -305,22 +381,43 @@ export function useStrategyData(strategy: Index | null) {
       }
     : null
 
-  // Log de débogage désactivé pour réduire le bruit dans la console
-  // Décommenter si nécessaire pour le débogage
-  // if (isConfigured && data && formattedData) {
-  //   console.log('[useStrategyData] Debug:', {
-  //     vaultAddress: strategy?.vaultAddress,
-  //     userAddress: address,
-  //     vaultSharesRaw: formattedData.vaultSharesRaw?.toString(),
-  //     vaultSharesFormatted: formattedData.vaultShares,
-  //     vaultTotalSupplyRaw: formattedData.vaultTotalSupplyRaw?.toString(),
-  //     vaultTotalSupplyFormatted: formattedData.vaultTotalSupply,
-  //     ppsRaw: formattedData.ppsRaw?.toString(),
-  //     ppsFormatted: formattedData.pps,
-  //     vaultDecimals: formattedData.vaultDecimals,
-  //     calculatedDeposits: (parseFloat(formattedData.vaultShares) * parseFloat(formattedData.pps)).toFixed(6),
-  //   })
-  // }
+  // Log de débogage pour diagnostiquer les problèmes
+  if (isConfigured && data && formattedData) {
+    console.log('[useStrategyData] Debug Info:', {
+      strategyName: strategy?.name,
+      vaultAddress: strategy?.vaultAddress,
+      handlerAddress: strategy?.handlerAddress,
+      l1ReadAddress: strategy?.l1ReadAddress,
+      userAddress: address,
+      isConfigured,
+      isLoading,
+      isError,
+      error: error?.message,
+      contractsCount: contracts.length,
+      dataResultsCount: data?.length || 0,
+      vaultSharesRaw: formattedData.vaultSharesRaw?.toString(),
+      vaultSharesFormatted: formattedData.vaultShares,
+      vaultTotalSupplyRaw: formattedData.vaultTotalSupplyRaw?.toString(),
+      vaultTotalSupplyFormatted: formattedData.vaultTotalSupply,
+      navUsd1e18Raw: formattedData.navUsd1e18Raw?.toString(),
+      navUsd1e18Formatted: formattedData.navUsd1e18,
+      ppsRaw: formattedData.ppsRaw?.toString(),
+      ppsFormatted: formattedData.pps,
+      vaultDecimals: formattedData.vaultDecimals,
+      vaultHypeBalanceRaw: vaultHypeBalance?.value?.toString(),
+      vaultHypeBalanceFormatted: formatUnitsSafe(vaultHypeBalance?.value, 18),
+      coreEquityUsdRaw: formattedData.coreEquityUsdRaw?.toString(),
+      coreEquityUsdFormatted: formattedData.coreEquityUsd,
+      oraclePxHypeRaw: formattedData.oraclePxHypeRaw?.toString(),
+      oraclePxHypeFormatted: formattedData.oraclePxHype,
+      totalHypeDepositedRaw: formattedData.totalHypeDepositedRaw?.toString(),
+      totalHypeDepositedFormatted: formattedData.totalHypeDeposited,
+      userDepositsHypeRaw: formattedData.userDepositsHypeRaw?.toString(),
+      userDepositsHypeFormatted: formattedData.userDepositsHype,
+      userShare: formattedData.userShare,
+      tokensWithIds: tokensWithIds.map(t => ({ symbol: t.symbol, tokenId: t.tokenId })),
+    })
+  }
 
   return {
     data: formattedData,
