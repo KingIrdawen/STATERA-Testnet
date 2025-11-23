@@ -228,6 +228,40 @@ function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; sho
   // Part de l'utilisateur (ratio shares / totalSupply)
   const userShare = data?.userShare || 0;
 
+  // Vérifier le réseau quand un montant est entré
+  useEffect(() => {
+    const amount = depositAmount?.trim();
+    if (amount && !isNaN(parseFloat(amount)) && parseFloat(amount) > 0) {
+      if (address && !isCorrectChain) {
+        setErrorMessage('Wrong Network - Please switch to HyperEVM Testnet (Chain ID: 998)');
+      } else if (address && isCorrectChain) {
+        // Effacer l'erreur de réseau si le réseau est correct
+        setErrorMessage((prev) => {
+          if (prev === 'Wrong Network - Please switch to HyperEVM Testnet (Chain ID: 998)') {
+            return null;
+          }
+          return prev;
+        });
+      } else if (!address) {
+        // Si pas connecté, ne pas afficher d'erreur de réseau
+        setErrorMessage((prev) => {
+          if (prev === 'Wrong Network - Please switch to HyperEVM Testnet (Chain ID: 998)') {
+            return null;
+          }
+          return prev;
+        });
+      }
+    } else if (!amount || amount === '') {
+      // Effacer l'erreur de réseau si le champ est vide
+      setErrorMessage((prev) => {
+        if (prev === 'Wrong Network - Please switch to HyperEVM Testnet (Chain ID: 998)') {
+          return null;
+        }
+        return prev;
+      });
+    }
+  }, [depositAmount, address, isCorrectChain]);
+
   // Gérer le dépôt
   const handleDeposit = async () => {
     if (!depositAmount || parseFloat(depositAmount) <= 0) {
@@ -237,6 +271,11 @@ function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; sho
 
     if (!address) {
       setErrorMessage('Please connect your wallet');
+      return;
+    }
+
+    if (!isCorrectChain) {
+      setErrorMessage('Wrong Network - Please switch to HyperEVM Testnet (Chain ID: 998)');
       return;
     }
 
@@ -324,9 +363,9 @@ function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; sho
         <div className="flex items-center justify-between mb-3">
           <h5 className="text-white font-semibold">Token Allocation</h5>
           <h5 className="text-white font-semibold">
-            APY: {estimatedApy !== null && !isNaN(estimatedApy) 
+            APY: {estimatedApy !== null && !isNaN(estimatedApy) && isFinite(estimatedApy)
               ? `${estimatedApy.toFixed(2)}%` 
-              : (strategy.apy !== undefined ? `${strategy.apy}%` : '-')}
+              : '-'}
           </h5>
         </div>
         
@@ -378,7 +417,7 @@ function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; sho
         </div>
       )}
       
-      {/* Vérification du réseau */}
+      {/* Network verification */}
       {address && !isCorrectChain && (
         <div className="mb-4 p-3 bg-yellow-900/20 border border-yellow-600/30 rounded-lg">
           <p className="text-yellow-400 text-sm font-semibold mb-2">Wrong Network</p>
@@ -434,8 +473,23 @@ function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; sho
           </span>
         </div>
         {errorMessage && (
-          <div className="mb-2 p-2 bg-red-900/20 border border-red-500/50 rounded text-red-400 text-xs">
-            {errorMessage}
+          <div className={`mb-2 p-3 rounded text-xs font-semibold ${
+            errorMessage.includes('Wrong Network') 
+              ? 'bg-red-600/90 border-2 border-red-500 text-white' 
+              : 'bg-red-900/20 border border-red-500/50 text-red-400'
+          }`}>
+            <div className="flex items-center gap-2">
+              {errorMessage.includes('Wrong Network') && <span>⚠️</span>}
+              <span>{errorMessage}</span>
+              {errorMessage.includes('Wrong Network') && address && (
+                <button
+                  onClick={() => switchChain({ chainId: EXPECTED_CHAIN_ID })}
+                  className="ml-auto px-2 py-1 bg-white text-red-600 font-semibold rounded text-xs hover:bg-gray-100 transition-colors whitespace-nowrap"
+                >
+                  Switch Network
+                </button>
+              )}
+            </div>
           </div>
         )}
         {isSuccess && (
@@ -571,6 +625,13 @@ export default function DashboardPage() {
   const { strategies, loading } = useStrategies();
   const [activePage, setActivePage] = useState('dashboard');
   
+  // Vérification du réseau au niveau de la page
+  const { address } = useAccount();
+  const chainId = useChainId();
+  const { switchChain } = useSwitchChain();
+  const EXPECTED_CHAIN_ID = 998;
+  const isCorrectChain = chainId === EXPECTED_CHAIN_ID;
+  
   // États pour la recherche et le filtrage
   const [searchQuery, setSearchQuery] = useState('');
   const [apySort, setApySort] = useState<'none' | 'asc' | 'desc'>('none');
@@ -676,8 +737,25 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-black">
       {/* Header avec bouton Connect Wallet */}
-      <header className="fixed top-0 left-0 right-0 z-[9999] bg-black/50 backdrop-blur-md border-b border-gray-800">
-        <div className="flex items-center justify-between px-4 sm:px-8 md:px-36 lg:px-48 py-4">
+      <header className="fixed left-0 right-0 top-0 z-[9999] bg-black/50 backdrop-blur-md border-b border-gray-800">
+        {/* Bandeau Wrong Network intégré dans le header */}
+        {address && !isCorrectChain && (
+          <div className="bg-red-600 text-white text-center py-3 px-4 text-sm font-semibold shadow-lg border-b-2 border-red-700">
+            <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
+              <span className="flex items-center gap-2">
+                <span className="text-lg">⚠️</span>
+                <span>Wrong Network - Please switch to HyperEVM Testnet (Chain ID: 998)</span>
+              </span>
+              <button
+                onClick={() => switchChain({ chainId: EXPECTED_CHAIN_ID })}
+                className="px-4 py-1.5 bg-white text-red-600 font-semibold rounded text-xs hover:bg-gray-100 transition-colors whitespace-nowrap shadow-md"
+              >
+                Switch Network
+              </button>
+            </div>
+          </div>
+        )}
+        <div className={`flex items-center justify-between px-4 sm:px-8 md:px-36 lg:px-48 py-4 ${address && !isCorrectChain ? '' : ''}`}>
           {/* Logo et nom */}
           <Link href="/" className="flex items-center gap-3 sm:gap-4">
             <Image
@@ -725,9 +803,9 @@ export default function DashboardPage() {
         </div>
       </header>
       
-      <main className="pt-[60px] md:pt-[80px] flex">
+      <main className={`flex ${address && !isCorrectChain ? 'pt-[104px] md:pt-[124px]' : 'pt-[60px] md:pt-[80px]'}`}>
         {/* Sidebar Navigation */}
-        <aside className="fixed left-0 top-[60px] h-[calc(100vh-600px)] w-64 bg-black overflow-y-auto z-[9998] pb-20">
+        <aside className={`fixed left-0 w-64 bg-black overflow-y-auto z-[9998] pb-20 ${address && !isCorrectChain ? 'top-[104px] h-[calc(100vh-104px)]' : 'top-[60px] h-[calc(100vh-60px)]'}`}>
           <div className="p-6 space-y-2">
             <button
               onClick={() => setActivePage('dashboard')}
