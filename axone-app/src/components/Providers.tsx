@@ -10,12 +10,13 @@ import ConsoleErrorFilter from './ConsoleErrorFilter';
 
 // Note: setLogger n'existe pas dans React Query v5 (@tanstack/react-query@^5.90.5)
 // Les erreurs doivent être gérées au niveau des useQuery individuels via onError dans chaque query
+// IMPORTANT: onError n'est PAS supporté dans defaultOptions.queries en React Query v5
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient({
     defaultOptions: {
       queries: {
-        // ❌ onError n'est pas supporté ici en React Query v5
+        // ❌ onError n'est PAS supporté ici en React Query v5 - doit être dans chaque useQuery individuel
         retry: 2,
         refetchOnMount: false,
         refetchOnWindowFocus: false,
