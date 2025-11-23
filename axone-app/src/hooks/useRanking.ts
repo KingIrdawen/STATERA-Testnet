@@ -56,9 +56,9 @@ export function useRanking() {
         const data: RankingData = await response.json()
         setRankingData(data)
         setError(null)
-      } catch (fetchErr: any) {
+      } catch (fetchErr) {
         clearTimeout(timeoutId)
-        if (fetchErr.name === 'AbortError') {
+        if (fetchErr instanceof Error && fetchErr.name === 'AbortError') {
           throw new Error('Request timeout: Server did not respond')
         }
         throw fetchErr

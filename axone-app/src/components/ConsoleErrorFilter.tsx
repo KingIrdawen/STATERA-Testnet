@@ -31,8 +31,8 @@ export default function ConsoleErrorFilter() {
     };
 
     // Remplacer console.error
-    console.error = (...args: any[]) => {
-      const message = args.join(' ');
+    console.error = (...args: unknown[]) => {
+      const message = args.map(arg => String(arg)).join(' ');
       if (!shouldIgnore(message)) {
         originalError.apply(console, args);
       }
@@ -40,8 +40,8 @@ export default function ConsoleErrorFilter() {
     };
 
     // Remplacer console.warn (au cas où)
-    console.warn = (...args: any[]) => {
-      const message = args.join(' ');
+    console.warn = (...args: unknown[]) => {
+      const message = args.map(arg => String(arg)).join(' ');
       if (!shouldIgnore(message)) {
         originalWarn.apply(console, args);
       }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getStrategies, saveStrategies, addStrategy, updateStrategy, deleteStrategy } from '@/lib/strategies';
+import { getStrategies, addStrategy, updateStrategy, deleteStrategy } from '@/lib/strategies';
 import { Index } from '@/types/index';
 
 // GET - Récupérer toutes les stratégies

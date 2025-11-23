@@ -196,7 +196,7 @@ function getMissingConfig(strategy: Index): string[] {
 // Composant pour afficher une stratégie avec ses données
 function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; showWithdraw?: boolean }) {
   const { data, isLoading, isConfigured, address, isError, error } = useStrategyData(strategy);
-  const { deposit, withdraw, isPending, isConfirming, isSuccess, error: vaultError } = useVaultActions(strategy);
+  const { deposit, withdraw, isPending, isConfirming, isSuccess } = useVaultActions(strategy);
   const [depositAmount, setDepositAmount] = useState('');
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -295,8 +295,9 @@ function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; sho
       // HYPE natif utilise 18 décimales
       await deposit(depositAmount, 18);
       setDepositAmount(''); // Reset après succès
-    } catch (err: any) {
-      setErrorMessage(err.message || 'Failed to deposit');
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to deposit';
+      setErrorMessage(errorMessage);
     }
   };
 
@@ -328,8 +329,9 @@ function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; sho
       const vaultDecimals = data?.vaultDecimals || 18;
       await withdraw(withdrawAmount, vaultDecimals);
       setWithdrawAmount(''); // Reset après succès
-    } catch (err: any) {
-      setErrorMessage(err.message || 'Failed to withdraw');
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to withdraw';
+      setErrorMessage(errorMessage);
     }
   };
 

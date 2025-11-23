@@ -53,9 +53,9 @@ export function useStrategies() {
         const strategiesList = Array.isArray(data) ? data : (data.strategies || []);
         setStrategies(strategiesList);
         setError(null);
-      } catch (fetchErr: any) {
+      } catch (fetchErr) {
         clearTimeout(timeoutId);
-        if (fetchErr.name === 'AbortError') {
+        if (fetchErr instanceof Error && fetchErr.name === 'AbortError') {
           throw new Error('Request timeout: Server did not respond');
         }
         throw fetchErr;
@@ -109,7 +109,7 @@ export function useStrategies() {
           const strategiesList = Array.isArray(refreshData) ? refreshData : (refreshData.strategies || []);
           setStrategies(strategiesList);
         }
-      } catch (refreshErr: any) {
+      } catch (_refreshErr) {
         clearTimeout(timeoutId);
         // Si le refresh échoue, on fait quand même un fetchStrategies normal
         await fetchStrategies();
@@ -158,7 +158,7 @@ export function useStrategies() {
           const strategiesList = Array.isArray(refreshData) ? refreshData : (refreshData.strategies || []);
           setStrategies(strategiesList);
         }
-      } catch (refreshErr: any) {
+      } catch (_refreshErr) {
         clearTimeout(timeoutId);
         // Si le refresh échoue, on fait quand même un fetchStrategies normal
         await fetchStrategies();

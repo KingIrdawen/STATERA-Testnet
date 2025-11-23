@@ -124,9 +124,10 @@ export function useStrategyData(strategy: Index | null) {
     return strategy?.tokens.find((t) => t.symbol.toUpperCase() === symbol.toUpperCase())?.tokenId
   }
 
-  const usdcTokenId = getTokenId('USDC')
-  const hypeTokenId = getTokenId('HYPE')
-  const btcTokenId = getTokenId('BTC')
+  // Token IDs pour référence future (actuellement non utilisés dans les appels)
+  const _usdcTokenId = getTokenId('USDC')
+  const _hypeTokenId = getTokenId('HYPE')
+  const _btcTokenId = getTokenId('BTC')
 
   // Récupérer le solde HYPE natif du wallet
   const { data: hypeBalance, isLoading: isLoadingHype } = useBalance({

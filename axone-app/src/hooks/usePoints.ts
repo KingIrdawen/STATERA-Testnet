@@ -28,7 +28,7 @@ export function usePoints() {
   const points = useMemo(() => {
     // Pour l'instant, retourner 0 en attendant le smart contract
     return '0'
-  }, [address, refreshKey])
+  }, [])
 
   // Rafraîchir automatiquement toutes les heures (une fois le smart contract configuré)
   useEffect(() => {
