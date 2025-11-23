@@ -1,8 +1,27 @@
 import { RankingEntry } from '@/types/ranking';
-import fs from 'fs';
-import path from 'path';
 
-const RANKING_FILE = path.join(process.cwd(), 'data', 'ranking.json');
+// Lazy load fs pour éviter les problèmes au build time
+function getFs() {
+  try {
+    return require('fs');
+  } catch {
+    return null;
+  }
+}
+
+function getPath() {
+  try {
+    return require('path');
+  } catch {
+    return null;
+  }
+}
+
+function getRankingFile() {
+  const path = getPath();
+  if (!path) return null;
+  return path.join(process.cwd(), 'data', 'ranking.json');
+}
 
 export interface RankingData {
   entries: RankingEntry[];
@@ -11,22 +30,49 @@ export interface RankingData {
 
 // Créer le fichier de ranking s'il n'existe pas
 export function ensureRankingFile() {
-  const dataDir = path.join(process.cwd(), 'data');
-  if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
-  }
-  if (!fs.existsSync(RANKING_FILE)) {
-    const initialData: RankingData = {
-      entries: [],
-      lastUpdate: new Date().toISOString(),
-    };
-    fs.writeFileSync(RANKING_FILE, JSON.stringify(initialData, null, 2));
+  const fs = getFs();
+  const path = getPath();
+  if (!fs || !path) return;
+  
+  const RANKING_FILE = getRankingFile();
+  if (!RANKING_FILE) return;
+  
+  try {
+    const dataDir = path.join(process.cwd(), 'data');
+    if (!fs.existsSync(dataDir)) {
+      fs.mkdirSync(dataDir, { recursive: true });
+    }
+    if (!fs.existsSync(RANKING_FILE)) {
+      const initialData: RankingData = {
+        entries: [],
+        lastUpdate: new Date().toISOString(),
+      };
+      fs.writeFileSync(RANKING_FILE, JSON.stringify(initialData, null, 2));
+    }
+  } catch (error) {
+    // Ignorer les erreurs
   }
 }
 
 // Lire le ranking depuis le fichier
 export function getRanking(): RankingData {
+  const fs = getFs();
+  if (!fs) {
+    return {
+      entries: [],
+      lastUpdate: new Date().toISOString(),
+    };
+  }
+  
   ensureRankingFile();
+  const RANKING_FILE = getRankingFile();
+  if (!RANKING_FILE) {
+    return {
+      entries: [],
+      lastUpdate: new Date().toISOString(),
+    };
+  }
+  
   try {
     const fileData = fs.readFileSync(RANKING_FILE, 'utf-8');
     const data = JSON.parse(fileData);
@@ -45,7 +91,19 @@ export function getRanking(): RankingData {
 
 // Sauvegarder le ranking
 export function saveRanking(entries: RankingEntry[]): void {
+  const fs = getFs();
+  if (!fs) {
+    console.warn('fs not available, ranking not saved');
+    return;
+  }
+  
   ensureRankingFile();
+  const RANKING_FILE = getRankingFile();
+  if (!RANKING_FILE) {
+    console.warn('Could not determine ranking file path');
+    return;
+  }
+  
   try {
     const data: RankingData = {
       entries,
