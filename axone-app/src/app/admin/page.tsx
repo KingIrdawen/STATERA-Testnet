@@ -35,6 +35,18 @@ export default function AdminPage() {
     tokens: [{ symbol: '', name: '', allocation: 0, logo: '', tokenId: '' }]
   });
 
+  // Fonction pour détecter le type de stratégie à partir du nom
+  const detectStrategyType = (name: string): 'STRATEGY_1' | 'ERA_2' | undefined => {
+    const nameUpper = name.toUpperCase();
+    if (nameUpper.includes('STRATEGY_1') || nameUpper.includes('STRATEGY1') || nameUpper.includes('STRATEGIE_1') || nameUpper.includes('STRATEGIE1')) {
+      return 'STRATEGY_1';
+    }
+    if (nameUpper.includes('ERA_2') || nameUpper.includes('ERA2')) {
+      return 'ERA_2';
+    }
+    return undefined;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -44,6 +56,9 @@ export default function AdminPage() {
       alert('La répartition des tokens doit totaliser 100%');
       return;
     }
+
+    // Détecter automatiquement le type de stratégie à partir du nom
+    const detectedStrategyType = detectStrategyType(formData.name);
 
     const newIndex: Index = {
       id: editingIndex?.id || Date.now().toString(),
@@ -56,6 +71,7 @@ export default function AdminPage() {
       handlerAddress: formData.handlerAddress,
       l1ReadAddress: formData.l1ReadAddress,
       coreWriterAddress: formData.coreWriterAddress || '0x3333333333333333333333333333333333333333',
+      strategyType: detectedStrategyType,
       tokens: formData.tokens.filter(token => token.symbol)
     };
 
@@ -265,6 +281,23 @@ export default function AdminPage() {
                     <option value="high">High</option>
                   </select>
                 </div>
+
+                {/* Info sur la détection automatique du type */}
+                {formData.name && (
+                  <div className="p-3 bg-gray-800/50 border border-gray-700 rounded-lg">
+                    <p className="text-gray-400 text-xs">
+                      <strong>Type détecté:</strong>{' '}
+                      {detectStrategyType(formData.name) ? (
+                        <span className="text-[#fab062]">{detectStrategyType(formData.name)}</span>
+                      ) : (
+                        <span className="text-gray-500">Non détecté (inclure "STRATEGY_1" ou "ERA_2" dans le nom)</span>
+                      )}
+                    </p>
+                    <p className="text-gray-500 text-xs mt-1">
+                      Le type est détecté automatiquement depuis le nom. Exemples: "STRATEGY_1", "ERA_2", "Strategy 1", etc.
+                    </p>
+                  </div>
+                )}
 
                 {/* Adresses */}
                 <div className="space-y-4">
