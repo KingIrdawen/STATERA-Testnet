@@ -11,15 +11,13 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient({
     defaultOptions: {
       queries: {
-        // Optimisations pour accélérer le chargement
-        retry: 2, // Retry par défaut (aligné avec les bonnes pratiques)
-        staleTime: 1000 * 60 * 5, // 5 minutes - augmenté pour réduire les appels
-        gcTime: 1000 * 60 * 10, // 10 minutes de cache - augmenté
-        refetchOnWindowFocus: false, // Ne pas refetch quand on revient sur la fenêtre
-        refetchOnReconnect: false, // Ne pas refetch automatiquement après reconnexion
-        refetchOnMount: false, // Ne pas refetch au montage si les données sont en cache
-        // ❌ onError retiré - non supporté en React Query v5
+        // ❌ onError n'est pas supporté ici en React Query v5
         // Les erreurs doivent être gérées au niveau des useQuery individuels via onError dans chaque query
+        retry: 2,
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        staleTime: 30_000,
+        gcTime: 5 * 60 * 1000,
       },
     },
   }));
