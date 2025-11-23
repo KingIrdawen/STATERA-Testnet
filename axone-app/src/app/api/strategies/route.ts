@@ -1,13 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getStrategies, addStrategy, updateStrategy, deleteStrategy } from '@/lib/strategies';
-import { Index } from '@/types/index';
+// axone-app/src/app/api/strategies/route.ts
+import { NextResponse } from "next/server";
+import { getAllStrategies, saveStrategy } from "@/lib/strategyRepo";
+import { StrategyInputSchema } from "@/lib/strategySchema";
 
-// GET - Récupérer toutes les stratégies
 export async function GET() {
   try {
-    const strategies = await getStrategies();
-    // Retourner directement le tableau pour compatibilité avec le code client
-    return NextResponse.json(strategies, {
+    const data = await getAllStrategies();
+    // Conserve le format attendu par l'UI (tableau direct)
+    return NextResponse.json(data, {
       headers: {
         'Cache-Control': 'no-store, must-revalidate',
       },
@@ -18,57 +18,22 @@ export async function GET() {
   }
 }
 
-// POST - Créer une nouvelle stratégie
-export async function POST(request: NextRequest) {
+export async function POST(req: Request) {
   try {
-    const body = await request.json();
-    const strategy: Index = body;
+    const body = await req.json();
+    const parsed = StrategyInputSchema.safeParse(body);
     
-    // Validation basique
-    if (!strategy.name || !strategy.tokens || strategy.tokens.length === 0) {
-      return NextResponse.json({ error: 'Invalid strategy data' }, { status: 400 });
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Invalid payload", issues: parsed.error.issues },
+        { status: 400 }
+      );
     }
-    
-    await addStrategy(strategy);
-    return NextResponse.json({ success: true, strategy });
+
+    const created = await saveStrategy(parsed.data);
+    return NextResponse.json(created, { status: 201 });
   } catch (error) {
     console.error('Error creating strategy:', error);
     return NextResponse.json({ error: 'Failed to create strategy' }, { status: 500 });
-  }
-}
-
-// PUT - Mettre à jour une stratégie
-export async function PUT(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const strategy: Index = body;
-    
-    if (!strategy.id) {
-      return NextResponse.json({ error: 'Strategy ID is required' }, { status: 400 });
-    }
-    
-    await updateStrategy(strategy.id, strategy);
-    return NextResponse.json({ success: true, strategy });
-  } catch (error) {
-    console.error('Error updating strategy:', error);
-    return NextResponse.json({ error: 'Failed to update strategy' }, { status: 500 });
-  }
-}
-
-// DELETE - Supprimer une stratégie
-export async function DELETE(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id');
-    
-    if (!id) {
-      return NextResponse.json({ error: 'Strategy ID is required' }, { status: 400 });
-    }
-    
-    await deleteStrategy(id);
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Error deleting strategy:', error);
-    return NextResponse.json({ error: 'Failed to delete strategy' }, { status: 500 });
   }
 }
