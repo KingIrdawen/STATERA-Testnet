@@ -1,7 +1,7 @@
-import type { NextConfig } from "next";
-import path from "path";
+/** @type {import('next').NextConfig} */
+const path = require("path");
 
-const nextConfig: NextConfig = {
+const nextConfig = {
   // Temporairement désactiver ESLint pendant le build pour permettre la correction progressive
   eslint: {
     ignoreDuringBuilds: true,
@@ -14,10 +14,11 @@ const nextConfig: NextConfig = {
     config.resolve = config.resolve || {};
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
-      '@react-native-async-storage/async-storage': require.resolve('./src/shims/async-storage.ts'),
+      "@react-native-async-storage/async-storage": path.resolve(__dirname, "src/shims/async-storage.ts"),
     };
     return config;
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
+
