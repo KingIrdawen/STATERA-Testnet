@@ -5,7 +5,7 @@ import { Index } from '@/types/index';
 // GET - Récupérer toutes les stratégies
 export async function GET() {
   try {
-    const strategies = getStrategies();
+    const strategies = await getStrategies();
     // Retourner directement le tableau pour compatibilité avec le code client
     return NextResponse.json(strategies, {
       headers: {
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid strategy data' }, { status: 400 });
     }
     
-    addStrategy(strategy);
+    await addStrategy(strategy);
     return NextResponse.json({ success: true, strategy });
   } catch (error) {
     console.error('Error creating strategy:', error);
@@ -47,7 +47,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Strategy ID is required' }, { status: 400 });
     }
     
-    updateStrategy(strategy.id, strategy);
+    await updateStrategy(strategy.id, strategy);
     return NextResponse.json({ success: true, strategy });
   } catch (error) {
     console.error('Error updating strategy:', error);
@@ -65,7 +65,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Strategy ID is required' }, { status: 400 });
     }
     
-    deleteStrategy(id);
+    await deleteStrategy(id);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error deleting strategy:', error);
