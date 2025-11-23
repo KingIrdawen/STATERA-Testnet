@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Users, DollarSign, Rocket, FileText, TrendingUp } from 'lucide-react';
 import { GlowButton } from '../ui/GlowButton';
@@ -9,12 +9,50 @@ import GlassCard from '../ui/GlassCard';
 import { CosmicParticles } from '../ui/CosmicParticles';
 import { GeometricShapes } from '../ui/GeometricShapes';
 import Link from 'next/link';
+import { useTotalTVL } from '@/hooks/useTotalTVL';
 
 const Hero: React.FC = () => {
+  const { totalTVL, isLoading: tvlLoading } = useTotalTVL();
+
+  // Calculer la valeur d'affichage et le format selon la taille du TVL
+  const tvlDisplay = useMemo(() => {
+    if (tvlLoading) {
+      // Valeur par défaut pendant le chargement
+      return { value: 45.2, prefix: '$', suffix: 'M' };
+    }
+
+    if (totalTVL === 0) {
+      return { value: 0, prefix: '$', suffix: '' };
+    }
+
+    // Adapter le format selon la valeur
+    if (totalTVL >= 1000000) {
+      // >= 1M : afficher en millions
+      return {
+        value: totalTVL / 1000000,
+        prefix: '$',
+        suffix: 'M',
+      };
+    } else if (totalTVL >= 1000) {
+      // >= 1K : afficher en milliers
+      return {
+        value: totalTVL / 1000,
+        prefix: '$',
+        suffix: 'K',
+      };
+    } else {
+      // < 1K : afficher en dollars
+      return {
+        value: totalTVL,
+        prefix: '$',
+        suffix: '',
+      };
+    }
+  }, [totalTVL, tvlLoading]);
 
   const stats = [
     { icon: Users, value: 125000, suffix: '+', label: 'Utilisateurs', color: 'text-success' },
-    { icon: DollarSign, value: 45.2, prefix: '$', suffix: 'M', label: 'TVL', color: 'text-info' },
+    { icon: DollarSign, value: tvlDisplay.value, prefix: tvlDisplay.prefix, suffix: tvlDisplay.suffix, label: 'TVL', color: 'text-info' },
     { icon: TrendingUp, value: 18.5, prefix: '+', suffix: '%', label: 'Performance', color: 'text-alert' },
   ];
 

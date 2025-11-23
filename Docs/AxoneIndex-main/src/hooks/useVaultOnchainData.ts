@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import { useAccount, useBalance, useReadContract, useReadContracts } from 'wagmi'
 import type { VaultDefinition } from '@/types/vaults'
 import { vaultContract } from '@/contracts/vault'
-import { coreInteractionHandlerContract } from '@/contracts/coreInteractionHandler'
+import { coreInteractionViewsAbi } from '@/lib/abi/coreInteractionViews'
 import { formatUnits, zeroAddress } from 'viem'
 
 function formatUnitsSafe(value: bigint | undefined, decimals: number): string {
@@ -26,6 +26,8 @@ function toNumber(value: unknown): number | undefined {
 
 export function useVaultOnchainData(vault: VaultDefinition | undefined) {
 	const { address, isConnected } = useAccount()
+	// Utiliser l'adresse du vault si définie, sinon fallback sur la variable d'environnement
+	const coreViewsAddress = (vault?.coreViewsAddress || process.env.NEXT_PUBLIC_CORE_VIEWS_ADDRESS) as `0x${string}` | undefined
 
 	const contracts = useMemo(() => {
 		if (!vault) return []
@@ -35,9 +37,14 @@ export function useVaultOnchainData(vault: VaultDefinition | undefined) {
 			{ ...vaultContract(vault.vaultAddress), functionName: 'pps1e18' as const },
 			{ ...vaultContract(vault.vaultAddress), functionName: 'depositFeeBps' as const },
 			{ ...vaultContract(vault.vaultAddress), functionName: 'withdrawFeeBps' as const },
-			{ ...coreInteractionHandlerContract(vault.handlerAddress), functionName: 'oraclePxHype1e8' as const },
+			...(coreViewsAddress ? [{
+				address: coreViewsAddress,
+				abi: coreInteractionViewsAbi,
+				functionName: 'oraclePxHype1e8' as const,
+				args: [vault.handlerAddress],
+			}] : []),
 		]
-	}, [vault])
+	}, [vault, coreViewsAddress])
 
 	const { data: multi } = useReadContracts({
 		contracts,
@@ -49,7 +56,10 @@ export function useVaultOnchainData(vault: VaultDefinition | undefined) {
 	const pps1e18Raw = toBigint(multi?.[2]?.result) ?? 0n
 	const depositFeeBps = toNumber(multi?.[3]?.result) ?? 0
 	const withdrawFeeBps = toNumber(multi?.[4]?.result) ?? 0
-	const oraclePxHype1e8Raw = toBigint(multi?.[5]?.result) ?? 0n
+	
+	// Calculer l'index dynamiquement : le contrat oracle est à l'index 5 seulement si coreViewsAddress est défini
+	const oraclePriceIndex = coreViewsAddress ? 5 : -1
+	const oraclePxHype1e8Raw = oraclePriceIndex >= 0 ? (toBigint(multi?.[oraclePriceIndex]?.result) ?? 0n) : 0n
 
 	const totalSupply = formatUnitsSafe(totalSupplyRaw, decimals)
 	const pps = formatUnitsSafe(pps1e18Raw, 18)

@@ -11,15 +11,37 @@ async function main() {
 
   const vault = await ethers.getContractAt("VaultContract", VAULT);
   const handler = await ethers.getContractAt("CoreInteractionHandler", HANDLER);
+  const viewsAddr = process.env.CORE_VIEWS_ADDRESS;
+  const views = viewsAddr ? await ethers.getContractAt("CoreInteractionViews", viewsAddr) : null;
+
+  const vaultCoreViews = await vault.coreViews().catch(
+    () => "0x0000000000000000000000000000000000000000"
+  );
+  const handlerVault = await handler.vault().catch(
+    () => "0x0000000000000000000000000000000000000000"
+  );
+  const handlerPaused = await handler.paused().catch(() => false);
+  const spotBTC = await handler.spotBTC().catch(() => 0);
+  const spotHYPE = await handler.spotHYPE().catch(() => 0);
+  const spotTokenBTC = await handler.spotTokenBTC().catch(() => 0n);
+  const spotTokenHYPE = await handler.spotTokenHYPE().catch(() => 0n);
+  const l1readAddr = await handler.l1read().catch(
+    () => "0x0000000000000000000000000000000000000000"
+  );
+  const usdcAddr = await handler.usdc().catch(
+    () => "0x0000000000000000000000000000000000000000"
+  );
 
   const paused = await vault.paused();
   const totalSupply = await vault.totalSupply();
   const nav = await vault.nav1e18().catch(() => 0n);
   const vaultHandler = await vault.handler().catch(() => "0x0000000000000000000000000000000000000000");
-  const oraclePx = await handler.oraclePxHype1e8().catch((err) => {
-    console.error("Erreur oraclePxHype1e8:", err?.error?.message || err?.message || err);
-    return 0n;
-  });
+  const oraclePx = views
+    ? await views.oraclePxHype1e8(HANDLER).catch((err) => {
+        console.error("Erreur oraclePxHype1e8 (views):", err?.error?.message || err?.message || err);
+        return 0n;
+      })
+    : 0n;
   const feeVault = await handler.feeVault();
   const usdcCoreSystemAddress = await handler.usdcCoreSystemAddress();
   const hypeCoreSystemAddress = await handler.hypeCoreSystemAddress();
@@ -34,6 +56,7 @@ async function main() {
 
   console.log("Vault status:", {
     paused,
+    coreViews: vaultCoreViews,
     totalSupply: totalSupply.toString(),
     nav1e18: nav.toString(),
     depositFeeBps: Number(depositFee),
@@ -41,12 +64,20 @@ async function main() {
     handler: vaultHandler,
   });
   console.log("Handler status:", {
+    paused: handlerPaused,
+    vault: handlerVault,
+    l1read: l1readAddr,
+    usdc: usdcAddr,
     feeVault,
     oraclePxHype1e8: oraclePx.toString(),
     usdcCoreSystemAddress,
     hypeCoreSystemAddress,
     usdcCoreTokenId: Number(usdcCoreTokenId),
     hypeCoreTokenId: Number(hypeCoreTokenId),
+    spotBTC: Number(spotBTC),
+    spotHYPE: Number(spotHYPE),
+    spotTokenBTC: Number(spotTokenBTC),
+    spotTokenHYPE: Number(spotTokenHYPE),
     maxOutboundPerEpoch: maxOutboundPerEpoch.toString(),
     epochLength: Number(epochLength),
     sentThisEpoch: sentThisEpoch.toString(),

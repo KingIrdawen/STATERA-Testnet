@@ -16,8 +16,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => {
     // Configuration React Query v5 - onError n'est PAS supporté dans defaultOptions.queries
     return new QueryClient({
-      defaultOptions: {
-        queries: {
+    defaultOptions: {
+      queries: {
           retry: 2,
           refetchOnMount: false,
           refetchOnWindowFocus: false,

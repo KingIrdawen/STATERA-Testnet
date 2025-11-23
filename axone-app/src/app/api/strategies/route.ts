@@ -29,7 +29,7 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-
+    
     const created = await saveStrategy(parsed.data);
     return NextResponse.json(created, { status: 201 });
   } catch (error) {

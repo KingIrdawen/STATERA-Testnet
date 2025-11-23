@@ -47,19 +47,23 @@ Voir: [`tick-and-lot-size`](https://hyperliquid.gitbook.io/hyperliquid-docs/for-
 ---
 
 ## Normalisation du prix (vers 1e8)
-Les précompilés renvoient un Px brut dont l’échelle varie par actif. Désormais, la normalisation en 1e8 utilise la précision prix propre au marché (`pxDecimals`) lue depuis le métadata (stockée on-chain côté handler):
+Les précompilés renvoient un Px brut dont l’échelle varie par actif. STRATEGY_1 normalise en **1e8** (base commune) en utilisant la précision prix propre au marché (`pxDecimals`) dérivée dynamiquement depuis les métadonnées:
 
 ```
+// pxDecimals = 8 - szDecimals (avec borne à 0 si szDecimals >= 8)
 // px1e8 = rawPx * 10^(8 - pxDecimals), avec garde pour pxDecimals > 8
 if pxDecimals == 8:  px1e8 = rawPx
 if pxDecimals < 8:   px1e8 = rawPx * 10^(8 - pxDecimals)
 if pxDecimals > 8:   px1e8 = rawPx / 10^(pxDecimals - 8)
 ```
 
-Conséquence: tous les actifs spot sont ramenés à une base commune (1e8), en respectant exactement la précision de prix du marché (HIP-1/HIP-3 compatibles).
+Conséquence: tous les actifs spot sont ramenés à une base commune (1e8), en respectant exactement la précision de prix du marché (HIP-1/HIP-3 compatibles). Cela facilite les calculs de valorisation et d'allocation en USD.
+
+**Note**: La librairie de référence (`PrecompileLib.normalizedSpotPx`) utilise une approche différente: `spotPx * 10^szDecimals`, qui donne un prix avec `szDecimals` décimales (variable par actif). Voir la section "Différences avec la librairie de référence" pour plus de détails.
 
 Implémentations:
-- `CoreInteractionHandler._spotPxDecimals()` (mapping on-chain), `_toPx1e8()`, `_toRawPx()`
+- `CoreInteractionHandler._derivedSpotPxDecimals()` dérive `pxDecimals` depuis `tokenInfo.szDecimals`
+- `_spotPxDecimals()`, `_toPx1e8()`, `_toRawPx()` (conversion inverse)
 - `_spotBboPx1e8()`/`spotOraclePx1e8()` utilisent `_toPx1e8()`
 - `_validatedOraclePx1e8()`/_`_tryValidatedOraclePx1e8()` normalisent avant validations de déviation
 
@@ -70,10 +74,11 @@ Les soldes de `spotBalance` sont en `szDecimals`. Pour valoriser en USD 1e18, on
 
 ```
 if weiDecimals > szDecimals: totalWei = totalSz * 10^(weiDecimals - szDecimals)
-if weiDecimals < szDecimals: totalWei = totalSz / 10^(szDecimals - weiDecimals)
 ```
 
-Implémentation: `CoreHandlerLib.spotBalanceInWei()` (utilisé par le handler).
+**Note importante**: Dans STRATEGY_1 et la librairie de référence (`HLConversions.szToWei`), on assume que `weiDecimals >= szDecimals` pour tous les tokens spot. Le cas `weiDecimals < szDecimals` est considéré comme une erreur et provoque un revert (`INVALID_DECIMALS`).
+
+Implémentation: `CoreHandlerLib.spotBalanceInWei()` (utilisé par le handler), aligné avec `HLConversions.szToWei()` de la librairie de référence.
 
 ---
 
@@ -93,12 +98,14 @@ Implémentation: `CoreHandlerLib.toSzInSzDecimals()`. Cette version corrige un a
 
 ## Encodage des ordres SPOT et envois
 - `assetId` utilisé pour le carnet/BBO et la soumission d’ordres: `assetId = 10000 + spotIndex`
-- `encodeSpotLimitOrder(assetId, isBuy, limitPxRaw, szInSzDecimals, reduceOnly, encodedTif, cloid)`
-  - `limitPxRaw` est en décimales « natives » du marché (avant normalisation). Nous partons d’un `limitPx1e8` puis re‑replions via `_toRawPx()`.
-  - `szInSzDecimals` est en `szDecimals` de l’actif base.
+- `encodeSpotLimitOrder(assetId, isBuy, limitPx1e8, sz1e8, reduceOnly, encodedTif, cloid)`
+  - **Format final**: HyperCore attend les prix et tailles en format **1e8** (human-readable * 1e8).
+  - `limitPx1e8`: prix quantifié en 1e8 (après normalisation et quantization via `StrategyMathLib.quantizePx1e8()`).
+  - `sz1e8`: taille convertie en 1e8 depuis `szDecimals` via `StrategyMathLib.sizeSzTo1e8(szInSzDecimals, szDecimals)`.
+  - **Calculs intermédiaires**: Les calculs utilisent `szInSzDecimals` et `limitPx1e8`, puis conversion finale avant encodage.
   - `reduceOnly` = `false` pour les ordres marketables de STRATEGY_1.
   - `encodedTif` = `HLConstants.TIF_IOC` (3) pour exécuter en IOC.
-- `encodeSpotSend(destination, tokenId, amount1e8)` pour crédits EVM/Core
+- `encodeSpotSend(destination, tokenId, amount1e8)` pour crédits EVM/Core (montant en 1e8)
 
 Implémentations: `HLConstants`, `CoreHandlerLib.encodeSpotLimitOrder`, `CoreHandlerLib.encodeSpotSend`, `CoreInteractionHandler._sendSpotLimitOrderDirect`.
 
@@ -107,7 +114,7 @@ Implémentations: `HLConstants`, `CoreHandlerLib.encodeSpotLimitOrder`, `CoreHan
 ## Règles pratiques appliquées par STRATEGY_1
 - Prix normalisés en 1e8; quantisation appliquée après epsilon/slippage:
   - Contrainte prix: ≤ 5 chiffres significatifs et ≤ (8 − szDecimals) décimales
-  - Direction d’arrondi agressif pour conserver la « marketability »: BUY ↑ (ceil), SELL ↓ (floor)
+  - Direction d'arrondi agressif pour conserver la « marketability »: BUY ↑ (ceil), SELL ↓ (floor)
 - Ordres « market IOC » via le BBO:
   - BUY: limite sur `ask` (élargie par `marketEpsilonBps`)
   - SELL: limite sur `bid` (réduite par `marketEpsilonBps`)
@@ -115,7 +122,11 @@ Implémentations: `HLConstants`, `CoreHandlerLib.encodeSpotLimitOrder`, `CoreHan
   - Les deltas/allocations sont calculés en USD 1e18
   - Convertis en tailles `szDecimals` avec `toSzInSzDecimals`
   - Cap achat par solde USDC disponible si aucune vente préalable
-- Lot size: la taille est alignée sur `szDecimals` (snap to lot)
+- **Lot size**: la taille est arrondie à `szDecimals` selon les règles Hyperliquid ([tick-and-lot-size](https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/api/tick-and-lot-size))
+  - `toSzInSzDecimals()` calcule la taille en `szDecimals` avec floor (division entière)
+  - `snapToLot()` garantit la conformité explicite avec les règles Hyperliquid
+  - Exemple: si `szDecimals=6`, alors `1.1648349853` HYPE → `1.164834` HYPE (floor)
+  - L'arrondi vers le bas (floor) évite les rejets d'ordres
 - Notional minimum: un seuil en USD 1e8 évite les IOC « poussière »
 - Asset IDs:
   - `assetId = spotIndex + 10000` pour `bbo()` et `encodeSpotLimitOrder()`
@@ -145,6 +156,47 @@ Implémentations: `HLConstants`, `CoreHandlerLib.encodeSpotLimitOrder`, `CoreHan
 - Spot system address: premier octet `0x20`, le reste zéro sauf l’index `tokenId` (big‑endian implicite sur les derniers octets).
 - HYPE natif: `0x2222222222222222222222222222222222222222`.
 - STRATEGY_1: `SystemAddressLib.getSpotSystemAddress(tokenId)` calcule toujours `0x20 + tokenId` — y compris pour `tokenId = 0` (USDC). Le natif HYPE est géré séparément via la constante HYPE.
+
+**Cohérence avec la librairie de référence**: `CoreWriterLib.getSystemAddress()` utilise la même logique: `BASE_SYSTEM_ADDRESS + index` (où `BASE_SYSTEM_ADDRESS = 0x20...`) pour les tokens spot, et `HYPE_SYSTEM_ADDRESS = 0x2222...2222` pour HYPE.
+
+---
+
+## Différences avec la librairie de référence (Lib_EVM/hyper-evm-lib)
+
+Cette section documente les différences entre l'approche de STRATEGY_1 et celle de la librairie de référence `hyper-evm-lib`.
+
+### Normalisation des prix spot
+
+**Librairie de référence (`PrecompileLib.normalizedSpotPx`)**:
+- Normalise avec `szDecimals`: `normalizedSpotPx = spotPx * 10^baseSzDecimals`
+- Résultat: prix avec `szDecimals` décimales (variable selon l'actif)
+
+**STRATEGY_1**:
+- Normalise vers **1e8** (base commune): `px1e8 = rawPx * 10^(8 - pxDecimals)` où `pxDecimals = 8 - szDecimals`
+- Résultat: tous les prix en USD 1e8, facilitant les comparaisons et calculs inter-actifs
+
+**Raison**: STRATEGY_1 nécessite une base commune (1e8) pour les calculs de valorisation et d'allocation en USD, tandis que la librairie de référence offre une normalisation plus simple basée sur les décimales natives de chaque actif.
+
+### Conversion szDecimals → weiDecimals
+
+**Cohérence**: Les deux approches sont alignées:
+- `HLConversions.szToWei()`: `sz * 10^(weiDecimals - szDecimals)`
+- `CoreHandlerLib.spotBalanceInWei()`: même formule avec vérification `weiDecimals >= szDecimals`
+
+**Note**: Le cas `weiDecimals < szDecimals` n'est pas géré (erreur dans les deux cas).
+
+### Encodage des ordres
+
+**Librairie de référence (`CoreWriterLib.placeLimitOrder`)**:
+- Accepte `limitPx` et `sz` directement (précision non spécifiée dans la signature)
+- Les exemples utilisent des valeurs en wei/1e8
+
+**STRATEGY_1**:
+- Convertit explicitement `szInSzDecimals` → `sz1e8` avant encodage via `StrategyMathLib.sizeSzTo1e8()`
+- Utilise `limitPx1e8` directement (après quantization)
+- **Format final identique**: HyperCore attend 1e8 pour prix et taille dans les deux cas
+
+**Raison**: STRATEGY_1 gère explicitement les conversions pour garantir la cohérence des calculs intermédiaires (en `szDecimals`) avec le format final (1e8).
 
 
 

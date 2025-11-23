@@ -3,7 +3,7 @@
 > Note: Cette page décrit un ancien modèle USDC‑based. L’implémentation active utilisée en production est `contracts/src/STRATEGY_1/VaultContract.sol` (dépôts HYPE natifs). Voir `STRATEGY_1_VaultContract.md` pour la référence à jour.
 
 ## Résumé
-`VaultContract.sol` émet des parts (18 décimales) contre des dépôts en HYPE natif (1e18 sur HyperEVM), gère la NAV/PPS, des retraits immédiats ou différés, et l'auto-déploiement partiel vers Core. Les frais de retrait dépendent du montant retiré (brut), via des paliers configurables. Le vault n'a pas besoin d'approval pour HYPE natif et transmet directement les montants en 1e18 au Handler.
+`VaultContract.sol` (legacy) émet des parts (18 décimales) contre des dépôts en **USDC** (8 décimales) et gère la NAV/PPS, des retraits immédiats ou différés, et l'auto-déploiement partiel vers Core via un handler USDC. Les frais de retrait dépendent du montant retiré (brut) en USDC 1e8, via des paliers configurables. Dans ce modèle, le vault s’appuie sur une **approval USDC illimitée** vers le handler et travaille exclusivement en unités 1e8 côté EVM/Core.
 
 ## 🔒 Améliorations de Sécurité
 
@@ -61,7 +61,7 @@ vault.setWithdrawFeeTiers(tiers);
 ```
 
 ## Notes
-- Les dépôts utilisateurs précédemment utilisés pour calculer des frais “sur base de dépôt” ne sont plus pris en compte pour la détermination des frais; la logique est désormais strictement basée sur le montant brut.
+- Les dépôts utilisateurs précédemment utilisés pour calculer des frais “sur base de dépôt” ne sont plus pris en compte pour la détermination des frais; la logique est désormais strictement basée sur le montant brut **en USDC 1e8**.
 - Les paliers doivent être définis en USDC 1e8 (8 décimales).
 
 ## Approvals USDC et Unités (1e8 ↔ 1e6)

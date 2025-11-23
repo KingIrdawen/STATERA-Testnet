@@ -103,7 +103,81 @@ Sur Vercel, forcer pnpm `9.x` dans `package.json` pour éviter les erreurs ETIME
 }
 ```
 
-Référence interne: voir aussi `vercel.json` si vous personnalisez l’environnement d’exécution.
+Référence interne: voir aussi `vercel.json` si vous personnalisez l'environnement d'exécution.
+
+### 6) Configuration des variables d'environnement
+
+Pour configurer les variables d'environnement sur Vercel (comme `NEXT_PUBLIC_CORE_VIEWS_ADDRESS`), suivez ces étapes:
+
+#### Via le Dashboard Vercel (recommandé)
+
+1. **Accédez à votre projet** sur [vercel.com](https://vercel.com)
+2. Allez dans **Settings** → **Environment Variables**
+3. Ajoutez chaque variable avec les valeurs suivantes:
+
+| Variable | Valeur | Environnement |
+|----------|--------|---------------|
+| `NEXT_PUBLIC_CORE_VIEWS_ADDRESS` | `0x1E2B0DccE25Eeb479F83DABE24ab687C6AB64292` (STRATEGY_1) ou `0x71a2B85dD822782A8031549f9B35629a5759F81B` (ERA_2) | Production, Preview, Development |
+
+**Note:** Cochez tous les environnements (Production, Preview, Development) pour que la variable soit disponible partout.
+
+#### Variables d'environnement recommandées
+
+Variables essentielles pour le fonctionnement de l'application:
+
+```env
+# Adresse du contrat CoreInteractionViews (obligatoire pour les prix oracle)
+NEXT_PUBLIC_CORE_VIEWS_ADDRESS=0x1E2B0DccE25Eeb479F83DABE24ab687C6AB64292
+
+# Autres variables optionnelles (si utilisées)
+# NEXT_PUBLIC_USDC_ADDRESS=0x0B80659a4076E9E93C7DbE0f10675A16a3e5C206
+# NEXT_PUBLIC_VAULT_ADDRESS=0x72eEdd6cE1039E429e44F86b3DcA4A45e206a410
+# NEXT_PUBLIC_HANDLER_ADDRESS=0x7551Ca74B5f2Cb3EF9f2e885f2fe9BF993bF570c
+# NEXT_PUBLIC_L1_READ_ADDRESS=0xacE17480F4d157C48180f4ed10AB483238143e11
+```
+
+#### Adresses selon le déploiement
+
+**STRATEGY_1** (déploiement 2025-11-21):
+- `NEXT_PUBLIC_CORE_VIEWS_ADDRESS=0x1E2B0DccE25Eeb479F83DABE24ab687C6AB64292`
+
+**ERA_2** (déploiement 2025-11-21):
+- `NEXT_PUBLIC_CORE_VIEWS_ADDRESS=0x71a2B85dD822782A8031549f9B35629a5759F81B`
+
+#### Gestion de plusieurs vaults
+
+Si vous avez plusieurs vaults avec des adresses `CoreInteractionViews` différentes, vous pouvez :
+
+1. **Option 1 (Recommandée)** : Définir `coreViewsAddress` pour chaque vault dans l'interface d'administration (`/admin/vaults`)
+   - Chaque vault peut avoir sa propre adresse `CoreInteractionViews`
+   - Si non défini, le système utilisera `NEXT_PUBLIC_CORE_VIEWS_ADDRESS` comme fallback
+
+2. **Option 2** : Utiliser uniquement la variable d'environnement globale
+   - Tous les vaults utiliseront la même adresse `NEXT_PUBLIC_CORE_VIEWS_ADDRESS`
+   - Fonctionne si tous vos vaults partagent le même contrat `CoreInteractionViews`
+
+**Recommandation** : Utilisez l'Option 1 pour une meilleure flexibilité, surtout si vous avez des vaults avec des déploiements différents (STRATEGY_1, ERA_2, etc.).
+
+#### Après avoir ajouté les variables
+
+1. **Redéployez** votre application (Vercel redéploiera automatiquement ou vous pouvez déclencher un nouveau déploiement)
+2. Vérifiez que les variables sont bien chargées dans les logs de build
+
+#### Via la CLI Vercel (alternative)
+
+```bash
+# Installer Vercel CLI si nécessaire
+npm i -g vercel
+
+# Ajouter une variable d'environnement
+vercel env add NEXT_PUBLIC_CORE_VIEWS_ADDRESS
+
+# Suivre les instructions pour sélectionner les environnements
+```
+
+#### Vérification
+
+Après le déploiement, vérifiez que l'erreur "Variable d'environnement NEXT_PUBLIC_CORE_VIEWS_ADDRESS non définie" a disparu.
 
 ## Checklist rapide de validation
 

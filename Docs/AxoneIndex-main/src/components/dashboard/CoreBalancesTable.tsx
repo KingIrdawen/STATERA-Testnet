@@ -4,6 +4,7 @@ interface CoreBalanceRow {
   token: string
   tokenId: string
   balance: string
+  valueUsd?: string
 }
 
 interface CoreBalancesTableProps {
@@ -21,6 +22,7 @@ export function CoreBalancesTable({ balances, isLoading }: CoreBalancesTableProp
               <th className="px-5 py-3 font-semibold">Token</th>
               <th className="px-5 py-3 font-semibold">Token ID</th>
               <th className="px-5 py-3 text-right font-semibold">Balance</th>
+              <th className="px-5 py-3 text-right font-semibold">Valeur (USD)</th>
             </tr>
           </thead>
           <tbody>
@@ -36,6 +38,9 @@ export function CoreBalancesTable({ balances, isLoading }: CoreBalancesTableProp
                     <td className="px-5 py-4 text-right">
                       <Skeleton className="ml-auto h-5 w-28" />
                     </td>
+                    <td className="px-5 py-4 text-right">
+                      <Skeleton className="ml-auto h-5 w-28" />
+                    </td>
                   </tr>
                 ))
               : balances.map((row) => (
@@ -47,6 +52,9 @@ export function CoreBalancesTable({ balances, isLoading }: CoreBalancesTableProp
                     </td>
                     <td className="px-5 py-4 font-mono text-sm text-[var(--text-secondary)]">{row.tokenId}</td>
                     <td className="px-5 py-4 text-right font-mono text-sm text-[var(--text-secondary)]">{row.balance}</td>
+                    <td className="px-5 py-4 text-right font-mono text-sm text-[var(--text-secondary)]">
+                      {row.valueUsd ? `$${row.valueUsd}` : '-'}
+                    </td>
                   </tr>
                 ))}
           </tbody>

@@ -2,8 +2,9 @@
 
 ## Ordre d’Initialisation
 
-1. Déployer `CoreInteractionHandler`
-   - Renseigner le constructeur: `L1Read`, `USDC`, `maxOutboundPerEpoch`, `epochLength`, `feeVault`, `feeBps` (≤ 10000)
+1. Déployer `CoreHandlerLogicLib` puis `CoreInteractionHandler`
+   - Déployer la librairie `CoreHandlerLogicLib` (logique d’equity et de rebalance) puis le handler lié à cette librairie.
+   - Renseigner le constructeur de `CoreInteractionHandler`: `L1Read`, `USDC`, `maxOutboundPerEpoch`, `epochLength`, `feeVault`, `feeBps` (≤ 10000)
    - ⚠️ `CORE_WRITER` est figé à `0x3333...3333` ; initialiser le compte HyperCore du handler avant d'envoyer des actions (sinon `CoreAccountMissing()`).
    - Appeler:
      - `setSpotIds(btcSpot, hypeSpot)`

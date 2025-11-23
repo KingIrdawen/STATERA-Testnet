@@ -46,8 +46,16 @@ async function main() {
   await l1.setBbo(spotBTC, 30000000, 30010000);
   await l1.setBbo(spotHYPE, 50000000, 50010000);
 
-  console.log("\n🔧 Déploiement CoreInteractionHandler...");
-  const CoreInteractionHandler = await ethers.getContractFactory("CoreInteractionHandler");
+  console.log("\n🔧 Déploiement CoreInteractionHandlerLogicLib + CoreInteractionHandler...");
+  const CoreHandlerLogicLib = await ethers.getContractFactory("CoreHandlerLogicLib");
+  const coreHandlerLogicLib = await CoreHandlerLogicLib.deploy();
+  await coreHandlerLogicLib.waitForDeployment();
+
+  const CoreInteractionHandler = await ethers.getContractFactory("CoreInteractionHandler", {
+    libraries: {
+      CoreHandlerLogicLib: await coreHandlerLogicLib.getAddress(),
+    },
+  });
   const maxOutboundPerEpoch = 1_000_000_000n; // 1e9 en 1e8 (USD notionnel)
   const epochLen = 10; // blocs
   const feeVault = deployer.address;

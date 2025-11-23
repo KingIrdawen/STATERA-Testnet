@@ -86,7 +86,9 @@ Où trouver les IDs Core
 
 1. `L1Read`
    - Déployer le contrat utilitaire de lectures Core (precompile wrappers).
-2. `CoreInteractionHandler`
+2. `CoreHandlerLogicLib`
+   - Déployer la librairie contenant la logique partagée d’equity et de rebalance (appelée en `delegatecall` par le handler).
+3. `CoreInteractionHandler`
    - Paramètres du constructeur:
      - `l1read = L1READ_ADDRESS`
      - `usdc = USDC_TOKEN_EVM`
@@ -94,7 +96,8 @@ Où trouver les IDs Core
      - `epochLength = EPOCH_LENGTH_BLOCKS` ⚠️ **EN BLOCS, PAS EN SECONDES**
      - `feeVault = FEE_VAULT_ADDRESS`
      - `feeBps = FEE_BPS`
-3. `VaultContract`
+   - Lier `CoreInteractionHandler` à l’adresse de `CoreHandlerLogicLib` via l’outil de déploiement (scripts Hardhat fournis).
+4. `VaultContract`
    - Aucun paramètre du constructeur (HYPE natif)
 5. Configuration (owner)
    - Handler:

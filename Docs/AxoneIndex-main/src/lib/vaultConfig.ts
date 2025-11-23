@@ -6,10 +6,11 @@ export type VaultUiConfig = {
   vaultAddress: `0x${string}`
   handlerAddress: `0x${string}`
   l1ReadAddress: `0x${string}`
+  coreViewsAddress?: `0x${string}` // Optionnel : adresse du contrat CoreInteractionViews
   coreTokenIds: {
     usdc: number
     hype: number
-    btc: number
+    token1: number
   }
 }
 
@@ -58,7 +59,7 @@ export function validateConfig(config: Partial<VaultUiConfig>): config is VaultU
     config.coreTokenIds &&
     typeof config.coreTokenIds.usdc === 'number' &&
     typeof config.coreTokenIds.hype === 'number' &&
-    typeof config.coreTokenIds.btc === 'number'
+    typeof config.coreTokenIds.token1 === 'number'
   )
 }
 

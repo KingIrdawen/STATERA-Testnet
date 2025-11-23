@@ -77,8 +77,19 @@ async function main() {
 
   console.log("ℹ️ Rappel: effectuez un micro-transfert HyperCore vers l'adresse du handler après déploiement pour éviter `CoreAccountMissing()` lors du premier ordre.");
 
-  console.log("\n🔧 Déploiement CoreInteractionHandler...");
-  const CoreInteractionHandler = await ethers.getContractFactory("CoreInteractionHandler");
+  console.log("\n🔧 Déploiement CoreHandlerLogicLib + CoreInteractionHandler...");
+
+  const CoreHandlerLogicLib = await ethers.getContractFactory("CoreHandlerLogicLib");
+  const coreHandlerLogicLib = await CoreHandlerLogicLib.deploy({ gasPrice });
+  await coreHandlerLogicLib.waitForDeployment();
+  await delay(1000);
+  console.log("✅ CoreHandlerLogicLib:", await coreHandlerLogicLib.getAddress());
+
+  const CoreInteractionHandler = await ethers.getContractFactory("CoreInteractionHandler", {
+    libraries: {
+      CoreHandlerLogicLib: await coreHandlerLogicLib.getAddress(),
+    },
+  });
   const maxOutboundPerEpoch = MAX_OUTBOUND_PER_EPOCH_1e8;
   const epochLen = EPOCH_LENGTH_BLOCKS;
   const feeVault = FEE_VAULT_ADDRESS;
@@ -121,12 +132,23 @@ async function main() {
   await send(vault.setHandler(handler.target, { gasPrice }));
   await send(vault.setFees(50, 50, 10000, { gasPrice }));
 
+  console.log("\n🔧 Déploiement CoreInteractionViews...");
+  const CoreInteractionViews = await ethers.getContractFactory("CoreInteractionViews");
+  const views = await CoreInteractionViews.deploy({ gasPrice });
+  await views.waitForDeployment();
+  await delay(1000);
+  console.log("✅ CoreInteractionViews:", await views.getAddress());
+
+  await send(vault.setCoreViews(views.target, { gasPrice }));
+
   console.log("\n📋 Adresses (HyperEVM Testnet):");
   console.log("L1Read:", await l1.getAddress());
+  console.log("CoreHandlerLogicLib:", await coreHandlerLogicLib.getAddress());
   console.log("CoreWriter (système):", CORE_WRITER_ADDRESS);
   console.log("USDC (EVM):", USDC_EVM_ADDRESS);
   console.log("CoreInteractionHandler:", await handler.getAddress());
   console.log("VaultContract:", await vault.getAddress());
+  console.log("CoreInteractionViews:", await views.getAddress());
   console.log("\n🎉 Déploiement STRATEGY_1 terminé sur testnet.");
 }
 

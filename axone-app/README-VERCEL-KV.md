@@ -93,3 +93,4 @@ Vercel KV offre un plan gratuit généreux :
 - 30 000 requêtes/jour
 - Plus que suffisant pour stocker vos stratégies
 
+

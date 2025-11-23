@@ -31,8 +31,8 @@ Ce script analysera votre transaction spécifique et décodera tous les événem
 
 #### A. Vérifier l'Équité Core
 ```javascript
-const handler = await ethers.getContractAt("CoreInteractionHandler", HANDLER_ADDRESS);
-const coreEquity = await handler.equitySpotUsd1e18();
+const coreViews = await ethers.getContractAt("CoreInteractionViews", CORE_VIEWS_ADDRESS);
+const coreEquity = await coreViews.equitySpotUsd1e18(HANDLER_ADDRESS);
 console.log(`Équité Core: ${ethers.utils.formatEther(coreEquity)} USD`);
 ```
 
@@ -130,8 +130,8 @@ pnpm hardhat console --network testnet
 
 #### Vérification des Balances Core
 ```bash
-> const handler = await ethers.getContractAt("CoreInteractionHandler", "0x4E0389AcF0b2bde612C43e6CE887309D81aCe0D6");
-> const equity = await handler.equitySpotUsd1e18();
+> const coreViews = await ethers.getContractAt("CoreInteractionViews", CORE_VIEWS_ADDRESS);
+> const equity = await coreViews.equitySpotUsd1e18("0x4E0389AcF0b2bde612C43e6CE887309D81aCe0D6");
 > console.log(ethers.utils.formatEther(equity));
 ```
 

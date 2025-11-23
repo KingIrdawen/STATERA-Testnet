@@ -43,6 +43,8 @@ async function main() {
 
   const vault = await ethers.getContractAt("VaultContract", VAULT);
   const handler = await ethers.getContractAt("CoreInteractionHandler", HANDLER);
+  const viewsAddr = process.env.CORE_VIEWS_ADDRESS;
+  const views = viewsAddr ? await ethers.getContractAt("CoreInteractionViews", viewsAddr) : null;
   const signer = (await ethers.getSigners())[0];
   const who = await signer.getAddress();
 
@@ -86,7 +88,9 @@ async function main() {
 
   // Equity côté Core (peut rester 0 si dépôt minimal ou oracles déviés)
   let equity = 0n;
-  try { equity = await handler.equitySpotUsd1e18(); } catch (_) {}
+  if (views) {
+    try { equity = await views.equitySpotUsd1e18(HANDLER); } catch (_) {}
+  }
 
   console.log(JSON.stringify({
     network: hre.network.name,

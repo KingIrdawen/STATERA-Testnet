@@ -4,8 +4,8 @@
 - `CoreInteractionHandler.sol` gère les interactions avec Core (Hyperliquid): transferts HYPE natif, ordres IOC SPOT BTC/HYPE, et rééquilibrage 50/50. Le rééquilibrage est restreint à une adresse `rebalancer` définie par l'owner. Pour HYPE50 Defensive, HYPE est traité comme le jeton de gaz natif: les dépôts se font en natif (payable), sont convertis 100% en USDC côté Core, puis alloués 50/50.
 
 ## 🔒 Améliorations de Sécurité
-- **Héritage de Pausable** : Le contrat utilise maintenant `Pausable` d'OpenZeppelin
-- **Protection des fonctions critiques** : Toutes les opérations principales sont protégées par `whenNotPaused`
+- **Pause manuelle** : Le contrat expose un booléen `paused` et des événements `Paused/Unpaused` (il **n’hérite pas** de `Pausable` OpenZeppelin)
+- **Protection des fonctions critiques** : Toutes les opérations principales sont protégées par `whenNotPaused` / `whenPaused`
 - **Contrôle d'urgence** : `pause()` et `unpause()` permettent d'arrêter immédiatement les opérations
 - **Protection contre les défaillances d'oracle** : Pause disponible en cas de manipulation ou de défaillance
 
@@ -16,7 +16,7 @@
 - **🔒 SÉCURITÉ RENFORCÉE** : **Rate limiting basé sur les blocs** - Utilisation de `block.number` pour les époques au lieu de timestamps manipulables
 - **🐛 CORRECTION CRITIQUE** : **Migration vers ordres SPOT** — Les ordres de rééquilibrage et de dépôt utilisent désormais un encodage SPOT dédié (`encodeSpotLimitOrder`) avec `reduceOnly=false` et `encodedTif=IOC`. Les tailles sont converties selon `szDecimals` via `toSzInSzDecimals()`.
 - **🔗 HARDENING (2025-11-10)** : **Adresse CoreWriter constante** — `CORE_WRITER` est figée à `0x3333…3333` (contrat système HyperCore), supprimant tout risque de mauvaise configuration lors du déploiement.
-- **🛡️ GARDE CORE** : **Vérification d’existence du compte HyperCore** — Chaque envoi `sendRawAction` appelle `_ensureCoreAccountExists()` et revert avec `CoreAccountMissing()` si le compte n’est pas encore initialisé côté Core.
+- **🛡️ GARDE CORE (à la charge de l’ops)** : L’erreur `CoreAccountMissing()` est déclarée mais la fonction interne `_send()` se contente d’appeler `CORE_WRITER.sendRawAction(data)` et d’émettre `OutboundToCore(data)` ; il est donc nécessaire d’initialiser le compte HyperCore du handler (micro‑transfert Core) côté infra avant d’envoyer des actions, sinon c’est HyperCore qui renverra ses propres erreurs.
 - **💰 CORRECTION (2025-11-09)** : **Valorisation fiable des soldes spot** — `spotBalanceInWei()` lit les métadonnées Hyperliquid (`tokenInfo`) et convertit systématiquement les soldes `szDecimals → weiDecimals`, garantissant une valorisation correcte même si le format des precompiles évolue.
 - **⚖️ CORRECTION (2025-11-08)** : **Conversion des tailles au prix limite courant** — les ordres de rebalancing utilisent maintenant le même prix que la limite BBO (ask/bid ajusté par `marketEpsilonBps`) pour convertir le notional USD en taille base. Cela empêche d'essayer d'acheter plus d'actifs que la trésorerie disponible lorsque le carnet est loin de l'oracle et réduit les rejets Hyperliquid pour « insufficient funds ».
 - **🐛 CORRECTION CRITIQUE (tailles d'ordre ×100)** : **Conversion USD → taille en `szDecimals`** — `toSzInSzDecimals()` divise désormais par `price1e8 * 1e10` (et non `price1e8 * 1e8`). Cela corrige un facteur ×100 sur les tailles d’ordres qui pouvait empêcher l’exécution (ex: vente HYPE initiale lors d’un dépôt natif).
@@ -37,10 +37,11 @@ Le contrat implémente un mécanisme de **rattrapage graduel par paliers** pour 
 #### Fonctionnement
 
 Quand le prix oracle dévie de plus de `maxOracleDeviationBps` (défaut: 5%) :
-1. `lastPx` est **mis à jour** vers la limite de la fourchette (±5%)
-2. **Rebalance**: n'échoue plus — il devient un **no‑op** (aucun ordre placé) et émet `RebalanceSkippedOracleDeviation(pxB1e8, pxH1e8)`
-3. **Dépôts/Retraits**: continuent d'**échouer** avec `OracleGradualCatchup` (sécurité maintenue)
-4. Les transactions suivantes progressent par paliers successifs jusqu'à convergence
+1. `lastPx` est **mis à jour** vers la limite de la fourchette (±déviation maximale autorisée)
+2. **Rebalance** (`rebalancePortfolio`) utilise la variante tolérante `_tryValidatedOraclePx1e8` : en cas de déviation, aucune transaction n’est envoyée vers Core, la fonction retourne en no‑op et émet `RebalanceSkippedOracleDeviation(pxB1e8, pxH1e8)` sans revert.
+3. **Dépôts USDC/HYPE** (`executeDeposit`, `executeDepositHype`) utilisent également `_tryValidatedOraclePx1e8` : en cas de déviation, ils créditent bien les soldes spot correspondant au dépôt mais **ne placent aucun ordre** et émettent `DepositSkippedOracleDeviationUsdc(pxB1e8, pxH1e8)` ou `DepositSkippedOracleDeviationHype(pxH1e8)` (no‑op sur les ordres, sans revert).
+4. Certaines fonctions internes strictes, comme `_validatedOraclePx1e8` utilisée dans `pullHypeFromCoreToEvm`, continuent d’**échouer** avec `OracleGradualCatchup()` si la déviation dépasse le seuil, afin de protéger les retraits.
+5. Les transactions suivantes progressent par paliers successifs jusqu'à convergence du prix vers la valeur oracle réelle.
 
 #### Exemple Concret
 
@@ -113,11 +114,8 @@ handler.setMaxOracleDeviationBps(1000);
 | setRebalancer | `setRebalancer(address _rebalancer)` | external | - | onlyOwner |
 | setRebalanceAfterWithdrawal | `setRebalanceAfterWithdrawal(bool v)` | external | - | onlyOwner |
 | pause/unpause | `pause()` / `unpause()` | external | - | onlyOwner |
-| oraclePxHype1e8 | `oraclePxHype1e8()` → `uint64` | external view | view | - |
-| oraclePxBtc1e8 | `oraclePxBtc1e8()` → `uint64` | external view | view | - |
-| spotBalance | `spotBalance(address coreUser, uint64 tokenId)` → `uint64` | public view | view | - |
-| spotOraclePx1e8 | `spotOraclePx1e8(uint32 spotAsset)` → `uint64` | public view | view | - |
-| equitySpotUsd1e18 | `equitySpotUsd1e18()` → `uint256` | public view | view | - |
+| spotOraclePx1e8 | `spotOraclePx1e8(uint32 spotAsset)` → `uint64` | internal view | view | - |
+| _equitySpotUsd1e18 | `_equitySpotUsd1e18()` → `uint256` | internal view | view | - |
 | executeDeposit | `executeDeposit(uint64 usdc1e8, bool forceRebalance)` | external | whenNotPaused | onlyVault |
 | executeDepositHype | `executeDepositHype(bool forceRebalance)` | external payable | whenNotPaused | onlyVault |
 | pullFromCoreToEvm | `pullFromCoreToEvm(uint64 usdc1e8)` → `uint64` | external | whenNotPaused | onlyVault |
@@ -173,10 +171,12 @@ Le contrat utilise un système de rate limiting basé sur les **blocs** (et non 
 - `setSpotIds(btcSpot, hypeSpot)`
 - `setSpotTokenIds(usdcToken, btcToken, hypeToken)`
 
-## Intégration avec `VaultContract`
+## Intégration avec `VaultContract` et librairies
 - Les vaults HYPE50 appellent `executeDepositHype{value: deployAmt}(true)` pour auto-déployer la fraction HYPE en 50/50 après conversion en USDC.
 - Les retraits HYPE utilisent `pullHypeFromCoreToEvm()` puis `sweepHypeToVault()` si nécessaire.
 - Cohérence des frais: le `VaultContract` réutilise la même adresse `feeVault` (via `handler.feeVault()`) pour envoyer les frais de dépôt et de retrait. Ainsi, les `sweep` du Handler et les frais du Vault convergent tous vers `feeVault`.
+- La lecture des prix BTC/HYPE normalisés en 1e8 et de l’equity Core (`equitySpotUsd1e18`) se fait désormais via le contrat `CoreInteractionViews` (fonctions `oraclePxHype1e8(address handler)`, `oraclePxBtc1e8(address handler)`, `equitySpotUsd1e18(address handler)`), et non plus via des vues publiques sur le handler.
+- Les calculs lourds d’equity et de deltas de rebalance sont factorisés dans la librairie `CoreHandlerLogicLib`, appelée via des appels de **bibliothèque Solidity** (`CoreHandlerLogicLib.equitySpotUsd1e18`, `CoreHandlerLogicLib.computeDeltasWithPositions`) depuis `CoreInteractionHandler`, afin de réduire la taille du bytecode du handler sous la limite EIP‑170 tout en conservant exactement le même comportement.
 
 ## Gestion des Décimales (szDecimals vs weiDecimals + pxDecimals)
 
@@ -239,7 +239,7 @@ Ancienne formule incorrecte (ajoutait un facteur ×100 sur la taille, à éviter
 |----------|---------------|---------|
 | `executeDeposit()` | szDecimals (via `spotBalance()`) | Ordres SPOT / Transfers |
 | `pullFromCoreToEvm()` | szDecimals (via `spotBalance()`) | Ordres SPOT / Transfers |
-| `equitySpotUsd1e18()` | weiDecimals (via `spotBalanceInWei()`) | Valorisation USD |
+| `_equitySpotUsd1e18()` (appelée en interne, exposée via `CoreInteractionViews.equitySpotUsd1e18(handler)`) | weiDecimals (via `spotBalanceInWei()`) | Valorisation USD |
 | `_computeRebalanceDeltas()` | weiDecimals (via `spotBalanceInWei()`) | Valorisation USD |
 
 ### 🎯 Impact

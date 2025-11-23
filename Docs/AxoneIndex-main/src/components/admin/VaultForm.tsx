@@ -26,6 +26,7 @@ export function VaultForm({ onSuccess, mode = 'create', vault }: Props) {
 				handlerAddress: vault.handlerAddress,
 				l1ReadAddress: vault.l1ReadAddress,
 				usdcAddress: vault.usdcAddress,
+				coreViewsAddress: vault.coreViewsAddress,
 				coreTokenIds: { ...vault.coreTokenIds },
 			}
 		}
@@ -41,7 +42,8 @@ export function VaultForm({ onSuccess, mode = 'create', vault }: Props) {
 			handlerAddress: '0x',
 			l1ReadAddress: '0x',
 			usdcAddress: '0x',
-			coreTokenIds: { usdc: 0, hype: 0, btc: 0 },
+			coreViewsAddress: undefined,
+			coreTokenIds: { usdc: 0, hype: 0, token1: 0 },
 		}
 	})
 	const [submitting, setSubmitting] = useState(false)
@@ -61,6 +63,7 @@ export function VaultForm({ onSuccess, mode = 'create', vault }: Props) {
 				handlerAddress: vault.handlerAddress,
 				l1ReadAddress: vault.l1ReadAddress,
 				usdcAddress: vault.usdcAddress,
+				coreViewsAddress: vault.coreViewsAddress,
 				coreTokenIds: { ...vault.coreTokenIds },
 			})
 		}
@@ -81,7 +84,8 @@ export function VaultForm({ onSuccess, mode = 'create', vault }: Props) {
 		if (!isAddress(form.handlerAddress)) return 'Adresse du Handler invalide.'
 		if (!isAddress(form.l1ReadAddress)) return 'Adresse L1Read invalide.'
 		if (!isAddress(form.usdcAddress)) return 'Adresse USDC invalide.'
-		if (![form.coreTokenIds.usdc, form.coreTokenIds.hype, form.coreTokenIds.btc].every(n => Number.isFinite(n))) {
+		if (form.coreViewsAddress && !isAddress(form.coreViewsAddress)) return 'Adresse CoreInteractionViews invalide.'
+		if (![form.coreTokenIds.usdc, form.coreTokenIds.hype, form.coreTokenIds.token1].every(n => Number.isFinite(n))) {
 			return 'coreTokenIds invalides.'
 		}
 		return null
@@ -189,6 +193,11 @@ export function VaultForm({ onSuccess, mode = 'create', vault }: Props) {
 							<Label htmlFor="usdcAddress">Adresse USDC</Label>
 							<Input id="usdcAddress" value={form.usdcAddress} onChange={(e) => setField('usdcAddress', e.target.value as NewVaultInput['usdcAddress'])} placeholder="0x…" />
 						</div>
+						<div className="space-y-2">
+							<Label htmlFor="coreViewsAddress">Adresse CoreInteractionViews (optionnel)</Label>
+							<Input id="coreViewsAddress" value={form.coreViewsAddress || ''} onChange={(e) => setField('coreViewsAddress', (e.target.value.trim() || undefined) as NewVaultInput['coreViewsAddress'])} placeholder="0x… (laisser vide pour utiliser NEXT_PUBLIC_CORE_VIEWS_ADDRESS)" />
+							<p className="text-xs text-muted-foreground">Si non défini, utilise la variable d&apos;environnement NEXT_PUBLIC_CORE_VIEWS_ADDRESS</p>
+						</div>
 					</div>
 
 					<div className="grid sm:grid-cols-3 gap-4">
@@ -201,8 +210,8 @@ export function VaultForm({ onSuccess, mode = 'create', vault }: Props) {
 							<Input id="coreHype" type="number" value={form.coreTokenIds.hype} onChange={(e) => setField('coreTokenIds', { ...form.coreTokenIds, hype: Number(e.target.value) || 0 } as NewVaultInput['coreTokenIds'])} />
 						</div>
 						<div className="space-y-2">
-							<Label htmlFor="coreBtc">Core Token ID — BTC</Label>
-							<Input id="coreBtc" type="number" value={form.coreTokenIds.btc} onChange={(e) => setField('coreTokenIds', { ...form.coreTokenIds, btc: Number(e.target.value) || 0 } as NewVaultInput['coreTokenIds'])} />
+							<Label htmlFor="coreToken1">Core Token ID — TOKEN1</Label>
+							<Input id="coreToken1" type="number" value={form.coreTokenIds.token1} onChange={(e) => setField('coreTokenIds', { ...form.coreTokenIds, token1: Number(e.target.value) || 0 } as NewVaultInput['coreTokenIds'])} />
 						</div>
 					</div>
 
@@ -217,7 +226,7 @@ export function VaultForm({ onSuccess, mode = 'create', vault }: Props) {
 								id="tags"
 								value={tagsAsString}
 								onChange={(e) => setField('tags', e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
-								placeholder="btc, defensive, core"
+								placeholder="token1, defensive, core"
 							/>
 						</div>
 					</div>

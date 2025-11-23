@@ -45,7 +45,7 @@ Le vault STRATEGY_1 accepte des dépôts en HYPE (18 décimales), valorise la NA
 ## Formules
 - NAV côté vault:
   - `evmHypeUsd1e18 = address(this).balance * oraclePxHype1e8 / 1e8`
-  - `nav = evmHypeUsd1e18 + handler.equitySpotUsd1e18()`
+  - `nav = evmHypeUsd1e18 + coreViews.equitySpotUsd1e18(handler)`
 - Shares mintées (dépôt net):
   - `netAmount1e18 = amount1e18 - (amount1e18 * depositFeeBps / 10000)`
   - `depositUsd1e18 = netAmount1e18 * pxHype1e8 / 1e8`
@@ -66,11 +66,12 @@ Le vault STRATEGY_1 accepte des dépôts en HYPE (18 décimales), valorise la NA
 
 
 ## Intégration
-1. Déployer le handler STRATEGY_1 (voir doc Handler STRATEGY_1) et le vault STRATEGY_1.
+1. Déployer le handler STRATEGY_1 (voir doc Handler STRATEGY_1), le vault STRATEGY_1 **et** le contrat `CoreInteractionViews`.
 2. `vault.setHandler(handler)` — lie le handler; pas d'approval HYPE (dépôts natifs).
-3. Configurer côté handler: `setUsdcCoreLink`, `setHypeCoreLink`, `setSpotIds`, `setSpotTokenIds`.
-4. (Optionnel) Réserve USDC Core: `setUsdcReserveBps(100)` pour 1% (plafonné à 10%).
-4. Configurer frais et paliers. Le Vault lit l’adresse des frais via `handler.feeVault()` et y envoie les frais de dépôt/retrait.
+3. `vault.setCoreViews(coreViews)` — lie le contrat de vues pour les calculs de prix/equity.
+4. Configurer côté handler: `setUsdcCoreLink`, `setHypeCoreLink`, `setSpotIds`, `setSpotTokenIds`.
+5. (Optionnel) Réserve USDC Core: `setUsdcReserveBps(100)` pour 1% (plafonné à 10%).
+6. Configurer frais et paliers. Le Vault lit l’adresse des frais via `handler.feeVault()` et y envoie les frais de dépôt/retrait.
 
 ## Politique de frais (cohérente avec le Handler)
 
@@ -102,11 +103,15 @@ Le vault STRATEGY_1 accepte des dépôts en HYPE (18 décimales), valorise la NA
 
 ## Références code
 - NAV USD HYPE EVM + Core:
-```116:122:contracts/src/STRATEGY_1/VaultContract.sol
+```126:135:contracts/src/STRATEGY_1/VaultContract.sol
 function nav1e18() public view returns (uint256) {
-    uint64 pxH = address(handler) == address(0) ? uint64(0) : handler.oraclePxHype1e8();
+    uint64 pxH = (address(handler) == address(0) || address(coreViews) == address(0))
+        ? uint64(0)
+        : coreViews.oraclePxHype1e8(address(handler));
     uint256 evmHypeUsd1e18 = pxH == 0 ? 0 : (address(this).balance * uint256(pxH)) / 1e8;
-    uint256 coreEq1e18 = address(handler) == address(0) ? 0 : handler.equitySpotUsd1e18();
+    uint256 coreEq1e18 = (address(handler) == address(0) || address(coreViews) == address(0))
+        ? 0
+        : coreViews.equitySpotUsd1e18(address(handler));
     return evmHypeUsd1e18 + coreEq1e18;
 }
 ```

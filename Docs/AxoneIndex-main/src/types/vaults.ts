@@ -7,10 +7,11 @@ export interface VaultOnchainConfig {
 	handlerAddress: `0x${string}`
 	l1ReadAddress: `0x${string}`
 	usdcAddress: `0x${string}`
+	coreViewsAddress?: `0x${string}` // Optionnel : adresse du contrat CoreInteractionViews pour ce vault
 	coreTokenIds: {
 		usdc: number
 		hype: number
-		btc: number
+		token1: number
 	}
 }
 
@@ -38,6 +39,7 @@ export function isVaultOnchainConfig(value: unknown): value is VaultOnchainConfi
 	if (!value || typeof value !== 'object') return false
 	const v = value as Partial<VaultOnchainConfig>
 	const coreTokenIds = v.coreTokenIds as Partial<VaultOnchainConfig['coreTokenIds']> | undefined
+	const hasValidCoreViewsAddress = v.coreViewsAddress === undefined || (typeof v.coreViewsAddress === 'string' && isAddress(v.coreViewsAddress as Address))
 	return (
 		typeof v.chainId === 'number' &&
 		coreTokenIds !== undefined &&
@@ -45,7 +47,7 @@ export function isVaultOnchainConfig(value: unknown): value is VaultOnchainConfi
 		typeof coreTokenIds === 'object' &&
 		typeof coreTokenIds.usdc === 'number' &&
 		typeof coreTokenIds.hype === 'number' &&
-		typeof coreTokenIds.btc === 'number' &&
+		typeof coreTokenIds.token1 === 'number' &&
 		typeof v.vaultAddress === 'string' &&
 		typeof v.handlerAddress === 'string' &&
 		typeof v.l1ReadAddress === 'string' &&
@@ -53,7 +55,8 @@ export function isVaultOnchainConfig(value: unknown): value is VaultOnchainConfi
 		isAddress(v.vaultAddress as Address) &&
 		isAddress(v.handlerAddress as Address) &&
 		isAddress(v.l1ReadAddress as Address) &&
-		isAddress(v.usdcAddress as Address)
+		isAddress(v.usdcAddress as Address) &&
+		hasValidCoreViewsAddress
 	)
 }
 
@@ -99,10 +102,11 @@ export function normaliseOnchainConfig(input: VaultOnchainConfig): VaultOnchainC
 		handlerAddress: input.handlerAddress,
 		l1ReadAddress: input.l1ReadAddress,
 		usdcAddress: input.usdcAddress,
+		coreViewsAddress: input.coreViewsAddress,
 		coreTokenIds: {
 			usdc: Number.isFinite(input.coreTokenIds.usdc) ? input.coreTokenIds.usdc : 0,
 			hype: Number.isFinite(input.coreTokenIds.hype) ? input.coreTokenIds.hype : 0,
-			btc: Number.isFinite(input.coreTokenIds.btc) ? input.coreTokenIds.btc : 0,
+			token1: Number.isFinite(input.coreTokenIds.token1) ? input.coreTokenIds.token1 : 0,
 		},
 	}
 }

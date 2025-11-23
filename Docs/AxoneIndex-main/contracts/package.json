@@ -15,7 +15,10 @@
     "clean": "hardhat clean",
     "status:testnet": "hardhat run scripts/status_strategy1_testnet.js --network testnet",
     "events:testnet": "hardhat run scripts/strategy1_verify_events_testnet.js --network testnet",
-    "rebalance:testnet": "hardhat run scripts/strategy1_rebalance_testnet.js --network testnet"
+    "rebalance:testnet": "hardhat run scripts/strategy1_rebalance_testnet.js --network testnet",
+    "test:foundry": "forge test",
+    "test:strategy1:foundry": "forge test --match-path test/strategy1/*.t.sol",
+    "test:lib-evm": "forge test -C Lib_EVM/hyper-evm-lib"
   },
   "keywords": [
     "ethereum",

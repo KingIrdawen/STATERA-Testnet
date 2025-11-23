@@ -57,6 +57,64 @@ export function truncateAddress(address: string): string {
   return `${address.slice(0, 6)}...${address.slice(-4)}`
 }
 
+/**
+ * Formate une balance de manière lisible pour les humains
+ * - Utilise la notation compacte (K, M, B) pour les grandes valeurs
+ * - Ajuste le nombre de décimales selon la taille de la valeur
+ * - Utilise les séparateurs de milliers
+ */
+export function formatHumanBalance(
+  value: string | number,
+  options?: {
+    minDecimals?: number
+    maxDecimals?: number
+    compact?: boolean
+  }
+): string {
+  const num = typeof value === 'string' ? parseFloat(value) : value
+  
+  if (isNaN(num) || num === 0) return '0'
+  
+  const minDecimals = options?.minDecimals ?? 0
+  const maxDecimals = options?.maxDecimals ?? 8
+  const useCompact = options?.compact ?? true
+  
+  // Notation compacte pour les très grandes valeurs
+  if (useCompact) {
+    if (Math.abs(num) >= 1_000_000_000) {
+      return `${(num / 1_000_000_000).toLocaleString('fr-FR', {
+        minimumFractionDigits: Math.min(minDecimals, 2),
+        maximumFractionDigits: Math.min(maxDecimals, 2)
+      })}B`
+    } else if (Math.abs(num) >= 1_000_000) {
+      return `${(num / 1_000_000).toLocaleString('fr-FR', {
+        minimumFractionDigits: Math.min(minDecimals, 2),
+        maximumFractionDigits: Math.min(maxDecimals, 2)
+      })}M`
+    } else if (Math.abs(num) >= 1_000) {
+      return `${(num / 1_000).toLocaleString('fr-FR', {
+        minimumFractionDigits: Math.min(minDecimals, 2),
+        maximumFractionDigits: Math.min(maxDecimals, 2)
+      })}K`
+    }
+  }
+  
+  // Pour les valeurs normales, ajuster les décimales selon la taille
+  let decimals = maxDecimals
+  if (Math.abs(num) >= 1) {
+    decimals = Math.min(maxDecimals, 4)
+  } else if (Math.abs(num) >= 0.01) {
+    decimals = Math.min(maxDecimals, 6)
+  } else if (Math.abs(num) >= 0.0001) {
+    decimals = Math.min(maxDecimals, 8)
+  }
+  
+  return num.toLocaleString('fr-FR', {
+    minimumFractionDigits: minDecimals,
+    maximumFractionDigits: decimals
+  })
+}
+
 export function formatCoreBalance(
   value: bigint | number | undefined,
   weiDecimals: number
@@ -69,5 +127,5 @@ export function formatCoreBalance(
   // par adjustByDecimals() dans useDashboardData.ts
   // La valeur reçue est déjà en weiDecimals
   const formatted = formatUnitsSafe(bigintValue, weiDecimals)
-  return formatNumber(formatted, { decimals: 6 })
+  return formatHumanBalance(formatted, { minDecimals: 0, maxDecimals: 6, compact: true })
 }

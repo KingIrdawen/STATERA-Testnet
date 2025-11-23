@@ -21,13 +21,19 @@ async function main() {
     ], owner);
     
     const handler = new ethers.Contract(HANDLER_ADDRESS, [
-        "function equitySpotUsd1e18() view returns (uint256)",
-        "function spotBalance(address coreUser, uint64 tokenId) view returns (uint64)",
         "function usdcCoreTokenId() view returns (uint64)",
         "function spotTokenBTC() view returns (uint64)",
         "function spotTokenHYPE() view returns (uint64)",
         "function spotBTC() view returns (uint32)",
         "function spotHYPE() view returns (uint32)"
+    ], owner);
+
+    const coreViewsAddress = process.env.CORE_VIEWS_ADDRESS;
+    if (!coreViewsAddress) {
+        throw new Error("CORE_VIEWS_ADDRESS manquant (adresse de CoreInteractionViews)");
+    }
+    const views = new ethers.Contract(coreViewsAddress, [
+        "function equitySpotUsd1e18(address handler) view returns (uint256)",
     ], owner);
     
     const usdc = new ethers.Contract(await vault.usdc(), [
@@ -50,7 +56,7 @@ async function main() {
     
     // Vérifier l'équité sur Core
     try {
-        const coreEquity = await handler.equitySpotUsd1e18();
+        const coreEquity = await views.equitySpotUsd1e18(HANDLER_ADDRESS);
         console.log(`💰 Équité sur HyperCore: ${ethers.formatEther(coreEquity)} USD`);
         
         if (coreEquity === 0n) {

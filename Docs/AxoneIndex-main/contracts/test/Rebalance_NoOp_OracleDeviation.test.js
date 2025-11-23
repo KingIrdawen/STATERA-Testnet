@@ -18,8 +18,16 @@ describe("CoreInteractionHandler: rebalance no-op on oracle deviation", function
     const USDC = await ethers.getContractFactory("MockUSDC");
     const usdc = await USDC.deploy();
 
-    // Deploy handler
-    const Handler = await ethers.getContractFactory("CoreInteractionHandler");
+    // Deploy library + handler (linking CoreHandlerLogicLib)
+    const CoreHandlerLogicLib = await ethers.getContractFactory("CoreHandlerLogicLib");
+    const coreHandlerLogicLib = await CoreHandlerLogicLib.deploy();
+    await coreHandlerLogicLib.waitForDeployment();
+
+    const Handler = await ethers.getContractFactory("CoreInteractionHandler", {
+      libraries: {
+        CoreHandlerLogicLib: await coreHandlerLogicLib.getAddress(),
+      },
+    });
     const handler = await Handler.deploy(
       l1.target,
       usdc.target,

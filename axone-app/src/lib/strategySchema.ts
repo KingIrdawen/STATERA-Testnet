@@ -21,8 +21,10 @@ export const StrategyInputSchema = z.object({
   handlerAddress: z.string().min(1),
   l1ReadAddress: z.string().min(1),
   coreWriterAddress: z.string().optional(),
+  strategyType: z.enum(['STRATEGY_1', 'ERA_2']).optional(), // Type de stratégie
   tokens: z.array(TokenSchema).min(1),
 });
 
 export type StrategyInputDTO = z.infer<typeof StrategyInputSchema>;
+
 

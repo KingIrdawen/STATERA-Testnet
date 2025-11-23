@@ -10,6 +10,10 @@ module.exports = {
         enabled: true,
         runs: 1, // Optimize for size reduction instead of gas efficiency
       },
+      // Réduit encore un peu la taille du bytecode en supprimant le hash IPFS/BZZ en suffixe
+      metadata: {
+        bytecodeHash: "none",
+      },
       viaIR: true,
     },
   },

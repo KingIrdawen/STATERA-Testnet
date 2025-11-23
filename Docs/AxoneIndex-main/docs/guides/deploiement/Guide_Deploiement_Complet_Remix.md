@@ -364,8 +364,11 @@ coreHandler.setRebalancer(rebalancerAddress);
 ### Configuration du VaultContract
 
 ```solidity
-// Définir le handler
+// Définir le handler STRATEGY_1
 vault.setHandler(handlerAddress);
+
+// Définir le contrat de vues CoreInteractionViews
+vault.setCoreViews(coreViewsAddress);
 
 // Configurer les frais (1% dépôt, 0.5% retrait, 90% auto-deploy)
 vault.setFees(100, 50, 9000);
@@ -423,14 +426,14 @@ axoneSale.buyWithUSDC(1000 * 1e18);
 ### Workflow de Rééquilibrage du Portefeuille
 
 ```solidity
-// 1. Vérifier l'équité actuelle
-uint256 equity = coreHandler.equitySpotUsd1e18();
+// 1. Vérifier l'équité actuelle via CoreInteractionViews
+uint256 equity = coreViews.equitySpotUsd1e18(address(coreHandler));
 
 // 2. Rééquilibrer le portefeuille
 coreHandler.rebalancePortfolio(12345, 67890);
 
 // 3. Vérifier la nouvelle équité
-uint256 newEquity = coreHandler.equitySpotUsd1e18();
+uint256 newEquity = coreViews.equitySpotUsd1e18(address(coreHandler));
 ```
 
 ---

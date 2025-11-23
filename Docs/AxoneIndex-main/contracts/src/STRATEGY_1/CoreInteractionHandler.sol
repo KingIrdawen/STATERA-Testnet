@@ -4,13 +4,13 @@ pragma solidity ^0.8.24;
 import {HLConstants} from "./utils/HLConstants.sol";
 import {CoreHandlerLib} from "./utils/CoreHandlerLib.sol";
 import {Rebalancer50Lib} from "./Rebalancer50Lib.sol";
+import {CoreHandlerLogicLib} from "./CoreHandlerLogicLib.sol";
 import {SystemAddressLib} from "./utils/SystemAddressLib.sol";
 import {StrategyMathLib} from "./utils/StrategyMathLib.sol";
 import {L1Read} from "./interfaces/L1Read.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {SafeCast} from "@openzeppelin/contracts/utils/math/SafeCast.sol";
-import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
 
 interface ICoreWriter {
     function sendRawAction(bytes calldata data) external;
@@ -18,7 +18,7 @@ interface ICoreWriter {
 
 // IERC20 importé via OpenZeppelin ci-dessus
 
-contract CoreInteractionHandler is Pausable {
+contract CoreInteractionHandler {
     using SafeERC20 for IERC20;
 
     ICoreWriter public constant CORE_WRITER = ICoreWriter(0x3333333333333333333333333333333333333333);
@@ -93,7 +93,6 @@ contract CoreInteractionHandler is Pausable {
     error INVALID_SZ_DECIMALS();
     error PX_NOT_QUANTIZED();
     error PX_TOO_LOW();
-    error PX_TOO_HIGH();
     error SIZE_TOO_LARGE();
     error SIZE_ZERO();
     error INVALID_TIF();
@@ -119,10 +118,14 @@ contract CoreInteractionHandler is Pausable {
     event SweepWithFee(uint64 gross1e8, uint64 fee1e8, uint64 net1e8);
     event RebalancerSet(address rebalancer);
 
+    event Paused(address account);
+    event Unpaused(address account);
+
     address public owner;
     address public rebalancer;
     // Option: rééquilibrer automatiquement après un retrait HYPE (par défaut: activé)
     bool public rebalanceAfterWithdrawal = true;
+    bool public paused;
 
     modifier onlyOwner(){
         if(msg.sender!=owner) revert NotOwner();
@@ -136,6 +139,16 @@ contract CoreInteractionHandler is Pausable {
 
     modifier onlyRebalancer() {
         if (msg.sender != rebalancer) revert NotRebalancer();
+        _;
+    }
+
+    modifier whenNotPaused() {
+        if (paused) revert("P"); // contrat en pause
+        _;
+    }
+
+    modifier whenPaused() {
+        if (!paused) revert("NP"); // contrat non pausé
         _;
     }
 
@@ -250,21 +263,18 @@ contract CoreInteractionHandler is Pausable {
     }
 
     /// @notice Pause all critical operations in case of emergency
-    function pause() external onlyOwner {
-        _pause();
+    function pause() external onlyOwner whenNotPaused {
+        paused = true;
+        emit Paused(msg.sender);
     }
-
+    
     /// @notice Unpause all operations
-    function unpause() external onlyOwner {
-        _unpause();
+    function unpause() external onlyOwner whenPaused {
+        paused = false;
+        emit Unpaused(msg.sender);
     }
 
-    // Views (spot)
-    function spotBalance(address coreUser, uint64 tokenId) public view returns (uint64) {
-        L1Read.SpotBalance memory b = l1read.spotBalance(coreUser, tokenId);
-        return b.total;
-    }
-
+    // Views internes (spot)
     /// @notice Get spot balance converted to wei decimals
     /// @dev Converts SpotBalance.total from szDecimals to weiDecimals format
     /// @param coreUser The user address
@@ -274,57 +284,27 @@ contract CoreInteractionHandler is Pausable {
         return CoreHandlerLib.spotBalanceInWei(l1read, coreUser, tokenId);
     }
 
-    function spotOraclePx1e8(uint32 spotAsset) public view returns (uint64) {
+    function spotOraclePx1e8(uint32 spotAsset) internal view returns (uint64) {
         uint64 raw = l1read.spotPx(spotAsset);
         if (raw == 0) revert OracleZero();
         return _toPx1e8(spotAsset, raw);
     }
 
-    // Public oracle getters for vault accounting
-    function oraclePxHype1e8() external view returns (uint64) {
-        return spotOraclePx1e8(spotHYPE);
-    }
-
-    function oraclePxBtc1e8() external view returns (uint64) {
-        return spotOraclePx1e8(spotBTC);
-    }
-
-    function equitySpotUsd1e18() public view returns (uint256) {
+    function _equitySpotUsd1e18() internal view returns (uint256) {
         // Core spot equity only. EVM USDC est compté dans le Vault.
-        // CORRECTION AUDIT: Utilisation de spotBalanceInWei pour conversion correcte szDecimals -> weiDecimals
-        uint256 usdcBalWei = spotBalanceInWei(address(this), usdcCoreTokenId);
-        uint256 btcBalWei = spotBalanceInWei(address(this), spotTokenBTC);
-        uint256 hypeBalWei = spotBalanceInWei(address(this), spotTokenHYPE);
+        uint64 pxB1e8 = spotOraclePx1e8(spotBTC);
+        uint64 pxH1e8 = spotOraclePx1e8(spotHYPE);
 
-        uint256 pxB1e8 = spotOraclePx1e8(spotBTC);
-        uint256 pxH1e8 = spotOraclePx1e8(spotHYPE);
-
-        // Récupération des infos de décimales pour chaque token
-        L1Read.TokenInfo memory usdcInfo = l1read.tokenInfo(uint32(usdcCoreTokenId));
-        L1Read.TokenInfo memory btcInfo = l1read.tokenInfo(uint32(spotTokenBTC));
-        L1Read.TokenInfo memory hypeInfo = l1read.tokenInfo(uint32(spotTokenHYPE));
-
-        // Conversion USDC: balanceWei * 10^(18 - weiDecimals)
-        uint256 usdc1e18 = usdcBalWei * (10 ** (18 - usdcInfo.weiDecimals));
-        
-        // Conversion assets: valueUsd1e18 = (balanceWei / 10^weiDecimals) * (price1e8 / 10^8) * 10^18
-        // Simplifié: balanceWei * price1e8 * 10^(18 - weiDecimals - 8)
-        uint256 btcUsd1e18;
-        uint256 hypeUsd1e18;
-        
-        if (btcInfo.weiDecimals + 8 <= 18) {
-            btcUsd1e18 = btcBalWei * pxB1e8 * (10 ** (18 - btcInfo.weiDecimals - 8));
-        } else {
-            btcUsd1e18 = (btcBalWei * pxB1e8) / (10 ** (btcInfo.weiDecimals + 8 - 18));
-        }
-        
-        if (hypeInfo.weiDecimals + 8 <= 18) {
-            hypeUsd1e18 = hypeBalWei * pxH1e8 * (10 ** (18 - hypeInfo.weiDecimals - 8));
-        } else {
-            hypeUsd1e18 = (hypeBalWei * pxH1e8) / (10 ** (hypeInfo.weiDecimals + 8 - 18));
-        }
-        
-        return usdc1e18 + btcUsd1e18 + hypeUsd1e18;
+        return
+            CoreHandlerLogicLib.equitySpotUsd1e18(
+                l1read,
+                address(this),
+                usdcCoreTokenId,
+                spotTokenBTC,
+                spotTokenHYPE,
+                pxB1e8,
+                pxH1e8
+            );
     }
 
     // Core flows
@@ -441,7 +421,7 @@ contract CoreInteractionHandler is Pausable {
         }
         // Reserve enforcement (post-adjustment): do not allow withdrawal that breaches reserve
         {
-            uint256 equity1e18 = equitySpotUsd1e18();
+            uint256 equity1e18 = _equitySpotUsd1e18();
             uint256 reserve1e8 = ((equity1e18 * uint256(usdcReserveBps)) / 10_000) / 1e10;
             uint256 refreshedBal1e8 = _weiToMantissa1e8(
                 spotBalanceInWei(address(this), usdcCoreTokenId),
@@ -475,7 +455,7 @@ contract CoreInteractionHandler is Pausable {
             // USD nécessaire en 1e8 pour couvrir le shortfall en HYPE: shortfallH1e8 * pxH / 1e8
             uint256 usdNeed1e8 = (shortfallH1e8 * uint256(pxH1e8)) / 1e8;
             // Calculer la réserve USDC requise en unités 1e8 (USDC)
-            uint256 equity1e18_r = equitySpotUsd1e18();
+            uint256 equity1e18_r = _equitySpotUsd1e18();
             uint256 reserve1e8 = ((equity1e18_r * uint256(usdcReserveBps)) / 10_000) / 1e10;
             // S'assurer d'abord d'avoir assez d'USDC pour usdNeed + réserve, en vendant BTC puis HYPE si nécessaire
             L1Read.TokenInfo memory usdcInfo = l1read.tokenInfo(uint32(usdcCoreTokenId));
@@ -582,36 +562,17 @@ contract CoreInteractionHandler is Pausable {
     }
 
     function _computeDeltasWithPositions(uint64 pxB, uint64 pxH) internal view returns (int256 dB, int256 dH) {
-        // Balances spot convertis en weiDecimals
-        uint256 usdcBalWei = spotBalanceInWei(address(this), usdcCoreTokenId);
-        uint256 btcBalWei = spotBalanceInWei(address(this), spotTokenBTC);
-        uint256 hypeBalWei = spotBalanceInWei(address(this), spotTokenHYPE);
-
-        // Infos de décimales pour conversion de valorisation
-        L1Read.TokenInfo memory usdcInfo = l1read.tokenInfo(uint32(usdcCoreTokenId));
-        L1Read.TokenInfo memory btcInfo = l1read.tokenInfo(uint32(spotTokenBTC));
-        L1Read.TokenInfo memory hypeInfo = l1read.tokenInfo(uint32(spotTokenHYPE));
-
-        // USDC en 1e18
-        uint256 usdc1e18 = usdcBalWei * (10 ** (18 - usdcInfo.weiDecimals));
-
-        // Positions en USD 1e18
-        int256 posB1e18;
-        int256 posH1e18;
-        if (btcInfo.weiDecimals + 8 <= 18) {
-            posB1e18 = int256(btcBalWei * uint256(pxB) * (10 ** (18 - btcInfo.weiDecimals - 8)));
-        } else {
-            posB1e18 = int256((btcBalWei * uint256(pxB)) / (10 ** (btcInfo.weiDecimals + 8 - 18)));
-        }
-        if (hypeInfo.weiDecimals + 8 <= 18) {
-            posH1e18 = int256(hypeBalWei * uint256(pxH) * (10 ** (18 - hypeInfo.weiDecimals - 8)));
-        } else {
-            posH1e18 = int256((hypeBalWei * uint256(pxH)) / (10 ** (hypeInfo.weiDecimals + 8 - 18)));
-        }
-
-        uint256 equity1e18 = usdc1e18 + uint256(posB1e18) + uint256(posH1e18);
-        uint256 targetEquity1e18 = (equity1e18 * (10_000 - usdcReserveBps)) / 10_000;
-        (dB, dH) = Rebalancer50Lib.computeDeltas(targetEquity1e18, posB1e18, posH1e18, deadbandBps);
+        (dB, dH) = CoreHandlerLogicLib.computeDeltasWithPositions(
+            l1read,
+            address(this),
+            usdcCoreTokenId,
+            spotTokenBTC,
+            spotTokenHYPE,
+            pxB,
+            pxH,
+            usdcReserveBps,
+            deadbandBps
+        );
     }
 
     function _placeRebalanceOrders(
@@ -630,6 +591,23 @@ contract CoreInteractionHandler is Pausable {
         if (!buyH && dH != 0) {
             uint64 pxHLimitSell = _marketLimitFromBbo(spotHYPE, false);
             uint64 szHSell = CoreHandlerLib.toSzInSzDecimals(l1read, spotTokenHYPE, dH, pxHLimitSell);
+            // Limiter la taille de vente à la balance disponible
+            // Aligné avec Lib_EVM: spotBalance.total est en szDecimals (selon doc HYPERLIQUID_UNITS.md)
+            // Utilisons spotBalanceInWei pour obtenir la balance en weiDecimals, puis convertissons en szDecimals
+            // pour comparer avec szHSell (qui est en szDecimals)
+            uint256 hypeBalanceWei = spotBalanceInWei(address(this), spotTokenHYPE);
+            L1Read.TokenInfo memory hypeInfo = l1read.tokenInfo(uint32(spotTokenHYPE));
+            // Convertir weiDecimals -> szDecimals (comme HLConversions.weiToSz)
+            uint64 hypeBalanceSz;
+            if (hypeInfo.weiDecimals > hypeInfo.szDecimals) {
+                uint8 diff = hypeInfo.weiDecimals - hypeInfo.szDecimals;
+                hypeBalanceSz = uint64(hypeBalanceWei / (10 ** uint256(diff)));
+            } else {
+                hypeBalanceSz = uint64(hypeBalanceWei);
+            }
+            if (szHSell > hypeBalanceSz) {
+                szHSell = hypeBalanceSz; // Ne pas vendre plus que disponible
+            }
             if (szHSell > 0) {
                 hasSell = true;
                 _sendSpotLimitOrderDirect(spotHYPE, false, pxHLimitSell, szHSell, cloidHype);
@@ -639,6 +617,20 @@ contract CoreInteractionHandler is Pausable {
         if (!buyB && dB != 0) {
             uint64 pxBLimitSell = _marketLimitFromBbo(spotBTC, false);
             uint64 szBSell = CoreHandlerLib.toSzInSzDecimals(l1read, spotTokenBTC, dB, pxBLimitSell);
+            // Limiter la taille de vente à la balance disponible
+            L1Read.TokenInfo memory btcInfo = l1read.tokenInfo(uint32(spotTokenBTC));
+            // Convertir la balance via spotBalanceInWei pour être sûr du format
+            uint256 btcBalanceWei = spotBalanceInWei(address(this), spotTokenBTC);
+            uint64 btcBalanceSz;
+            if (btcInfo.weiDecimals > btcInfo.szDecimals) {
+                uint8 diff = btcInfo.weiDecimals - btcInfo.szDecimals;
+                btcBalanceSz = uint64(btcBalanceWei / (10 ** uint256(diff)));
+            } else {
+                btcBalanceSz = uint64(btcBalanceWei);
+            }
+            if (szBSell > btcBalanceSz) {
+                szBSell = btcBalanceSz; // Ne pas vendre plus que disponible
+            }
             if (szBSell > 0) {
                 hasSell = true;
                 _sendSpotLimitOrderDirect(spotBTC, false, pxBLimitSell, szBSell, cloidBtc);
@@ -696,6 +688,7 @@ contract CoreInteractionHandler is Pausable {
     }
 
     function _spotBboPx1e8(uint32 spotAsset) internal view returns (uint64 bid1e8, uint64 ask1e8) {
+        // bbo() precompile attend spotAsset + 10000 (unified asset ID)
         uint32 assetId = spotAsset + HLConstants.SPOT_ASSET_OFFSET;
         L1Read.Bbo memory b = l1read.bbo(assetId);
         uint8 pxDec = _spotPxDecimals(spotAsset);
@@ -721,7 +714,9 @@ contract CoreInteractionHandler is Pausable {
     /// @notice Clamp prix 1e8: ≤5 sig figs et ≤ (8 - szDecimals) décimales. BUY: ceil, SELL: floor.
     function _marketLimitFromBbo(uint32 asset, bool isBuy) internal view returns (uint64) {
         (uint64 bid1e8, uint64 ask1e8) = _spotBboPx1e8(asset);
-        if (bid1e8 == 0 || ask1e8 == 0) {
+        // Pour un achat, on a besoin de l'ask. Pour une vente, on a besoin du bid.
+        // On fait fallback sur l'oracle seulement si le prix nécessaire n'est pas disponible.
+        if ((isBuy && ask1e8 == 0) || (!isBuy && bid1e8 == 0)) {
             // Fallback sur l'oracle normalisé si BBO indisponible
             uint64 oracle = spotOraclePx1e8(asset);
             return _limitFromOracleQuantized(asset, oracle, isBuy);
@@ -735,8 +730,37 @@ contract CoreInteractionHandler is Pausable {
         return StrategyMathLib.limitFromOracleQuantized(oraclePx1e8, baseSzDec, maxSlippageBps, marketEpsilonBps, isBuy);
     }
 
-    function snapToLot(uint64 sizeSz, uint8 /*szDecimals*/) internal pure returns (uint64) {
-        // Les tailles sont déjà exprimées en unités d'entier alignées sur szDecimals
+    /// @notice Arrondit la taille à szDecimals selon les règles Hyperliquid (tick-and-lot-size)
+    /// @dev Selon https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/api/tick-and-lot-size
+    ///      Les tailles doivent être arrondies au szDecimals de l'actif.
+    ///      Exemple: si szDecimals=6, alors 1.1648349853 HYPE → 1.164834 HYPE (floor)
+    ///      On utilise floor (arrondi vers le bas) pour éviter les rejets d'ordres.
+    ///      
+    ///      Cette fonction garantit que la taille respecte szDecimals même si elle vient
+    ///      d'un calcul avec plus de précision. En pratique, sizeSz vient déjà de
+    ///      toSzInSzDecimals qui fait un floor via division entière, mais cette fonction
+    ///      sert de validation/sécurité supplémentaire.
+    /// @param sizeSz Taille en format szDecimals (entier représentant la taille * 10^szDecimals)
+    /// @param szDecimals Nombre de décimales autorisées pour la taille (lot size)
+    /// @return Taille arrondie à szDecimals (floor)
+    function snapToLot(uint64 sizeSz, uint8 szDecimals) internal pure returns (uint64) {
+        if (sizeSz == 0) return 0;
+        
+        // Selon la documentation Hyperliquid, les tailles doivent être arrondies à szDecimals
+        // sizeSz est déjà en format szDecimals (entier), donc déjà conforme
+        // Cette fonction garantit la conformité explicite avec les règles Hyperliquid
+        
+        // Note: sizeSz est un entier uint64 en unités de szDecimals
+        // Par exemple, si szDecimals=6 et sizeSz=1164834, cela représente 1.164834 HYPE
+        // Le floor est déjà appliqué par toSzInSzDecimals lors du calcul (division entière)
+        
+        // Si szDecimals >= 8, sizeSz est déjà un entier complet, pas besoin d'arrondi supplémentaire
+        if (szDecimals >= 8) {
+            return sizeSz;
+        }
+        
+        // Pour szDecimals < 8, sizeSz est déjà correctement arrondi par toSzInSzDecimals
+        // On retourne tel quel pour garantir la conformité avec les règles Hyperliquid
         return sizeSz;
     }
 
@@ -755,7 +779,6 @@ contract CoreInteractionHandler is Pausable {
         
         // Validation supplémentaire
         if (limitPx1e8 < 1) revert PX_TOO_LOW();
-        if (limitPx1e8 > 1e12) revert PX_TOO_HIGH();
         if (szInSzDecimals > 1e15) revert SIZE_TOO_LARGE();
     }
 
@@ -813,33 +836,6 @@ contract CoreInteractionHandler is Pausable {
     /// @dev Utilise un arrondi vers le bas pour éviter les reverts
     function _weiToMantissa1e8(uint256 amountWei, uint8 weiDecimals) internal pure returns (uint256) {
         return StrategyMathLib.weiToMantissa1e8(amountWei, weiDecimals);
-    }
-
-    /// @notice Convertit mantissa 1e8 en wei avec validation améliorée
-    /// @dev Gère les cas de perte de précision avec arrondi sécurisé
-    function _mantissa1e8ToWeiSafe(uint64 amount1e8, uint8 weiDecimals) internal pure returns (uint256) {
-        if (amount1e8 == 0) return 0;
-        
-        if (weiDecimals >= 8) {
-            uint256 factor = 10 ** uint256(weiDecimals - 8);
-            uint256 result = uint256(amount1e8) * factor;
-            // Protection contre l'overflow
-            require(result / factor == uint256(amount1e8), "overflow");
-            return result;
-        } else {
-            uint256 divisor = 10 ** uint256(8 - weiDecimals);
-            return uint256(amount1e8) / divisor; // Arrondi vers le bas (safe)
-        }
-    }
-
-    /// @notice Calcule la perte de précision lors de la conversion wei -> mantissa 1e8
-    /// @dev Utilisé pour le logging et le debugging
-    function _calculateWeiToMantissaLoss(uint256 amountWei, uint8 weiDecimals) internal pure returns (uint256 loss) {
-        if (amountWei == 0 || weiDecimals < 8) return 0;
-        
-        uint256 divisor = 10 ** uint256(weiDecimals - 8);
-        uint256 remainder = amountWei % divisor;
-        return remainder; // Perte due à la division
     }
 
     function _rateLimit(uint64 amount1e8) internal {
@@ -933,6 +929,8 @@ contract CoreInteractionHandler is Pausable {
             if (cloid > type(uint128).max / 2) revert CLOID_TOO_LARGE();
         }
         
+        // Les spots nécessitent un offset +10000 pour l'asset ID (voir HLConversions.spotToAssetId)
+        // La bibliothèque de référence ajoute systématiquement +10000 dans tous ses exemples
         uint32 assetId = asset + HLConstants.SPOT_ASSET_OFFSET;
         uint64 limitPxForCore = limitPx1e8;
         uint64 sz1e8 = StrategyMathLib.sizeSzTo1e8(szInSzDecimals, baseSzDec);

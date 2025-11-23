@@ -1,4 +1,4 @@
-// ABI minimale pour CoreInteractionHandler
+// ABI minimale pour CoreInteractionHandler (logique seulement, sans vues de pricing/equity)
 export const coreInteractionHandlerAbi = [
   {
     type: 'function',
@@ -27,26 +27,5 @@ export const coreInteractionHandlerAbi = [
     stateMutability: 'view',
     inputs: [],
     outputs: [{ name: '', type: 'address' }]
-  },
-  {
-    type: 'function',
-    name: 'oraclePxHype1e8',
-    stateMutability: 'view',
-    inputs: [],
-    outputs: [{ name: '', type: 'uint64' }]
-  },
-  {
-    type: 'function',
-    name: 'oraclePxBtc1e8',
-    stateMutability: 'view',
-    inputs: [],
-    outputs: [{ name: '', type: 'uint64' }]
-  },
-  {
-    type: 'function',
-    name: 'equitySpotUsd1e18',
-    stateMutability: 'view',
-    inputs: [],
-    outputs: [{ name: '', type: 'uint256' }]
   }
 ] as const

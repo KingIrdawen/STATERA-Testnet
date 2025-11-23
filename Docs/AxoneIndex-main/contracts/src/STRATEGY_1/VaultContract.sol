@@ -4,12 +4,15 @@ pragma solidity ^0.8.24;
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 interface IHandler {
-    function equitySpotUsd1e18() external view returns (uint256);
-    function oraclePxHype1e8() external view returns (uint64);
     function executeDepositHype(bool forceRebalance) external payable;
     function pullHypeFromCoreToEvm(uint64 hype1e8) external returns (uint64);
     function sweepHypeToVault(uint256 amount1e18) external;
     function feeVault() external view returns (address);
+}
+
+interface ICoreInteractionViews {
+    function equitySpotUsd1e18(address handler) external view returns (uint256);
+    function oraclePxHype1e8(address handler) external view returns (uint64);
 }
 
 contract VaultContract is ReentrancyGuard {
@@ -20,6 +23,7 @@ contract VaultContract is ReentrancyGuard {
 
     address public owner;
     IHandler public handler;
+    ICoreInteractionViews public coreViews;
     bool public paused;
 
     uint16 public depositFeeBps; // applied on shares minted
@@ -80,6 +84,10 @@ contract VaultContract is ReentrancyGuard {
         emit HandlerSet(address(_handler));
     }
 
+    function setCoreViews(ICoreInteractionViews _views) external onlyOwner {
+        coreViews = _views;
+    }
+
     function setFees(uint16 _depositFeeBps, uint16 _withdrawFeeBps, uint16 _autoDeployBps) external onlyOwner {
         require(_autoDeployBps <= 10000, "autoDeployBps range");
         require(_depositFeeBps <= 10000 && _withdrawFeeBps <= 10000, "fees range");
@@ -117,9 +125,13 @@ contract VaultContract is ReentrancyGuard {
 
     // NAV/PPS
     function nav1e18() public view returns (uint256) {
-        uint64 pxH = address(handler) == address(0) ? uint64(0) : handler.oraclePxHype1e8();
+        uint64 pxH = (address(handler) == address(0) || address(coreViews) == address(0))
+            ? uint64(0)
+            : coreViews.oraclePxHype1e8(address(handler));
         uint256 evmHypeUsd1e18 = pxH == 0 ? 0 : (address(this).balance * uint256(pxH)) / 1e8;
-        uint256 coreEq1e18 = address(handler) == address(0) ? 0 : handler.equitySpotUsd1e18();
+        uint256 coreEq1e18 = (address(handler) == address(0) || address(coreViews) == address(0))
+            ? 0
+            : coreViews.equitySpotUsd1e18(address(handler));
         return evmHypeUsd1e18 + coreEq1e18;
     }
 
@@ -165,7 +177,9 @@ contract VaultContract is ReentrancyGuard {
         uint256 netAmount = amount1e18 - feeHype;
 
         // USD notional for minting (based on net amount)
-        uint64 pxH = handler.oraclePxHype1e8();
+        require(address(handler) != address(0), "handler");
+        require(address(coreViews) != address(0), "views");
+        uint64 pxH = coreViews.oraclePxHype1e8(address(handler));
         require(pxH > 0, "px");
         uint256 depositUsd1e18 = (netAmount * uint256(pxH)) / 1e8;
         uint256 sharesMint;
@@ -198,7 +212,9 @@ contract VaultContract is ReentrancyGuard {
         // Gross USD due from shares
         uint256 targetUsd1e18 = (shares * pps) / 1e18;
         // Convert to HYPE
-        uint64 pxH = handler.oraclePxHype1e8();
+        require(address(handler) != address(0), "handler");
+        require(address(coreViews) != address(0), "views");
+        uint64 pxH = coreViews.oraclePxHype1e8(address(handler));
         require(pxH > 0, "px");
         uint256 grossHype1e18 = (targetUsd1e18 * 1e8) / uint256(pxH);
         uint16 feeBpsApplied = getWithdrawFeeBpsForAmount(grossHype1e18);
@@ -258,7 +274,9 @@ contract VaultContract is ReentrancyGuard {
         uint256 pps = (nav * 1e18) / totalSupply;
 
         uint256 dueUsd1e18 = (r.shares * pps) / 1e18;
-        uint64 pxH = handler.oraclePxHype1e8();
+        require(address(handler) != address(0), "handler");
+        require(address(coreViews) != address(0), "views");
+        uint64 pxH = coreViews.oraclePxHype1e8(address(handler));
         require(pxH > 0, "px");
         uint256 grossHype1e18 = (dueUsd1e18 * 1e8) / uint256(pxH);
         uint256 feeHype1e18_settle = (r.feeBpsSnapshot > 0 && grossHype1e18 > 0)

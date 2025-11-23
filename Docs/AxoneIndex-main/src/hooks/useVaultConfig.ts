@@ -22,6 +22,7 @@ export function useVaultConfig() {
             vaultAddress: first.vaultAddress,
             handlerAddress: first.handlerAddress,
             l1ReadAddress: first.l1ReadAddress,
+            coreViewsAddress: first.coreViewsAddress,
             coreTokenIds: { ...first.coreTokenIds },
           })
           setError(null)

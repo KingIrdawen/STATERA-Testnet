@@ -94,7 +94,7 @@ export function useStrategies() {
       }
       const data = await response.json();
       // Re-fetch immédiatement sans cache pour s'assurer que les données sont à jour
-      await fetchStrategies();
+        await fetchStrategies();
       return data;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
@@ -128,7 +128,7 @@ export function useStrategies() {
       }
       const data = await response.json();
       // Re-fetch immédiatement sans cache pour s'assurer que les données sont à jour
-      await fetchStrategies();
+        await fetchStrategies();
       return data;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
@@ -155,7 +155,7 @@ export function useStrategies() {
         throw new Error(errorData.error || 'Failed to delete strategy');
       }
       // Re-fetch immédiatement sans cache pour s'assurer que les données sont à jour
-      await fetchStrategies();
+        await fetchStrategies();
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(errorMessage);

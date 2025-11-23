@@ -18,6 +18,7 @@ export interface Index {
   handlerAddress: string;
   l1ReadAddress: string;
   coreWriterAddress?: string; // Adresse CoreWriter (par défaut: 0x3333333333333333333333333333333333333333)
+  strategyType?: 'STRATEGY_1' | 'ERA_2'; // Type de stratégie pour déterminer les oracles à utiliser
 }
 
 export const getRiskColor = (risk: string) => {

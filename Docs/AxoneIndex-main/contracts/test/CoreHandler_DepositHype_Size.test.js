@@ -44,8 +44,16 @@ describe("CoreHandler: dépôt HYPE et conversions de taille", function () {
     const MockUSDC = await ethers.getContractFactory("MockUSDC");
     const usdc = await MockUSDC.deploy();
 
-    // Déployer le handler
-    const Handler = await ethers.getContractFactory("CoreInteractionHandler");
+    // Déployer la librairie puis le handler (linking CoreHandlerLogicLib)
+    const CoreHandlerLogicLib = await ethers.getContractFactory("CoreHandlerLogicLib");
+    const coreHandlerLogicLib = await CoreHandlerLogicLib.deploy();
+    await coreHandlerLogicLib.waitForDeployment();
+
+    const Handler = await ethers.getContractFactory("CoreInteractionHandler", {
+      libraries: {
+        CoreHandlerLogicLib: await coreHandlerLogicLib.getAddress(),
+      },
+    });
     const maxOutbound = 1000000000000n; // large
     const epochLen = 10;
     const handler = await Handler.deploy(l1.target, usdc.target, maxOutbound, epochLen, owner.address, 0);
@@ -119,7 +127,15 @@ describe("CoreHandler: dépôt HYPE et conversions de taille", function () {
     const MockUSDC = await ethers.getContractFactory("MockUSDC");
     const usdc = await MockUSDC.deploy();
 
-    const Handler = await ethers.getContractFactory("CoreInteractionHandler");
+    const CoreHandlerLogicLib = await ethers.getContractFactory("CoreHandlerLogicLib");
+    const coreHandlerLogicLib = await CoreHandlerLogicLib.deploy();
+    await coreHandlerLogicLib.waitForDeployment();
+
+    const Handler = await ethers.getContractFactory("CoreInteractionHandler", {
+      libraries: {
+        CoreHandlerLogicLib: await coreHandlerLogicLib.getAddress(),
+      },
+    });
     const handler = await Handler.deploy(
       l1.target,
       usdc.target,

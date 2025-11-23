@@ -1,27 +1,35 @@
+/**
+ * @deprecated Ce hook est déprécié. Utilisez useAllVaultsData() pour le dashboard
+ * et useVaultCoreData() pour les données spécifiques d'un vault.
+ * 
+ * Ce hook était utilisé pour récupérer les données d'un seul vault (le premier).
+ * Il a été remplacé par useAllVaultsData() qui récupère les données de tous les vaults
+ * pour afficher une vue synthétique dans le dashboard.
+ */
 import { useAccount, useReadContracts, useBalance } from 'wagmi'
 import { useVaultConfig } from './useVaultConfig'
 import { erc20Contract } from '@/contracts/erc20'
 import { vaultContract } from '@/contracts/vault'
 import { l1readContract } from '@/contracts/l1read'
-import { coreInteractionHandlerContract } from '@/contracts/coreInteractionHandler'
+import { coreInteractionViewsAbi } from '@/lib/abi/coreInteractionViews'
 import { formatUnitsSafe, formatCoreBalance } from '@/lib/format'
 
 // Conversions de décimales Hyperliquid ↔ EVM
-// Les oracles oraclePxHype1e8()/oraclePxBtc1e8() renvoient un prix normalisé en 1e8 (USD 1e8)
-// - BTC: ex. 4500000000 = 45000 USD
+// Les oracles oraclePxHype1e8()/oraclePxToken11e8() renvoient un prix normalisé en 1e8 (USD 1e8)
+// - TOKEN1: ex. 4500000000 = 45000 USD
 // - HYPE: ex. 500000000 = 50 USD
 // Pour convertir vers USD 1e18, on monte d'un facteur 1e10 si nécessaire
 // Pour convertir un montant HYPE 1e18 en USD 1e18: usd1e18 = (hype1e18 * px1e8) / 1e8
 // Pour convertir USD 1e18 en HYPE 1e18: hype1e18 = (usd1e18 * 1e8) / px1e8
 const PX_DECIMALS = {
-  btc: 8,   // BTC prix normalisé en 1e8 (ex: 4500000000 = 45000 USD)
+  token1: 8,   // TOKEN1 prix normalisé en 1e8 (ex: 4500000000 = 45000 USD)
   hype: 8,  // HYPE prix normalisé en 1e8 (ex: 500000000 = 50 USD)
 } as const
 
 const CORE_TOKEN_DEFAULTS = {
   usdc: { szDecimals: 8, weiDecimals: 8 },
   hype: { szDecimals: 6, weiDecimals: 8 },
-  btc: { szDecimals: 4, weiDecimals: 10 },
+  token1: { szDecimals: 4, weiDecimals: 10 },
 } as const
 
 type SpotBalanceResult = {
@@ -63,6 +71,9 @@ export function useDashboardData() {
     address,
     query: { enabled: !!address },
   })
+
+  // Utiliser l'adresse du vault si définie, sinon fallback sur la variable d'environnement
+  const coreViewsAddress = (config?.coreViewsAddress || process.env.NEXT_PUBLIC_CORE_VIEWS_ADDRESS) as `0x${string}` | undefined
 
   // Préparer les contrats pour les lectures
   const contracts = config && address ? [
@@ -117,38 +128,44 @@ export function useDashboardData() {
       functionName: 'tokenInfo',
       args: [BigInt(config.coreTokenIds.hype)],
     },
-    // Core BTC balance
+    // Core TOKEN1 balance
     {
       ...l1readContract(config.l1ReadAddress),
       functionName: 'spotBalance',
-      args: [config.handlerAddress, BigInt(config.coreTokenIds.btc)],
+      args: [config.handlerAddress, BigInt(config.coreTokenIds.token1)],
     },
-    // Core BTC token info
+    // Core TOKEN1 token info
     {
       ...l1readContract(config.l1ReadAddress),
       functionName: 'tokenInfo',
-      args: [BigInt(config.coreTokenIds.btc)],
-    },
-    // Handler core equity (USD 1e18)
-    {
-      ...coreInteractionHandlerContract(config.handlerAddress),
-      functionName: 'equitySpotUsd1e18',
-    },
-    // Oracle BTC (1e8)
-    {
-      ...coreInteractionHandlerContract(config.handlerAddress),
-      functionName: 'oraclePxBtc1e8',
-    },
-    // Oracle HYPE (1e8)
-    {
-      ...coreInteractionHandlerContract(config.handlerAddress),
-      functionName: 'oraclePxHype1e8',
+      args: [BigInt(config.coreTokenIds.token1)],
     },
     // Vault PPS (USD 1e18)
     {
       ...vaultContract(config.vaultAddress),
       functionName: 'pps1e18',
     },
+    // Handler core equity (USD 1e18) via CoreInteractionViews
+    ...(coreViewsAddress ? [{
+      address: coreViewsAddress,
+      abi: coreInteractionViewsAbi,
+      functionName: 'equitySpotUsd1e18',
+      args: [config.handlerAddress],
+    }] : []),
+    // Oracle TOKEN1 (1e8) via CoreInteractionViews
+    ...(coreViewsAddress ? [{
+      address: coreViewsAddress,
+      abi: coreInteractionViewsAbi,
+      functionName: 'oraclePxToken11e8',
+      args: [config.handlerAddress],
+    }] : []),
+    // Oracle HYPE (1e8) via CoreInteractionViews
+    ...(coreViewsAddress ? [{
+      address: coreViewsAddress,
+      abi: coreInteractionViewsAbi,
+      functionName: 'oraclePxHype1e8',
+      args: [config.handlerAddress],
+    }] : []),
   ] : []
 
   const { data, isLoading, isError, error } = useReadContracts({
@@ -199,7 +216,11 @@ export function useDashboardData() {
 
     const fallbackWeiDecimals = weiDecimals ?? defaultWeiDecimals
     const fallbackSzDecimals = szDecimals ?? defaultSzDecimals
-    const normalized = adjustByDecimals(total, fallbackWeiDecimals, fallbackSzDecimals)
+    
+    // CORRECTION: spotBalance.total est déjà en weiDecimals selon CoreHandlerLib.sol
+    // Ne PAS faire de conversion szDecimals → weiDecimals car cela multiplierait incorrectement
+    // Si total est déjà en weiDecimals, on l'utilise directement
+    const normalized = total
 
     return {
       tokenId: tokenId ?? 0,
@@ -209,11 +230,19 @@ export function useDashboardData() {
       decimals: {
         szDecimals: fallbackSzDecimals,
         weiDecimals: fallbackWeiDecimals,
-        adjustmentPower: fallbackWeiDecimals - fallbackSzDecimals,
+        adjustmentPower: 0, // Plus d'ajustement car total est déjà en weiDecimals
         isInferred: typeof weiDecimals !== 'number' || typeof szDecimals !== 'number',
       },
     }
   }
+
+  // Calculer les indices dynamiquement en fonction de la présence de coreViewsAddress
+  // Les 11 premiers contrats sont toujours présents (USDC, Vault, Core balances/info, PPS)
+  // Les indices 12, 13, 14 sont conditionnels (equity, token1 price, hype price)
+  const baseIndex = 11
+  const equityIndex = coreViewsAddress ? baseIndex + 1 : -1
+  const token1PriceIndex = coreViewsAddress ? baseIndex + 2 : -1
+  const hypePriceIndex = coreViewsAddress ? baseIndex + 3 : -1
 
   const formattedData = data ? {
     usdcBalance: formatUnitsSafe(
@@ -237,25 +266,26 @@ export function useDashboardData() {
         data[8]?.result as TokenInfoResult | undefined,
         CORE_TOKEN_DEFAULTS.hype
       ),
-      btc: buildCoreBalance(
-        config?.coreTokenIds.btc,
+      token1: buildCoreBalance(
+        config?.coreTokenIds.token1,
         data[9]?.result as SpotBalanceResult | undefined,
         data[10]?.result as TokenInfoResult | undefined,
-        CORE_TOKEN_DEFAULTS.btc
+        CORE_TOKEN_DEFAULTS.token1
       ),
     },
-    // Brutes
-    coreEquityUsdRaw: data[11]?.result as bigint | undefined,
-    ppsRaw: data[14]?.result as bigint | undefined,
+    // Brutes - utiliser les indices calculés dynamiquement
+    coreEquityUsdRaw: equityIndex >= 0 ? (data[equityIndex]?.result as bigint | undefined) : undefined,
+    ppsRaw: data[baseIndex]?.result as bigint | undefined,
     // Formatées standard 1e18
-    coreEquityUsd: formatUnitsSafe(data[11]?.result as bigint, 18),
+    coreEquityUsd: formatUnitsSafe(equityIndex >= 0 ? (data[equityIndex]?.result as bigint | undefined) : undefined, 18),
     // CORRECTION: Utiliser les pxDecimals réels Hyperliquid au lieu de 1e8 fixe
-    oraclePxBtc: formatUnitsSafe(data[12]?.result as bigint, PX_DECIMALS.btc),
-    oraclePxHype: formatUnitsSafe(data[13]?.result as bigint, PX_DECIMALS.hype),
-    pps: formatUnitsSafe(data[14]?.result as bigint, 18),
+    // Utiliser les indices calculés dynamiquement
+    oraclePxToken1: formatUnitsSafe(token1PriceIndex >= 0 ? (data[token1PriceIndex]?.result as bigint | undefined) : undefined, PX_DECIMALS.token1),
+    oraclePxHype: formatUnitsSafe(hypePriceIndex >= 0 ? (data[hypePriceIndex]?.result as bigint | undefined) : undefined, PX_DECIMALS.hype),
+    pps: formatUnitsSafe(data[baseIndex]?.result as bigint, 18),
     // Affichages normalisés (garde visuelle anti double-scaling)
-    coreEquityDisplay: normalize1e18(data[11]?.result as bigint | undefined, 18),
-    ppsDisplay: normalize1e18(data[14]?.result as bigint | undefined, 18),
+    coreEquityDisplay: normalize1e18(equityIndex >= 0 ? (data[equityIndex]?.result as bigint | undefined) : undefined, 18),
+    ppsDisplay: normalize1e18(data[baseIndex]?.result as bigint | undefined, 18),
     hypeNativeBalance: formatUnitsSafe(hypeNative?.value as bigint | undefined, hypeNative?.decimals ?? 18),
   } : null
 

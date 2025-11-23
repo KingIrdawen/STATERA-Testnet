@@ -15,9 +15,12 @@ import {
   useAccount,
   useReadContract,
   useWaitForTransactionReceipt,
-  useWriteContract
+  useWriteContract,
+  useChainId,
+  useBalance
 } from 'wagmi'
 import { formatUnits, parseUnits } from 'viem'
+import { formatNumber } from '@/lib/format'
 
 import { Input } from '@/components/ui/input'
 import {
@@ -29,6 +32,7 @@ import {
 } from '@/components/ui/card'
 import { vaultContractAbi } from '@/lib/abi/VaultContract'
 import type { VaultDefinition } from '@/types/vaults'
+import { useToast } from '@/components/ui/use-toast'
 
 type VaultListItem = VaultDefinition & {
   tokens?: { symbol: string; percentage?: number }[]
@@ -63,6 +67,8 @@ const riskConfig = {
   medium: { label: 'Moyen', Icon: AlertTriangle },
   high: { label: 'Élevé', Icon: Activity }
 } as const
+
+const HYPEREVM_CHAIN_ID = 998
 
 export function VaultCardSummary({
   vault,
@@ -113,7 +119,7 @@ export function VaultCardSummary({
           <div className="flex items-baseline justify-between">
             <span className="text-sm text-vault-muted">TVL</span>
             <span className="text-2xl font-semibold text-vault-primary">
-              {tvl > 0 ? `$${tvl.toLocaleString('fr-FR')}` : '–'}
+              {tvl > 0 ? `$${formatNumber(tvl, { decimals: 2 })}` : '–'}
             </span>
           </div>
 
@@ -126,7 +132,7 @@ export function VaultCardSummary({
                 }`}
               >
                 {isPositive ? '+' : ''}
-                {performance.toFixed(2)}%
+                {formatNumber(performance, { decimals: 2 })}%
               </p>
             </div>
             {isPositive ? (
@@ -140,7 +146,7 @@ export function VaultCardSummary({
             <div className="rounded-lg border border-vault bg-vault-brand-muted px-4 py-3">
               <p className="text-xs text-vault-muted">Mon dépôt</p>
               <p className="text-sm font-semibold text-vault-primary">
-                ${userDeposit.toLocaleString('fr-FR')} USDC
+                ${formatNumber(userDeposit, { decimals: 2 })} USDC
               </p>
             </div>
           )}
@@ -183,10 +189,14 @@ export function VaultCardActions({
   onDeposit,
   onWithdraw
 }: VaultCardActionsProps) {
-  const { address: userAddress } = useAccount()
+  const { address: userAddress, isConnected } = useAccount()
+  const chainId = useChainId()
+  const { toast } = useToast()
   const [depositAmount, setDepositAmount] = useState('')
   const [withdrawAmount, setWithdrawAmount] = useState('')
   const [isMounted, setIsMounted] = useState(false)
+  const [depositError, setDepositError] = useState<string | null>(null)
+  const [withdrawError, setWithdrawError] = useState<string | null>(null)
 
   const vaultAddress = vault.vaultAddress as `0x${string}` | undefined
 
@@ -198,8 +208,13 @@ export function VaultCardActions({
     query: { enabled: Boolean(vaultAddress && userAddress) }
   })
 
+  const { data: hypeNative } = useBalance({ 
+    address: userAddress, 
+    query: { enabled: !!userAddress } 
+  })
+
   const { writeContractAsync, data: txHash, isPending } = useWriteContract()
-  const { isLoading: isConfirming } = useWaitForTransactionReceipt({ hash: txHash })
+  const { isLoading: isConfirming, isSuccess, error: receiptError } = useWaitForTransactionReceipt({ hash: txHash })
   const isBusy = isPending || isConfirming
   const canInteract = useMemo(() => Boolean(vaultAddress), [vaultAddress])
 
@@ -228,11 +243,162 @@ export function VaultCardActions({
     }
   }, [open, onOpenChange])
 
+  // Gestion du succès de transaction
+  useEffect(() => {
+    if (isSuccess) {
+      toast({
+        title: 'Transaction réussie',
+        description: 'Votre transaction a été confirmée avec succès.',
+      })
+      setDepositAmount('')
+      setWithdrawAmount('')
+      setDepositError(null)
+      setWithdrawError(null)
+    }
+  }, [isSuccess, toast])
+
+  // Gestion des erreurs de receipt
+  useEffect(() => {
+    if (receiptError) {
+      console.error('Erreur transaction receipt:', receiptError)
+      
+      // Extraire le message d'erreur avec plus de détails
+      let errorMessage = 'La transaction a échoué lors de la confirmation.'
+      let errorDetails = ''
+      
+      if (receiptError instanceof Error) {
+        errorDetails = receiptError.message
+        const errorStr = errorDetails.toLowerCase()
+        
+        // Messages d'erreur spécifiques selon les raisons de revert possibles
+        if (errorStr.includes('execution reverted')) {
+          // Essayer d'extraire la raison du revert
+          const revertMatch = errorDetails.match(/execution reverted[:\s]+([^(\n]+)/i)
+          if (revertMatch && revertMatch[1]) {
+            const revertReason = revertMatch[1].trim()
+            errorMessage = `La transaction a été rejetée: ${revertReason}`
+            
+            // Messages spécifiques selon les raisons connues du contrat
+            if (revertReason.includes('amount=0')) {
+              errorMessage = 'Montant invalide. Le montant doit être supérieur à 0.'
+            } else if (revertReason.includes('feeVault')) {
+              errorMessage = 'Erreur de configuration: feeVault non défini.'
+            } else if (revertReason.includes('fee send fail')) {
+              errorMessage = 'Échec de l\'envoi des frais. Veuillez réessayer.'
+            } else if (revertReason.includes('handler')) {
+              errorMessage = 'Erreur de configuration: handler non défini.'
+            } else if (revertReason.includes('views')) {
+              errorMessage = 'Erreur de configuration: coreViews non défini.'
+            } else if (revertReason.includes('px')) {
+              errorMessage = 'Erreur d\'oracle: prix HYPE non disponible ou invalide.'
+            } else if (revertReason.includes('paused')) {
+              errorMessage = 'Le vault est actuellement en pause.'
+            } else if (revertReason.includes('reentrant')) {
+              errorMessage = 'Erreur de sécurité: tentative de réentrance détectée.'
+            }
+          } else {
+            errorMessage = 'La transaction a été rejetée par le contrat. Vérifiez que le vault n\'est pas en pause et que tous les paramètres sont corrects.'
+          }
+        } else if (errorStr.includes('replaced') || errorStr.includes('replacement')) {
+          errorMessage = 'La transaction a été remplacée par une autre transaction.'
+        } else if (errorStr.includes('timeout') || errorStr.includes('timed out')) {
+          errorMessage = 'Le délai d\'attente de confirmation a été dépassé. La transaction peut toujours être en attente.'
+        } else if (errorStr.includes('network') || errorStr.includes('connection')) {
+          errorMessage = 'Erreur réseau lors de la confirmation de la transaction.'
+        }
+      }
+      
+      // Logger les détails complets pour le debugging
+      if (errorDetails) {
+        console.error('Détails de l\'erreur de receipt:', {
+          message: errorDetails,
+          error: receiptError,
+        })
+      }
+      
+      toast({
+        title: 'Erreur de confirmation',
+        description: errorMessage,
+      })
+      setDepositError(errorMessage)
+      setWithdrawError(errorMessage)
+    }
+  }, [receiptError, toast])
+
   const handleDepositInternal = async () => {
-    if (!canInteract || !userAddress) return
+    setDepositError(null)
+    
+    // Vérifications préalables
+    if (!canInteract || !userAddress) {
+      const errorMsg = 'Veuillez connecter votre wallet.'
+      setDepositError(errorMsg)
+      toast({
+        title: 'Wallet non connecté',
+        description: errorMsg,
+      })
+      console.error('Deposit error: Wallet not connected or cannot interact')
+      return
+    }
+
+    if (!isConnected) {
+      const errorMsg = 'Veuillez connecter votre wallet.'
+      setDepositError(errorMsg)
+      toast({
+        title: 'Wallet non connecté',
+        description: errorMsg,
+      })
+      console.error('Deposit error: Wallet not connected')
+      return
+    }
+
+    if (chainId !== HYPEREVM_CHAIN_ID) {
+      const errorMsg = 'Veuillez vous connecter au réseau HyperEVM Testnet (ID 998).'
+      setDepositError(errorMsg)
+      toast({
+        title: 'Mauvais réseau',
+        description: errorMsg,
+      })
+      console.error('Deposit error: Wrong chain', { currentChainId: chainId, expectedChainId: HYPEREVM_CHAIN_ID })
+      return
+    }
+
+    if (!depositAmount || parseFloat(depositAmount) <= 0) {
+      const errorMsg = 'Veuillez entrer un montant valide.'
+      setDepositError(errorMsg)
+      console.error('Deposit error: Invalid amount', { depositAmount })
+      return
+    }
+
+    const depositAmountFloat = parseFloat(depositAmount)
+    const balanceFloat = parseFloat(formatUnits(hypeNative?.value || 0n, hypeNative?.decimals || 18))
+    
+    if (depositAmountFloat > balanceFloat) {
+      const errorMsg = 'Montant supérieur à votre balance HYPE.'
+      setDepositError(errorMsg)
+      toast({
+        title: 'Balance insuffisante',
+        description: errorMsg,
+      })
+      console.error('Deposit error: Insufficient balance', { depositAmount: depositAmountFloat, balance: balanceFloat })
+      return
+    }
+
     try {
-      const value = parseUnits(depositAmount || '0', 18)
-      if (value <= 0n) return
+      const value = parseUnits(depositAmount, 18)
+      if (value <= 0n) {
+        const errorMsg = 'Montant invalide.'
+        setDepositError(errorMsg)
+        console.error('Deposit error: Invalid value', { value: value.toString() })
+        return
+      }
+
+      console.log('Envoi transaction deposit:', {
+        vaultAddress: vaultAddress,
+        value: value.toString(),
+        amount: depositAmount,
+        chainId,
+      })
+
       await writeContractAsync({
         abi: vaultContractAbi,
         address: vaultAddress!,
@@ -241,19 +407,100 @@ export function VaultCardActions({
         value
       })
       setDepositAmount('')
-    } catch {
-      // Erreurs gérées par le wallet
+    } catch (error) {
+      console.error('Erreur lors de la transaction deposit:', error)
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      let friendlyMessage = 'La transaction a échoué.'
+      
+      if (errorMessage.includes('User rejected') || errorMessage.includes('user rejected')) {
+        friendlyMessage = 'Transaction rejetée par l&apos;utilisateur.'
+      } else if (errorMessage.includes('insufficient funds') || errorMessage.includes('insufficient balance')) {
+        friendlyMessage = 'Fonds insuffisants pour effectuer cette transaction.'
+      } else if (errorMessage.includes('chain mismatch') || errorMessage.includes('wrong network') || errorMessage.includes('Unsupported chain')) {
+        friendlyMessage = 'Mauvais réseau. Veuillez basculer sur HyperEVM Testnet (ID 998).'
+      } else if (errorMessage.includes('execution reverted')) {
+        friendlyMessage = 'La transaction a été rejetée par le contrat. Vérifiez que le vault n&apos;est pas en pause.'
+      } else {
+        friendlyMessage = `Erreur: ${errorMessage}`
+      }
+      
+      setDepositError(friendlyMessage)
+      toast({
+        title: 'Erreur de transaction',
+        description: friendlyMessage,
+      })
     }
   }
 
   const handleWithdrawInternal = async () => {
-    if (!canInteract || !userAddress) return
+    setWithdrawError(null)
+    
+    // Vérifications préalables
+    if (!canInteract || !userAddress) {
+      const errorMsg = 'Veuillez connecter votre wallet.'
+      setWithdrawError(errorMsg)
+      toast({
+        title: 'Wallet non connecté',
+        description: errorMsg,
+      })
+      console.error('Withdraw error: Wallet not connected or cannot interact')
+      return
+    }
+
+    if (!isConnected) {
+      const errorMsg = 'Veuillez connecter votre wallet.'
+      setWithdrawError(errorMsg)
+      toast({
+        title: 'Wallet non connecté',
+        description: errorMsg,
+      })
+      console.error('Withdraw error: Wallet not connected')
+      return
+    }
+
+    if (chainId !== HYPEREVM_CHAIN_ID) {
+      const errorMsg = 'Veuillez vous connecter au réseau HyperEVM Testnet (ID 998).'
+      setWithdrawError(errorMsg)
+      toast({
+        title: 'Mauvais réseau',
+        description: errorMsg,
+      })
+      console.error('Withdraw error: Wrong chain', { currentChainId: chainId, expectedChainId: HYPEREVM_CHAIN_ID })
+      return
+    }
+
+    if (!withdrawAmount || parseFloat(withdrawAmount) <= 0) {
+      const errorMsg = 'Veuillez entrer un montant valide.'
+      setWithdrawError(errorMsg)
+      console.error('Withdraw error: Invalid amount', { withdrawAmount })
+      return
+    }
+
     try {
       const enteredShares = parseUnits(withdrawAmount || '0', 18)
-      if (enteredShares <= 0n) return
+      if (enteredShares <= 0n) {
+        const errorMsg = 'Montant invalide.'
+        setWithdrawError(errorMsg)
+        console.error('Withdraw error: Invalid shares', { enteredShares: enteredShares.toString() })
+        return
+      }
+      
       const maxShares = (userShares as bigint) || 0n
       const sharesToBurn = enteredShares > maxShares ? maxShares : enteredShares
-      if (sharesToBurn <= 0n) return
+      if (sharesToBurn <= 0n) {
+        const errorMsg = 'Montant invalide.'
+        setWithdrawError(errorMsg)
+        console.error('Withdraw error: Invalid shares to burn', { sharesToBurn: sharesToBurn.toString() })
+        return
+      }
+
+      console.log('Envoi transaction withdraw:', {
+        vaultAddress: vaultAddress,
+        shares: sharesToBurn.toString(),
+        amount: withdrawAmount,
+        chainId,
+      })
+
       await writeContractAsync({
         abi: vaultContractAbi,
         address: vaultAddress!,
@@ -261,8 +508,28 @@ export function VaultCardActions({
         args: [sharesToBurn]
       })
       setWithdrawAmount('')
-    } catch {
-      // Erreurs gérées par le wallet
+    } catch (error) {
+      console.error('Erreur lors de la transaction withdraw:', error)
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      let friendlyMessage = 'La transaction a échoué.'
+      
+      if (errorMessage.includes('User rejected') || errorMessage.includes('user rejected')) {
+        friendlyMessage = 'Transaction rejetée par l&apos;utilisateur.'
+      } else if (errorMessage.includes('insufficient funds') || errorMessage.includes('insufficient balance')) {
+        friendlyMessage = 'Fonds insuffisants pour effectuer cette transaction.'
+      } else if (errorMessage.includes('chain mismatch') || errorMessage.includes('wrong network') || errorMessage.includes('Unsupported chain')) {
+        friendlyMessage = 'Mauvais réseau. Veuillez basculer sur HyperEVM Testnet (ID 998).'
+      } else if (errorMessage.includes('execution reverted')) {
+        friendlyMessage = 'La transaction a été rejetée par le contrat. Vérifiez que le vault n&apos;est pas en pause.'
+      } else {
+        friendlyMessage = `Erreur: ${errorMessage}`
+      }
+      
+      setWithdrawError(friendlyMessage)
+      toast({
+        title: 'Erreur de transaction',
+        description: friendlyMessage,
+      })
     }
   }
 
@@ -270,7 +537,8 @@ export function VaultCardActions({
     return null
   }
 
-  const formattedShares = formatUnits(((userShares as bigint) || 0n), 18)
+  const sharesRaw = formatUnits(((userShares as bigint) || 0n), 18)
+  const formattedShares = formatNumber(sharesRaw, { decimals: 2 })
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-6 md:items-center">
@@ -321,11 +589,17 @@ export function VaultCardActions({
             <p className="text-xs text-vault-dim">
               Disponible uniquement si l&apos;adresse du contrat est renseignée.
             </p>
+            {chainId !== HYPEREVM_CHAIN_ID && isConnected && (
+              <p className="text-xs text-red-500">Veuillez basculer sur HyperEVM Testnet (ID 998)</p>
+            )}
+            {depositError && (
+              <p className="text-xs text-red-500">{depositError}</p>
+            )}
             <button
               type="button"
               onClick={onDeposit ? onDeposit : handleDepositInternal}
               className="inline-flex w-full items-center justify-center rounded-lg bg-vault-brand px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-vault-brand/90 disabled:cursor-not-allowed disabled:opacity-60"
-              disabled={vault.status === 'closed' || !canInteract || isBusy}
+              disabled={vault.status === 'closed' || !canInteract || isBusy || chainId !== HYPEREVM_CHAIN_ID}
             >
               Déposer
             </button>
@@ -348,16 +622,22 @@ export function VaultCardActions({
               <button
                 type="button"
                 className="text-vault-muted underline-offset-2 hover:underline"
-                onClick={() => setWithdrawAmount(formattedShares)}
+                onClick={() => setWithdrawAmount(sharesRaw)}
               >
                 Tout retirer
               </button>
             </div>
+            {chainId !== HYPEREVM_CHAIN_ID && isConnected && (
+              <p className="text-xs text-red-500">Veuillez basculer sur HyperEVM Testnet (ID 998)</p>
+            )}
+            {withdrawError && (
+              <p className="text-xs text-red-500">{withdrawError}</p>
+            )}
             <button
               type="button"
               onClick={onWithdraw ? onWithdraw : handleWithdrawInternal}
               className="inline-flex w-full items-center justify-center rounded-lg border border-vault px-4 py-2 text-sm font-semibold text-vault-primary transition-colors hover:border-vault-strong disabled:cursor-not-allowed disabled:opacity-60"
-              disabled={!canInteract || isBusy}
+              disabled={!canInteract || isBusy || chainId !== HYPEREVM_CHAIN_ID}
             >
               Retirer
             </button>

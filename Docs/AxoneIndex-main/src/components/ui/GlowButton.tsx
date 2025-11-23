@@ -44,35 +44,36 @@ export const GlowButton: React.FC<GlowButtonProps> = ({
   };
 
   if (asChild) {
-    return (
-      <motion.div
-        whileHover={{ scale: 1.05, y: -2 }}
-        whileTap={{ scale: 0.98 }}
-        className={cn(baseClasses, sizeClasses[size], variantClasses[variant], glowClasses[glowColor], className)}
-      >
-      {/* Effet de brillance au survol */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-        initial={{ x: '-100%' }}
-        whileHover={{ x: '100%' }}
-        transition={{ duration: 0.6 }}
-      />
-      
-      {/* Effet de glow de fond */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <div className="absolute inset-0 bg-gradient-to-r from-axone-accent/20 to-axone-flounce/20 blur-xl" />
-      </div>
-      
-      {/* Contenu du bouton */}
-      {asChild ? (
-        children
-      ) : (
-        <span className="relative z-10 flex items-center justify-center gap-2">
-          {children}
-        </span>
-      )}
-      </motion.div>
-    );
+    const child = React.Children.only(children) as React.ReactElement<React.HTMLAttributes<HTMLElement> & { className?: string }>;
+    const clonedProps: Partial<React.HTMLAttributes<HTMLElement> & { className?: string; children?: React.ReactNode }> = {
+      className: cn(
+        baseClasses,
+        sizeClasses[size],
+        variantClasses[variant],
+        glowClasses[glowColor],
+        'relative inline-flex items-center justify-center gap-2',
+        'transition-transform duration-200 hover:scale-105 hover:-translate-y-0.5 active:scale-[0.98]',
+        className,
+        child.props.className
+      ),
+      children: (
+        <>
+          {/* Effet de brillance au survol */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none rounded-lg opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full transition-all duration-[600ms] ease-in-out" />
+          
+          {/* Effet de glow de fond */}
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-lg">
+            <div className="absolute inset-0 bg-gradient-to-r from-axone-accent/20 to-axone-flounce/20 blur-xl" />
+          </div>
+          
+          {/* Contenu du bouton */}
+          <span className="relative z-10 flex items-center justify-center gap-2">
+            {child.props.children}
+          </span>
+        </>
+      ),
+    };
+    return React.cloneElement(child, clonedProps);
   }
 
   const { onClick, onMouseDown, onMouseUp, onFocus, onBlur, ...buttonProps } = props;

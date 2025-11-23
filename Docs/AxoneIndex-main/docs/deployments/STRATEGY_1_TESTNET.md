@@ -10,7 +10,35 @@
 
 ## Adresses — déploiement courant (dernier run `deploy_strategy1_testnet.js`)
 
-**Dernier déploiement:** 2025-11-15
+**Dernier déploiement:** 2025-11-21 (redéploiement complet)
+
+- L1Read: `0xacE17480F4d157C48180f4ed10AB483238143e11` ⚡ **NOUVEAU**
+- CoreHandlerLogicLib: `0xD3d068ae44B19E7d398eDa2E4bAE1F83A27de863` ⚡ **NOUVEAU**
+- CoreWriter (système): `0x3333333333333333333333333333333333333333`
+- USDC (EVM): `0x0B80659a4076E9E93C7DbE0f10675A16a3e5C206`
+- CoreInteractionHandler: `0x7551Ca74B5f2Cb3EF9f2e885f2fe9BF993bF570c` ⚡ **NOUVEAU**
+- VaultContract: `0x72eEdd6cE1039E429e44F86b3DcA4A45e206a410` ⚡ **NOUVEAU**
+- CoreInteractionViews: `0x1E2B0DccE25Eeb479F83DABE24ab687C6AB64292` ⚡ **NOUVEAU**
+
+**Historique des déploiements précédents:**
+- Déploiement 2025-01-XX:
+  - L1Read: `0x46976ef07CA697f1546A7F5fcE6f6C6c1e8fdB6D`
+  - CoreHandlerLogicLib: `0x79201af8A766F96A129c086477931742Bbec25bf`
+  - CoreInteractionHandler: `0x071Bcc062D661536D77a09b38bFfd249B7B8195F`
+  - VaultContract: `0x7659E4D1E1CAf66cCd7573Fa640c33E5e6bbd2F9`
+  - CoreInteractionViews: `0x38fCB5F1e4498b537142ca2563e355127Af68fD2`
+- Déploiement 2025-11-20:
+  - L1Read: `0x4F730c91A1a4C3cC4733a96eF6Ea52901164c761`
+  - CoreHandlerLogicLib: `0xF2E413D3F9F3582e8A39BEb962f60aeee6683701`
+  - CoreInteractionHandler: `0xe1F039cEF269Ba678D867c55F5681852Cb7ad797` (avec limite de vente)
+  - VaultContract: `0x83ec125f62521a15940857EdD19069d5cc4EAabE`
+  - CoreInteractionViews: `0xa51941b7744013c8BFe0b9F52A351aAe290588Dc`
+- Handler v2 (sans limite 1e12): `0x96f2b90dDe33348F347bd95CbF3A0830c30506C0`
+- Handler v1 (avec limite 1e12): `0xa7b8306307572c3ec388939A4C18931D905519a1` (déprécié)
+
+## Historique des déploiements
+
+### Déploiement 2025-11-15
 
 - L1Read: `0x71752E1caFa851f3Cdb34C1B8Dd5D4745d55403A`
 - CoreWriter (système): `0x3333333333333333333333333333333333333333`

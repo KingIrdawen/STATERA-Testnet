@@ -23,7 +23,7 @@ function parseNewVault(body: unknown): NewVaultInput {
 		!v.coreTokenIds ||
 		typeof v.coreTokenIds.usdc !== 'number' ||
 		typeof v.coreTokenIds.hype !== 'number' ||
-		typeof v.coreTokenIds.btc !== 'number' ||
+		typeof v.coreTokenIds.token1 !== 'number' ||
 		typeof v.vaultAddress !== 'string' ||
 		typeof v.handlerAddress !== 'string' ||
 		typeof v.l1ReadAddress !== 'string' ||
@@ -43,6 +43,7 @@ function parseNewVault(body: unknown): NewVaultInput {
 		handlerAddress: v.handlerAddress as `0x${string}`,
 		l1ReadAddress: v.l1ReadAddress as `0x${string}`,
 		usdcAddress: v.usdcAddress as `0x${string}`,
+		coreViewsAddress: v.coreViewsAddress ? (v.coreViewsAddress as `0x${string}`) : undefined,
 		coreTokenIds: v.coreTokenIds,
 	}
 }

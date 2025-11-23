@@ -156,3 +156,4 @@ logs
 # Temporary folders
 tmp/
 temp/
+/contracts/Lib_EVM/hyper-evm-lib

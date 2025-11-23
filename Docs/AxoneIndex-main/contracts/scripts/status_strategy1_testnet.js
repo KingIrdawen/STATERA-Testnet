@@ -10,6 +10,11 @@ async function main() {
   };
 
   const handler = await ethers.getContractAt("CoreInteractionHandler", ADDRS.HANDLER);
+  const viewsAddr = process.env.CORE_VIEWS_ADDRESS;
+  if (!viewsAddr) {
+    throw new Error("CORE_VIEWS_ADDRESS manquant (adresse de CoreInteractionViews)");
+  }
+  const views = await ethers.getContractAt("CoreInteractionViews", viewsAddr);
   const vault = await ethers.getContractAt("VaultContract", ADDRS.VAULT);
 
   const delay = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -21,13 +26,13 @@ async function main() {
     throw last;
   };
 
-  // Oracles
+  // Oracles via CoreInteractionViews
   let pxB = 0n, pxH = 0n;
-  try { pxB = await callWithRetry(() => handler.oraclePxBtc1e8()); } catch (_) {}
-  try { pxH = await callWithRetry(() => handler.oraclePxHype1e8()); } catch (_) {}
+  try { pxB = await callWithRetry(() => views.oraclePxBtc1e8(ADDRS.HANDLER)); } catch (_) {}
+  try { pxH = await callWithRetry(() => views.oraclePxHype1e8(ADDRS.HANDLER)); } catch (_) {}
 
   // Equity / NAV / PPS
-  const equity1e18 = await callWithRetry(() => handler.equitySpotUsd1e18());
+  const equity1e18 = await callWithRetry(() => views.equitySpotUsd1e18(ADDRS.HANDLER));
   const nav1e18 = await callWithRetry(() => vault.nav1e18());
   const pps1e18 = await callWithRetry(() => vault.pps1e18());
 

@@ -224,12 +224,18 @@ export function useStrategyData(strategy: Index | null) {
           ...coreInteractionHandlerContract(strategy.handlerAddress),
           functionName: 'equitySpotUsd1e18' as const,
         },
-        // Oracle BTC (1e8) - retourne uint64
-        {
-          ...coreInteractionHandlerContract(strategy.handlerAddress),
-          functionName: 'oraclePxBtc1e8' as const,
-        },
-        // Oracle HYPE (1e8) - retourne uint64
+        // Oracle selon le type de stratégie
+        // STRATEGY_1 utilise oraclePxBtc1e8, ERA_2 utilise oraclePxToken11e8
+        strategy.strategyType === 'ERA_2'
+          ? {
+              ...coreInteractionHandlerContract(strategy.handlerAddress),
+              functionName: 'oraclePxToken11e8' as const,
+            }
+          : {
+              ...coreInteractionHandlerContract(strategy.handlerAddress),
+              functionName: 'oraclePxBtc1e8' as const,
+            },
+        // Oracle HYPE (1e8) - retourne uint64 (commun aux deux stratégies)
         {
           ...coreInteractionHandlerContract(strategy.handlerAddress),
           functionName: 'oraclePxHype1e8' as const,
@@ -325,7 +331,8 @@ export function useStrategyData(strategy: Index | null) {
   })
 
   const coreEquityUsdRaw = data?.[contractIndex++]?.result as bigint | undefined
-  const oraclePxBtcRaw = data?.[contractIndex++]?.result as bigint | undefined
+  // Oracle du premier token : BTC pour STRATEGY_1, TOKEN1 pour ERA_2
+  const oraclePxFirstTokenRaw = data?.[contractIndex++]?.result as bigint | undefined
   const oraclePxHypeRaw = data?.[contractIndex++]?.result as bigint | undefined
 
   // Calculer le total HYPE déposé dans le vault
@@ -376,13 +383,24 @@ export function useStrategyData(strategy: Index | null) {
         coreEquityUsdRaw,
         coreEquityUsd: formatUnitsSafe(coreEquityUsdRaw, 18),
         // Oracles
-        oraclePxBtc: formatUnitsSafe(oraclePxBtcRaw ? BigInt(oraclePxBtcRaw) : 0n, PX_DECIMALS.btc),
+        // Oracle du premier token (BTC pour STRATEGY_1, TOKEN1 pour ERA_2)
+        oraclePxFirstToken: formatUnitsSafe(oraclePxFirstTokenRaw ? BigInt(oraclePxFirstTokenRaw) : 0n, 8),
+        oraclePxFirstTokenRaw: oraclePxFirstTokenRaw ? BigInt(oraclePxFirstTokenRaw) : 0n,
+        // Pour compatibilité avec l'UI existante, garder oraclePxBtc pour STRATEGY_1
+        oraclePxBtc: strategy.strategyType === 'STRATEGY_1' 
+          ? formatUnitsSafe(oraclePxFirstTokenRaw ? BigInt(oraclePxFirstTokenRaw) : 0n, PX_DECIMALS.btc)
+          : undefined,
         oraclePxHype: formatUnitsSafe(oraclePxHypeRaw ? BigInt(oraclePxHypeRaw) : 0n, PX_DECIMALS.hype),
         oraclePxHypeRaw: oraclePxHypeRaw ? BigInt(oraclePxHypeRaw) : 0n,
         // Valeurs formatées en USD (Number)
         ppsUsd: ppsRaw ? Number(formatUnitsSafe(ppsRaw, 18)) : undefined,
         oracleHypeUsd: oraclePxHypeRaw ? Number(oraclePxHypeRaw) / 1e8 : undefined,
-        oracleBtcUsd: oraclePxBtcRaw ? Number(oraclePxBtcRaw) / 1e8 : undefined,
+        oracleBtcUsd: strategy.strategyType === 'STRATEGY_1' && oraclePxFirstTokenRaw 
+          ? Number(oraclePxFirstTokenRaw) / 1e8 
+          : undefined,
+        oracleToken1Usd: strategy.strategyType === 'ERA_2' && oraclePxFirstTokenRaw 
+          ? Number(oraclePxFirstTokenRaw) / 1e8 
+          : undefined,
       }
     : null
 

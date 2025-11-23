@@ -1,5 +1,12 @@
 # Changelog
 
+## 2025-11-18
+
+### Changed
+- CoreInteractionHandler: refactor interne en deux composants (`CoreInteractionHandler` + librairie `CoreHandlerLogicLib`) pour réduire la taille du bytecode du handler sous la limite EIP‑170 sans modifier l’API publique ni le comportement fonctionnel (calculs d’equity et de deltas de rebalance déplacés dans la librairie).
+- Scripts STRATEGY_1 (`contracts/scripts/deploy_strategy1*.js`): déploiement et linking explicite de `CoreHandlerLogicLib` avant `CoreInteractionHandler`.
+- Docs: mises à jour `docs/contracts/CoreInteractionHandler.md`, `docs/guides/deploiement/STRATEGY_1_Deployment_Guide.md`, `docs/ops/DEPLOYMENT_CHECKLIST.md` pour documenter la nouvelle architecture contrat + librairie.
+
 ## 2025-11-09
 
 ### Fixed

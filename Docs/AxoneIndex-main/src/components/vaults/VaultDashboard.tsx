@@ -1,6 +1,7 @@
 'use client'
 
 import { ArrowDownRight, PieChart, TrendingUp, Wallet } from 'lucide-react'
+import { formatNumber } from '@/lib/format'
 
 import { Card, CardContent } from '@/components/ui/card'
 
@@ -11,11 +12,6 @@ interface VaultDashboardProps {
   totalVaults: number
   variant?: 'default' | 'dense'
 }
-
-const baseFormatter = new Intl.NumberFormat('fr-FR', {
-  minimumFractionDigits: 0,
-  maximumFractionDigits: 0
-})
 
 export function VaultDashboard({
   totalDeposited,
@@ -42,11 +38,11 @@ export function VaultDashboard({
     : 'text-base text-vault-muted'
   const cardPadding = isDense ? 'p-4' : 'p-6'
 
-  const yieldValue = `${globalYield >= 0 ? '+' : ''}${globalYield.toFixed(2)}%`
+  const yieldValue = `${globalYield >= 0 ? '+' : ''}${formatNumber(globalYield, { decimals: 2 })}%`
   const stats = [
     {
       label: 'Total déposé',
-      value: `$${baseFormatter.format(totalDeposited)}`,
+      value: `$${formatNumber(totalDeposited, { decimals: 2 })}`,
       helper: 'Capital engagé',
       icon: Wallet
     },

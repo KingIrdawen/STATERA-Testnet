@@ -25,9 +25,7 @@ async function main() {
     ];
     
     const handlerABI = [
-        "function equitySpotUsd1e18() view returns (uint256)",
         "function spotBalance(address coreUser, uint64 tokenId) view returns (uint64)",
-        "function spotOraclePx1e8(uint32 spotAsset) view returns (uint64)",
         "function usdcCoreTokenId() view returns (uint64)",
         "function spotTokenBTC() view returns (uint64)",
         "function spotTokenHYPE() view returns (uint64)",
@@ -46,6 +44,16 @@ async function main() {
     // Récupération des contrats
     const vault = new ethers.Contract(VAULT_ADDRESS, vaultABI, provider);
     const handler = new ethers.Contract(HANDLER_ADDRESS, handlerABI, provider);
+
+    const coreViewsAddress = process.env.CORE_VIEWS_ADDRESS;
+    if (!coreViewsAddress) {
+        throw new Error("CORE_VIEWS_ADDRESS manquant (adresse de CoreInteractionViews)");
+    }
+    const views = new ethers.Contract(coreViewsAddress, [
+        "function equitySpotUsd1e18(address handler) view returns (uint256)",
+        "function oraclePxBtc1e8(address handler) view returns (uint64)",
+        "function oraclePxHype1e8(address handler) view returns (uint64)",
+    ], provider);
     const usdc = new ethers.Contract(USDC_ADDRESS, usdcABI, provider);
 
     console.log("📊 État du Vault sur HyperEVM Testnet:");
@@ -73,7 +81,7 @@ async function main() {
         console.log("=============================");
         
         // 4. Vérifier l'équité spot sur Core
-        const coreEquity = await handler.equitySpotUsd1e18();
+        const coreEquity = await views.equitySpotUsd1e18(HANDLER_ADDRESS);
         console.log(`💎 Équité Core: ${ethers.utils.formatEther(coreEquity)} USD`);
         
         // 5. Vérifier la configuration Core
@@ -103,8 +111,8 @@ async function main() {
         const spotHYPE = await handler.spotHYPE();
         
         try {
-            const btcPrice = await handler.spotOraclePx1e8(spotBTC);
-            const hypePrice = await handler.spotOraclePx1e8(spotHYPE);
+            const btcPrice = await views.oraclePxBtc1e8(HANDLER_ADDRESS);
+            const hypePrice = await views.oraclePxHype1e8(HANDLER_ADDRESS);
             
             console.log(`\n📊 Prix Oracle sur HyperCore:`);
             console.log(`   BTC: $${ethers.utils.formatUnits(btcPrice, 8)}`);

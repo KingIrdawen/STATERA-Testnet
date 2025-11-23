@@ -94,8 +94,8 @@ console.log(`NAV: ${ethers.utils.formatEther(nav)} USD`);
 
 #### Vérifier les balances Core
 ```javascript
-const handler = await ethers.getContractAt("CoreInteractionHandler", "0x4E0389AcF0b2bde612C43e6CE887309D81aCe0D6");
-const equity = await handler.equitySpotUsd1e18();
+const coreViews = await ethers.getContractAt("CoreInteractionViews", CORE_VIEWS_ADDRESS);
+const equity = await coreViews.equitySpotUsd1e18("0x4E0389AcF0b2bde612C43e6CE887309D81aCe0D6");
 console.log(`Équité Core: ${ethers.utils.formatEther(equity)} USD`);
 ```
 

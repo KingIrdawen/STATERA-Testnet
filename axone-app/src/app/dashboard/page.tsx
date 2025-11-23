@@ -571,9 +571,16 @@ function StrategyCard({ strategy, showWithdraw = false }: { strategy: Index; sho
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-500 text-xs">BTC (oracle)</span>
+                      <span className="text-gray-500 text-xs">
+                        {strategy.strategyType === 'ERA_2' ? 'TOKEN1' : 'BTC'} (oracle)
+                      </span>
                       <span className="text-white text-sm font-mono">
-                        {formatUsd(data.oracleBtcUsd, 2)}
+                        {formatUsd(
+                          strategy.strategyType === 'ERA_2' 
+                            ? data.oracleToken1Usd 
+                            : data.oracleBtcUsd, 
+                          2
+                        )}
                       </span>
                     </div>
                   </div>

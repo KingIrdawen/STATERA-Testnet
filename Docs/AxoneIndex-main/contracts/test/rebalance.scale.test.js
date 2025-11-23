@@ -23,7 +23,15 @@ describe('Rebalance scale: dB/dH 1e18 -> tailles en szDecimals, BBO limit, cap U
     usdc = await MockUSDC.deploy();
     await usdc.waitForDeployment();
 
-    Handler = await ethers.getContractFactory('CoreInteractionHandler');
+    const CoreHandlerLogicLib = await ethers.getContractFactory('CoreHandlerLogicLib');
+    const coreHandlerLogicLib = await CoreHandlerLogicLib.deploy();
+    await coreHandlerLogicLib.waitForDeployment();
+
+    Handler = await ethers.getContractFactory('CoreInteractionHandler', {
+      libraries: {
+        CoreHandlerLogicLib: await coreHandlerLogicLib.getAddress(),
+      },
+    });
     handler = await Handler.deploy(
       mock.target,
       usdc.target,

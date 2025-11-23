@@ -23,7 +23,15 @@ describe('Encodage SPOT: assetId offset + TIF IOC + raw px conversion', function
     usdc = await MockUSDC.deploy();
     await usdc.waitForDeployment();
 
-    Handler = await ethers.getContractFactory('CoreInteractionHandler');
+    const CoreHandlerLogicLib = await ethers.getContractFactory('CoreHandlerLogicLib');
+    const coreHandlerLogicLib = await CoreHandlerLogicLib.deploy();
+    await coreHandlerLogicLib.waitForDeployment();
+
+    Handler = await ethers.getContractFactory('CoreInteractionHandler', {
+      libraries: {
+        CoreHandlerLogicLib: await coreHandlerLogicLib.getAddress(),
+      },
+    });
     handler = await Handler.deploy(
       mock.target,
       usdc.target,

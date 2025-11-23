@@ -63,6 +63,7 @@ export async function addVault(input: NewVaultInput): Promise<VaultDefinition> {
 		handlerAddress: input.handlerAddress,
 		l1ReadAddress: input.l1ReadAddress,
 		usdcAddress: input.usdcAddress,
+		coreViewsAddress: input.coreViewsAddress,
 		coreTokenIds: input.coreTokenIds,
 	})
 	const ui = normaliseUiMetadata({
@@ -88,6 +89,7 @@ export async function addVault(input: NewVaultInput): Promise<VaultDefinition> {
 		handlerAddress: onchain.handlerAddress,
 		l1ReadAddress: onchain.l1ReadAddress,
 		usdcAddress: onchain.usdcAddress,
+		coreViewsAddress: onchain.coreViewsAddress,
 		coreTokenIds: onchain.coreTokenIds,
 	}
 
@@ -119,13 +121,14 @@ export async function updateVault(id: string, changes: UpdateVaultInput): Promis
 		handlerAddress: changes.handlerAddress ?? current.handlerAddress,
 		l1ReadAddress: changes.l1ReadAddress ?? current.l1ReadAddress,
 		usdcAddress: changes.usdcAddress ?? current.usdcAddress,
-		coreTokenIds: changes.coreTokenIds
-			? {
-				usdc: Number.isFinite(changes.coreTokenIds.usdc) ? changes.coreTokenIds.usdc : current.coreTokenIds.usdc,
-				hype: Number.isFinite(changes.coreTokenIds.hype) ? changes.coreTokenIds.hype : current.coreTokenIds.hype,
-				btc: Number.isFinite(changes.coreTokenIds.btc) ? changes.coreTokenIds.btc : current.coreTokenIds.btc,
-			}
-			: current.coreTokenIds,
+		coreViewsAddress: changes.coreViewsAddress !== undefined ? changes.coreViewsAddress : current.coreViewsAddress,
+			coreTokenIds: changes.coreTokenIds
+				? {
+					usdc: Number.isFinite(changes.coreTokenIds.usdc) ? changes.coreTokenIds.usdc : current.coreTokenIds.usdc,
+					hype: Number.isFinite(changes.coreTokenIds.hype) ? changes.coreTokenIds.hype : current.coreTokenIds.hype,
+					token1: Number.isFinite(changes.coreTokenIds.token1) ? changes.coreTokenIds.token1 : current.coreTokenIds.token1,
+				}
+				: current.coreTokenIds,
 	}
 
 	all[index] = merged

@@ -1,0 +1,12 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["Lib_EVM/hyper-evm-lib/lib"]
+
+[rpc_endpoints]
+hyperliquid = "https://rpc.hyperliquid.xyz/evm"
+testnet = "https://rpc.hyperliquid-testnet.xyz/evm"
+
+[fmt]
+
+

@@ -31,7 +31,15 @@ describe('Strategy_1 Pricing & Quantization', function () {
     usdc = await MockUSDC.deploy();
     await usdc.waitForDeployment();
 
-    Handler = await ethers.getContractFactory('CoreInteractionHandler');
+    const CoreHandlerLogicLib = await ethers.getContractFactory('CoreHandlerLogicLib');
+    const coreHandlerLogicLib = await CoreHandlerLogicLib.deploy();
+    await coreHandlerLogicLib.waitForDeployment();
+
+    Handler = await ethers.getContractFactory('CoreInteractionHandler', {
+      libraries: {
+        CoreHandlerLogicLib: await coreHandlerLogicLib.getAddress(),
+      },
+    });
     handler = await Handler.deploy(
       mock.target,
       usdc.target,
@@ -112,7 +120,7 @@ describe('Strategy_1 Pricing & Quantization', function () {
     expect(qBuy).to.be.at.least(qSell);
   });
 
-  it('5) Direction d'arrondi: BUY ↑, SELL ↓', async () => {
+  it("5) Direction d'arrondi: BUY ↑, SELL ↓", async () => {
     const base = 1_234_567_89n; // 12.3456789 * 1e8
     const buy = await handler.quantizePx1e8Public(base, 7, true);  // maxPxDecimals=1
     const sell = await handler.quantizePx1e8Public(base, 7, false);
