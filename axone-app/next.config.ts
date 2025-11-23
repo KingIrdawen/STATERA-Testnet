@@ -11,14 +11,10 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: false,
   },
   webpack: (config) => {
-    // Alias pour shim @react-native-async-storage/async-storage (client et serveur)
     config.resolve = config.resolve || {};
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
-      '@react-native-async-storage/async-storage': path.resolve(
-        __dirname,
-        'src/shims/async-storage.ts'
-      ),
+      '@react-native-async-storage/async-storage': require.resolve('./src/shims/async-storage.ts'),
     };
     return config;
   },
