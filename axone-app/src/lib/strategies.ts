@@ -29,18 +29,19 @@ function initializeStrategies(): Index[] {
       }
     }
     // Essayer de lire le fichier au build time (lecture seule sur Vercel)
+    // Note: Sur Vercel, le fichier peut ne pas être accessible au runtime, seulement au build time
     try {
-      if (fs.existsSync(STRATEGIES_FILE)) {
-        const fileData = fs.readFileSync(STRATEGIES_FILE, 'utf-8');
-        const parsed = JSON.parse(fileData);
-        // Initialiser le stockage en mémoire avec les stratégies du fichier
-        if (inMemoryStrategies === null) {
-          inMemoryStrategies = parsed;
-        }
-        return inMemoryStrategies;
+      // Utiliser try/catch au lieu de existsSync pour éviter les problèmes de timing
+      const fileData = fs.readFileSync(STRATEGIES_FILE, 'utf-8');
+      const parsed = JSON.parse(fileData);
+      // Initialiser le stockage en mémoire avec les stratégies du fichier
+      if (inMemoryStrategies === null && Array.isArray(parsed)) {
+        inMemoryStrategies = parsed;
       }
+      return inMemoryStrategies || [];
     } catch (error) {
-      console.warn('Could not read strategies file on Vercel:', error);
+      // Le fichier n'existe pas ou n'est pas accessible - c'est normal sur Vercel au runtime
+      // On continuera avec le stockage en mémoire vide ou depuis INITIAL_STRATEGIES
     }
     // Sinon, utiliser le stockage en mémoire (vide au départ)
     if (inMemoryStrategies === null) {
