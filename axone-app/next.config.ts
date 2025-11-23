@@ -10,17 +10,16 @@ const nextConfig: NextConfig = {
     // Garder la vérification TypeScript active
     ignoreBuildErrors: false,
   },
-  webpack: (config, { isServer }) => {
-    // Alias pour shim @react-native-async-storage/async-storage en environnement web
-    if (!isServer) {
-      config.resolve.alias = {
-        ...(config.resolve.alias || {}),
-        '@react-native-async-storage/async-storage': path.resolve(
-          __dirname,
-          'src/shims/async-storage.ts'
-        ),
-      };
-    }
+  webpack: (config) => {
+    // Alias pour shim @react-native-async-storage/async-storage (client et serveur)
+    config.resolve = config.resolve || {};
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      '@react-native-async-storage/async-storage': path.resolve(
+        __dirname,
+        'src/shims/async-storage.ts'
+      ),
+    };
     return config;
   },
 };

@@ -257,7 +257,7 @@ export function useStrategyData(strategy: Index | null) {
         index: i,
         address: c.address,
         functionName: c.functionName,
-        args: c.args,
+        args: 'args' in c ? c.args : undefined,
       })),
       isLoading,
       isError,
@@ -284,7 +284,7 @@ export function useStrategyData(strategy: Index | null) {
         index: i,
         contractAddress: contract?.address,
         functionName: contract?.functionName,
-        args: contract?.args,
+        args: contract && 'args' in contract ? contract.args : undefined,
         status: d.status,
         result: d.result?.toString() || 'null',
         error: d.error ? {

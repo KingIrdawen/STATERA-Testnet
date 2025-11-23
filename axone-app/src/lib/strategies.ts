@@ -33,10 +33,10 @@ function initializeStrategies(): Index[] {
       try {
         const parsed = JSON.parse(envStrategies);
         // Initialiser le stockage en mémoire avec ces stratégies
-        if (inMemoryStrategies === null) {
+        if (inMemoryStrategies === null && Array.isArray(parsed)) {
           inMemoryStrategies = parsed;
         }
-        return inMemoryStrategies;
+        return inMemoryStrategies || [];
       } catch (e) {
         // Ignorer les erreurs de parsing
       }
