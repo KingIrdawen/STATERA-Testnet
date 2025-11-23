@@ -13,18 +13,21 @@ import ConsoleErrorFilter from './ConsoleErrorFilter';
 // IMPORTANT: onError n'est PAS supporté dans defaultOptions.queries en React Query v5
 
 export default function Providers({ children }: { children: React.ReactNode }) {
-  const [queryClient] = useState(() => new QueryClient({
-    defaultOptions: {
-      queries: {
-        // ❌ onError n'est PAS supporté ici en React Query v5 - doit être dans chaque useQuery individuel
-        retry: 2,
-        refetchOnMount: false,
-        refetchOnWindowFocus: false,
-        staleTime: 30_000,
-        gcTime: 5 * 60 * 1000,
+  const [queryClient] = useState(() => {
+    // Configuration React Query v5 - onError n'est PAS supporté dans defaultOptions.queries
+    return new QueryClient({
+      defaultOptions: {
+        queries: {
+          retry: 2,
+          refetchOnMount: false,
+          refetchOnWindowFocus: false,
+          staleTime: 30_000,
+          gcTime: 5 * 60 * 1000,
+          // Note: onError doit être défini dans chaque useQuery individuel, pas ici
+        },
       },
-    },
-  }));
+    });
+  });
 
   return (
     <>
