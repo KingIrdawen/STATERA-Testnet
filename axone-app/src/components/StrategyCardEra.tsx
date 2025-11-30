@@ -128,12 +128,6 @@ export function StrategyCardEra({ strategy, showWithdraw = false }: StrategyCard
         <p className="text-[#5a9a9a] text-sm mb-4">{strategy.description}</p>
       )}
 
-      {/* TOKEN1 on-chain info */}
-      <div className="mb-4 p-2 bg-gray-800/30 border border-gray-700 rounded text-xs">
-        <span className="text-gray-400">TOKEN1 on-chain: </span>
-        <span className="text-[#fab062] font-semibold">{displayToken1}</span>
-      </div>
-
       {/* Network warning */}
       {address && !isCorrectChain && (
         <div className="mb-4 p-3 bg-red-900/20 border border-red-600/30 rounded-lg">
@@ -184,7 +178,7 @@ export function StrategyCardEra({ strategy, showWithdraw = false }: StrategyCard
           </div>
           {strategyData.oracleHypeUsd !== undefined && (
             <div className="flex justify-between items-center">
-              <span className="text-gray-500 text-xs">HYPE (oracle)</span>
+              <span className="text-gray-500 text-xs">HYPE</span>
               <span className="text-white text-sm font-mono">
                 {formatUsd(strategyData.oracleHypeUsd, 2)}
               </span>
@@ -192,7 +186,7 @@ export function StrategyCardEra({ strategy, showWithdraw = false }: StrategyCard
           )}
           {strategyData.oracleToken1Usd !== undefined && (
             <div className="flex justify-between items-center">
-              <span className="text-gray-500 text-xs">TOKEN1 (oracle)</span>
+              <span className="text-gray-500 text-xs">{displayToken1}</span>
               <span className="text-white text-sm font-mono">
                 {formatUsd(strategyData.oracleToken1Usd, 2)}
               </span>
