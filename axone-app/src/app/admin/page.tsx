@@ -131,7 +131,7 @@ export default function AdminPage() {
         <div className="flex items-center justify-between px-4 sm:px-8 md:px-36 lg:px-48 py-4">
           <Link href="/" className="flex items-center gap-3 sm:gap-4">
             <Image
-              src="/Logo-Statera-sandy-brown-détouré.png"
+              src="/Logo-Axone.png"
               alt="Statera Logo"
               width={48}
               height={48}

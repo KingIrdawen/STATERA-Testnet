@@ -10,8 +10,35 @@ const LIST_KEY = "strategies:list";
 
 export async function getAllStrategies(): Promise<Strategy[]> {
   const kv = getKv();
-  const list = await kv.get<Strategy[]>(LIST_KEY);
-  return Array.isArray(list) ? list : [];
+  const list = await kv.get<unknown>(LIST_KEY);
+
+  if (!Array.isArray(list)) {
+    return [];
+  }
+
+  // Filter out legacy strategies that don't have a valid `contracts` block
+  const valid = (list as any[]).filter((item) => {
+    const contracts = item?.contracts;
+    return (
+      item &&
+      typeof item === "object" &&
+      contracts &&
+      typeof contracts === "object" &&
+      typeof contracts.vaultAddress === "string" &&
+      typeof contracts.handlerAddress === "string" &&
+      typeof contracts.coreViewsAddress === "string" &&
+      typeof contracts.l1ReadAddress === "string"
+    );
+  });
+
+  if (valid.length !== list.length) {
+    console.warn(
+      "[strategyRepo] Ignored some legacy strategies without a `contracts` block. " +
+      'Consider cleaning the "strategies:list" KV key.'
+    );
+  }
+
+  return valid as Strategy[];
 }
 
 export async function getStrategyById(id: string): Promise<Strategy | null> {

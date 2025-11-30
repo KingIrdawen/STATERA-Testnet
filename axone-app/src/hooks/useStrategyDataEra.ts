@@ -28,17 +28,46 @@ export interface StrategyData {
 export function useStrategyData(strategy: Strategy | null): StrategyData {
   const { address } = useAccount();
 
-  const isConfigured =
+  // Defensive check: ensure strategy has a valid contracts block
+  const hasContracts =
     !!strategy &&
-    !!strategy.contracts.vaultAddress &&
-    !!strategy.contracts.handlerAddress &&
-    !!strategy.contracts.coreViewsAddress &&
+    !!(strategy as any).contracts &&
+    typeof (strategy as any).contracts === "object" &&
+    typeof (strategy as any).contracts.vaultAddress === "string" &&
+    typeof (strategy as any).contracts.handlerAddress === "string" &&
+    typeof (strategy as any).contracts.coreViewsAddress === "string" &&
+    typeof (strategy as any).contracts.l1ReadAddress === "string";
+
+  if (!hasContracts) {
+    return {
+      loading: false,
+      error: null,
+      navUsd: undefined,
+      ppsUsd: undefined,
+      totalShares: undefined,
+      userShares: undefined,
+      userValueUsd: undefined,
+      tvlUsd: undefined,
+      oracleHypeUsd: undefined,
+      oracleToken1Usd: undefined,
+      navUsd1e18: undefined,
+      ppsUsd1e18: undefined,
+      totalSharesRaw: undefined,
+      userSharesRaw: undefined,
+    };
+  }
+
+  const isConfigured =
+    hasContracts &&
+    !!(strategy as Strategy).contracts.vaultAddress &&
+    !!(strategy as Strategy).contracts.handlerAddress &&
+    !!(strategy as Strategy).contracts.coreViewsAddress &&
     !!address;
 
-  const contracts = isConfigured && strategy
+  const contracts = isConfigured && strategy && hasContracts
     ? (() => {
-        const contracts = getStrategyContracts(strategy);
-        const shareDecimals = strategy.contracts.shareDecimals ?? 18;
+        const contracts = getStrategyContracts(strategy as Strategy);
+        const shareDecimals = (strategy as Strategy).contracts.shareDecimals ?? 18;
 
         return [
           // From Vault
@@ -89,7 +118,7 @@ export function useStrategyData(strategy: Strategy | null): StrategyData {
     },
   });
 
-  if (!isConfigured || !strategy || !data) {
+  if (!isConfigured || !strategy || !data || !hasContracts) {
     return {
       loading: isLoading,
       error: error as Error | null,
@@ -108,7 +137,7 @@ export function useStrategyData(strategy: Strategy | null): StrategyData {
     };
   }
 
-  const shareDecimals = strategy.contracts.shareDecimals ?? 18;
+  const shareDecimals = (strategy as Strategy).contracts.shareDecimals ?? 18;
 
   // Parse results
   const navUsd1e18 = data[0]?.result as bigint | undefined;
