@@ -189,9 +189,18 @@ function StrategiesWithDeposits({ strategies, loading }: { strategies: Strategy[
     );
   }
 
+  // Filtrer les stratégies invalides
+  const validStrategies = strategies.filter(strategy => 
+    strategy && 
+    strategy.contracts && 
+    strategy.contracts.vaultAddress &&
+    strategy.contracts.handlerAddress &&
+    strategy.contracts.coreViewsAddress
+  );
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      {strategies.map(strategy => (
+      {validStrategies.map(strategy => (
         <StrategyWithDepositCheck key={strategy.id} strategy={strategy} />
       ))}
     </div>
@@ -220,7 +229,14 @@ export default function DashboardPage() {
 
   // Fonction pour filtrer et trier les stratégies (pour l'onglet "Stratégies" - toutes les stratégies)
   const getFilteredStrategies = () => {
-    let filtered = [...strategies];
+    // Filtrer d'abord les stratégies invalides
+    let filtered = strategies.filter(strategy => 
+      strategy && 
+      strategy.contracts && 
+      strategy.contracts.vaultAddress &&
+      strategy.contracts.handlerAddress &&
+      strategy.contracts.coreViewsAddress
+    );
     
     // Filtrage par recherche
     if (searchQuery) {

@@ -18,6 +18,11 @@ interface StrategyCardEraProps {
 }
 
 export function StrategyCardEra({ strategy, showWithdraw = false }: StrategyCardEraProps) {
+  // Vérification de sécurité
+  if (!strategy || !strategy.contracts) {
+    return null;
+  }
+
   const { address } = useAccount();
   const chainId = useChainId();
   const { switchChain } = useSwitchChain();
