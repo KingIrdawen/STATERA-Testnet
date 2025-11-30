@@ -5,7 +5,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useAccount, useChainId, useSwitchChain } from 'wagmi';
+import { useAccount, useChainId, useSwitchChain, useBalance } from 'wagmi';
+import { formatUnits } from 'viem';
 import type { Strategy } from '@/types/strategy';
 import { useStrategyData } from '@/hooks/useStrategyDataEra';
 import { useStrategyDeposit } from '@/hooks/useStrategyDeposit';
@@ -38,6 +39,16 @@ export function StrategyCardEra({ strategy, showWithdraw = false }: StrategyCard
 
   const isCorrectChain = chainId === strategy.contracts.chainId;
   const EXPECTED_CHAIN_ID = strategy.contracts.chainId;
+
+  // Récupérer le solde HYPE natif du wallet
+  const { data: hypeBalance } = useBalance({
+    address,
+    query: { enabled: !!address && isCorrectChain },
+  });
+
+  // Calculer les montants max
+  const maxDeposit = hypeBalance ? Number(formatUnits(hypeBalance.value, 18)) : 0;
+  const maxWithdraw = strategyData.userShares ?? 0;
 
   // Reset form on success
   useEffect(() => {
@@ -200,7 +211,17 @@ export function StrategyCardEra({ strategy, showWithdraw = false }: StrategyCard
         <div className="mt-auto space-y-3">
           {/* Deposit */}
           <div>
-            <label className="block text-white text-sm font-semibold mb-2">Deposit (HYPE)</label>
+            <div className="flex justify-between items-center mb-2">
+              <label className="block text-white text-sm font-semibold">Deposit (HYPE)</label>
+              {maxDeposit > 0 && (
+                <button
+                  onClick={() => setDepositAmount(maxDeposit.toString())}
+                  className="text-xs text-[#fab062] hover:text-[#e89a4a] transition-colors font-medium"
+                >
+                  MAX: {maxDeposit.toFixed(6)}
+                </button>
+              )}
+            </div>
             <div className="flex gap-2">
               <input
                 type="number"
@@ -208,7 +229,7 @@ export function StrategyCardEra({ strategy, showWithdraw = false }: StrategyCard
                 value={depositAmount}
                 onChange={(e) => setDepositAmount(e.target.value)}
                 placeholder="0.0"
-                className="flex-1 px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm focus:border-[#fab062] focus:outline-none"
+                className="flex-1 px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm focus:border-[#fab062] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
               <button
                 onClick={handleDeposit}
@@ -226,7 +247,17 @@ export function StrategyCardEra({ strategy, showWithdraw = false }: StrategyCard
           {/* Withdraw */}
           {showWithdraw && (
             <div>
-              <label className="block text-white text-sm font-semibold mb-2">Withdraw (Shares)</label>
+              <div className="flex justify-between items-center mb-2">
+                <label className="block text-white text-sm font-semibold">Withdraw (Shares)</label>
+                {maxWithdraw > 0 && (
+                  <button
+                    onClick={() => setWithdrawAmount(maxWithdraw.toString())}
+                    className="text-xs text-[#fab062] hover:text-[#e89a4a] transition-colors font-medium"
+                  >
+                    MAX: {maxWithdraw.toFixed(6)}
+                  </button>
+                )}
+              </div>
               <div className="flex gap-2">
                 <input
                   type="number"
@@ -234,7 +265,7 @@ export function StrategyCardEra({ strategy, showWithdraw = false }: StrategyCard
                   value={withdrawAmount}
                   onChange={(e) => setWithdrawAmount(e.target.value)}
                   placeholder="0.0"
-                  className="flex-1 px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm focus:border-[#fab062] focus:outline-none"
+                  className="flex-1 px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm focus:border-[#fab062] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
                 <button
                   onClick={handleWithdraw}
