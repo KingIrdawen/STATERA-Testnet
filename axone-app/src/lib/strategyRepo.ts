@@ -1,6 +1,9 @@
-// axone-app/src/lib/strategyRepo.ts
+/**
+ * Repository for Strategy persistence
+ * Updated to use the new Strategy type
+ */
 import { getKv } from "./kv";
-import { Strategy, StrategyInput } from "./strategyTypes";
+import { Strategy, StrategyInput } from "@/types/strategy";
 import { toJSONSafe } from "./serializers";
 
 const LIST_KEY = "strategies:list";
@@ -45,4 +48,3 @@ export async function deleteStrategy(id: string): Promise<boolean> {
   
   return changed;
 }
-

@@ -21,7 +21,7 @@ export type Strategy = {
   handlerAddress: string;
   l1ReadAddress: string;
   coreWriterAddress?: string; // Adresse CoreWriter (par défaut: 0x3333333333333333333333333333333333333333)
-  strategyType?: 'STRATEGY_1' | 'ERA_2'; // Type de stratégie pour déterminer les oracles à utiliser
+  strategyType?: 'ERA_2'; // Type de stratégie pour déterminer les oracles à utiliser (legacy, utiliser le nouveau type Strategy pour les nouvelles stratégies)
   // Pour les grands nombres qui pourraient être des bigint, on les garde en number/string selon le besoin
   tvl?: string; // Total Value Locked en string pour éviter les problèmes de précision
 };

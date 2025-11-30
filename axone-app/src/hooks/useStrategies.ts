@@ -1,14 +1,17 @@
+/**
+ * Hook for managing strategies
+ * Updated to use the new Strategy type
+ */
 import { useState, useEffect, useCallback } from 'react';
-import { Index } from '@/types/index';
+import type { Strategy } from '@/types/strategy';
 
 export function useStrategies() {
-  const [strategies, setStrategies] = useState<Index[]>([]);
+  const [strategies, setStrategies] = useState<Strategy[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // Charger toutes les stratégies depuis l'API
   const fetchStrategies = useCallback(async () => {
-    // S'assurer que nous sommes côté client
     if (typeof window === 'undefined') {
       return;
     }
@@ -17,13 +20,11 @@ export function useStrategies() {
       setLoading(true);
       setError(null);
       
-      // Construire l'URL - utiliser l'URL absolue si possible
       const baseUrl = window.location.origin;
       const apiUrl = `${baseUrl}/api/strategies`;
       
-      // Utiliser un timeout pour éviter les appels qui traînent
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 secondes timeout (réduit pour accélérer)
+      const timeoutId = setTimeout(() => controller.abort(), 3000);
       
       try {
         const response = await fetch(apiUrl, {
@@ -31,8 +32,8 @@ export function useStrategies() {
           headers: {
             'Content-Type': 'application/json',
           },
-          cache: 'force-cache', // Utiliser le cache pour accélérer le chargement
-          next: { revalidate: 60 }, // Revalider toutes les 60 secondes
+          cache: 'force-cache',
+          next: { revalidate: 60 },
           signal: controller.signal,
         });
         
@@ -49,7 +50,6 @@ export function useStrategies() {
         }
         
         const data = await response.json();
-        // Accepter soit data.strategies soit data directement (si c'est un tableau)
         const strategiesList = Array.isArray(data) ? data : (data.strategies || []);
         setStrategies(strategiesList);
         setError(null);
@@ -63,11 +63,9 @@ export function useStrategies() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch strategies';
       setError(errorMessage);
-      // Ne logger l'erreur que si c'est une erreur critique (pas juste un timeout ou réseau)
       if (err instanceof Error && !err.message.includes('timeout') && !err.message.includes('Failed to fetch')) {
         console.error('Error fetching strategies:', err);
       }
-      // En cas d'erreur, initialiser avec un tableau vide pour ne pas bloquer l'interface
       setStrategies([]);
     } finally {
       setLoading(false);
@@ -75,7 +73,7 @@ export function useStrategies() {
   }, []);
 
   // Créer une nouvelle stratégie
-  const createStrategy = async (strategy: Index) => {
+  const createStrategy = async (strategy: Strategy) => {
     if (typeof window === 'undefined') {
       throw new Error('Cannot create strategy on server side');
     }
@@ -86,15 +84,14 @@ export function useStrategies() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(strategy),
-        cache: 'no-store', // Forcer le rechargement sans cache
+        cache: 'no-store',
       });
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || 'Failed to create strategy');
       }
       const data = await response.json();
-      // Re-fetch immédiatement sans cache pour s'assurer que les données sont à jour
-        await fetchStrategies();
+      await fetchStrategies();
       return data;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
@@ -105,7 +102,7 @@ export function useStrategies() {
   };
 
   // Mettre à jour une stratégie
-  const updateStrategy = async (strategy: Index) => {
+  const updateStrategy = async (strategy: Strategy) => {
     if (typeof window === 'undefined') {
       throw new Error('Cannot update strategy on server side');
     }
@@ -120,15 +117,14 @@ export function useStrategies() {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(strategy),
-        cache: 'no-store', // Forcer le rechargement sans cache
+        cache: 'no-store',
       });
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || 'Failed to update strategy');
       }
       const data = await response.json();
-      // Re-fetch immédiatement sans cache pour s'assurer que les données sont à jour
-        await fetchStrategies();
+      await fetchStrategies();
       return data;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
@@ -148,14 +144,13 @@ export function useStrategies() {
       const baseUrl = window.location.origin;
       const response = await fetch(`${baseUrl}/api/strategies/${id}`, {
         method: 'DELETE',
-        cache: 'no-store', // Forcer le rechargement sans cache
+        cache: 'no-store',
       });
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || 'Failed to delete strategy');
       }
-      // Re-fetch immédiatement sans cache pour s'assurer que les données sont à jour
-        await fetchStrategies();
+      await fetchStrategies();
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(errorMessage);
@@ -165,9 +160,7 @@ export function useStrategies() {
   };
 
   useEffect(() => {
-    // S'assurer que nous sommes côté client et que le DOM est prêt
     if (typeof window !== 'undefined') {
-      // Charger immédiatement sans délai pour accélérer
       fetchStrategies().catch(() => {
         // Erreur silencieuse - le hook gère déjà l'état d'erreur
       });
