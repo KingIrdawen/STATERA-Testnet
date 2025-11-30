@@ -379,7 +379,10 @@ export default function AdminPage() {
                       value={formData.contracts.usdcAddress || ''}
                       onChange={(e) => setFormData({
                         ...formData,
-                        contracts: { ...formData.contracts, usdcAddress: e.target.value || undefined as `0x${string}` | undefined }
+                        contracts: { 
+                          ...formData.contracts, 
+                          usdcAddress: e.target.value ? (e.target.value as `0x${string}`) : undefined 
+                        }
                       })}
                       className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-[#fab062] focus:outline-none"
                       placeholder="0x... (optionnel)"

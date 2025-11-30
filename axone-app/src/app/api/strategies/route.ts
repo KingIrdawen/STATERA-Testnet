@@ -30,7 +30,21 @@ export async function POST(req: Request) {
       );
     }
     
-    const created = await saveStrategy(parsed.data);
+    // Convertir les adresses string en 0x${string}
+    const strategyInput = {
+      ...parsed.data,
+      contracts: {
+        ...parsed.data.contracts,
+        vaultAddress: parsed.data.contracts.vaultAddress as `0x${string}`,
+        handlerAddress: parsed.data.contracts.handlerAddress as `0x${string}`,
+        coreViewsAddress: parsed.data.contracts.coreViewsAddress as `0x${string}`,
+        l1ReadAddress: parsed.data.contracts.l1ReadAddress as `0x${string}`,
+        coreWriterAddress: parsed.data.contracts.coreWriterAddress as `0x${string}`,
+        usdcAddress: parsed.data.contracts.usdcAddress ? (parsed.data.contracts.usdcAddress as `0x${string}`) : undefined,
+      },
+    };
+    
+    const created = await saveStrategy(strategyInput);
     return NextResponse.json(created, { status: 201 });
   } catch (error) {
     console.error('Error creating strategy:', error);
