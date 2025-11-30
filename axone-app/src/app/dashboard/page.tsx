@@ -158,17 +158,20 @@ function RankingTabContent() {
   )
 }
 
+// Composant wrapper pour une stratégie avec vérification de dépôt
+function StrategyWithDepositCheck({ strategy }: { strategy: Strategy }) {
+  const data = useStrategyData(strategy);
+  const hasDeposit = (data.userShares ?? 0) > 0 || (data.userValueUsd ?? 0) > 0;
+
+  if (!hasDeposit) {
+    return null;
+  }
+
+  return <StrategyCardEra strategy={strategy} showWithdraw={true} />;
+}
+
 // Composant pour filtrer les stratégies avec dépôts (pour l'onglet "Strategy")
 function StrategiesWithDeposits({ strategies, loading }: { strategies: Strategy[]; loading: boolean }) {
-  const strategiesWithData = strategies.map(strategy => ({
-    strategy,
-    data: useStrategyData(strategy),
-  }));
-
-  const strategiesWithDeposits = strategiesWithData.filter(
-    ({ data }) => (data.userShares ?? 0) > 0 || (data.userValueUsd ?? 0) > 0
-  );
-
   if (loading) {
     return (
       <div className="text-center py-12">
@@ -177,7 +180,7 @@ function StrategiesWithDeposits({ strategies, loading }: { strategies: Strategy[
     );
   }
 
-  if (strategiesWithDeposits.length === 0) {
+  if (strategies.length === 0) {
     return (
       <div className="text-center py-12">
         <p className="text-[#5a9a9a] text-lg mb-4">No deposited strategies yet</p>
@@ -188,8 +191,8 @@ function StrategiesWithDeposits({ strategies, loading }: { strategies: Strategy[
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      {strategiesWithDeposits.map(({ strategy }) => (
-        <StrategyCardEra key={strategy.id} strategy={strategy} showWithdraw={true} />
+      {strategies.map(strategy => (
+        <StrategyWithDepositCheck key={strategy.id} strategy={strategy} />
       ))}
     </div>
   );
