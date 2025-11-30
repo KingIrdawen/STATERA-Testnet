@@ -18,11 +18,11 @@ export default function DocsFonctionnementRevenusPage() {
       </div>
 
       <div className="prose prose-invert max-w-none">
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-8">
+        <section>
           <p className="text-[#5a9a9a] leading-relaxed">
             The Protocol Mechanics section explains how users can participate in Statera strategies and earn rewards.
           </p>
-        </div>
+        </section>
       </div>
     </div>
   );

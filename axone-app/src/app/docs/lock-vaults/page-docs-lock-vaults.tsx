@@ -20,38 +20,39 @@ export default function DocsLockVaultsPage() {
         </p>
       </div>
 
-      <div className="prose prose-invert max-w-none space-y-8">
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
-          <h2 className="text-2xl font-bold text-white mb-4">How it works:</h2>
-          <ul className="text-[#5a9a9a] leading-relaxed mb-4 ml-6 space-y-2">
+      <div className="prose prose-invert max-w-none">
+        <div className="space-y-12">
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-6">How it works:</h2>
+            <ul className="text-[#5a9a9a] leading-relaxed mb-6 ml-6 space-y-2">
             <li>The user deposits their liquid tokens into the Strategy Staking vault</li>
             <li>There is <strong>no minimum lock-up period</strong> and <strong>no penalties</strong> for withdrawing</li>
             <li>Rewards in <strong>STA are accrued continuously</strong> and can be claimed at any time</li>
           </ul>
 
-          <h2 className="text-2xl font-bold text-white mb-4 mt-8">Source of rewards:</h2>
-          <ul className="text-[#5a9a9a] leading-relaxed mb-4 ml-6 space-y-2">
+            <h2 className="text-2xl font-bold text-white mb-6 mt-8">Source of rewards:</h2>
+            <ul className="text-[#5a9a9a] leading-relaxed mb-6 ml-6 space-y-2">
             <li><strong>100% of the annual 10% inflation</strong> of the STA token is allocated to the Strategy Staking vaults</li>
             <li>→ <strong>Linear reward distribution over time</strong>: 1 month of participation = 1/12 of annual rewards (shared proportionally among vault depositors)</li>
           </ul>
 
-          <h2 className="text-2xl font-bold text-white mb-4 mt-8">Incentive to stay:</h2>
-          <p className="text-[#5a9a9a] leading-relaxed mb-4">
+            <h2 className="text-2xl font-bold text-white mb-6 mt-8">Incentive to stay:</h2>
+            <p className="text-[#5a9a9a] leading-relaxed mb-6">
             Rewards accumulate continuously while your tokens are staked.
           </p>
 
-          <h2 className="text-2xl font-bold text-white mb-4 mt-8">Real-time dashboard:</h2>
+            <h2 className="text-2xl font-bold text-white mb-6 mt-8">Real-time dashboard:</h2>
           <p className="text-[#5a9a9a] leading-relaxed mb-4">
             An on-chain dashboard allows users to monitor:
           </p>
-          <ul className="text-[#5a9a9a] leading-relaxed mb-4 ml-6 space-y-2">
+            <ul className="text-[#5a9a9a] leading-relaxed mb-6 ml-6 space-y-2">
             <li>Accrued rewards</li>
             <li>Their share in the vault</li>
           </ul>
-        </div>
+          </section>
 
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
-          <h2 className="text-2xl font-bold text-white mb-4">Real-World Example: Alice invests 25 HYPE in the ERA1 strategy</h2>
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-6">Real-World Example: Alice invests 25 HYPE in the ERA1 strategy</h2>
           
           <h3 className="text-xl font-bold text-white mb-4 mt-6">🔹 Context</h3>
           <ul className="text-[#5a9a9a] leading-relaxed mb-4 ml-6 space-y-2">
@@ -170,6 +171,7 @@ export default function DocsLockVaultsPage() {
           <p className="text-[#5a9a9a] leading-relaxed">
             <strong>Even without considering the monetary value of STA</strong>, Alice achieved an <strong>18.8% return on her capital in one year.</strong> And <strong>if STA appreciates</strong> (due to demand, buyback and burn, HYPE rewards), her <strong>total return becomes even higher.</strong>
           </p>
+          </section>
         </div>
       </div>
     </div>

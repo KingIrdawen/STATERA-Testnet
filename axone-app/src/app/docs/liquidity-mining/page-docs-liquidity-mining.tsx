@@ -20,8 +20,9 @@ export default function DocsLiquidityMiningPage() {
         </p>
       </div>
 
-      <div className="prose prose-invert max-w-none space-y-8">
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
+      <div className="prose prose-invert max-w-none">
+        <div className="space-y-12">
+          <section>
           <p className="text-[#5a9a9a] leading-relaxed mb-4">
             Statera&apos;s <strong>liquidity mining</strong> mechanism is designed to <strong>fairly reward early liquidity contributors</strong>, with <strong>no centralized allocations or privileged access.</strong>
           </p>
@@ -29,14 +30,14 @@ export default function DocsLiquidityMiningPage() {
             Before the <strong>TGE (Token Generation Event)</strong>, users can deposit HYPE into a <strong>the LP vault.</strong>
           </p>
 
-          <h2 className="text-2xl font-bold text-white mb-4 mt-8">Key features:</h2>
+            <h2 className="text-2xl font-bold text-white mb-6 mt-8">Key features:</h2>
           <ul className="text-[#5a9a9a] leading-relaxed mb-4 ml-6 space-y-2">
             <li><strong>Flexible deposits</strong>: Funds can be withdrawn at any time <strong>before the lock period</strong></li>
             <li><strong>No rewards are credited</strong> until the vault is locked</li>
             <li><strong>Global cap of $5M equivalent</strong> to limit risk and ensure balanced distribution</li>
           </ul>
 
-          <h2 className="text-2xl font-bold text-white mb-4 mt-8">Locking :</h2>
+            <h2 className="text-2xl font-bold text-white mb-6 mt-8">Locking :</h2>
           <p className="text-[#5a9a9a] leading-relaxed mb-4">
             A few days or weeks before TGE, the LP vault is <strong>locked</strong>:
           </p>
@@ -46,7 +47,7 @@ export default function DocsLiquidityMiningPage() {
             <li><strong>Point distribution</strong> is finalized based on each user&apos;s share <strong>the day before TGE</strong>—no further capital additions after that.</li>
           </ul>
 
-          <h2 className="text-2xl font-bold text-white mb-4 mt-8">At TGE:</h2>
+            <h2 className="text-2xl font-bold text-white mb-6 mt-8">At TGE:</h2>
           <p className="text-[#5a9a9a] leading-relaxed mb-4">
             50M STA (50% of the initial supply) are minted and transferred to the LP vault, which now forms a balanced 50/50 liquidity pool:
           </p>
@@ -76,7 +77,7 @@ export default function DocsLiquidityMiningPage() {
             This ensures <strong>long-term liquidity depth</strong> and rewards those who helped launch the protocol.
           </p>
 
-          <h2 className="text-2xl font-bold text-white mb-4 mt-8">Example :</h2>
+            <h2 className="text-2xl font-bold text-white mb-6 mt-8">Example :</h2>
           
           <h3 className="text-xl font-bold text-white mb-4 mt-6">🚀 Initial State – At TGE</h3>
           <ul className="text-[#5a9a9a] leading-relaxed mb-4 ml-6 space-y-2">
@@ -137,6 +138,7 @@ export default function DocsLiquidityMiningPage() {
             <li>User B: <strong>25,000 STA</strong></li>
             <li>Remaining 200,000 STA → distributed to ERA depositors</li>
           </ul>
+          </section>
         </div>
       </div>
     </div>

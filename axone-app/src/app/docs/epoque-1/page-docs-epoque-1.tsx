@@ -21,11 +21,11 @@ export default function DocsEpoque1Page() {
       </div>
 
       <div className="prose prose-invert max-w-none">
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-8">
+        <section>
           <p className="text-[#5a9a9a] leading-relaxed">
             Content coming soon...
           </p>
-        </div>
+        </section>
       </div>
     </div>
   );

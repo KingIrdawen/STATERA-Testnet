@@ -20,8 +20,9 @@ export default function DocsTokenomicsPage() {
         </p>
       </div>
 
-      <div className="prose prose-invert max-w-none space-y-8">
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
+      <div className="prose prose-invert max-w-none">
+        <div className="space-y-12">
+          <section>
           <p className="text-[#5a9a9a] leading-relaxed mb-4">
             Convinced by the performance and value created by our products, and guided by <strong>decentralization as our ethical compass</strong>, we&apos;ve made a radical choice : <strong>100% of protocol revenue is redistributed to the community.</strong>
           </p>
@@ -42,7 +43,7 @@ export default function DocsTokenomicsPage() {
             A model that is <strong>fair, transparent, and deeply community-driven.</strong>
           </p>
 
-          <h2 className="text-2xl font-bold text-white mb-4 mt-8">Supply and Inflation: Balancing Growth and Value</h2>
+            <h2 className="text-2xl font-bold text-white mb-6 mt-8">Supply and Inflation: Balancing Growth and Value</h2>
           <ul className="text-[#5a9a9a] leading-relaxed mb-4 ml-6 space-y-2">
             <li><strong>Initial total supply</strong>: 100,000,000 STA</li>
             <li><strong>Emission model</strong>: 10% annual inflation, issued continuously to fund long-term rewards</li>
@@ -55,7 +56,7 @@ export default function DocsTokenomicsPage() {
             This model ensures <strong>long-term sustainability</strong> while protecting token value from excessive dilution.
           </p>
 
-          <h2 className="text-2xl font-bold text-white mb-4 mt-8">Distribution: Fair, Community-First, No Privileges</h2>
+            <h2 className="text-2xl font-bold text-white mb-6 mt-8">Distribution: Fair, Community-First, No Privileges</h2>
           <p className="text-[#5a9a9a] leading-relaxed mb-4">
             All STA supply will be distributed at launch across two equitable channels:
           </p>
@@ -85,6 +86,7 @@ export default function DocsTokenomicsPage() {
           <p className="text-[#5a9a9a] leading-relaxed font-semibold">
             ❗ <strong>No tokens were allocated to the team, investors, or partners</strong>—Statera is built on a <strong>truly fair and decentralized distribution.</strong>
           </p>
+          </section>
         </div>
       </div>
     </div>

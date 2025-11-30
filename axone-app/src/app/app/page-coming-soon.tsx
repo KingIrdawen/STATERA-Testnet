@@ -28,7 +28,7 @@ export default function ComingSoon() {
         <div className="mb-8">
           <Link href="/" className="inline-block">
             <Image
-              src="/Logo-Axone.png"
+              src="/Logo-Statera-sandy-brown-détouré.png"
               alt="STATERA Logo"
               width={200}
               height={67}

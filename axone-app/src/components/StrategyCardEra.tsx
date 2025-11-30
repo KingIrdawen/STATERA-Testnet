@@ -10,6 +10,7 @@ import type { Strategy } from '@/types/strategy';
 import { useStrategyData } from '@/hooks/useStrategyDataEra';
 import { useStrategyDeposit } from '@/hooks/useStrategyDeposit';
 import { useStrategyWithdraw } from '@/hooks/useStrategyWithdraw';
+import { useStrategyToken1Meta } from '@/hooks/useStrategyToken1Meta';
 import { formatUsd } from '@/lib/format';
 
 interface StrategyCardEraProps {
@@ -29,6 +30,8 @@ export function StrategyCardEra({ strategy, showWithdraw = false }: StrategyCard
   const strategyData = useStrategyData(strategy);
   const { deposit, isPending: isDepositPending, isConfirmed: isDepositConfirmed, error: depositError } = useStrategyDeposit(strategy);
   const { withdraw, isPending: isWithdrawPending, isConfirmed: isWithdrawConfirmed, error: withdrawError } = useStrategyWithdraw(strategy);
+  const { symbol: token1Symbol, name: token1Name } = useStrategyToken1Meta(strategy);
+  const displayToken1 = token1Symbol || token1Name || 'TOKEN1';
 
   const [depositAmount, setDepositAmount] = useState('');
   const [withdrawAmount, setWithdrawAmount] = useState('');
@@ -125,12 +128,11 @@ export function StrategyCardEra({ strategy, showWithdraw = false }: StrategyCard
         <p className="text-[#5a9a9a] text-sm mb-4">{strategy.description}</p>
       )}
 
-      {/* Description (may contain composition info) */}
-      {strategy.description && (
-        <div className="mb-4">
-          <p className="text-[#5a9a9a] text-sm">{strategy.description}</p>
-        </div>
-      )}
+      {/* TOKEN1 on-chain info */}
+      <div className="mb-4 p-2 bg-gray-800/30 border border-gray-700 rounded text-xs">
+        <span className="text-gray-400">TOKEN1 on-chain: </span>
+        <span className="text-[#fab062] font-semibold">{displayToken1}</span>
+      </div>
 
       {/* Network warning */}
       {address && !isCorrectChain && (

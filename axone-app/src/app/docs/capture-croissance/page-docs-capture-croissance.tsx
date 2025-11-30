@@ -20,8 +20,9 @@ export default function DocsCaptureCroissancePage() {
         </p>
       </div>
 
-      <div className="prose prose-invert max-w-none space-y-8">
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
+      <div className="prose prose-invert max-w-none">
+        <div className="space-y-12">
+          <section>
           <p className="text-[#5a9a9a] leading-relaxed mb-4">
             At Statera, we believe a decentralized protocol must <strong>first serve its community</strong>. That&apos;s why we&apos;ve built an <strong>innovative, transparent economic model</strong> designed to <strong>directly return value</strong> to the people who power the ecosystem: <strong>STA holders</strong>.
           </p>
@@ -57,7 +58,7 @@ export default function DocsCaptureCroissancePage() {
             Statera does <strong>not extract value for centralized stakeholders</strong>. Instead, it <strong>redistributes value fairly, predictably, and automatically</strong>—a model that embodies our vision of a <strong>sustainable, community-driven, and economically resilient protocol</strong>, where every participant benefits from Statera&apos;s success.
           </p>
 
-          <h2 className="text-2xl font-bold text-white mb-4 mt-8">Direct Redistribution</h2>
+            <h2 className="text-2xl font-bold text-white mb-6 mt-8">Direct Redistribution</h2>
           <p className="text-[#5a9a9a] leading-relaxed mb-4">
             50% of all protocol fees are deposited into a <strong>dedicated vault</strong>, fully controlled by <strong>audited smart contracts</strong>. This vault powers a <strong>continuous stream of automatic distributions</strong> to STA holders who <strong>deposit their tokens into the STA Staking Vault</strong>— demonstrating long-term commitment to the protocol.
           </p>
@@ -75,7 +76,7 @@ export default function DocsCaptureCroissancePage() {
             <li>✅ STA holders are incentivized to deposit on STA Staking Vault, increasing protocol stability and community engagement</li>
           </ul>
 
-          <h2 className="text-2xl font-bold text-white mb-4 mt-8">Buyback & Burn</h2>
+            <h2 className="text-2xl font-bold text-white mb-6 mt-8">Buyback & Burn</h2>
           <p className="text-[#5a9a9a] leading-relaxed mb-4">
             We&apos;ve designed a <strong>simple but powerful mechanism</strong> to support long-term token value and deliver direct impact to our community.
           </p>
@@ -94,7 +95,7 @@ export default function DocsCaptureCroissancePage() {
             The more platform activity grows, the stronger the <strong>Buyback & Burn</strong> mechanism becomes—acting as an <strong>engine of scarcity and appreciation</strong> for STA.
           </p>
 
-          <div className="mt-8 p-4 bg-[#011f26] rounded-lg border border-gray-600">
+          <div className="mt-8">
             <p className="text-white font-semibold mb-2">Visuel :</p>
             <p className="text-[#5a9a9a] leading-relaxed mb-1">
               User pays fee (HYPE)
@@ -103,6 +104,7 @@ export default function DocsCaptureCroissancePage() {
               --&gt; 50% buy STA and burn / 50% distributed to STA depositors in STA Staking Vault
             </p>
           </div>
+          </section>
         </div>
       </div>
     </div>

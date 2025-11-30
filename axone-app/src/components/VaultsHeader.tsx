@@ -11,7 +11,7 @@ export default function VaultsHeader() {
         {/* Logo et nom */}
         <Link href="/" className="flex items-center gap-3 sm:gap-4">
           <Image
-            src="/Logo-Axone.png"
+            src="/Logo-Statera-sandy-brown-détouré.png"
             alt="Statera Logo"
             width={150}
             height={50}

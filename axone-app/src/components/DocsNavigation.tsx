@@ -40,18 +40,21 @@ export default function DocsNavigation() {
 
   if (!prev && !next) return null;
 
+  // Style discret pour toutes les pages
+  const linkClassName = "group flex flex-col justify-between border-b border-gray-800/50 pb-4 pt-2 hover:border-gray-700/50 transition-all";
+
   return (
-    <div className="mt-16 border-t border-gray-700 pt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div className="mt-16 pt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
       {prev ? (
         <Link
           href={prev.slug}
-          className="group flex flex-col justify-between bg-[#001a1f] border border-gray-700 rounded-xl p-5 hover:bg-gray-800 transition-all"
+          className={linkClassName}
         >
           <span className="text-sm text-[#5a9a9a] mb-2 flex items-center gap-2">
             <ArrowLeft size={16} className="text-[#fab062]" />
             Previous page
           </span>
-          <span className="text-lg font-semibold text-white group-hover:text-[#fab062] transition-colors">
+          <span className="text-lg font-semibold text-white group-hover:text-[#fab062] transition-colors text-left">
             {prev.label}
           </span>
         </Link>
@@ -61,13 +64,13 @@ export default function DocsNavigation() {
       {next ? (
         <Link
           href={next.slug}
-          className="group flex flex-col justify-between bg-[#001a1f] border border-gray-700 rounded-xl p-5 hover:bg-gray-800 transition-all text-right"
+          className={linkClassName}
         >
           <span className="text-sm text-[#5a9a9a] mb-2 flex items-center justify-end gap-2">
             Next page
             <ArrowRight size={16} className="text-[#fab062]" />
           </span>
-          <span className="text-lg font-semibold text-white group-hover:text-[#fab062] transition-colors">
+          <span className="text-lg font-semibold text-white group-hover:text-[#fab062] transition-colors text-right">
             {next.label}
           </span>
         </Link>

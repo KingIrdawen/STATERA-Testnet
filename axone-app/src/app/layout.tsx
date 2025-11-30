@@ -13,9 +13,9 @@ export const metadata: Metadata = {
   title: "STATERA - Plateforme de gestion de vaults crypto",
   description: "La plateforme de gestion de vaults crypto nouvelle génération. Maximisez vos rendements avec notre technologie blockchain avancée.",
   icons: {
-    icon: '/Logo-Axone.png',
-    shortcut: '/Logo-Axone.png',
-    apple: '/Logo-Axone.png',
+    icon: '/Logo-Statera-sandy-brown-détouré.png',
+    shortcut: '/Logo-Statera-sandy-brown-détouré.png',
+    apple: '/Logo-Statera-sandy-brown-détouré.png',
   },
 };
 

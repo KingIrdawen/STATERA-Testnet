@@ -20,8 +20,9 @@ export default function SmartRebalancingPage() {
         </p>
       </div>
 
-      <div className="prose prose-invert max-w-none space-y-8">
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
+      <div className="prose prose-invert max-w-none">
+        <div className="space-y-12">
+          <section>
           <p className="text-[#5a9a9a] leading-relaxed mb-4">
             Unlike a static basket of assets, a Statera index is powered by <strong>smart contracts</strong> that automatically adjust its composition to maintain its target allocation—e.g., 50% BTC / 50% HYPE.
           </p>
@@ -35,7 +36,7 @@ export default function SmartRebalancingPage() {
             Today, <strong>passive holding is no longer enough. You must act intelligently.</strong>
           </p>
 
-          <h2 className="text-2xl font-bold text-white mb-4 mt-8">How It Works</h2>
+            <h2 className="text-2xl font-bold text-white mb-6 mt-8">How It Works</h2>
           <p className="text-[#5a9a9a] leading-relaxed mb-4">
             Cryptocurrencies are volatile. In Statera indices, this leads to weight imbalances:
           </p>
@@ -74,7 +75,7 @@ export default function SmartRebalancingPage() {
             By combining <strong>hourly monitoring</strong> with <strong>index-specific thresholds</strong>, Statera delivers a <strong>smarter, more adaptive form of active management</strong>—fully automated, transparent, and optimized for each strategy.
           </p>
 
-          <h2 className="text-2xl font-bold text-white mb-4 mt-8">Example: Statera&apos;s first index ERA1 (50% BTC / 50% HYPE)</h2>
+            <h2 className="text-2xl font-bold text-white mb-6 mt-8">Example: Statera&apos;s first index ERA1 (50% BTC / 50% HYPE)</h2>
           <p className="text-[#5a9a9a] leading-relaxed mb-4">
             After a strong rally in Bitcoin, the portfolio&apos;s composition shifts to:
           </p>
@@ -99,10 +100,10 @@ export default function SmartRebalancingPage() {
           <p className="text-[#5a9a9a] leading-relaxed">
             This mechanism lets you <strong>benefit from volatility</strong> while avoiding unnecessary trades on minor price noise.
           </p>
-        </div>
+          </section>
 
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
-          <h2 className="text-2xl font-bold text-white mb-4">Advantages of Statera&apos;s Smart Rebalancing</h2>
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-6">Advantages of Statera&apos;s Smart Rebalancing</h2>
           <p className="text-[#5a9a9a] leading-relaxed mb-4">
             A non-rebalanced portfolio drifts with the market: if BTC surges, you become <strong>overexposed to BTC risk</strong>. A correction can lead to massive losses.
           </p>
@@ -112,10 +113,10 @@ export default function SmartRebalancingPage() {
           <p className="text-[#5a9a9a] leading-relaxed">
             Smart rebalancing doesn&apos;t guarantee outperformance in all market conditions. In strong bull runs, selling early may limit maximum gains. But in return, you <strong>reduce risk, diversify intelligently, and capitalize on volatility</strong>—a more <strong>robust long-term approach.</strong>
           </p>
-        </div>
+          </section>
 
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
-          <h2 className="text-2xl font-bold text-white mb-4">Rebalancing in Traditional Finance</h2>
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-6">Rebalancing in Traditional Finance</h2>
           <p className="text-[#5a9a9a] leading-relaxed mb-4">
             Rebalancing is a well-established pillar of portfolio management. Decades of academic research and institutional practice, including studies by <strong>Vanguard, Morningstar</strong> and others, consistently show that regularly returning a portfolio to its target mix improves <strong>risk-adjusted returns</strong>, captures a <strong>&quot;buy low, sell high&quot; effect</strong>, and avoids unwanted risk drift.
           </p>
@@ -132,10 +133,10 @@ export default function SmartRebalancingPage() {
             <li>Vanguard study: <a href="https://www.financieelonafhankelijkblog.nl/wp-content/uploads/2021/11/Vanguard-ISGPORE.pdf" className="text-[#fab062] hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">https://www.financieelonafhankelijkblog.nl/wp-content/uploads/2021/11/Vanguard-ISGPORE.pdf</a></li>
             <li>Morningstar report: <a href="https://www.morningstar.com/columns/rekenthaler-report/when-rebalancing-creates-higher-returnsand-when-it-doesnt" className="text-[#fab062] hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">https://www.morningstar.com/columns/rekenthaler-report/when-rebalancing-creates-higher-returnsand-when-it-doesnt</a></li>
           </ul>
-        </div>
+          </section>
 
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
-          <h2 className="text-2xl font-bold text-white mb-4">Rebalancing in DeFi</h2>
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-6">Rebalancing in DeFi</h2>
           <p className="text-[#5a9a9a] leading-relaxed mb-4">
             Rebalancing isn&apos;t just a good idea—it&apos;s a <strong>strategy validated by decades of financial analysis.</strong> It improves risk-return profiles, enforces discipline, and harnesses volatility.
           </p>
@@ -159,10 +160,10 @@ export default function SmartRebalancingPage() {
           <p className="text-[#5a9a9a] leading-relaxed">
             The promise of active, frequent rebalancing <strong>remains unfulfilled</strong>—not due to flawed strategy, but <strong>because of infrastructure limits.</strong>
           </p>
-        </div>
+          </section>
 
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
-          <h2 className="text-2xl font-bold text-white mb-4">Statera&apos;s smart rebalancing: optimized execution via Hypercore</h2>
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-6">Statera&apos;s smart rebalancing: optimized execution via Hypercore</h2>
           <p className="text-[#5a9a9a] leading-relaxed mb-4">
             ✅ <strong>Statera is designed to break through this barrier.</strong>
           </p>
@@ -183,6 +184,7 @@ export default function SmartRebalancingPage() {
           <p className="text-[#5a9a9a] leading-relaxed font-semibold">
             Where others are held back by friction, Statera moves forward—powered by the fusion of <strong>proven strategy and cutting-edge technology.</strong>
           </p>
+          </section>
         </div>
       </div>
     </div>

@@ -317,7 +317,7 @@ export default function DashboardPage() {
           {/* Logo et nom */}
           <Link href="/" className="flex items-center gap-3 sm:gap-4">
             <Image
-              src="/Logo-Axone.png"
+              src="/Logo-Statera-sandy-brown-détouré.png"
               alt="Statera Logo"
               width={48}
               height={48}

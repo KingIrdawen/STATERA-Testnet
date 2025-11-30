@@ -21,23 +21,23 @@ export default function DocsPresentationPage() {
       </div>
 
       <div className="prose prose-invert max-w-none">
-        <div className="space-y-8">
-          <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
-            <h2 className="text-2xl font-bold text-white mb-4">Mission</h2>
+        <div className="space-y-12">
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-6">Mission</h2>
             <p className="text-[#5a9a9a] leading-relaxed mb-4">
               Statera indices enable investors of all levels to access sophisticated investment strategies—automatically managed to maximize returns, without effort and without trusted intermediaries.
             </p>
             <p className="text-[#5a9a9a] leading-relaxed">
               Whether you&apos;re a beginner or an expert, Statera allows you to invest in diversified indices (e.g., 50% BTC / 50% HYPE), automatically rebalanced.
             </p>
-          </div>
+          </section>
 
-          <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
-            <h2 className="text-2xl font-bold text-white mb-4">Vision and Values</h2>
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-6">Vision and Values</h2>
             <p className="text-[#5a9a9a] leading-relaxed mb-4">
               The Statera protocol is fully aligned with Hyperliquid&apos;s core values:
             </p>
-            <ul className="text-[#5a9a9a] leading-relaxed mb-4 ml-6 space-y-2">
+            <ul className="text-[#5a9a9a] leading-relaxed mb-6 ml-6 space-y-2">
               <li><strong>Performance</strong> → Hourly rebalancing via Hypercore.</li>
               <li><strong>Decentralization</strong> → The protocol will evolve into fully decentralized governance.</li>
               <li><strong>Self-custody</strong> → Users manage their funds directly from their wallets.</li>
@@ -56,10 +56,10 @@ export default function DocsPresentationPage() {
             <p className="text-[#5a9a9a] leading-relaxed font-semibold">
               The DeFi of tomorrow must be <strong>as fast as an institutional exchange, as free as an open-source protocol.</strong>
             </p>
-          </div>
+          </section>
 
-          <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
-            <h2 className="text-2xl font-bold text-white mb-4">The STA Token: Rewarding Alignment</h2>
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-6">The STA Token: Rewarding Alignment</h2>
             <p className="text-[#5a9a9a] leading-relaxed mb-4">
               The <strong>STA token</strong> is not just an access or speculative token.
             </p>
@@ -78,7 +78,7 @@ export default function DocsPresentationPage() {
             <p className="text-[#5a9a9a] leading-relaxed font-semibold">
               It is <strong>proof of commitment</strong>—and a reward for those who choose to build with us.
             </p>
-          </div>
+          </section>
         </div>
       </div>
     </div>

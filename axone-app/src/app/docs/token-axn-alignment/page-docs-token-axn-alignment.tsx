@@ -21,17 +21,17 @@ export default function DocsTokenAxnAlignmentPage() {
       </div>
 
       <div className="prose prose-invert max-w-none">
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-8">
-          <p className="text-[#5a9a9a] leading-relaxed mb-4">
+        <section className="space-y-6">
+          <p className="text-[#5a9a9a] leading-relaxed">
             The <strong>STA token</strong> is not just an access or speculative token.
           </p>
-          <p className="text-[#5a9a9a] leading-relaxed mb-4">
+          <p className="text-[#5a9a9a] leading-relaxed">
             It is Statera&apos;s <strong>alignment currency</strong>—an asset that rewards those who believe in the protocol, participate in it, and contribute to its growth.
           </p>
-          <p className="text-[#5a9a9a] leading-relaxed mb-4">
+          <p className="text-[#5a9a9a] leading-relaxed">
             Every STA holder is <strong>morally and economically aligned</strong> with Statera&apos;s success.
           </p>
-          <p className="text-[#5a9a9a] leading-relaxed mb-4">
+          <p className="text-[#5a9a9a] leading-relaxed">
             Whether you use an index, stake your liquid token, or engage with the ecosystem, STA allows you to <strong>capture a share of the value you help create.</strong>
           </p>
           <p className="text-[#5a9a9a] leading-relaxed">
@@ -40,7 +40,7 @@ export default function DocsTokenAxnAlignmentPage() {
           <p className="text-[#5a9a9a] leading-relaxed font-semibold">
             It is <strong>proof of commitment</strong>—and a reward for those who choose to build with us.
           </p>
-        </div>
+        </section>
       </div>
     </div>
   );

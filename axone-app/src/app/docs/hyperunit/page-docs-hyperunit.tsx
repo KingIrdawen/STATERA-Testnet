@@ -21,39 +21,39 @@ export default function HyperUnitPage() {
       </div>
 
       <div className="prose prose-invert max-w-none">
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-8">
-          <p className="text-[#5a9a9a] leading-relaxed mb-4">
+        <section className="space-y-6">
+          <p className="text-[#5a9a9a] leading-relaxed">
             A protocol&apos;s performance is only as strong as the <strong>security of its foundations.</strong>
           </p>
-          <p className="text-[#5a9a9a] leading-relaxed mb-4">
+          <p className="text-[#5a9a9a] leading-relaxed">
             Fast and low-cost rebalancing makes no sense if your assets are built on <strong>fragile layers, risky bridges, or opaque wrapped tokens.</strong>
           </p>
-          <p className="text-[#5a9a9a] leading-relaxed mb-4">
+          <p className="text-[#5a9a9a] leading-relaxed">
             That&apos;s why Statera is built on <strong>HyperUnit</strong>—Hyperliquid&apos;s integrated tokenization infrastructure—to ensure a seamless, secure, traceable, and non-custodial user experience.
           </p>
-          <p className="text-[#5a9a9a] leading-relaxed mb-4">
+          <p className="text-[#5a9a9a] leading-relaxed">
             Most DeFi protocols use <strong>&quot;wrapped&quot; tokens</strong> (wBTC, wETH, etc.) to represent assets from other blockchains. With <strong>HyperUnit</strong>, assets like BTC, ETH, and others are <strong>natively available on Hyperliquid</strong> through an on-chain registration and verification system.
           </p>
-          <p className="text-[#5a9a9a] leading-relaxed mb-4">
+          <p className="text-[#5a9a9a] leading-relaxed">
             HyperUnit eliminates the risks associated with wrapped tokens and the security vulnerabilities that bridges introduce to on-chain ecosystems.
           </p>
-          <p className="text-[#5a9a9a] leading-relaxed mb-4">
+          <p className="text-[#5a9a9a] leading-relaxed">
             By relying on native asset representation, Statera ensures:
           </p>
-          <ul className="text-[#5a9a9a] leading-relaxed mb-4 ml-6 space-y-2">
+          <ul className="text-[#5a9a9a] leading-relaxed ml-6 space-y-2">
             <li><strong>Full transparency</strong> of asset backing</li>
             <li><strong>No dependency on third-party custodians</strong></li>
             <li><strong>Reduced attack surface</strong> (no bridge exploits)</li>
             <li><strong>On-chain verifiability</strong> of reserves</li>
           </ul>
-          <p className="text-[#5a9a9a] leading-relaxed mb-4">
+          <p className="text-[#5a9a9a] leading-relaxed">
             This means users get the full benefits of cross-chain exposure—without compromising on decentralization or security.
           </p>
           <p className="text-[#5a9a9a] leading-relaxed font-semibold">
             With HyperUnit, <strong>your Bitcoin is truly Bitcoin, your Ethereum is truly Ethereum—natively, securely, and transparently on Hyperliquid.</strong>
           </p>
 
-          <div className="mt-8 p-4 bg-[#011f26] rounded-lg border border-gray-600">
+          <div className="mt-8">
             <p className="text-white font-semibold mb-2">Visuel :</p>
             <p className="text-[#5a9a9a] leading-relaxed mb-1">
               <strong>User: Deposits HYPE → [Statera Protocol] → Receives ERA1 token</strong>
@@ -68,7 +68,7 @@ export default function HyperUnitPage() {
               <strong>→ User can: Hold, transfer, deposit, or redeem ERA1 for HYPE</strong>
             </p>
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );
