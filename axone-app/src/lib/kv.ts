@@ -7,11 +7,6 @@ function createKvClient() {
   const token = process.env.strategies_KV_REST_API_TOKEN;
   
   if (!url || !token) {
-    // En développement local, retourner un client mock
-    if (process.env.NODE_ENV === 'development') {
-      console.warn('[KV] Vercel KV credentials not configured. Using mock client for local development.');
-      return createMockKvClient();
-    }
     throw new Error('Vercel KV credentials not configured. Please set strategies_KV_REST_API_URL and strategies_KV_REST_API_TOKEN');
   }
   
@@ -21,28 +16,10 @@ function createKvClient() {
   });
 }
 
-// Client mock pour le développement local
-function createMockKvClient() {
-  const storage = new Map<string, any>();
-  
-  return {
-    get: async <T>(key: string): Promise<T | null> => {
-      const value = storage.get(key);
-      return value ?? null;
-    },
-    set: async (key: string, value: any): Promise<void> => {
-      storage.set(key, value);
-    },
-    del: async (key: string): Promise<void> => {
-      storage.delete(key);
-    },
-  } as any;
-}
-
 // Lazy initialization pour éviter les erreurs au build time
 let kvClient: ReturnType<typeof createClient> | null = null;
 
-export function getKv() {
+export function getKv(): ReturnType<typeof createClient> {
   if (!kvClient) {
     kvClient = createKvClient();
   }
