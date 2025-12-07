@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAccount, useChainId, useSwitchChain } from 'wagmi';
 import { useSwapStrategies, type SwapStrategy } from '@/hooks/useSwapStrategies';
 import { useSwapQuote, usePerformSwap, type SwapDirection } from '@/hooks/useSwap';
+import { useVaultTokenApproval } from '@/hooks/useVaultTokenApproval';
 import { formatUsd } from '@/lib/format';
 
 export function DashboardSwapTab() {
@@ -33,6 +34,13 @@ export function DashboardSwapTab() {
     amountOutWei: quote.amountOutWei,
     slippageBps: 100n, // 1% slippage
   });
+
+  // Check approval for VAULT_TO_HYPE swaps
+  const { needsApproval, approve, isApproving, isApproved, approveError } = useVaultTokenApproval(
+    selected?.strategy || null,
+    selected?.poolAddress,
+    direction === 'VAULT_TO_HYPE' ? amountIn : ''
+  );
 
   // Reset form on success
   useEffect(() => {
@@ -214,6 +222,35 @@ export function DashboardSwapTab() {
             </div>
           )}
 
+          {/* Approval button for VAULT_TO_HYPE */}
+          {direction === 'VAULT_TO_HYPE' && needsApproval && (
+            <div className="mb-4">
+              <button
+                onClick={approve}
+                disabled={isApproving || !address || !isCorrectChain}
+                className="w-full px-6 py-3 bg-yellow-600 text-white rounded-lg text-sm font-semibold hover:bg-yellow-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isApproving
+                  ? 'Approving...'
+                  : !address
+                  ? 'Connect Wallet'
+                  : !isCorrectChain
+                  ? 'Switch Network'
+                  : 'Approve Vault Tokens'}
+              </button>
+              {approveError && (
+                <p className="text-red-400 text-xs mt-2 text-center">
+                  Approval error: {approveError.message}
+                </p>
+              )}
+              {isApproved && (
+                <p className="text-green-400 text-xs mt-2 text-center">
+                  ✓ Approval successful! You can now swap.
+                </p>
+              )}
+            </div>
+          )}
+
           {/* Swap button */}
           <button
             onClick={handleSwap}
@@ -226,7 +263,8 @@ export function DashboardSwapTab() {
               !quote.amountOutWei ||
               quote.amountOutWei === 0n ||
               !address ||
-              !isCorrectChain
+              !isCorrectChain ||
+              (direction === 'VAULT_TO_HYPE' && needsApproval)
             }
             className="w-full px-6 py-3 bg-[#fab062] text-black rounded-lg text-sm font-semibold hover:bg-[#e89a4a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
@@ -238,12 +276,14 @@ export function DashboardSwapTab() {
               ? 'Switch Network'
               : !quote.amountOutFormatted
               ? 'Calculating...'
+              : direction === 'VAULT_TO_HYPE' && needsApproval
+              ? 'Approve First'
               : 'Swap'}
           </button>
 
-          {direction === 'VAULT_TO_HYPE' && (
-            <p className="mt-3 text-yellow-400 text-xs text-center">
-              ⚠️ Make sure you have approved the pool to spend your vault tokens
+          {direction === 'VAULT_TO_HYPE' && !needsApproval && (
+            <p className="mt-3 text-green-400 text-xs text-center">
+              ✓ Pool approved to spend your vault tokens
             </p>
           )}
         </div>

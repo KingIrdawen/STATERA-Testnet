@@ -113,23 +113,40 @@ export function usePerformSwap({ poolAddress, strategy, direction, amountIn, amo
         minOutWei: minOutWei.toString(),
         slippageBps: slippageBps.toString(),
         recipient: address,
+        willCallFunction: direction === 'HYPE_TO_VAULT' ? 'swapHypeForVaultToken' : 'swapVaultTokenForHype',
+        willSendValue: direction === 'HYPE_TO_VAULT' ? amountInWei.toString() : '0',
       });
 
       if (direction === 'HYPE_TO_VAULT') {
         // Swap HYPE -> vault, native value
-        writeContract({
+        const contractCall = {
           ...swapPool(poolAddress),
-          functionName: 'swapHypeForVaultToken',
-          args: [minOutWei, address],
+          functionName: 'swapHypeForVaultToken' as const,
+          args: [minOutWei, address] as const,
           value: amountInWei,
+        };
+        console.log('[SwapDebug] Calling swapHypeForVaultToken with:', {
+          poolAddress,
+          minOutWei: minOutWei.toString(),
+          recipient: address,
+          value: amountInWei.toString(),
         });
+        writeContract(contractCall);
       } else {
         // Swap vault -> HYPE
-        writeContract({
+        const contractCall = {
           ...swapPool(poolAddress),
-          functionName: 'swapVaultTokenForHype',
-          args: [amountInWei, minOutWei, address],
+          functionName: 'swapVaultTokenForHype' as const,
+          args: [amountInWei, minOutWei, address] as const,
+        };
+        console.log('[SwapDebug] Calling swapVaultTokenForHype with:', {
+          poolAddress,
+          amountInWei: amountInWei.toString(),
+          minOutWei: minOutWei.toString(),
+          recipient: address,
+          value: '0 (not payable)',
         });
+        writeContract(contractCall);
       }
     } catch (err) {
       console.error('[usePerformSwap] Error preparing swap:', err);
