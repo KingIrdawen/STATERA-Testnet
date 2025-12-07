@@ -18,9 +18,10 @@ import { formatUsd } from '@/lib/format';
 interface StrategyCardEraProps {
   strategy: Strategy;
   showWithdraw?: boolean;
+  showViewMore?: boolean; // Show "View more" button for dashboard tab
 }
 
-export function StrategyCardEra({ strategy, showWithdraw = false }: StrategyCardEraProps) {
+export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore = false }: StrategyCardEraProps) {
   // Vérification de sécurité
   if (!strategy || !strategy.contracts) {
     return null;
@@ -116,12 +117,9 @@ export function StrategyCardEra({ strategy, showWithdraw = false }: StrategyCard
     <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 hover:border-[#fab062]/50 transition-colors h-full flex flex-col">
       {/* En-tête */}
       <div className="flex justify-between items-start mb-4">
-        <Link
-          href={`/dashboard/strategy/${strategy.id}`}
-          className="text-xl font-bold bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent hover:opacity-80 transition-opacity cursor-pointer"
-        >
+        <h4 className="text-xl font-bold bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent">
           {strategy.name}
-        </Link>
+        </h4>
         <div className="flex items-center gap-2">
           {strategy.status && (
             <span className={`px-2 py-1 rounded text-xs font-semibold ${
@@ -290,6 +288,18 @@ export function StrategyCardEra({ strategy, showWithdraw = false }: StrategyCard
       {!address && (
         <div className="mt-auto p-3 bg-yellow-900/20 border border-yellow-600/30 rounded-lg">
           <p className="text-yellow-400 text-sm text-center">Connect wallet to deposit</p>
+        </div>
+      )}
+
+      {/* View More button - only for dashboard tab */}
+      {showViewMore && (
+        <div className="mt-4 pt-4 border-t border-gray-700">
+          <Link
+            href={`/dashboard/strategy/${strategy.id}`}
+            className="block w-full text-center text-xs text-[#5a9a9a] hover:text-[#fab062] transition-colors"
+          >
+            View more →
+          </Link>
         </div>
       )}
     </div>

@@ -525,7 +525,7 @@ export default function DashboardPage() {
                 <div className="max-w-4xl mx-auto">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {getFilteredStrategies().map((strategy) => (
-                      <StrategyCardEra key={strategy.id} strategy={strategy} />
+                      <StrategyCardEra key={strategy.id} strategy={strategy} showViewMore={true} />
                     ))}
                   </div>
                 </div>
