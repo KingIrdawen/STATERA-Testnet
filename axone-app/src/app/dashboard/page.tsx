@@ -534,15 +534,13 @@ export default function DashboardPage() {
           )}
 
           {activePage === 'referral' && (
-            <div className="text-center">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 sm:mb-8">
+            <div>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 sm:mb-8 text-center">
                 <span className="bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent">
                   Referral
                 </span>
               </h1>
-              <p className="text-[#5a9a9a] text-lg leading-relaxed">
-                Content for Referral page coming soon...
-              </p>
+              <DashboardReferralTab />
             </div>
           )}
 
