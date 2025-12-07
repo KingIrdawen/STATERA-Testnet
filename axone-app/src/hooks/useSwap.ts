@@ -110,21 +110,14 @@ export function usePerformSwap({ poolAddress, strategy, direction, amountIn, amo
           value: amountInWei, // msg.value must equal hypeIn
         });
       } else {
-        // Swap vault -> HYPE: requires approval and uses amountIn + minAmountOut
-        // Calculate minAmountOut with slippage protection
-        let minOutWei: bigint;
-        if (amountOutWei && amountOutWei > 0n) {
-          // Apply slippage: minOut = amountOut * (10000 - slippageBps) / 10000
-          minOutWei = (amountOutWei * (10_000n - slippageBps)) / 10_000n;
-        } else {
-          // No quote available - use 0 (no slippage protection)
-          console.warn('[usePerformSwap] No quote available for VAULT_TO_HYPE, using minOut = 0');
-          minOutWei = 0n;
-        }
+        // FIX: swapVaultTokenForHype expects (vaultTokenIn, to). No minAmountOut in ABI.
+        // Swap vault -> HYPE: requires approval
+        // The contract expects: swapVaultTokenForHype(uint256 vaultTokenIn, address to)
+        // Note: getAmountOut is used only for display, not as a parameter
         writeContract({
           ...swapPool(poolAddress),
           functionName: 'swapVaultTokenForHype' as const,
-          args: [amountInWei, minOutWei, address] as const,
+          args: [amountInWei, address] as const,
         });
       }
     } catch (err) {
