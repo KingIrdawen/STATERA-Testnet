@@ -5,6 +5,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useAccount, useChainId, useSwitchChain, useBalance } from 'wagmi';
 import { formatUnits } from 'viem';
 import type { Strategy } from '@/types/strategy';
@@ -115,9 +116,12 @@ export function StrategyCardEra({ strategy, showWithdraw = false }: StrategyCard
     <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 hover:border-[#fab062]/50 transition-colors h-full flex flex-col">
       {/* En-tête */}
       <div className="flex justify-between items-start mb-4">
-        <h4 className="text-xl font-bold bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent">
+        <Link
+          href={`/dashboard/strategy/${strategy.id}`}
+          className="text-xl font-bold bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent hover:opacity-80 transition-opacity cursor-pointer"
+        >
           {strategy.name}
-        </h4>
+        </Link>
         <div className="flex items-center gap-2">
           {strategy.status && (
             <span className={`px-2 py-1 rounded text-xs font-semibold ${
