@@ -5,20 +5,6 @@ import Link from 'next/link';
 export default function Footer() {
   return (
     <footer className="relative bg-black shadow-lg overflow-hidden">
-      {/* Image de fond */}
-      <div 
-        className="absolute inset-0 bg-center bg-no-repeat"
-        style={{
-          backgroundImage: 'url(/image_axone_bas_page.jpg)',
-          backgroundSize: '100% 100%',
-          backgroundPosition: 'center',
-          minHeight: '100%',
-          height: '100%',
-        }}
-      />
-      {/* Overlay pour assurer la lisibilité */}
-      <div className="absolute inset-0 bg-black/30" />
-      
       {/* Contenu du footer */}
       <div className="relative z-10">
       
