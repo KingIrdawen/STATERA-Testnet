@@ -14,6 +14,7 @@ import { StrategyCardEra } from '@/components/StrategyCardEra';
 import { DashboardSwapTab } from '@/components/DashboardSwapTab';
 import { DashboardArbitrageTab } from '@/components/DashboardArbitrageTab';
 import { DashboardStakingTab } from '@/components/DashboardStakingTab';
+import { DashboardReferralTab } from '@/components/DashboardReferralTab';
 import { formatUsd } from '@/lib/format';
 import { usePoints } from '@/hooks/usePoints';
 import { useRanking } from '@/hooks/useRanking';
@@ -228,7 +229,7 @@ export default function DashboardPage() {
   const [apySort, setApySort] = useState<'none' | 'asc' | 'desc'>('none');
   const [volumeSort, setVolumeSort] = useState<'none' | 'asc' | 'desc'>('none');
 
-  const tabs = ['Strategy', 'Staking', 'Swap', 'Arbitrage'];
+  const tabs = ['Strategy', 'Staking', 'Swap', 'Arbitrage', 'Referral'];
 
   // Fonction pour filtrer et trier les stratégies (pour l'onglet "Stratégies" - toutes les stratégies)
   const getFilteredStrategies = () => {
@@ -269,6 +270,8 @@ export default function DashboardPage() {
         return <DashboardSwapTab />;
       case 'Arbitrage':
         return <DashboardArbitrageTab />;
+      case 'Referral':
+        return <DashboardReferralTab />;
       default:
         return null;
     }
