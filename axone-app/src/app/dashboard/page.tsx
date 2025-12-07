@@ -13,6 +13,7 @@ import { useStrategyData } from '@/hooks/useStrategyDataEra';
 import { StrategyCardEra } from '@/components/StrategyCardEra';
 import { DashboardSwapTab } from '@/components/DashboardSwapTab';
 import { DashboardArbitrageTab } from '@/components/DashboardArbitrageTab';
+import { DashboardStakingTab } from '@/components/DashboardStakingTab';
 import { formatUsd } from '@/lib/format';
 import { usePoints } from '@/hooks/usePoints';
 import { useRanking } from '@/hooks/useRanking';
@@ -263,14 +264,7 @@ export default function DashboardPage() {
       case 'Strategy':
         return <StrategiesWithDeposits strategies={strategies} loading={loading} />;
       case 'Staking':
-        return (
-          <div className="text-center">
-            <h3 className="text-2xl font-bold text-white mb-4">Staking</h3>
-            <p className="text-[#5a9a9a] leading-relaxed">
-              Content for Staking tab coming soon...
-            </p>
-          </div>
-        );
+        return <DashboardStakingTab />;
       case 'Swap':
         return <DashboardSwapTab />;
       case 'Arbitrage':

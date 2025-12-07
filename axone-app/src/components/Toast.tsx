@@ -52,7 +52,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           const handleHashClick = (e: React.MouseEvent) => {
             e.stopPropagation();
             if (toast.hash) {
-              window.open(`https://app.hyperliquid.xyz/explorer/tx/${toast.hash}`, '_blank', 'noopener,noreferrer');
+              window.open(`https://app.hyperliquid-testnet.xyz/explorer/tx/${toast.hash}`, '_blank', 'noopener,noreferrer');
             }
           };
 
