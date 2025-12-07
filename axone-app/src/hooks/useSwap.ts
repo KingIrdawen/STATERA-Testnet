@@ -1,9 +1,10 @@
-// FIX: swap minOut calculation - use raw bigint from quote with slippage instead of formatted string
+// FIX: swap hypeIn/value consistency + tx toast notifications
 import { useMemo, useEffect } from 'react';
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useAccount } from 'wagmi';
 import { parseUnits, formatUnits } from 'viem';
 import { swapPool } from '@/contracts/swapContracts';
 import type { Strategy } from '@/types/strategy';
+import { useToast } from '@/components/Toast';
 
 export type SwapDirection = 'HYPE_TO_VAULT' | 'VAULT_TO_HYPE';
 
@@ -39,18 +40,6 @@ export function useSwapQuote({ poolAddress, strategy, direction, amountIn }: Use
     },
   });
 
-  // Debug logging for quote (temporary - remove after validation)
-  useEffect(() => {
-    if (amountInWei && poolAddress && data) {
-      console.log('[SwapDebug] getAmountOut result', {
-        poolAddress,
-        amountInWei: amountInWei.toString(),
-        hypeIn: direction === 'HYPE_TO_VAULT',
-        amountOutWei: (data as bigint).toString(),
-        direction,
-      });
-    }
-  }, [amountInWei, poolAddress, data, direction]);
 
   const amountOutFormatted = useMemo(() => {
     if (!data || !strategy) return '';
@@ -78,10 +67,29 @@ interface UsePerformSwapParams {
 export function usePerformSwap({ poolAddress, strategy, direction, amountIn, amountOutWei, slippageBps = 100n }: UsePerformSwapParams) {
   const { address } = useAccount();
   const { writeContract, data: hash, isPending, error: writeError } = useWriteContract();
-  const { isLoading: isConfirming, error: txError } = useWaitForTransactionReceipt({ hash });
+  const { isLoading: isConfirming, isSuccess, error: txError } = useWaitForTransactionReceipt({ hash });
+  const { showToast } = useToast();
 
   const shareDecimals = strategy?.contracts.shareDecimals ?? 18;
   const hypeDecimals = 18;
+
+  // Show toast on success
+  useEffect(() => {
+    if (isSuccess && hash) {
+      const shortHash = `${hash.slice(0, 6)}...${hash.slice(-4)}`;
+      showToast('success', `Transaction confirmée`, hash);
+    }
+  }, [isSuccess, hash, showToast]);
+
+  // Show toast on error
+  useEffect(() => {
+    if (writeError || txError) {
+      const error = writeError || txError;
+      const message = error?.message ?? 'Transaction revert';
+      const shortHash = hash ? `${hash.slice(0, 6)}...${hash.slice(-4)}` : undefined;
+      showToast('error', message, hash || undefined);
+    }
+  }, [writeError, txError, hash, showToast]);
 
   function swap() {
     if (!poolAddress || !address || !amountIn || !strategy) return;
@@ -91,62 +99,33 @@ export function usePerformSwap({ poolAddress, strategy, direction, amountIn, amo
     try {
       const amountInWei = parseUnits(amountIn, decimalsIn);
       
-      // Calculate minAmountOut with slippage protection
-      let minOutWei: bigint;
-      if (amountOutWei && amountOutWei > 0n) {
-        // Apply slippage: minOut = amountOut * (10000 - slippageBps) / 10000
-        minOutWei = (amountOutWei * (10_000n - slippageBps)) / 10_000n;
-      } else {
-        // No quote available - use 0 (no slippage protection) for debugging
-        // TODO: In production, should prevent swap or show error
-        console.warn('[usePerformSwap] No quote available, using minOut = 0 (no slippage protection)');
-        minOutWei = 0n;
-      }
-
-      // Debug logging
-      console.log('[SwapDebug] Preparing swap', {
-        poolAddress,
-        direction,
-        amountIn,
-        amountInWei: amountInWei.toString(),
-        amountOutWei: amountOutWei?.toString() || 'undefined',
-        minOutWei: minOutWei.toString(),
-        slippageBps: slippageBps.toString(),
-        recipient: address,
-        willCallFunction: direction === 'HYPE_TO_VAULT' ? 'swapHypeForVaultToken' : 'swapVaultTokenForHype',
-        willSendValue: direction === 'HYPE_TO_VAULT' ? amountInWei.toString() : '0',
-      });
-
       if (direction === 'HYPE_TO_VAULT') {
-        // Swap HYPE -> vault, native value
-        const contractCall = {
+        // Swap HYPE -> vault: hypeIn = amountInWei, msg.value = amountInWei
+        // The contract expects: swapHypeForVaultToken(uint256 hypeIn, address to)
+        // where hypeIn must equal msg.value
+        writeContract({
           ...swapPool(poolAddress),
           functionName: 'swapHypeForVaultToken' as const,
-          args: [minOutWei, address] as const,
-          value: amountInWei,
-        };
-        console.log('[SwapDebug] Calling swapHypeForVaultToken with:', {
-          poolAddress,
-          minOutWei: minOutWei.toString(),
-          recipient: address,
-          value: amountInWei.toString(),
+          args: [amountInWei, address] as const,
+          value: amountInWei, // msg.value must equal hypeIn
         });
-        writeContract(contractCall);
       } else {
-        // Swap vault -> HYPE
-        const contractCall = {
+        // Swap vault -> HYPE: requires approval and uses amountIn + minAmountOut
+        // Calculate minAmountOut with slippage protection
+        let minOutWei: bigint;
+        if (amountOutWei && amountOutWei > 0n) {
+          // Apply slippage: minOut = amountOut * (10000 - slippageBps) / 10000
+          minOutWei = (amountOutWei * (10_000n - slippageBps)) / 10_000n;
+        } else {
+          // No quote available - use 0 (no slippage protection)
+          console.warn('[usePerformSwap] No quote available for VAULT_TO_HYPE, using minOut = 0');
+          minOutWei = 0n;
+        }
+        writeContract({
           ...swapPool(poolAddress),
           functionName: 'swapVaultTokenForHype' as const,
           args: [amountInWei, minOutWei, address] as const,
-        };
-        console.log('[SwapDebug] Calling swapVaultTokenForHype with:', {
-          poolAddress,
-          amountInWei: amountInWei.toString(),
-          minOutWei: minOutWei.toString(),
-          recipient: address,
-          value: '0 (not payable)',
         });
-        writeContract(contractCall);
       }
     } catch (err) {
       console.error('[usePerformSwap] Error preparing swap:', err);
@@ -158,7 +137,7 @@ export function usePerformSwap({ poolAddress, strategy, direction, amountIn, amo
     hash,
     isPending,
     isConfirming,
-    isSuccess: !!hash && !isPending && !isConfirming && !txError,
+    isSuccess: isSuccess,
     error: (writeError || txError) as Error | null,
   };
 }

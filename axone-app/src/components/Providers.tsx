@@ -1,3 +1,4 @@
+// FIX: swap hypeIn/value consistency + tx toast notifications
 'use client';
 
 import React from 'react';
@@ -7,6 +8,7 @@ import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 import { config } from '@/lib/wagmi';
 import { useState } from 'react';
 import ConsoleErrorFilter from './ConsoleErrorFilter';
+import { ToastProvider } from './Toast';
 
 // Note: setLogger n'existe pas dans React Query v5 (@tanstack/react-query@^5.90.5)
 // Les erreurs doivent être gérées au niveau des useQuery individuels via onError dans chaque query
@@ -43,7 +45,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
               overlayBlur: 'small',
             })}
           >
-            {children}
+            <ToastProvider>
+              {children}
+            </ToastProvider>
           </RainbowKitProvider>
         </QueryClientProvider>
       </WagmiProvider>

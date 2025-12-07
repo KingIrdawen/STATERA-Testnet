@@ -1,3 +1,4 @@
+// FIX: swap hypeIn/value consistency + tx toast notifications
 // ABI for SwapPool contract
 export const swapPoolAbi = [
   {
@@ -25,8 +26,8 @@ export const swapPoolAbi = [
     name: 'swapHypeForVaultToken',
     stateMutability: 'payable',
     inputs: [
-      { name: 'minAmountOut', type: 'uint256' },
-      { name: 'recipient', type: 'address' },
+      { name: 'hypeIn', type: 'uint256' },
+      { name: 'to', type: 'address' },
     ],
     outputs: [],
   },
