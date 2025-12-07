@@ -30,7 +30,8 @@ export function DashboardSwapTab() {
     strategy: selected?.strategy,
     direction,
     amountIn,
-    minOut: quote.amountOutFormatted,
+    amountOutWei: quote.amountOutWei,
+    slippageBps: 100n, // 1% slippage
   });
 
   // Reset form on success
@@ -204,6 +205,15 @@ export function DashboardSwapTab() {
             </div>
           )}
 
+          {/* Error if no quote available */}
+          {amountIn && parseFloat(amountIn) > 0 && !quote.loading && !quote.amountOutFormatted && !quote.error && (
+            <div className="mb-4 p-3 bg-yellow-900/20 border border-yellow-600/30 rounded-lg">
+              <p className="text-yellow-400 text-xs">
+                Impossible de calculer la sortie. Vérifiez la liquidité du pool ou réessayez.
+              </p>
+            </div>
+          )}
+
           {/* Swap button */}
           <button
             onClick={handleSwap}
@@ -213,6 +223,8 @@ export function DashboardSwapTab() {
               !amountIn ||
               parseFloat(amountIn) <= 0 ||
               !quote.amountOutFormatted ||
+              !quote.amountOutWei ||
+              quote.amountOutWei === 0n ||
               !address ||
               !isCorrectChain
             }
@@ -224,6 +236,8 @@ export function DashboardSwapTab() {
               ? 'Connect Wallet'
               : !isCorrectChain
               ? 'Switch Network'
+              : !quote.amountOutFormatted
+              ? 'Calculating...'
               : 'Swap'}
           </button>
 

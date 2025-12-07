@@ -1,4 +1,5 @@
-import { useMemo } from 'react';
+// FIX: swap minOut calculation - use raw bigint from quote with slippage instead of formatted string
+import { useMemo, useEffect } from 'react';
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useAccount } from 'wagmi';
 import { parseUnits, formatUnits } from 'viem';
 import { swapPool } from '@/contracts/swapContracts';
@@ -38,6 +39,19 @@ export function useSwapQuote({ poolAddress, strategy, direction, amountIn }: Use
     },
   });
 
+  // Debug logging for quote (temporary - remove after validation)
+  useEffect(() => {
+    if (amountInWei && poolAddress && data) {
+      console.log('[SwapDebug] getAmountOut result', {
+        poolAddress,
+        amountInWei: amountInWei.toString(),
+        hypeIn: direction === 'HYPE_TO_VAULT',
+        amountOutWei: (data as bigint).toString(),
+        direction,
+      });
+    }
+  }, [amountInWei, poolAddress, data, direction]);
+
   const amountOutFormatted = useMemo(() => {
     if (!data || !strategy) return '';
     const decimals = direction === 'HYPE_TO_VAULT' ? shareDecimals : hypeDecimals;
@@ -46,6 +60,7 @@ export function useSwapQuote({ poolAddress, strategy, direction, amountIn }: Use
 
   return {
     amountOutFormatted,
+    amountOutWei: data as bigint | undefined,
     loading: isLoading,
     error: error as Error | null,
   };
@@ -56,10 +71,11 @@ interface UsePerformSwapParams {
   strategy?: Strategy | null;
   direction: SwapDirection;
   amountIn: string;
-  minOut?: string;
+  amountOutWei?: bigint; // Raw quote from getAmountOut
+  slippageBps?: bigint; // Slippage in basis points (default: 100 = 1%)
 }
 
-export function usePerformSwap({ poolAddress, strategy, direction, amountIn, minOut }: UsePerformSwapParams) {
+export function usePerformSwap({ poolAddress, strategy, direction, amountIn, amountOutWei, slippageBps = 100n }: UsePerformSwapParams) {
   const { address } = useAccount();
   const { writeContract, data: hash, isPending, error: writeError } = useWriteContract();
   const { isLoading: isConfirming, error: txError } = useWaitForTransactionReceipt({ hash });
@@ -71,11 +87,33 @@ export function usePerformSwap({ poolAddress, strategy, direction, amountIn, min
     if (!poolAddress || !address || !amountIn || !strategy) return;
 
     const decimalsIn = direction === 'HYPE_TO_VAULT' ? hypeDecimals : shareDecimals;
-    const decimalsOut = direction === 'HYPE_TO_VAULT' ? shareDecimals : hypeDecimals;
 
     try {
       const amountInWei = parseUnits(amountIn, decimalsIn);
-      const minOutWei = minOut ? parseUnits(minOut, decimalsOut) : 0n;
+      
+      // Calculate minAmountOut with slippage protection
+      let minOutWei: bigint;
+      if (amountOutWei && amountOutWei > 0n) {
+        // Apply slippage: minOut = amountOut * (10000 - slippageBps) / 10000
+        minOutWei = (amountOutWei * (10_000n - slippageBps)) / 10_000n;
+      } else {
+        // No quote available - use 0 (no slippage protection) for debugging
+        // TODO: In production, should prevent swap or show error
+        console.warn('[usePerformSwap] No quote available, using minOut = 0 (no slippage protection)');
+        minOutWei = 0n;
+      }
+
+      // Debug logging
+      console.log('[SwapDebug] Preparing swap', {
+        poolAddress,
+        direction,
+        amountIn,
+        amountInWei: amountInWei.toString(),
+        amountOutWei: amountOutWei?.toString() || 'undefined',
+        minOutWei: minOutWei.toString(),
+        slippageBps: slippageBps.toString(),
+        recipient: address,
+      });
 
       if (direction === 'HYPE_TO_VAULT') {
         // Swap HYPE -> vault, native value
