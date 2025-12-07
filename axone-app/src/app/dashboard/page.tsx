@@ -12,6 +12,7 @@ import { useStrategies } from '@/hooks/useStrategies';
 import { useStrategyData } from '@/hooks/useStrategyDataEra';
 import { StrategyCardEra } from '@/components/StrategyCardEra';
 import { DashboardSwapTab } from '@/components/DashboardSwapTab';
+import { DashboardArbitrageTab } from '@/components/DashboardArbitrageTab';
 import { formatUsd } from '@/lib/format';
 import { usePoints } from '@/hooks/usePoints';
 import { useRanking } from '@/hooks/useRanking';
@@ -226,7 +227,7 @@ export default function DashboardPage() {
   const [apySort, setApySort] = useState<'none' | 'asc' | 'desc'>('none');
   const [volumeSort, setVolumeSort] = useState<'none' | 'asc' | 'desc'>('none');
 
-  const tabs = ['Strategy', 'Staking', 'Swap', 'Hype Engine'];
+  const tabs = ['Strategy', 'Staking', 'Swap', 'Arbitrage'];
 
   // Fonction pour filtrer et trier les stratégies (pour l'onglet "Stratégies" - toutes les stratégies)
   const getFilteredStrategies = () => {
@@ -272,15 +273,8 @@ export default function DashboardPage() {
         );
       case 'Swap':
         return <DashboardSwapTab />;
-      case 'Hype Engine':
-        return (
-          <div className="text-center">
-            <h3 className="text-2xl font-bold text-white mb-4">Hype Engine</h3>
-            <p className="text-[#5a9a9a] leading-relaxed">
-              Content for Hype Engine tab coming soon...
-            </p>
-          </div>
-        );
+      case 'Arbitrage':
+        return <DashboardArbitrageTab />;
       default:
         return null;
     }
