@@ -90,7 +90,7 @@ export function DashboardReferralTab() {
   // Show single toast on final outcome only
   useEffect(() => {
     if (isUseCodeSuccess && useCodeHash) {
-      showToast('success', 'Code referral utilisé avec succès', useCodeHash);
+      showToast('success', 'Referral code used successfully', useCodeHash);
       setReferralCode('');
       refetchWhitelisted();
       refetchReferrer();
@@ -100,18 +100,18 @@ export function DashboardReferralTab() {
   useEffect(() => {
     if (useCodeError && useCodeHash) {
       const errorObj = useCodeError as Error | { message?: string; shortMessage?: string; data?: any } | null;
-      let message = 'Erreur lors de l\'utilisation du code';
+      let message = 'Error using code';
       
       if (errorObj) {
         const errorName = (errorObj as any)?.data?.errorName || (errorObj as any)?.errorName;
         const shortMessage = (errorObj as any)?.shortMessage || errorObj?.message || String(useCodeError);
         
         const errorMessages: Record<string, string> = {
-          'AlreadyWhitelisted': 'Vous êtes déjà whitelisté.',
-          'InvalidCode': 'Code invalide ou inexistant.',
-          'CodeAlreadyUsed': 'Ce code a déjà été utilisé.',
-          'SelfReferral': 'Auto-parrainage interdit.',
-          'CodeExpired': 'Ce code a expiré (30 jours).',
+          'AlreadyWhitelisted': 'You are already whitelisted.',
+          'InvalidCode': 'Invalid or non-existent code.',
+          'CodeAlreadyUsed': 'This code has already been used.',
+          'SelfReferral': 'Self-referral is not allowed.',
+          'CodeExpired': 'This code has expired (30 days).',
         };
         
         if (errorName && errorMessages[errorName]) {
@@ -121,13 +121,13 @@ export function DashboardReferralTab() {
         }
       }
       
-      showToast('error', `Utilisation code échouée: ${message}`, useCodeHash);
+      showToast('error', `Failed to use code: ${message}`, useCodeHash);
     }
   }, [useCodeError, useCodeHash, showToast]);
 
   useEffect(() => {
     if (isCreateCodeSuccess && createCodeHash) {
-      showToast('success', 'Code referral créé avec succès', createCodeHash);
+      showToast('success', 'Referral code created successfully', createCodeHash);
       refetchCodesCreated();
       refetchUnusedCodes();
       refetchQuota();
@@ -137,16 +137,16 @@ export function DashboardReferralTab() {
   useEffect(() => {
     if (createCodeError && createCodeHash) {
       const errorObj = createCodeError as Error | { message?: string; shortMessage?: string; data?: any } | null;
-      let message = 'Erreur lors de la création du code';
+      let message = 'Error creating code';
       
       if (errorObj) {
         const errorName = (errorObj as any)?.data?.errorName || (errorObj as any)?.errorName;
         const shortMessage = (errorObj as any)?.shortMessage || errorObj?.message || String(createCodeError);
         
         const errorMessages: Record<string, string> = {
-          'CodeGenerationPaused': 'La génération de codes est temporairement désactivée.',
-          'MaxCodesExceeded': 'Quota de codes atteint.',
-          'QuotaReached': 'Quota de codes atteint.',
+          'CodeGenerationPaused': 'Code generation is temporarily disabled.',
+          'MaxCodesExceeded': 'Code quota reached.',
+          'QuotaReached': 'Code quota reached.',
         };
         
         if (errorName && errorMessages[errorName]) {
@@ -156,7 +156,7 @@ export function DashboardReferralTab() {
         }
       }
       
-      showToast('error', `Création code échouée: ${message}`, createCodeHash);
+      showToast('error', `Failed to create code: ${message}`, createCodeHash);
     }
   }, [createCodeError, createCodeHash, showToast]);
 
@@ -184,7 +184,7 @@ export function DashboardReferralTab() {
       });
     } catch (error) {
       console.error('[DashboardReferralTab] Error hashing code:', error);
-      const errorMsg = error instanceof Error ? error.message : 'Erreur lors du hashage du code';
+      const errorMsg = error instanceof Error ? error.message : 'Error hashing code';
       showToast('error', errorMsg);
     }
   };
@@ -195,12 +195,12 @@ export function DashboardReferralTab() {
     }
 
     if (!REFERRAL_REGISTRY_ADDRESS) {
-      showToast('error', 'ReferralRegistry n\'est pas configuré');
+      showToast('error', 'ReferralRegistry is not configured');
       return;
     }
 
     if (!isWhitelisted) {
-      showToast('error', 'Vous devez être whitelisté pour créer des codes');
+      showToast('error', 'You must be whitelisted to create codes');
       return;
     }
 
@@ -218,7 +218,7 @@ export function DashboardReferralTab() {
       setTimeout(() => setCopiedCode(null), 2000);
     } catch (error) {
       console.error('[DashboardReferralTab] Error copying code:', error);
-      showToast('error', 'Erreur lors de la copie du code');
+      showToast('error', 'Error copying code');
     }
   };
 
@@ -229,7 +229,7 @@ export function DashboardReferralTab() {
         <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-8 max-w-md text-center">
           <h3 className="text-2xl font-bold text-white mb-4">Connect Wallet</h3>
           <p className="text-[#5a9a9a]">
-            Veuillez connecter votre wallet pour utiliser le système de referral.
+            Please connect your wallet to use the referral system.
           </p>
         </div>
       </div>
@@ -243,7 +243,7 @@ export function DashboardReferralTab() {
         <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-8 max-w-md text-center">
           <h3 className="text-2xl font-bold text-white mb-4">Wrong Network</h3>
           <p className="text-[#5a9a9a] mb-6">
-            Veuillez basculer sur HyperEVM Testnet (Chain ID {EXPECTED_CHAIN_ID}) pour utiliser le système de referral.
+            Please switch to HyperEVM Testnet (Chain ID {EXPECTED_CHAIN_ID}) to use the referral system.
           </p>
           <button
             onClick={() => switchChain({ chainId: EXPECTED_CHAIN_ID })}
@@ -263,7 +263,7 @@ export function DashboardReferralTab() {
         <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-8 max-w-md text-center">
           <h3 className="text-2xl font-bold text-white mb-4">Not Configured</h3>
           <p className="text-[#5a9a9a]">
-            ReferralRegistry n'est pas configuré. Veuillez configurer NEXT_PUBLIC_REFERRAL_REGISTRY_ADDRESS.
+            ReferralRegistry is not configured. Please configure NEXT_PUBLIC_REFERRAL_REGISTRY_ADDRESS.
           </p>
         </div>
       </div>
@@ -280,17 +280,17 @@ export function DashboardReferralTab() {
     <div className="space-y-6 max-w-4xl mx-auto">
       {/* Section 1: Your referral status */}
       <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
-        <h3 className="text-2xl font-bold text-white mb-4">Votre statut de referral</h3>
+        <h3 className="text-2xl font-bold text-white mb-4">Your Referral Status</h3>
         <div className="space-y-3">
           <div className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">
-            <span className="text-gray-400 text-sm">Statut whitelist:</span>
+            <span className="text-gray-400 text-sm">Whitelist status:</span>
             <span className={`text-sm font-semibold ${isWhitelisted ? 'text-green-400' : 'text-red-400'}`}>
-              {isWhitelisted ? '✓ Whitelisté' : '✗ Non whitelisté'}
+              {isWhitelisted ? '✓ Whitelisted' : '✗ Not whitelisted'}
             </span>
           </div>
           {hasReferrer && (
             <div className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">
-              <span className="text-gray-400 text-sm">Votre parrain:</span>
+              <span className="text-gray-400 text-sm">Your referrer:</span>
               <span className="text-white font-mono text-sm">
                 {referrer.slice(0, 6)}...{referrer.slice(-4)}
               </span>
@@ -299,7 +299,7 @@ export function DashboardReferralTab() {
           {isWhitelisted && !hasReferrer && (
             <div className="p-3 bg-yellow-900/20 border border-yellow-600/30 rounded-lg">
               <p className="text-yellow-400 text-xs">
-                ⚠️ Vous êtes whitelisté mais n'avez pas de parrain. Vous ne pouvez pas créer de codes.
+                ⚠️ You are whitelisted but do not have a referrer. You cannot create codes.
               </p>
             </div>
           )}
@@ -309,18 +309,18 @@ export function DashboardReferralTab() {
       {/* Section 2: Use referral code */}
       {!isWhitelisted && (
         <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
-          <h3 className="text-2xl font-bold text-white mb-4">Utiliser un code de referral</h3>
+          <h3 className="text-2xl font-bold text-white mb-4">Use a Referral Code</h3>
           <div className="space-y-4">
             <div>
               <label htmlFor="referral-code" className="block text-white text-sm font-semibold mb-2">
-                Code de referral
+                Referral Code
               </label>
               <input
                 id="referral-code"
                 type="text"
                 value={referralCode}
                 onChange={(e) => setReferralCode(normalizeCode(e.target.value))}
-                placeholder="Entrez le code (ex: ERA9C3L6)"
+                placeholder="Enter code (e.g., ERA9C3L6)"
                 className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm focus:border-[#fab062] focus:outline-none uppercase"
                 maxLength={20}
               />
@@ -330,7 +330,7 @@ export function DashboardReferralTab() {
               disabled={isUseCodePending || isUseCodeConfirming || !referralCode.trim()}
               className="w-full px-6 py-3 bg-[#fab062] text-black rounded-lg text-sm font-semibold hover:bg-[#e89a4a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isUseCodePending || isUseCodeConfirming ? 'Traitement...' : 'Utiliser le code'}
+              {isUseCodePending || isUseCodeConfirming ? 'Processing...' : 'Use Code'}
             </button>
           </div>
         </div>
@@ -339,18 +339,18 @@ export function DashboardReferralTab() {
       {/* Section 3: Statistics */}
       {isWhitelisted && (
         <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
-          <h3 className="text-2xl font-bold text-white mb-4">Statistiques</h3>
+          <h3 className="text-2xl font-bold text-white mb-4">Statistics</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-gray-800/50 rounded-lg p-4">
-              <p className="text-gray-500 text-xs mb-2">Codes créés</p>
+              <p className="text-gray-500 text-xs mb-2">Codes Created</p>
               <p className="text-white text-2xl font-bold">{codesCreatedNum}</p>
             </div>
             <div className="bg-gray-800/50 rounded-lg p-4">
-              <p className="text-gray-500 text-xs mb-2">Codes disponibles</p>
+              <p className="text-gray-500 text-xs mb-2">Codes Available</p>
               <p className="text-white text-2xl font-bold">{Math.max(0, codesAvailable)}</p>
             </div>
             <div className="bg-gray-800/50 rounded-lg p-4">
-              <p className="text-gray-500 text-xs mb-2">Quota maximum</p>
+              <p className="text-gray-500 text-xs mb-2">Max Quota</p>
               <p className="text-white text-2xl font-bold">{codesQuotaNum}</p>
             </div>
           </div>
@@ -360,9 +360,9 @@ export function DashboardReferralTab() {
       {/* Section 4: Create code */}
       {isWhitelisted && hasReferrer && (
         <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
-          <h3 className="text-2xl font-bold text-white mb-4">Créer un code</h3>
+          <h3 className="text-2xl font-bold text-white mb-4">Create Code</h3>
           <p className="text-gray-400 text-sm mb-4">
-            Générez un nouveau code de parrainage à usage unique. Le code expirera après 30 jours.
+            Generate a new one-time use referral code. The code will expire after 30 days.
           </p>
           <button
             onClick={handleCreateCode}
@@ -370,10 +370,10 @@ export function DashboardReferralTab() {
             className="w-full px-6 py-3 bg-[#fab062] text-black rounded-lg text-sm font-semibold hover:bg-[#e89a4a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isCreateCodePending || isCreateCodeConfirming
-              ? 'Création...'
+              ? 'Creating...'
               : codesAvailable <= 0
-              ? 'Quota atteint'
-              : 'Créer un code'}
+              ? 'Quota Reached'
+              : 'Create Code'}
           </button>
         </div>
       )}
@@ -381,7 +381,7 @@ export function DashboardReferralTab() {
       {/* Section 5: Unused codes list */}
       {isWhitelisted && unusedCodesList.length > 0 && (
         <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
-          <h3 className="text-2xl font-bold text-white mb-4">Codes non utilisés</h3>
+          <h3 className="text-2xl font-bold text-white mb-4">Unused Codes</h3>
           <div className="space-y-2">
             {unusedCodesList.map((code, index) => (
               <div
@@ -393,7 +393,7 @@ export function DashboardReferralTab() {
                   onClick={() => handleCopyCode(code)}
                   className="px-4 py-2 bg-[#5a9a9a] text-white rounded-lg text-xs font-semibold hover:bg-[#4a8a8a] transition-colors flex-shrink-0"
                 >
-                  {copiedCode === code ? 'Copié !' : 'Copier'}
+                  {copiedCode === code ? 'Copied!' : 'Copy'}
                 </button>
               </div>
             ))}
@@ -403,7 +403,7 @@ export function DashboardReferralTab() {
 
       {isWhitelisted && unusedCodesList.length === 0 && codesCreatedNum > 0 && (
         <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
-          <p className="text-[#5a9a9a] text-center">Aucun code non utilisé disponible</p>
+          <p className="text-[#5a9a9a] text-center">No unused codes available</p>
         </div>
       )}
     </div>
