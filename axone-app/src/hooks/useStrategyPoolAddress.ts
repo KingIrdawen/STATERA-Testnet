@@ -4,25 +4,39 @@ import type { Strategy } from '@/types/strategy';
 import { swapPoolFactory, SWAP_POOL_FACTORY_ADDRESS } from '@/contracts/swapContracts';
 
 /**
+ * Helper to check if an address is the zero address
+ */
+const isZeroAddress = (address: string): boolean => {
+  return /^0x0{40}$/i.test(address);
+};
+
+/**
  * Hook to get the swap pool address for a strategy
  * Returns undefined if no pool exists or factory is not configured
  */
 export function useStrategyPoolAddress(strategy: Strategy | null) {
-  const publicClient = usePublicClient();
+  const publicClient = usePublicClient({ chainId: 998 });
   const [poolAddress, setPoolAddress] = useState<`0x${string}` | undefined>(undefined);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!strategy || !publicClient || !SWAP_POOL_FACTORY_ADDRESS || !swapPoolFactory) {
-      setPoolAddress(undefined);
-      setLoading(false);
-      return;
-    }
-
     let cancelled = false;
 
     async function loadPool() {
-      if (!strategy || !strategy.contracts) {
+      // Guard: ensure all required dependencies are available
+      if (!publicClient) {
+        setPoolAddress(undefined);
+        setLoading(false);
+        return;
+      }
+
+      if (!strategy || !strategy.contracts || !strategy.contracts.vaultAddress) {
+        setPoolAddress(undefined);
+        setLoading(false);
+        return;
+      }
+
+      if (!SWAP_POOL_FACTORY_ADDRESS || !swapPoolFactory) {
         setPoolAddress(undefined);
         setLoading(false);
         return;
@@ -31,6 +45,7 @@ export function useStrategyPoolAddress(strategy: Strategy | null) {
       setLoading(true);
       try {
         const vaultAddress = strategy.contracts.vaultAddress;
+        // At this point, TypeScript knows publicClient is defined due to the guard above
         const pool = (await publicClient.readContract({
           address: swapPoolFactory.address,
           abi: swapPoolFactory.abi,
@@ -39,7 +54,8 @@ export function useStrategyPoolAddress(strategy: Strategy | null) {
         })) as `0x${string}`;
 
         if (!cancelled) {
-          if (pool && pool !== `0x0000000000000000000000000000000000000000`) {
+          // Normalize: treat zero address as no pool
+          if (pool && !isZeroAddress(pool)) {
             setPoolAddress(pool);
           } else {
             setPoolAddress(undefined);
@@ -47,7 +63,7 @@ export function useStrategyPoolAddress(strategy: Strategy | null) {
         }
       } catch (e) {
         if (!cancelled) {
-          // No pool exists for this vault
+          // No pool exists for this vault or error occurred
           setPoolAddress(undefined);
         }
       } finally {
