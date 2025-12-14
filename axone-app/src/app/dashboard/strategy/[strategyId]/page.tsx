@@ -18,7 +18,6 @@ import { useStrategyToken1Meta } from '@/hooks/useStrategyToken1Meta';
 import { getStrategyContracts } from '@/lib/strategyContracts';
 import { formatUsd } from '@/lib/format';
 import { l1readContract } from '@/contracts/l1read';
-import { coreInteractionHandlerContract } from '@/contracts/coreInteractionHandler';
 
 // Token composition interface
 interface TokenComposition {
@@ -34,7 +33,8 @@ const EXPLORER_BASE_URL = 'https://app.hyperliquid-testnet.xyz/explorer/tx/';
 export default function StrategyStatsPage() {
   const params = useParams();
   const router = useRouter();
-  const strategyId = params?.id as string;
+  // Support both [id] and [strategyId] for compatibility
+  const strategyId = (params?.strategyId || params?.id) as string;
   const { strategies, loading } = useStrategies();
   const [strategy, setStrategy] = useState<Strategy | null>(null);
   const { address } = useAccount();
@@ -42,10 +42,10 @@ export default function StrategyStatsPage() {
   const { switchChain } = useSwitchChain();
   useWhitelistCheck();
 
-  // Find strategy by ID - defensive check for strategies array
+  // Find strategy by ID
   useEffect(() => {
-    if (strategyId && Array.isArray(strategies) && strategies.length > 0) {
-      const found = strategies.find(s => s && s.id === strategyId);
+    if (strategyId && strategies.length > 0) {
+      const found = strategies.find(s => s.id === strategyId);
       if (found) {
         setStrategy(found);
       }
@@ -75,35 +75,38 @@ export default function StrategyStatsPage() {
   // Token composition - read HYPE and TOKEN1 balances from Core
   const contracts = strategy ? getStrategyContracts(strategy) : null;
   const handlerAddress = strategy?.contracts.handlerAddress;
-
-  // Read handler token IDs (HYPE and TOKEN1) - ensure it's always an array
-  const tokenIdContracts: any[] = handlerAddress && contracts?.handler
-    ? [
-        {
-          ...contracts.handler,
-          functionName: 'spotTokenHYPE' as const,
-        },
-        {
-          ...contracts.handler,
-          functionName: 'spotTokenTOKEN1' as const,
-        },
-      ]
-    : [];
-
-  const { data: tokenIdsData } = useReadContracts({
-    contracts: tokenIdContracts,
-    query: { enabled: Array.isArray(tokenIdContracts) && tokenIdContracts.length > 0 },
-  });
-
-  // Defensive check: ensure tokenIdsData is an array before accessing
-  const tokenIdsArray = Array.isArray(tokenIdsData) ? tokenIdsData : [];
-  const hypeTokenId = tokenIdsArray[0]?.result as bigint | undefined;
-  const token1TokenId = tokenIdsArray[1]?.result as bigint | undefined;
-
   const l1ReadAddress = strategy?.contracts.l1ReadAddress;
 
-  // Read token balances and info - ensure it's always an array
-  const tokenCompositionContracts: any[] = handlerAddress && l1ReadAddress && hypeTokenId && token1TokenId
+  // Read handler token IDs (HYPE and TOKEN1)
+  const { data: spotTokenHype } = useReadContracts({
+    contracts: handlerAddress && contracts?.handler
+      ? [
+          {
+            ...contracts.handler,
+            functionName: 'spotTokenHYPE' as const,
+          },
+        ]
+      : [],
+    query: { enabled: !!handlerAddress && !!contracts?.handler },
+  });
+
+  const { data: spotTokenToken1 } = useReadContracts({
+    contracts: handlerAddress && contracts?.handler
+      ? [
+          {
+            ...contracts.handler,
+            functionName: 'spotTokenTOKEN1' as const,
+          },
+        ]
+      : [],
+    query: { enabled: !!handlerAddress && !!contracts?.handler },
+  });
+
+  const hypeTokenId = spotTokenHype?.[0]?.result as bigint | undefined;
+  const token1TokenId = spotTokenToken1?.[0]?.result as bigint | undefined;
+
+  // Read token balances and info
+  const tokenCompositionContracts = handlerAddress && l1ReadAddress && hypeTokenId && token1TokenId
     ? [
         // HYPE balance
         {
@@ -134,17 +137,16 @@ export default function StrategyStatsPage() {
 
   const { data: tokenData } = useReadContracts({
     contracts: tokenCompositionContracts,
-    query: { enabled: Array.isArray(tokenCompositionContracts) && tokenCompositionContracts.length > 0 },
+    query: { enabled: tokenCompositionContracts.length > 0 },
   });
 
-  // Parse token composition - defensive check for undefined/array
+  // Parse token composition
   const tokenComposition: TokenComposition[] = [];
-  const tokenDataArray = Array.isArray(tokenData) ? tokenData : [];
-  if (tokenDataArray.length >= 4 && strategyData.oracleHypeUsd !== undefined && strategyData.oracleToken1Usd !== undefined) {
+  if (tokenData && tokenData.length >= 4 && strategyData.oracleHypeUsd !== undefined && strategyData.oracleToken1Usd !== undefined) {
     try {
       // HYPE
-      const hypeBalanceResult = tokenDataArray[0]?.result as { total: bigint } | undefined;
-      const hypeInfo = tokenDataArray[1]?.result as { name: string; weiDecimals: number } | undefined;
+      const hypeBalanceResult = tokenData[0]?.result as { total: bigint } | undefined;
+      const hypeInfo = tokenData[1]?.result as { name: string; weiDecimals: number } | undefined;
       if (hypeBalanceResult && hypeInfo) {
         const balance = Number(formatUnits(hypeBalanceResult.total, hypeInfo.weiDecimals || 18));
         const valueUsd = balance * strategyData.oracleHypeUsd;
@@ -158,8 +160,8 @@ export default function StrategyStatsPage() {
       }
 
       // TOKEN1
-      const token1BalanceResult = tokenDataArray[2]?.result as { total: bigint } | undefined;
-      const token1Info = tokenDataArray[3]?.result as { name: string; weiDecimals: number } | undefined;
+      const token1BalanceResult = tokenData[2]?.result as { total: bigint } | undefined;
+      const token1Info = tokenData[3]?.result as { name: string; weiDecimals: number } | undefined;
       if (token1BalanceResult && token1Info) {
         const balance = Number(formatUnits(token1BalanceResult.total, token1Info.weiDecimals || 18));
         const valueUsd = balance * strategyData.oracleToken1Usd;
