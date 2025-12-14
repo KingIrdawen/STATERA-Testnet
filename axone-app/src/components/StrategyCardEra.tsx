@@ -257,6 +257,17 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
                 {isDepositPending ? 'Depositing...' : 'Deposit'}
               </button>
             </div>
+            {/* Preflight health check warnings */}
+            {strategyData.ppsUsd !== undefined && strategyData.ppsUsd === 0 && (
+              <p className="text-yellow-400 text-xs mt-1">
+                ⚠️ Oracle indisponible ou vault non initialisé.
+              </p>
+            )}
+            {strategyData.oracleHypeUsd !== undefined && strategyData.oracleHypeUsd === 0 && (
+              <p className="text-yellow-400 text-xs mt-1">
+                ⚠️ Prix oracle HYPE indisponible.
+              </p>
+            )}
             {depositError && (
               <p className="text-red-400 text-xs mt-1">{depositError.message}</p>
             )}

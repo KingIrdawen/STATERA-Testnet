@@ -1,5 +1,7 @@
 // ABI pour VaultContract - dépôts en HYPE natif
+// Includes custom errors for better revert decoding
 export const vaultAbi = [
+  // Functions
   {
     name: 'balanceOf',
     type: 'function',
@@ -62,6 +64,52 @@ export const vaultAbi = [
     stateMutability: 'view',
     inputs: [{ name: 'amount1e18', type: 'uint256' }],
     outputs: [{ name: '', type: 'uint16' }],
+  },
+  // Custom errors for better revert decoding
+  {
+    type: 'error',
+    name: 'ContractPaused',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'HandlerNotSet',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'ViewsNotSet',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'PriceZero',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'FeeVaultZero',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'AmountZero',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'FeeSendFail',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'NativePayFail',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'EmptyVault',
+    inputs: [],
   },
 ] as const
 

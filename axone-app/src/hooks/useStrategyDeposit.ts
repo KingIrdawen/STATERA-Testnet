@@ -84,25 +84,82 @@ export function useStrategyDeposit(strategy: Strategy | null) {
           account: address,
         });
       } catch (simError: any) {
-        // Extract error message
+        // Extract error name and message
+        let errorName: string | undefined;
         let errorMessage = 'Transaction simulation failed';
         
-        if (simError?.shortMessage) {
-          errorMessage = simError.shortMessage;
-        } else if (simError?.cause?.reason) {
-          errorMessage = simError.cause.reason;
-        } else if (simError?.details) {
-          errorMessage = simError.details;
-        } else if (simError?.message) {
-          errorMessage = simError.message;
-        } else if (simError?.metaMessages && simError.metaMessages.length > 0) {
-          errorMessage = simError.metaMessages.join(' ');
+        // viem exposes custom errors in different ways depending on version
+        // Try multiple paths to extract error name
+        const extractErrorName = (err: any): string | undefined => {
+          // Path 1: direct errorName
+          if (err?.errorName) return err.errorName;
+          
+          // Path 2: data.errorName
+          if (err?.data?.errorName) return err.data.errorName;
+          
+          // Path 3: cause chain
+          if (err?.cause) {
+            const causeName = extractErrorName(err.cause);
+            if (causeName) return causeName;
+          }
+          
+          // Path 4: Check if it's a ContractFunctionRevertedError
+          if (err?.name === 'ContractFunctionRevertedError') {
+            if (err.data?.errorName) return err.data.errorName;
+            if (err.errorName) return err.errorName;
+          }
+          
+          // Path 5: Check shortMessage for error selector patterns
+          if (err?.shortMessage) {
+            // Sometimes viem includes error name in shortMessage like "The contract function "deposit" reverted with error: PriceZero()."
+            const match = err.shortMessage.match(/(\w+)\(\)/);
+            if (match) return match[1];
+          }
+          
+          return undefined;
+        };
+        
+        errorName = extractErrorName(simError);
+        
+        // Map error names to friendly French messages
+        const errorMessages: Record<string, string> = {
+          'ContractPaused': 'Le vault est en pause (dépôts désactivés).',
+          'PriceZero': 'Oracle HYPE indisponible (prix à 0).',
+          'FeeVaultZero': 'FeeVault non configuré côté handler.',
+          'HandlerNotSet': 'Handler non configuré sur ce vault.',
+          'ViewsNotSet': 'Core views non configuré sur ce vault.',
+          'AmountZero': 'Montant invalide.',
+          'FeeSendFail': 'Échec de l\'envoi des frais.',
+          'NativePayFail': 'Échec du paiement natif.',
+          'EmptyVault': 'Vault vide (NAV = 0).',
+        };
+        
+        // Use friendly message if error name is known
+        if (errorName && errorMessages[errorName]) {
+          errorMessage = errorMessages[errorName];
+        } else {
+          // Fallback to extracting from error object
+          if (simError?.shortMessage) {
+            errorMessage = simError.shortMessage;
+          } else if (simError?.cause?.reason) {
+            errorMessage = simError.cause.reason;
+          } else if (simError?.details) {
+            errorMessage = simError.details;
+          } else if (simError?.message) {
+            errorMessage = simError.message;
+          } else if (simError?.metaMessages && simError.metaMessages.length > 0) {
+            errorMessage = simError.metaMessages.join(' ');
+          }
         }
 
-        // Show toast with decoded error
+        // Build full message with error name if available
         const vaultShort = `${contracts.vault.address.slice(0, 6)}...${contracts.vault.address.slice(-4)}`;
         const amountFormatted = `${amount} HYPE`;
-        const fullMessage = `Deposit failed: ${errorMessage}\nVault: ${vaultShort}\nAmount: ${amountFormatted}`;
+        let fullMessage = `Dépôt échoué: ${errorMessage}`;
+        if (errorName) {
+          fullMessage += ` (${errorName})`;
+        }
+        fullMessage += `\nVault: ${vaultShort}\nMontant: ${amountFormatted}`;
         
         showToast('error', fullMessage);
         throw new Error(errorMessage);
