@@ -5,15 +5,16 @@
 import { useWriteContract, useWaitForTransactionReceipt, usePublicClient, useAccount } from 'wagmi';
 import { parseEther, formatEther, formatUnits } from 'viem';
 import { simulateContract } from 'viem/actions';
+import { useEffect } from 'react';
 import type { Strategy } from '@/types/strategy';
 import { getStrategyContracts } from '@/lib/strategyContracts';
-import { useToast } from '@/components/Toast';
+import { useTxToasts } from '@/lib/txToasts';
 
 export function useStrategyDeposit(strategy: Strategy | null) {
   const contracts = strategy ? getStrategyContracts(strategy) : null;
   const publicClient = usePublicClient();
   const { address } = useAccount();
-  const { showToast } = useToast();
+  const { showTxToast } = useTxToasts();
 
   const {
     writeContract,
@@ -30,6 +31,24 @@ export function useStrategyDeposit(strategy: Strategy | null) {
     hash: txHash,
   });
 
+  // Show toast on transaction submitted
+  useEffect(() => {
+    if (txHash) {
+      showTxToast('submitted', { hash: txHash, action: 'Dépôt' });
+    }
+  }, [txHash, showTxToast]);
+
+  // Show toast on transaction confirmed or failed
+  useEffect(() => {
+    if (isConfirmed && txHash) {
+      showTxToast('confirmed', { hash: txHash, action: 'Dépôt' });
+    }
+    if (receiptError && txHash) {
+      const errorMsg = receiptError instanceof Error ? receiptError.message : String(receiptError);
+      showTxToast('failed', { hash: txHash, error: errorMsg, action: 'Dépôt' });
+    }
+  }, [isConfirmed, receiptError, txHash, showTxToast]);
+
   const deposit = async (amount: string) => {
     if (!strategy || !contracts || !publicClient || !address) {
       throw new Error('Strategy not configured or wallet not connected');
@@ -42,6 +61,10 @@ export function useStrategyDeposit(strategy: Strategy | null) {
       const value = parseEther(amount);
 
       // Preflight health checks: read pps1e18, nav1e18, and oraclePxHype1e8
+      let pps1e18: bigint | undefined;
+      let nav1e18: bigint | undefined;
+      let oraclePxHype1e8: bigint | undefined;
+      
       try {
         const [ppsResult, navResult, oracleResult] = await Promise.all([
           publicClient.readContract({
@@ -59,22 +82,29 @@ export function useStrategyDeposit(strategy: Strategy | null) {
           }),
         ]);
 
-        // Check if oracle or vault is not initialized
-        const oraclePxHype1e8 = oracleResult as bigint;
-        const pps1e18 = ppsResult as bigint;
-        const nav1e18 = navResult as bigint;
+        oraclePxHype1e8 = oracleResult as bigint;
+        pps1e18 = ppsResult as bigint;
+        nav1e18 = navResult as bigint;
+
+        // Log diagnostics
+        console.log('[useStrategyDeposit] Preflight diagnostics:', {
+          vaultAddress: contracts.vault.address,
+          chainId: strategy.contracts.chainId,
+          amount: value.toString(),
+          pps1e18: pps1e18.toString(),
+          nav1e18: nav1e18.toString(),
+          oraclePxHype1e8: oraclePxHype1e8.toString(),
+        });
 
         if (oraclePxHype1e8 === 0n || pps1e18 === 0n) {
-          const warningMessage = 'Oracle price unavailable or vault not initialized. Deposit may fail.';
-          showToast('error', warningMessage);
-          // Don't throw, just warn - let simulation catch the actual error
+          console.warn('[useStrategyDeposit] Oracle or vault not initialized');
         }
       } catch (preflightError) {
-        // Preflight checks failed, but continue to simulation which will show better error
         console.warn('[useStrategyDeposit] Preflight checks failed:', preflightError);
       }
 
-      // Simulate the transaction first to catch errors
+      // Simulate the transaction first to catch errors (first attempt)
+      let simError: any = null;
       try {
         await simulateContract(publicClient, {
           ...contracts.vault,
@@ -83,7 +113,56 @@ export function useStrategyDeposit(strategy: Strategy | null) {
           value,
           account: address,
         });
-      } catch (simError: any) {
+      } catch (firstSimError: any) {
+        simError = firstSimError;
+        
+        // Second chance: refetch oracle/pps and retry with blockTag='latest'
+        try {
+          console.log('[useStrategyDeposit] First simulation failed, retrying with latest block...');
+          
+          // Refetch oracle and pps
+          const [newPpsResult, newOracleResult] = await Promise.all([
+            publicClient.readContract({
+              ...contracts.vault,
+              functionName: 'pps1e18',
+              blockTag: 'latest',
+            }),
+            publicClient.readContract({
+              ...contracts.views,
+              functionName: 'oraclePxHype1e8',
+              args: [strategy.contracts.handlerAddress],
+              blockTag: 'latest',
+            }),
+          ]);
+          
+          const newOraclePxHype1e8 = newOracleResult as bigint;
+          const newPps1e18 = newPpsResult as bigint;
+          
+          console.log('[useStrategyDeposit] Refetched values:', {
+            newPps1e18: newPps1e18.toString(),
+            newOraclePxHype1e8: newOraclePxHype1e8.toString(),
+          });
+          
+          // Retry simulation with latest block
+          await simulateContract(publicClient, {
+            ...contracts.vault,
+            functionName: 'deposit',
+            args: [],
+            value,
+            account: address,
+            blockTag: 'latest',
+          });
+          
+          // If retry succeeds, clear simError and continue
+          simError = null;
+        } catch (retryError: any) {
+          // Both attempts failed, use the retry error
+          simError = retryError;
+        }
+      }
+      
+      // If simulation failed after retry, handle error
+      if (simError) {
         // Extract error name and message
         let errorName: string | undefined;
         let errorMessage = 'Transaction simulation failed';
@@ -161,7 +240,15 @@ export function useStrategyDeposit(strategy: Strategy | null) {
         }
         fullMessage += `\nVault: ${vaultShort}\nMontant: ${amountFormatted}`;
         
-        showToast('error', fullMessage);
+        // Add contextual diagnostics
+        if (pps1e18 !== undefined || oraclePxHype1e8 !== undefined) {
+          fullMessage += `\n\nDiagnostics:\n`;
+          if (pps1e18 !== undefined) fullMessage += `PPS: ${pps1e18.toString()}\n`;
+          if (nav1e18 !== undefined) fullMessage += `NAV: ${nav1e18.toString()}\n`;
+          if (oraclePxHype1e8 !== undefined) fullMessage += `Oracle HYPE: ${oraclePxHype1e8.toString()}\n`;
+        }
+        
+        showTxToast('failed', { error: fullMessage, action: 'Dépôt' });
         throw new Error(errorMessage);
       }
 

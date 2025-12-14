@@ -4,7 +4,7 @@ import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useAcc
 import { parseUnits, formatUnits } from 'viem';
 import { swapPool } from '@/contracts/swapContracts';
 import type { Strategy } from '@/types/strategy';
-import { useToast } from '@/components/Toast';
+import { useTxToasts } from '@/lib/txToasts';
 
 export type SwapDirection = 'HYPE_TO_VAULT' | 'VAULT_TO_HYPE';
 
@@ -68,28 +68,33 @@ export function usePerformSwap({ poolAddress, strategy, direction, amountIn, amo
   const { address } = useAccount();
   const { writeContract, data: hash, isPending, error: writeError } = useWriteContract();
   const { isLoading: isConfirming, isSuccess, error: txError } = useWaitForTransactionReceipt({ hash });
-  const { showToast } = useToast();
+  const { showTxToast } = useTxToasts();
 
   const shareDecimals = strategy?.contracts.shareDecimals ?? 18;
   const hypeDecimals = 18;
 
+  // Show toast on submitted
+  useEffect(() => {
+    if (hash) {
+      showTxToast('submitted', { hash, action: 'Swap' });
+    }
+  }, [hash, showTxToast]);
+
   // Show toast on success
   useEffect(() => {
     if (isSuccess && hash) {
-      const shortHash = `${hash.slice(0, 6)}...${hash.slice(-4)}`;
-      showToast('success', `Transaction confirmée`, hash);
+      showTxToast('confirmed', { hash, action: 'Swap' });
     }
-  }, [isSuccess, hash, showToast]);
+  }, [isSuccess, hash, showTxToast]);
 
   // Show toast on error
   useEffect(() => {
     if (writeError || txError) {
       const error = writeError || txError;
       const message = error?.message ?? 'Transaction revert';
-      const shortHash = hash ? `${hash.slice(0, 6)}...${hash.slice(-4)}` : undefined;
-      showToast('error', message, hash || undefined);
+      showTxToast('failed', { hash: hash || undefined, error: message, action: 'Swap' });
     }
-  }, [writeError, txError, hash, showToast]);
+  }, [writeError, txError, hash, showTxToast]);
 
   function swap() {
     if (!poolAddress || !address || !amountIn || !strategy) return;

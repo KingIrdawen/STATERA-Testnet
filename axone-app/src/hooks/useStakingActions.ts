@@ -3,34 +3,40 @@ import { useWriteContract, useWaitForTransactionReceipt, useReadContract } from 
 import { parseUnits, maxUint256 } from 'viem';
 import { rewardsHubContract, REWARDS_HUB_ADDRESS } from '@/contracts/rewardsHub';
 import { lpTokenAbi } from '@/lib/abi/lpToken';
-import { useToast } from '@/components/Toast';
+import { useTxToasts } from '@/lib/txToasts';
 import { useEffect } from 'react';
 
 export function useStakingActions() {
   const { address } = useAccount();
-  const { showToast } = useToast();
+  const { showTxToast } = useTxToasts();
 
   const { writeContract, data: hash, isPending, error: writeError } = useWriteContract();
   const { isLoading: isConfirming, isSuccess, error: txError } = useWaitForTransactionReceipt({
     hash,
   });
 
+  // Show toast on submitted
+  useEffect(() => {
+    if (hash) {
+      showTxToast('submitted', { hash, action: 'Staking' });
+    }
+  }, [hash, showTxToast]);
+
   // Show toast on success
   useEffect(() => {
     if (isSuccess && hash) {
-      const shortHash = `${hash.slice(0, 6)}...${hash.slice(-4)}`;
-      showToast('success', 'Transaction confirmée', hash);
+      showTxToast('confirmed', { hash, action: 'Staking' });
     }
-  }, [isSuccess, hash, showToast]);
+  }, [isSuccess, hash, showTxToast]);
 
   // Show toast on error
   useEffect(() => {
     if (writeError || txError) {
       const error = writeError || txError;
       const message = error?.message ?? 'Transaction revert';
-      showToast('error', message, hash || undefined);
+      showTxToast('failed', { hash: hash || undefined, error: message, action: 'Staking' });
     }
-  }, [writeError, txError, hash, showToast]);
+  }, [writeError, txError, hash, showTxToast]);
 
   const deposit = async (pid: number, amount: string, stakeTokenAddress: `0x${string}`, decimals: number = 18) => {
     if (!REWARDS_HUB_ADDRESS || !address) {

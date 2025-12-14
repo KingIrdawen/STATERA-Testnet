@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAccount, useChainId, useSwitchChain, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { referralRegistryContract, REFERRAL_REGISTRY_ADDRESS } from '@/contracts/referralRegistry';
 import { getCodeHash } from '@/lib/referralUtils';
-import { useToast } from './Toast';
+import { useTxToasts } from '@/lib/txToasts';
 
 export function DashboardReferralTab() {
   const { address } = useAccount();
@@ -12,7 +12,7 @@ export function DashboardReferralTab() {
   const { switchChain } = useSwitchChain();
   const EXPECTED_CHAIN_ID = 998;
   const isCorrectChain = chainId === EXPECTED_CHAIN_ID;
-  const { showToast } = useToast();
+  const { showTxToast } = useTxToasts();
 
   // State
   const [referralCode, setReferralCode] = useState('');
@@ -68,43 +68,59 @@ export function DashboardReferralTab() {
     hash: createCodeHash,
   });
 
+  // Show toast on useCode submitted
+  useEffect(() => {
+    if (useCodeHash) {
+      showTxToast('submitted', { hash: useCodeHash, action: 'Utilisation code referral' });
+    }
+  }, [useCodeHash, showTxToast]);
+
   // Handle useCode success
   useEffect(() => {
     if (isUseCodeSuccess && useCodeHash) {
-      showToast('success', 'Vous êtes maintenant whitelisté !', useCodeHash);
+      showTxToast('confirmed', { hash: useCodeHash, action: 'Utilisation code referral' });
       setReferralCode('');
       refetchWhitelisted();
     }
-  }, [isUseCodeSuccess, useCodeHash, showToast, refetchWhitelisted]);
+  }, [isUseCodeSuccess, useCodeHash, showTxToast, refetchWhitelisted]);
 
   // Handle useCode error
   useEffect(() => {
-    if (useCodeError) {
-      const message = useCodeError.message ?? 'Erreur lors de l\'utilisation du code';
-      showToast('error', message, useCodeHash || undefined);
+    if (useCodeError && useCodeHash) {
+      const errorObj = useCodeError as Error | { message?: string } | null;
+      const message = (errorObj && 'message' in errorObj ? errorObj.message : String(useCodeError)) || 'Erreur lors de l\'utilisation du code';
+      showTxToast('failed', { hash: useCodeHash, error: message, action: 'Utilisation code referral' });
     }
-  }, [useCodeError, useCodeHash, showToast]);
+  }, [useCodeError, useCodeHash, showTxToast]);
+
+  // Show toast on createCode submitted
+  useEffect(() => {
+    if (createCodeHash) {
+      showTxToast('submitted', { hash: createCodeHash, action: 'Création code referral' });
+    }
+  }, [createCodeHash, showTxToast]);
 
   // Handle createCode success - need to read the return value
   useEffect(() => {
     if (isCreateCodeSuccess && createCodeHash) {
       // The contract returns the raw code string, but we need to read it from events or contract state
       // For now, we'll just show success and refetch unused codes
-      showToast('success', 'Code de referral créé avec succès !', createCodeHash);
+      showTxToast('confirmed', { hash: createCodeHash, action: 'Création code referral' });
       refetchCodesCreated();
       refetchUnusedCodes();
       // Note: In a real implementation, you'd listen to CodeCreated event to get the raw code
       // For now, we'll rely on getUnusedCodes to show it
     }
-  }, [isCreateCodeSuccess, createCodeHash, showToast, refetchCodesCreated, refetchUnusedCodes]);
+  }, [isCreateCodeSuccess, createCodeHash, showTxToast, refetchCodesCreated, refetchUnusedCodes]);
 
   // Handle createCode error
   useEffect(() => {
-    if (createCodeError) {
-      const message = createCodeError.message ?? 'Erreur lors de la création du code';
-      showToast('error', message, createCodeHash || undefined);
+    if (createCodeError && createCodeHash) {
+      const errorObj = createCodeError as Error | { message?: string } | null;
+      const message = (errorObj && 'message' in errorObj ? errorObj.message : String(createCodeError)) || 'Erreur lors de la création du code';
+      showTxToast('failed', { hash: createCodeHash, error: message, action: 'Création code referral' });
     }
-  }, [createCodeError, createCodeHash, showToast]);
+  }, [createCodeError, createCodeHash, showTxToast]);
 
   const handleUseCode = () => {
     if (!address || !isCorrectChain || !referralCode.trim()) {
@@ -112,7 +128,7 @@ export function DashboardReferralTab() {
     }
 
     if (!REFERRAL_REGISTRY_ADDRESS) {
-      showToast('error', 'ReferralRegistry n\'est pas configuré');
+      showTxToast('failed', { error: 'ReferralRegistry n\'est pas configuré', action: 'Utilisation code referral' });
       return;
     }
 
@@ -125,7 +141,8 @@ export function DashboardReferralTab() {
       });
     } catch (error) {
       console.error('[DashboardReferralTab] Error hashing code:', error);
-      showToast('error', 'Erreur lors du hashage du code');
+      const errorMsg = error instanceof Error ? error.message : 'Erreur lors du hashage du code';
+      showTxToast('failed', { error: errorMsg, action: 'Utilisation code referral' });
     }
   };
 
@@ -135,7 +152,7 @@ export function DashboardReferralTab() {
     }
 
     if (!REFERRAL_REGISTRY_ADDRESS) {
-      showToast('error', 'ReferralRegistry n\'est pas configuré');
+      showTxToast('failed', { error: 'ReferralRegistry n\'est pas configuré', action: 'Utilisation code referral' });
       return;
     }
 
@@ -150,10 +167,10 @@ export function DashboardReferralTab() {
   const handleCopyCode = async (code: string) => {
     try {
       await navigator.clipboard.writeText(code);
-      showToast('success', 'Code copié dans le presse-papiers');
+      showTxToast('confirmed', { action: 'Code copié dans le presse-papiers' });
     } catch (error) {
       console.error('[DashboardReferralTab] Error copying code:', error);
-      showToast('error', 'Erreur lors de la copie du code');
+      showTxToast('failed', { error: 'Erreur lors de la copie du code', action: 'Copie code' });
     }
   };
 

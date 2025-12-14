@@ -73,7 +73,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-sm">
-                    {toast.type === 'success' ? '✓ Swap confirmé' : '✗ Swap échoué'}
+                    {toast.type === 'success' ? '✓ Transaction confirmée' : '✗ Transaction échouée'}
                   </p>
                   <p
                     className={`text-xs mt-1 opacity-90 break-words ${isLong ? 'cursor-pointer' : ''}`}
