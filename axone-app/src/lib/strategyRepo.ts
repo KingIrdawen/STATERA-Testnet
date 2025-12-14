@@ -16,29 +16,81 @@ export async function getAllStrategies(): Promise<Strategy[]> {
     return [];
   }
 
-  // Filter out legacy strategies that don't have a valid `contracts` block
-  const valid = (list as any[]).filter((item) => {
+  // Default contract addresses (can be overridden by env vars if needed)
+  const DEFAULT_CHAIN_ID = 998;
+  const DEFAULT_CORE_WRITER = '0x3333333333333333333333333333333333333333' as `0x${string}`;
+  
+  // Migrate legacy strategies to new format
+  const migrated: Strategy[] = [];
+  let migrationCount = 0;
+
+  for (const item of list) {
+    if (!item || typeof item !== "object") {
+      continue;
+    }
+
     const contracts = item?.contracts;
-    return (
-      item &&
-      typeof item === "object" &&
+    
+    // Check if already in new format
+    if (
       contracts &&
       typeof contracts === "object" &&
       typeof contracts.vaultAddress === "string" &&
       typeof contracts.handlerAddress === "string" &&
       typeof contracts.coreViewsAddress === "string" &&
       typeof contracts.l1ReadAddress === "string"
-    );
-  });
+    ) {
+      // Already valid, keep as is
+      migrated.push(item as Strategy);
+      continue;
+    }
 
-  if (valid.length !== list.length) {
-    console.warn(
-      "[strategyRepo] Ignored some legacy strategies without a `contracts` block. " +
-      'Consider cleaning the "strategies:list" KV key.'
-    );
+    // Legacy format: has vaultAddress/handlerAddress/l1ReadAddress at root level
+    const legacyVaultAddress = (item as any).vaultAddress;
+    const legacyHandlerAddress = (item as any).handlerAddress;
+    const legacyL1ReadAddress = (item as any).l1ReadAddress;
+    const legacyCoreViewsAddress = (item as any).coreViewsAddress;
+    const legacyCoreWriterAddress = (item as any).coreWriterAddress;
+
+    if (
+      typeof legacyVaultAddress === "string" &&
+      typeof legacyHandlerAddress === "string" &&
+      typeof legacyL1ReadAddress === "string"
+    ) {
+      // Migrate legacy strategy
+      const migratedStrategy: Strategy = {
+        id: (item as any).id || crypto.randomUUID(),
+        name: (item as any).name || "Unnamed Strategy",
+        description: (item as any).description,
+        riskLevel: (item as any).riskLevel || "low",
+        status: (item as any).status || "open",
+        contracts: {
+          chainId: DEFAULT_CHAIN_ID,
+          vaultAddress: legacyVaultAddress as `0x${string}`,
+          handlerAddress: legacyHandlerAddress as `0x${string}`,
+          coreViewsAddress: (legacyCoreViewsAddress || process.env.NEXT_PUBLIC_CORE_VIEWS_ADDRESS || '0x0000000000000000000000000000000000000000') as `0x${string}`,
+          l1ReadAddress: legacyL1ReadAddress as `0x${string}`,
+          coreWriterAddress: (legacyCoreWriterAddress || DEFAULT_CORE_WRITER) as `0x${string}`,
+          shareDecimals: (item as any).shareDecimals ?? 18,
+          hypeDecimals: (item as any).hypeDecimals ?? 18,
+          usdcDecimals: (item as any).usdcDecimals ?? 6,
+          depositIsNative: (item as any).depositIsNative ?? true,
+        },
+      };
+      migrated.push(migratedStrategy);
+      migrationCount++;
+    }
   }
 
-  return valid as Strategy[];
+  if (migrationCount > 0) {
+    console.warn(
+      `[strategyRepo] Migrated ${migrationCount} legacy strategy(ies) to new format.`
+    );
+    // Save migrated strategies back to KV
+    await kv.set(LIST_KEY, migrated);
+  }
+
+  return migrated;
 }
 
 export async function getStrategyById(id: string): Promise<Strategy | null> {

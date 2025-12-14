@@ -184,11 +184,27 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
             </span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-gray-500 text-xs">Vos parts</span>
+            <span className="text-gray-500 text-xs">Vos parts (total)</span>
             <span className="text-white text-sm font-mono">
               {strategyData.userShares !== undefined ? strategyData.userShares.toFixed(6) : '-'}
             </span>
           </div>
+          {strategyData.userSharesAvailable !== undefined && (
+            <div className="flex justify-between items-center">
+              <span className="text-gray-500 text-xs">Parts disponibles (wallet)</span>
+              <span className="text-white text-sm font-mono">
+                {strategyData.userSharesAvailable.toFixed(6)}
+              </span>
+            </div>
+          )}
+          {strategyData.userSharesStaked !== undefined && strategyData.userSharesStaked > 0 && (
+            <div className="flex justify-between items-center">
+              <span className="text-gray-500 text-xs">Parts stakées (staking)</span>
+              <span className="text-white text-sm font-mono">
+                {strategyData.userSharesStaked.toFixed(6)}
+              </span>
+            </div>
+          )}
           {strategyData.oracleHypeUsd !== undefined && (
             <div className="flex justify-between items-center">
               <span className="text-gray-500 text-xs">HYPE</span>
@@ -249,6 +265,23 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
           {/* Withdraw */}
           {showWithdraw && (
             <div>
+              {/* Display shares breakdown */}
+              {(strategyData.userSharesAvailable !== undefined || strategyData.userSharesStaked !== undefined) && (
+                <div className="mb-3 p-2 bg-gray-800/50 rounded-lg border border-gray-700">
+                  {strategyData.userSharesAvailable !== undefined && (
+                    <div className="flex justify-between items-center text-xs mb-1">
+                      <span className="text-gray-400">Shares disponibles (wallet):</span>
+                      <span className="text-white font-mono">{strategyData.userSharesAvailable.toFixed(6)}</span>
+                    </div>
+                  )}
+                  {strategyData.userSharesStaked !== undefined && strategyData.userSharesStaked > 0 && (
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="text-gray-400">Shares stakées (staking):</span>
+                      <span className="text-white font-mono">{strategyData.userSharesStaked.toFixed(6)}</span>
+                    </div>
+                  )}
+                </div>
+              )}
               <div className="flex justify-between items-center mb-2">
                 <label className="block text-white text-sm font-semibold">Withdraw (Shares)</label>
                 {maxWithdraw > 0 && (

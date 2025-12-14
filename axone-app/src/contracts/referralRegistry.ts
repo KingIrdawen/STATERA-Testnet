@@ -18,3 +18,4 @@ export function referralRegistryContract(address?: Address) {
   } as const;
 }
 
+

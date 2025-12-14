@@ -6,6 +6,7 @@ import { useAccount, useReadContracts } from 'wagmi';
 import type { Strategy } from '@/types/strategy';
 import { getStrategyContracts } from '@/lib/strategyContracts';
 import { formatUnits } from 'viem';
+import { useVaultStakedShares } from './useVaultStakedShares';
 
 export interface StrategyData {
   loading: boolean;
@@ -13,7 +14,9 @@ export interface StrategyData {
   navUsd: number | undefined; // Total NAV in USD
   ppsUsd: number | undefined; // Price per share in USD
   totalShares: number | undefined; // Total shares issued
-  userShares: number | undefined; // User's shares
+  userShares: number | undefined; // User's shares (wallet + staked)
+  userSharesAvailable: number | undefined; // User's shares in wallet
+  userSharesStaked: number | undefined; // User's shares staked in RewardsHub
   userValueUsd: number | undefined; // User's position value in USD
   tvlUsd: number | undefined; // Total Value Locked (same as NAV)
   oracleHypeUsd: number | undefined; // HYPE oracle price in USD
@@ -23,6 +26,7 @@ export interface StrategyData {
   ppsUsd1e18: bigint | undefined;
   totalSharesRaw: bigint | undefined;
   userSharesRaw: bigint | undefined;
+  userSharesStakedRaw: bigint | undefined;
 }
 
 export function useStrategyData(strategy: Strategy | null): StrategyData {
@@ -38,6 +42,10 @@ export function useStrategyData(strategy: Strategy | null): StrategyData {
     typeof (strategy as any).contracts.coreViewsAddress === "string" &&
     typeof (strategy as any).contracts.l1ReadAddress === "string";
 
+  // Get staked shares for this vault
+  const vaultAddress = hasContracts && strategy ? (strategy as Strategy).contracts.vaultAddress : undefined;
+  const { sharesStaked, isLoading: isLoadingStaked } = useVaultStakedShares(vaultAddress);
+
   if (!hasContracts) {
     return {
       loading: false,
@@ -46,6 +54,8 @@ export function useStrategyData(strategy: Strategy | null): StrategyData {
       ppsUsd: undefined,
       totalShares: undefined,
       userShares: undefined,
+      userSharesAvailable: undefined,
+      userSharesStaked: undefined,
       userValueUsd: undefined,
       tvlUsd: undefined,
       oracleHypeUsd: undefined,
@@ -54,6 +64,7 @@ export function useStrategyData(strategy: Strategy | null): StrategyData {
       ppsUsd1e18: undefined,
       totalSharesRaw: undefined,
       userSharesRaw: undefined,
+      userSharesStakedRaw: undefined,
     };
   }
 
@@ -120,12 +131,14 @@ export function useStrategyData(strategy: Strategy | null): StrategyData {
 
   if (!isConfigured || !strategy || !data || !hasContracts) {
     return {
-      loading: isLoading,
+      loading: isLoading || isLoadingStaked,
       error: error as Error | null,
       navUsd: undefined,
       ppsUsd: undefined,
       totalShares: undefined,
       userShares: undefined,
+      userSharesAvailable: undefined,
+      userSharesStaked: undefined,
       userValueUsd: undefined,
       tvlUsd: undefined,
       oracleHypeUsd: undefined,
@@ -134,6 +147,7 @@ export function useStrategyData(strategy: Strategy | null): StrategyData {
       ppsUsd1e18: undefined,
       totalSharesRaw: undefined,
       userSharesRaw: undefined,
+      userSharesStakedRaw: undefined,
     };
   }
 
@@ -152,19 +166,24 @@ export function useStrategyData(strategy: Strategy | null): StrategyData {
   const navUsd = navUsd1e18 ? Number(formatUnits(navUsd1e18, 18)) : undefined;
   const ppsUsd = ppsUsd1e18 ? Number(formatUnits(ppsUsd1e18, 18)) : undefined;
   const totalShares = totalSharesRaw ? Number(formatUnits(totalSharesRaw, shareDecimals)) : undefined;
-  const userShares = userSharesRaw ? Number(formatUnits(userSharesRaw, shareDecimals)) : undefined;
-  const userValueUsd = userShares !== undefined && ppsUsd !== undefined ? userShares * ppsUsd : undefined;
+  const userSharesAvailable = userSharesRaw ? Number(formatUnits(userSharesRaw, shareDecimals)) : undefined;
+  const userSharesStakedFormatted = sharesStaked ? Number(formatUnits(sharesStaked, shareDecimals)) : undefined;
+  // Total user shares = available (wallet) + staked
+  const userShares = (userSharesAvailable ?? 0) + (userSharesStakedFormatted ?? 0);
+  const userValueUsd = userShares > 0 && ppsUsd !== undefined ? userShares * ppsUsd : undefined;
   const tvlUsd = navUsd; // TVL is the same as NAV for ERA
   const oracleHypeUsd = oraclePxHype1e8 ? Number(oraclePxHype1e8) / 1e8 : undefined;
   const oracleToken1Usd = oraclePxToken11e8 ? Number(oraclePxToken11e8) / 1e8 : undefined;
 
   return {
-    loading: isLoading,
+    loading: isLoading || isLoadingStaked,
     error: error as Error | null,
     navUsd,
     ppsUsd,
     totalShares,
-    userShares,
+    userShares: userShares > 0 ? userShares : undefined,
+    userSharesAvailable,
+    userSharesStaked: userSharesStakedFormatted,
     userValueUsd,
     tvlUsd,
     oracleHypeUsd,
@@ -173,6 +192,7 @@ export function useStrategyData(strategy: Strategy | null): StrategyData {
     ppsUsd1e18,
     totalSharesRaw,
     userSharesRaw,
+    userSharesStakedRaw: sharesStaked,
   };
 }
 

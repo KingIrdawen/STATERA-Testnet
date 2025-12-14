@@ -4,3 +4,4 @@ export function isReferralProtectedRoute(path: string): boolean {
   return REFERRAL_PROTECTED.includes(path as any);
 }
 
+
