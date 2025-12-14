@@ -61,7 +61,7 @@ export default function StrategyDetailPage() {
           <div className="text-center">
             <p className="text-[#5a9a9a] text-lg mb-4">Strategy not found</p>
             <Link
-              href="/dashboard"
+              href="/dashboard/strategy"
               className="text-[#fab062] hover:text-[#e89a4a] transition-colors"
             >
               Return to Dashboard

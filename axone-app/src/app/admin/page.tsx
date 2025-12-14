@@ -151,7 +151,7 @@ export default function AdminPage() {
               Docs
             </Link>
             <Link
-              href="/dashboard"
+              href="/dashboard/strategy"
               className="text-white font-bold text-xs sm:text-sm md:text-base hover:text-[#fab062] transition-colors tracking-tight"
             >
               Dashboard
