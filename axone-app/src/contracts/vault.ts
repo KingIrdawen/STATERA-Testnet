@@ -65,6 +65,34 @@ export const vaultAbi = [
     inputs: [{ name: 'amount1e18', type: 'uint256' }],
     outputs: [{ name: '', type: 'uint16' }],
   },
+  {
+    name: 'paused',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ name: '', type: 'bool' }],
+  },
+  {
+    name: 'depositFeeBps',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ name: '', type: 'uint16' }],
+  },
+  {
+    name: 'withdrawFeeBps',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ name: '', type: 'uint16' }],
+  },
+  {
+    name: 'handler',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ name: '', type: 'address' }],
+  },
   // Custom errors for better revert decoding
   {
     type: 'error',

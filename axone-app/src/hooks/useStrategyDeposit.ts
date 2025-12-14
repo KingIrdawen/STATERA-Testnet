@@ -60,13 +60,30 @@ export function useStrategyDeposit(strategy: Strategy | null) {
       // Native HYPE deposit (payable)
       const value = parseEther(amount);
 
-      // Preflight health checks: read pps1e18, nav1e18, and oraclePxHype1e8
+      // Preflight health checks: read comprehensive vault state
       let pps1e18: bigint | undefined;
       let nav1e18: bigint | undefined;
       let oraclePxHype1e8: bigint | undefined;
+      let paused: boolean | undefined;
+      let depositFeeBps: number | undefined;
+      let withdrawFeeBps: number | undefined;
+      let handlerAddress: `0x${string}` | undefined;
+      let blockNumber: bigint | undefined;
       
       try {
-        const [ppsResult, navResult, oracleResult] = await Promise.all([
+        // Get block number first
+        blockNumber = await publicClient.getBlockNumber();
+
+        // Read all relevant state in parallel
+        const [
+          ppsResult,
+          navResult,
+          oracleResult,
+          pausedResult,
+          depositFeeBpsResult,
+          withdrawFeeBpsResult,
+          handlerResult,
+        ] = await Promise.allSettled([
           publicClient.readContract({
             ...contracts.vault,
             functionName: 'pps1e18',
@@ -80,24 +97,53 @@ export function useStrategyDeposit(strategy: Strategy | null) {
             functionName: 'oraclePxHype1e8',
             args: [strategy.contracts.handlerAddress],
           }),
+          publicClient.readContract({
+            ...contracts.vault,
+            functionName: 'paused',
+          }).catch(() => null),
+          publicClient.readContract({
+            ...contracts.vault,
+            functionName: 'depositFeeBps',
+          }).catch(() => null),
+          publicClient.readContract({
+            ...contracts.vault,
+            functionName: 'withdrawFeeBps',
+          }).catch(() => null),
+          publicClient.readContract({
+            ...contracts.vault,
+            functionName: 'handler',
+          }).catch(() => null),
         ]);
 
-        oraclePxHype1e8 = oracleResult as bigint;
-        pps1e18 = ppsResult as bigint;
-        nav1e18 = navResult as bigint;
+        pps1e18 = ppsResult.status === 'fulfilled' ? (ppsResult.value as bigint) : undefined;
+        nav1e18 = navResult.status === 'fulfilled' ? (navResult.value as bigint) : undefined;
+        oraclePxHype1e8 = oracleResult.status === 'fulfilled' ? (oracleResult.value as bigint) : undefined;
+        paused = pausedResult.status === 'fulfilled' ? (pausedResult.value as boolean) : undefined;
+        depositFeeBps = depositFeeBpsResult.status === 'fulfilled' ? Number(depositFeeBpsResult.value) : undefined;
+        withdrawFeeBps = withdrawFeeBpsResult.status === 'fulfilled' ? Number(withdrawFeeBpsResult.value) : undefined;
+        handlerAddress = handlerResult.status === 'fulfilled' ? (handlerResult.value as `0x${string}`) : strategy.contracts.handlerAddress;
 
-        // Log diagnostics
+        // Log comprehensive diagnostics with actual values
         console.log('[useStrategyDeposit] Preflight diagnostics:', {
-          vaultAddress: contracts.vault.address,
           chainId: strategy.contracts.chainId,
-          amount: value.toString(),
-          pps1e18: pps1e18.toString(),
-          nav1e18: nav1e18.toString(),
-          oraclePxHype1e8: oraclePxHype1e8.toString(),
+          vaultAddress: contracts.vault.address,
+          userAddress: address,
+          amountInWei: value.toString(),
+          blockNumber: blockNumber.toString(),
+          pps1e18: pps1e18?.toString() ?? 'N/A',
+          nav1e18: nav1e18?.toString() ?? 'N/A',
+          depositFeeBps: depositFeeBps ?? 'N/A',
+          withdrawFeeBps: withdrawFeeBps ?? 'N/A',
+          handlerAddress: handlerAddress ?? 'N/A',
+          oraclePxHype1e8: oraclePxHype1e8?.toString() ?? 'N/A',
+          paused: paused ?? 'N/A',
         });
 
         if (oraclePxHype1e8 === 0n || pps1e18 === 0n) {
           console.warn('[useStrategyDeposit] Oracle or vault not initialized');
+        }
+        if (paused === true) {
+          console.warn('[useStrategyDeposit] Vault is paused');
         }
       } catch (preflightError) {
         console.warn('[useStrategyDeposit] Preflight checks failed:', preflightError);
