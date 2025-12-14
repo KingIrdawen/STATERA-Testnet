@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import Section, { TextZone, AnimationZone } from '@/components/Section';
 import TypewriterText from '@/components/TypewriterText';
 import AnimatedListItem from '@/components/AnimatedListItem';
-import Footer from '@/components/Footer';
+import { SiteFooter } from '@/components/layout/SiteFooter';
 import AnimatedButton from '@/components/AnimatedButton';
 import AnimatedMetric from '@/components/AnimatedMetric';
 import ScrollAnimation from '@/components/ScrollAnimation';
@@ -386,7 +386,7 @@ export default function Home() {
             </div>
           </section>
       
-      <Footer />
+      <SiteFooter />
     </div>
   );
 }
