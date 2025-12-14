@@ -44,13 +44,29 @@ export default function StrategyStatsPage() {
 
   // Find strategy by ID - defensive check for strategies array
   useEffect(() => {
-    if (strategyId && Array.isArray(strategies) && strategies.length > 0) {
+    if (!strategyId) {
+      setStrategy(null);
+      return;
+    }
+
+    if (loading) {
+      // Still loading strategies, wait
+      return;
+    }
+
+    if (Array.isArray(strategies) && strategies.length > 0) {
       const found = strategies.find(s => s && s.id === strategyId);
       if (found) {
         setStrategy(found);
+      } else {
+        // Strategy not found - set to null to show "not found" message
+        setStrategy(null);
       }
+    } else if (!loading && Array.isArray(strategies) && strategies.length === 0) {
+      // Strategies loaded but empty - strategy not found
+      setStrategy(null);
     }
-  }, [strategyId, strategies]);
+  }, [strategyId, strategies, loading]);
 
   // Get strategy data
   const strategyData = useStrategyData(strategy);
