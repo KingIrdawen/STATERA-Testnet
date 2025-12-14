@@ -4,13 +4,15 @@ import { useAccount, useChainId } from 'wagmi';
 import { DashboardStakingTab } from '@/components/DashboardStakingTab';
 import { DashboardHeader } from '@/components/DashboardHeader';
 import { DashboardSidebar } from '@/components/DashboardSidebar';
-import Footer from '@/components/Footer';
+import { SiteFooter } from '@/components/layout/SiteFooter';
+import { useWhitelistCheck } from '@/hooks/useWhitelistCheck';
 
 export default function StakingPage() {
   const { address } = useAccount();
   const chainId = useChainId();
   const EXPECTED_CHAIN_ID = 998;
   const isCorrectChain = chainId === EXPECTED_CHAIN_ID;
+  useWhitelistCheck(); // Check whitelist and redirect if needed
 
   return (
     <div className="min-h-screen bg-black">
@@ -37,7 +39,7 @@ export default function StakingPage() {
         </div>
       </main>
       
-      <Footer />
+      <SiteFooter />
     </div>
   );
 }

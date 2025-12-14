@@ -6,7 +6,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount, useChainId, useSwitchChain } from 'wagmi';
-import Footer from '@/components/Footer';
+import { SiteFooter } from '@/components/layout/SiteFooter';
+import { useWhitelistCheck } from '@/hooks/useWhitelistCheck';
 import type { Strategy } from '@/types/strategy';
 import { useStrategies } from '@/hooks/useStrategies';
 import { useStrategyData } from '@/hooks/useStrategyDataEra';
@@ -22,6 +23,7 @@ export default function StrategyDetailPage() {
   const { address } = useAccount();
   const chainId = useChainId();
   const { switchChain } = useSwitchChain();
+  useWhitelistCheck(); // Check whitelist and redirect if needed
 
   // Find strategy by ID
   useEffect(() => {
@@ -255,7 +257,7 @@ export default function StrategyDetailPage() {
         </div>
       </main>
 
-      <Footer />
+      <SiteFooter />
     </div>
   );
 }

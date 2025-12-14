@@ -189,14 +189,6 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
               {strategyData.userShares !== undefined ? strategyData.userShares.toFixed(6) : '-'}
             </span>
           </div>
-          {strategyData.userSharesAvailable !== undefined && (
-            <div className="flex justify-between items-center">
-              <span className="text-gray-500 text-xs">Parts disponibles (wallet)</span>
-              <span className="text-white text-sm font-mono">
-                {strategyData.userSharesAvailable.toFixed(6)}
-              </span>
-            </div>
-          )}
           {strategyData.userSharesStaked !== undefined && strategyData.userSharesStaked > 0 && (
             <div className="flex justify-between items-center">
               <span className="text-gray-500 text-xs">Parts stakées (staking)</span>
@@ -277,14 +269,8 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
           {showWithdraw && (
             <div>
               {/* Display shares breakdown */}
-              {(strategyData.userSharesAvailable !== undefined || strategyData.userSharesStaked !== undefined) && (
+              {strategyData.userSharesStaked !== undefined && strategyData.userSharesStaked > 0 && (
                 <div className="mb-3 p-2 bg-gray-800/50 rounded-lg border border-gray-700">
-                  {strategyData.userSharesAvailable !== undefined && (
-                    <div className="flex justify-between items-center text-xs mb-1">
-                      <span className="text-gray-400">Shares disponibles (wallet):</span>
-                      <span className="text-white font-mono">{strategyData.userSharesAvailable.toFixed(6)}</span>
-                    </div>
-                  )}
                   {strategyData.userSharesStaked !== undefined && strategyData.userSharesStaked > 0 && (
                     <div className="flex justify-between items-center text-xs">
                       <span className="text-gray-400">Shares stakées (staking):</span>

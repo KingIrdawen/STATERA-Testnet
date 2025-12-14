@@ -7,6 +7,7 @@ import { StrategyCardEra } from '@/components/StrategyCardEra';
 import { DashboardHeader } from '@/components/DashboardHeader';
 import { DashboardSidebar } from '@/components/DashboardSidebar';
 import { SiteFooter } from '@/components/layout/SiteFooter';
+import { useWhitelistCheck } from '@/hooks/useWhitelistCheck';
 import type { Strategy } from '@/types/strategy';
 
 // Composant wrapper pour une stratégie avec vérification de dépôt
@@ -64,6 +65,7 @@ export default function StrategyPage() {
   const EXPECTED_CHAIN_ID = 998;
   const isCorrectChain = chainId === EXPECTED_CHAIN_ID;
   const { strategies, loading } = useStrategies();
+  useWhitelistCheck(); // Check whitelist and redirect if needed
 
   return (
     <div className="min-h-screen bg-black">

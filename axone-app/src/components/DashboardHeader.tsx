@@ -19,7 +19,6 @@ export function DashboardHeader() {
     { href: '/dashboard/staking', label: 'Staking' },
     { href: '/dashboard/swap', label: 'Swap' },
     { href: '/dashboard/arbitrage', label: 'Arbitrage' },
-    { href: '/dashboard/referral', label: 'Referral' },
   ];
 
   return (

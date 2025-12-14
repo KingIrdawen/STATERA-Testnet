@@ -132,7 +132,7 @@ export function SiteFooter() {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             {/* Copyright - Left */}
             <p className="text-white/50 text-xs">
-              © {currentYear} Statera Finance. Tous droits réservés.
+              © {currentYear} Statera Finance. All rights reserved.
             </p>
             
             {/* Legal links - Right */}
@@ -141,14 +141,14 @@ export function SiteFooter() {
                 href="#"
                 className="text-white/50 hover:text-white/70 transition-colors"
               >
-                Conditions d'utilisation
+                Terms of Use
               </Link>
               <span className="text-white/50">.</span>
               <Link
                 href="#"
                 className="text-white/50 hover:text-white/70 transition-colors"
               >
-                Confidentialité
+                Privacy
               </Link>
               <span className="text-white/50">.</span>
               <Link
