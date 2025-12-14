@@ -15,6 +15,9 @@ npm install
 1. Créer un fichier `.env.local` à la racine du projet :
 ```env
 NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=votre_project_id_ici
+NEXT_PUBLIC_REFERRAL_REGISTRY_ADDRESS=0x...
+NEXT_PUBLIC_REWARDS_HUB_ADDRESS=0x...
+NEXT_PUBLIC_HYPEREVM_RPC_URL=https://hyperliquid-testnet.core.chainstack.com/98107cd968ac1c4168c442fa6b1fe200/evm
 ```
 
 Pour obtenir un Project ID : https://cloud.walletconnect.com
