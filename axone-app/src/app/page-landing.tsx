@@ -47,11 +47,11 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-[100dvh] bg-white pt-[60px] md:pt-[80px]">
+    <div className="min-h-[100dvh] bg-[#121212] pt-[60px] md:pt-[80px]">
       <Header />
       
       {/* Section 1 - Hero */}
-      <section className="min-h-[100dvh] relative flex items-center justify-center bg-black">
+      <section className="min-h-[100dvh] relative flex items-center justify-center bg-[#121212]">
         {/* Animation de fond */}
         <video
           autoPlay
@@ -97,7 +97,7 @@ export default function Home() {
 
           {/* Section 2 - Performance */}
           <Section reducedHeight>
-            <AnimationZone bgColor="bg-black">
+            <AnimationZone bgColor="bg-[#121212]">
               <div className="flex items-center justify-center h-full p-4 sm:p-6 md:p-8" ref={metricsRef}>
                 <div className="w-full max-w-none px-4 sm:px-8 md:px-12">
                   {/* Mobile: 2 par ligne sur les 2 premières lignes, 1 centrée sur la troisième */}
@@ -172,7 +172,7 @@ export default function Home() {
               </div>
             </AnimationZone>
 
-            <TextZone bgColor="bg-black">
+            <TextZone bgColor="bg-[#121212]">
               <div className="text-center">
                 <TypewriterText 
                   text="Beyond vision, Statera is built on strong pillars that drive its uniqueness and long-term value"
@@ -185,7 +185,7 @@ export default function Home() {
 
           {/* Section 3 - Smart Rebalancing */}
           <Section reducedHeight>
-            <TextZone bgColor="bg-black" className="order-1 md:order-none">
+            <TextZone bgColor="bg-[#121212]" className="order-1 md:order-none">
               <div className="text-left">
                 <ScrollAnimation delay={0}>
                   <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6 inline-block bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent transition-colors duration-300">
@@ -232,7 +232,7 @@ export default function Home() {
               </div>
             </AnimationZone>
 
-            <TextZone bgColor="bg-black" className="order-1 md:order-none">
+            <TextZone bgColor="bg-[#121212]" className="order-1 md:order-none">
               <div className="text-left">
                 <ScrollAnimation delay={100}>
                   <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6 inline-block bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent transition-colors duration-300">
@@ -249,7 +249,7 @@ export default function Home() {
 
           {/* Section 5 - The STATERA Token */}
           <Section reducedHeight>
-            <TextZone bgColor="bg-black" className="order-1 md:order-none">
+            <TextZone bgColor="bg-[#121212]" className="order-1 md:order-none">
               <div className="text-left">
                 <ScrollAnimation delay={200}>
                   <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6 inline-block bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent transition-colors duration-300">
@@ -296,7 +296,7 @@ export default function Home() {
               </div>
             </AnimationZone>
 
-            <TextZone bgColor="bg-black" className="order-1 md:order-none">
+            <TextZone bgColor="bg-[#121212]" className="order-1 md:order-none">
               <div className="text-left">
                 <ScrollAnimation delay={300}>
                   <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6 inline-block bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent transition-colors duration-300">
@@ -313,7 +313,7 @@ export default function Home() {
 
           {/* Section 7 - Buyback and Burn */}
           <Section reducedHeight>
-            <TextZone bgColor="bg-black" className="order-1 md:order-none">
+            <TextZone bgColor="bg-[#121212]" className="order-1 md:order-none">
               <div className="text-left">
                 <ScrollAnimation delay={400}>
                   <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6 inline-block bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent transition-colors duration-300">
@@ -344,7 +344,7 @@ export default function Home() {
           </Section>
 
           {/* Section 9 - Growth Strategy */}
-          <section className="bg-black py-16">
+          <section className="bg-[#121212] py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-24 xl:px-36 2xl:px-48">
               <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-12 inline-block bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent transition-colors duration-300">
                 Growth Strategy
