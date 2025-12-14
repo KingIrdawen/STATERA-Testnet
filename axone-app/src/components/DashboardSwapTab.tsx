@@ -1,11 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useAccount, useChainId, useSwitchChain } from 'wagmi';
+import { useAccount, useChainId, useSwitchChain, useBalance, useReadContract } from 'wagmi';
+import { formatUnits } from 'viem';
 import { useSwapStrategies, type SwapStrategy } from '@/hooks/useSwapStrategies';
 import { useSwapQuote, usePerformSwap, type SwapDirection } from '@/hooks/useSwap';
 import { useVaultTokenApproval } from '@/hooks/useVaultTokenApproval';
 import { SwapStrategyCard } from '@/components/dashboard/SwapStrategyCard';
+import { getStrategyContracts } from '@/lib/strategyContracts';
 import { formatUsd } from '@/lib/format';
 
 export function DashboardSwapTab() {
@@ -42,6 +44,31 @@ export function DashboardSwapTab() {
     selected?.poolAddress,
     direction === 'VAULT_TO_HYPE' ? amountIn : ''
   );
+
+  // Get wallet balance for HYPE (native token)
+  const { data: hypeBalance } = useBalance({
+    address,
+    query: { enabled: !!address && isCorrectChain && direction === 'HYPE_TO_VAULT' },
+  });
+
+  // Get vault token balance for VAULT_TO_HYPE direction
+  const vaultContracts = selected?.strategy ? getStrategyContracts(selected.strategy) : null;
+  const shareDecimals = selected?.strategy?.contracts?.shareDecimals ?? 18;
+  const { data: vaultTokenBalanceRaw } = useReadContract({
+    ...vaultContracts?.vault,
+    functionName: 'balanceOf',
+    args: address ? [address] : undefined,
+    query: {
+      enabled: !!address && !!selected && !!vaultContracts && isCorrectChain && direction === 'VAULT_TO_HYPE',
+    },
+  });
+
+  // Determine available balance based on direction
+  const availableBalance = direction === 'HYPE_TO_VAULT'
+    ? (hypeBalance ? Number(formatUnits(hypeBalance.value, 18)) : 0)
+    : (vaultTokenBalanceRaw && typeof vaultTokenBalanceRaw === 'bigint' 
+        ? Number(formatUnits(vaultTokenBalanceRaw, shareDecimals)) 
+        : 0);
 
   // Reset form on success
   useEffect(() => {
@@ -167,9 +194,16 @@ export function DashboardSwapTab() {
 
           {/* Amount input */}
           <div className="mb-4">
-            <label className="block text-white text-sm font-semibold mb-2">
-              Amount In ({direction === 'HYPE_TO_VAULT' ? 'HYPE' : 'Vault Shares'})
-            </label>
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-white text-sm font-semibold">
+                Amount ({direction === 'HYPE_TO_VAULT' ? 'HYPE' : 'Vault Shares'})
+              </label>
+              {address && isCorrectChain && availableBalance > 0 && (
+                <span className="text-gray-400 text-xs">
+                  Available: {availableBalance.toFixed(6)}
+                </span>
+              )}
+            </div>
             <input
               type="number"
               step="0.0001"
