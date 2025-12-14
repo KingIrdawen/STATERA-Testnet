@@ -40,70 +40,74 @@ export function DashboardHeader() {
           </div>
         </div>
       )}
-      <div className={`flex items-center justify-between px-4 sm:px-8 md:px-36 lg:px-48 py-4 ${address && !isCorrectChain ? '' : ''}`}>
-        {/* Logo et nom */}
-        <Link href="/" className="flex items-center gap-3 sm:gap-4">
-          <Image
-            src="/Logo-Statera-sandy-brown-détouré.png"
-            alt="Statera Logo"
-            width={48}
-            height={48}
-            className="h-8 w-auto sm:h-10 md:h-12"
-            sizes="(min-width: 768px) 150px, 120px"
-          />
-          <span className="text-lg sm:text-xl md:text-2xl font-bold text-white">
-            Statera
-          </span>
-        </Link>
+      <div className="w-full">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className={`flex items-center justify-between py-4 ${address && !isCorrectChain ? '' : ''}`}>
+            {/* Logo et nom */}
+            <Link href="/" className="flex items-center gap-3 sm:gap-4">
+              <Image
+                src="/Logo-Statera-sandy-brown-détouré.png"
+                alt="Statera Logo"
+                width={48}
+                height={48}
+                className="h-8 w-auto sm:h-10 md:h-12"
+                sizes="(min-width: 768px) 150px, 120px"
+              />
+              <span className="text-lg sm:text-xl md:text-2xl font-bold text-white">
+                Statera
+              </span>
+            </Link>
 
-        {/* Navigation centrée */}
-        <nav className="flex items-center gap-4 sm:gap-6 absolute left-1/2 transform -translate-x-1/2">
-          {dashboardLinks.map((link) => {
-            const isActive = pathname === link.href;
-            return (
+            {/* Navigation centrée */}
+            <nav className="flex items-center gap-4 sm:gap-6 absolute left-1/2 transform -translate-x-1/2">
+              {dashboardLinks.map((link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`font-bold text-xs sm:text-sm md:text-base transition-colors tracking-tight ${
+                      isActive
+                        ? 'text-[#fab062]'
+                        : 'text-white hover:text-[#fab062]'
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </nav>
+
+            {/* Navigation droite */}
+            <div className="flex items-center gap-4 sm:gap-6">
               <Link
-                key={link.href}
-                href={link.href}
-                className={`font-bold text-xs sm:text-sm md:text-base transition-colors tracking-tight ${
-                  isActive
-                    ? 'text-[#fab062]'
-                    : 'text-white hover:text-[#fab062]'
-                }`}
+                href="/docs"
+                className="text-white font-bold text-xs sm:text-sm md:text-base hover:text-[#fab062] transition-colors tracking-tight"
               >
-                {link.label}
+                Docs
               </Link>
-            );
-          })}
-        </nav>
-
-        {/* Navigation droite */}
-        <div className="flex items-center gap-4 sm:gap-6">
-          <Link
-            href="/docs"
-            className="text-white font-bold text-xs sm:text-sm md:text-base hover:text-[#fab062] transition-colors tracking-tight"
-          >
-            Docs
-          </Link>
-          <Link
-            href="/admin"
-            className="text-white font-bold text-xs sm:text-sm md:text-base hover:text-[#fab062] transition-colors tracking-tight"
-          >
-            Admin
-          </Link>
-          
-          {/* Bouton de connexion de wallet avec RainbowKit */}
-          <ConnectButton 
-            label="Connect Wallet"
-            chainStatus="icon"
-            accountStatus={{
-              smallScreen: 'avatar',
-              largeScreen: 'full',
-            }}
-            showBalance={{
-              smallScreen: false,
-              largeScreen: false,
-            }}
-          />
+              <Link
+                href="/admin"
+                className="text-white font-bold text-xs sm:text-sm md:text-base hover:text-[#fab062] transition-colors tracking-tight"
+              >
+                Admin
+              </Link>
+              
+              {/* Bouton de connexion de wallet avec RainbowKit */}
+              <ConnectButton 
+                label="Connect Wallet"
+                chainStatus="icon"
+                accountStatus={{
+                  smallScreen: 'avatar',
+                  largeScreen: 'full',
+                }}
+                showBalance={{
+                  smallScreen: false,
+                  largeScreen: false,
+                }}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </header>

@@ -64,7 +64,7 @@ export function DashboardSidebar() {
 
   return (
     <aside 
-      className={`fixed left-0 w-64 z-[9998]`}
+      className={`fixed left-0 w-64 z-[9998] hidden md:block`}
       style={{
         top: `${headerHeight}px`,
         maxHeight: `calc(100vh - ${headerHeight}px)`,
