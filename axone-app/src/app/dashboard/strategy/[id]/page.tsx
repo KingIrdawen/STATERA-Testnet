@@ -42,28 +42,38 @@ export default function StrategyStatsPage() {
   const { switchChain } = useSwitchChain();
   useWhitelistCheck();
 
+  // Debug: log params and strategyId
+  useEffect(() => {
+    console.log('[StrategyStatsPage] Component mounted');
+    console.log('[StrategyStatsPage] params:', params);
+    console.log('[StrategyStatsPage] strategyId:', strategyId);
+  }, [params, strategyId]);
+
   // Find strategy by ID - defensive check for strategies array
   useEffect(() => {
     if (!strategyId) {
+      console.log('[StrategyStatsPage] No strategyId in params');
       setStrategy(null);
       return;
     }
 
     if (loading) {
-      // Still loading strategies, wait
+      console.log('[StrategyStatsPage] Still loading strategies...');
       return;
     }
 
     if (Array.isArray(strategies) && strategies.length > 0) {
+      console.log('[StrategyStatsPage] Looking for strategy:', strategyId, 'in', strategies.length, 'strategies');
       const found = strategies.find(s => s && s.id === strategyId);
       if (found) {
+        console.log('[StrategyStatsPage] Strategy found:', found.name);
         setStrategy(found);
       } else {
-        // Strategy not found - set to null to show "not found" message
+        console.log('[StrategyStatsPage] Strategy not found. Available IDs:', strategies.map(s => s.id));
         setStrategy(null);
       }
     } else if (!loading && Array.isArray(strategies) && strategies.length === 0) {
-      // Strategies loaded but empty - strategy not found
+      console.log('[StrategyStatsPage] Strategies array is empty');
       setStrategy(null);
     }
   }, [strategyId, strategies, loading]);
