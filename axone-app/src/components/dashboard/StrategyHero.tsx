@@ -25,7 +25,7 @@ const defaultLinkGroups: LinkGroup[] = [
   {
     title: 'Produits',
     links: [
-      { label: 'Market', href: '/app' },
+      { label: 'Market', href: '/app/strategies' },
       { label: 'Dashboard', href: '/dashboard/strategy' },
       { label: 'Parrainage', href: '/dashboard/referral' },
       { label: 'Documentation', href: '/docs' },
@@ -82,7 +82,7 @@ export function StrategyHero({
       if (strategiesElement) {
         strategiesElement.scrollIntoView({ behavior: 'smooth' });
       } else {
-        router.push('/app');
+        router.push('/dashboard/strategy');
       }
     } else {
       // User not connected, navigate to dashboard

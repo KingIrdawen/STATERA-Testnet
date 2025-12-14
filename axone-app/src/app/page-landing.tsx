@@ -79,7 +79,7 @@ export default function Home() {
           
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
             <Link
-              href="/app"
+              href="/dashboard/strategy"
               className="inline-flex items-center justify-center px-6 py-2 sm:px-4 sm:py-1.5 md:px-6 md:py-2 rounded-lg bg-[#fab062] text-[#011f26] font-semibold text-sm md:text-base shadow-[0_6px_12px_rgba(0,0,0,0.35),0_1px_0_rgba(255,255,255,0.3)_inset,0_-1px_0_rgba(0,0,0,0.15)_inset] transition-all duration-300 hover:bg-[#e89a4a] hover:scale-105 hover:shadow-[0_8px_16px_rgba(0,0,0,0.4),0_1px_0_rgba(255,255,255,0.4)_inset,0_-1px_0_rgba(0,0,0,0.2)_inset] focus:outline-none focus:ring-2 focus:ring-[#fab062] focus:ring-offset-2 focus:ring-offset-[#011f26] tracking-tight w-auto sm:w-auto"
             >
               Get Started
@@ -376,7 +376,7 @@ export default function Home() {
               {/* Bouton Launch App centré */}
               <div className="flex justify-center mt-12">
                 <AnimatedButton
-                  href="/app"
+                  href="/dashboard/strategy"
                   delay={2400}
                   className="inline-flex items-center px-6 py-2 md:px-8 md:py-3 rounded-lg bg-[#fab062] text-[#011f26] font-semibold text-base md:text-lg shadow-2xl transition-colors hover:bg-[#e89a4a] focus:outline-none focus:ring-2 focus:ring-[#fab062] focus:ring-offset-2 focus:ring-offset-[#011f26] tracking-tight"
                 >

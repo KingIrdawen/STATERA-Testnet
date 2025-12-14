@@ -54,7 +54,7 @@ export default function Header() {
               </Link>
               
                   <Link
-                    href="/app"
+                    href="/dashboard/strategy"
                     className="inline-flex items-center px-3 py-1 sm:px-4 sm:py-1.5 md:px-6 md:py-2 rounded-lg bg-[#fab062] text-[#011f26] font-semibold text-xs sm:text-sm md:text-base shadow-2xl transition-all duration-300 hover:bg-[#e89a4a] hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-[#fab062] focus:ring-offset-2 focus:ring-offset-[#011f26] tracking-tight"
                   >
                     Launch App
