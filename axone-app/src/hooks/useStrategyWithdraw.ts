@@ -83,14 +83,35 @@ export function useStrategyWithdraw(strategy: Strategy | null) {
       pps1e18 = ppsResult as bigint;
       nav1e18 = navResult as bigint;
 
-      console.log('[useStrategyWithdraw] Preflight diagnostics:', {
-        vaultAddress: contracts.vault.address,
+      // Log comprehensive diagnostics with actual values (structured for readability)
+      const diagnostics = {
         chainId: strategy.contracts.chainId,
-        shares: sharesAmount.toString(),
+        vaultAddress: contracts.vault.address,
+        userAddress: address,
+        sharesAmount: sharesAmount.toString(),
+        sharesFormatted: `${shares} shares`,
         pps1e18: pps1e18.toString(),
         nav1e18: nav1e18.toString(),
         oraclePxHype1e8: oraclePxHype1e8.toString(),
-      });
+      };
+      
+      // Use console.table for better readability, fallback to console.log with JSON
+      if (console.table) {
+        console.table(diagnostics);
+      } else {
+        console.log('[useStrategyWithdraw] Preflight diagnostics:', JSON.stringify(diagnostics, null, 2));
+      }
+      
+      // Also log individual values for easier debugging
+      console.log('[useStrategyWithdraw] Preflight values:', 
+        `chainId=${diagnostics.chainId}`,
+        `vault=${diagnostics.vaultAddress}`,
+        `user=${diagnostics.userAddress}`,
+        `shares=${diagnostics.sharesFormatted}`,
+        `pps=${diagnostics.pps1e18}`,
+        `nav=${diagnostics.nav1e18}`,
+        `oracle=${diagnostics.oraclePxHype1e8}`
+      );
     } catch (preflightError) {
       console.warn('[useStrategyWithdraw] Preflight checks failed:', preflightError);
     }
@@ -146,21 +167,58 @@ export function useStrategyWithdraw(strategy: Strategy | null) {
 
     // If simulation failed, handle error
     if (simError) {
+      // Log full error for debugging
+      console.error('[useStrategyWithdraw] Simulation error:', simError);
+      console.error('[useStrategyWithdraw] Error details:', {
+        name: simError?.name,
+        message: simError?.message,
+        shortMessage: simError?.shortMessage,
+        cause: simError?.cause,
+        data: simError?.data,
+        metaMessages: simError?.metaMessages,
+      });
+      
       const extractErrorName = (err: any): string | undefined => {
+        // Path 1: direct errorName
         if (err?.errorName) return err.errorName;
+        
+        // Path 2: data.errorName
         if (err?.data?.errorName) return err.data.errorName;
+        
+        // Path 3: cause chain (recursive)
         if (err?.cause) {
           const causeName = extractErrorName(err.cause);
           if (causeName) return causeName;
         }
-        if (err?.name === 'ContractFunctionRevertedError') {
+        
+        // Path 4: Check if it's a ContractFunctionRevertedError
+        if (err?.name === 'ContractFunctionRevertedError' || err?.name === 'ContractFunctionExecutionError') {
           if (err.data?.errorName) return err.data.errorName;
           if (err.errorName) return err.errorName;
+          // Check data.args for error name
+          if (err.data?.args && Array.isArray(err.data.args) && err.data.args.length > 0) {
+            const firstArg = err.data.args[0];
+            if (typeof firstArg === 'string') return firstArg;
+          }
         }
+        
+        // Path 5: Check shortMessage for error selector patterns
         if (err?.shortMessage) {
           const match = err.shortMessage.match(/(\w+)\(\)/);
           if (match) return match[1];
+          // Also try matching "reverted with error: ErrorName"
+          const match2 = err.shortMessage.match(/reverted with error:\s*(\w+)/i);
+          if (match2) return match2[1];
         }
+        
+        // Path 6: Check metaMessages
+        if (err?.metaMessages && Array.isArray(err.metaMessages)) {
+          for (const msg of err.metaMessages) {
+            const match = String(msg).match(/(\w+)\(\)/);
+            if (match) return match[1];
+          }
+        }
+        
         return undefined;
       };
 

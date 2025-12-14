@@ -123,12 +123,13 @@ export function useStrategyDeposit(strategy: Strategy | null) {
         withdrawFeeBps = withdrawFeeBpsResult.status === 'fulfilled' ? Number(withdrawFeeBpsResult.value) : undefined;
         handlerAddress = handlerResult.status === 'fulfilled' ? (handlerResult.value as `0x${string}`) : strategy.contracts.handlerAddress;
 
-        // Log comprehensive diagnostics with actual values
-        console.log('[useStrategyDeposit] Preflight diagnostics:', {
+        // Log comprehensive diagnostics with actual values (structured for readability)
+        const diagnostics = {
           chainId: strategy.contracts.chainId,
           vaultAddress: contracts.vault.address,
           userAddress: address,
           amountInWei: value.toString(),
+          amountFormatted: `${amount} HYPE`,
           blockNumber: blockNumber.toString(),
           pps1e18: pps1e18?.toString() ?? 'N/A',
           nav1e18: nav1e18?.toString() ?? 'N/A',
@@ -137,7 +138,30 @@ export function useStrategyDeposit(strategy: Strategy | null) {
           handlerAddress: handlerAddress ?? 'N/A',
           oraclePxHype1e8: oraclePxHype1e8?.toString() ?? 'N/A',
           paused: paused ?? 'N/A',
-        });
+        };
+        
+        // Use console.table for better readability, fallback to console.log with JSON
+        if (console.table) {
+          console.table(diagnostics);
+        } else {
+          console.log('[useStrategyDeposit] Preflight diagnostics:', JSON.stringify(diagnostics, null, 2));
+        }
+        
+        // Also log individual values for easier debugging
+        console.log('[useStrategyDeposit] Preflight values:', 
+          `chainId=${diagnostics.chainId}`,
+          `vault=${diagnostics.vaultAddress}`,
+          `user=${diagnostics.userAddress}`,
+          `amount=${diagnostics.amountFormatted}`,
+          `block=${diagnostics.blockNumber}`,
+          `pps=${diagnostics.pps1e18}`,
+          `nav=${diagnostics.nav1e18}`,
+          `oracle=${diagnostics.oraclePxHype1e8}`,
+          `paused=${diagnostics.paused}`,
+          `depositFeeBps=${diagnostics.depositFeeBps}`,
+          `withdrawFeeBps=${diagnostics.withdrawFeeBps}`,
+          `handler=${diagnostics.handlerAddress}`
+        );
 
         if (oraclePxHype1e8 === 0n || pps1e18 === 0n) {
           console.warn('[useStrategyDeposit] Oracle or vault not initialized');
@@ -209,9 +233,20 @@ export function useStrategyDeposit(strategy: Strategy | null) {
       
       // If simulation failed after retry, handle error
       if (simError) {
-        // Extract error name and message
+        // Extract error name and message with robust error parsing
         let errorName: string | undefined;
         let errorMessage = 'Transaction simulation failed';
+        
+        // Log full error for debugging
+        console.error('[useStrategyDeposit] Simulation error:', simError);
+        console.error('[useStrategyDeposit] Error details:', {
+          name: simError?.name,
+          message: simError?.message,
+          shortMessage: simError?.shortMessage,
+          cause: simError?.cause,
+          data: simError?.data,
+          metaMessages: simError?.metaMessages,
+        });
         
         // viem exposes custom errors in different ways depending on version
         // Try multiple paths to extract error name
@@ -222,16 +257,21 @@ export function useStrategyDeposit(strategy: Strategy | null) {
           // Path 2: data.errorName
           if (err?.data?.errorName) return err.data.errorName;
           
-          // Path 3: cause chain
+          // Path 3: cause chain (recursive)
           if (err?.cause) {
             const causeName = extractErrorName(err.cause);
             if (causeName) return causeName;
           }
           
           // Path 4: Check if it's a ContractFunctionRevertedError
-          if (err?.name === 'ContractFunctionRevertedError') {
+          if (err?.name === 'ContractFunctionRevertedError' || err?.name === 'ContractFunctionExecutionError') {
             if (err.data?.errorName) return err.data.errorName;
             if (err.errorName) return err.errorName;
+            // Check data.args for error name
+            if (err.data?.args && Array.isArray(err.data.args) && err.data.args.length > 0) {
+              const firstArg = err.data.args[0];
+              if (typeof firstArg === 'string') return firstArg;
+            }
           }
           
           // Path 5: Check shortMessage for error selector patterns
@@ -239,6 +279,17 @@ export function useStrategyDeposit(strategy: Strategy | null) {
             // Sometimes viem includes error name in shortMessage like "The contract function "deposit" reverted with error: PriceZero()."
             const match = err.shortMessage.match(/(\w+)\(\)/);
             if (match) return match[1];
+            // Also try matching "reverted with error: ErrorName"
+            const match2 = err.shortMessage.match(/reverted with error:\s*(\w+)/i);
+            if (match2) return match2[1];
+          }
+          
+          // Path 6: Check metaMessages
+          if (err?.metaMessages && Array.isArray(err.metaMessages)) {
+            for (const msg of err.metaMessages) {
+              const match = String(msg).match(/(\w+)\(\)/);
+              if (match) return match[1];
+            }
           }
           
           return undefined;

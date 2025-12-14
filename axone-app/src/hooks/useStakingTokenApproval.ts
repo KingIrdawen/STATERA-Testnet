@@ -2,6 +2,8 @@ import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useAcc
 import { parseUnits, maxUint256 } from 'viem';
 import { lpTokenAbi } from '@/lib/abi/lpToken';
 import { REWARDS_HUB_ADDRESS } from '@/contracts/rewardsHub';
+import { useTxToasts } from '@/lib/txToasts';
+import { useEffect } from 'react';
 
 /**
  * Hook to check allowance and approve stake tokens for RewardsHub
@@ -12,6 +14,7 @@ export function useStakingTokenApproval(
   decimals: number = 18
 ) {
   const { address } = useAccount();
+  const { showTxToast } = useTxToasts();
 
   // Check current allowance
   const { data: allowance, refetch: refetchAllowance } = useReadContract({
@@ -29,6 +32,30 @@ export function useStakingTokenApproval(
   const { isLoading: isConfirmingApproval, isSuccess: isApproved } = useWaitForTransactionReceipt({
     hash: approveHash,
   });
+
+  // Show toast on submitted
+  useEffect(() => {
+    if (approveHash) {
+      showTxToast('submitted', { hash: approveHash, action: 'Approbation token staking' });
+    }
+  }, [approveHash, showTxToast]);
+
+  // Show toast on success
+  useEffect(() => {
+    if (isApproved && approveHash) {
+      showTxToast('confirmed', { hash: approveHash, action: 'Approbation token staking' });
+      refetchAllowance();
+    }
+  }, [isApproved, approveHash, showTxToast, refetchAllowance]);
+
+  // Show toast on error
+  useEffect(() => {
+    if (approveError && approveHash) {
+      const error = approveError as Error | { message?: string } | null;
+      const message = (error && 'message' in error ? error.message : String(approveError)) || 'Approbation échouée';
+      showTxToast('failed', { hash: approveHash, error: message, action: 'Approbation token staking' });
+    }
+  }, [approveError, approveHash, showTxToast]);
 
   const amountInWei = amountIn && Number(amountIn) > 0 && decimals
     ? parseUnits(amountIn, decimals)
@@ -49,11 +76,6 @@ export function useStakingTokenApproval(
       args: [REWARDS_HUB_ADDRESS, maxUint256],
     });
   };
-
-  // Refetch allowance after approval
-  if (isApproved) {
-    refetchAllowance();
-  }
 
   return {
     allowance,

@@ -4,6 +4,8 @@ import { parseUnits, maxUint256 } from 'viem';
 import type { Strategy } from '@/types/strategy';
 import { getStrategyContracts } from '@/lib/strategyContracts';
 import { lpTokenAbi } from '@/lib/abi/lpToken';
+import { useTxToasts } from '@/lib/txToasts';
+import { useEffect } from 'react';
 
 /**
  * Hook to check allowance and approve vault tokens for swap pool
@@ -15,6 +17,7 @@ export function useVaultTokenApproval(
   amountIn: string
 ) {
   const { address } = useAccount();
+  const { showTxToast } = useTxToasts();
   const contracts = strategy ? getStrategyContracts(strategy) : null;
   const vaultAddress = contracts?.vault.address;
 
@@ -37,6 +40,30 @@ export function useVaultTokenApproval(
     hash: approveHash,
   });
 
+  // Show toast on submitted
+  useEffect(() => {
+    if (approveHash) {
+      showTxToast('submitted', { hash: approveHash, action: 'Approbation token vault' });
+    }
+  }, [approveHash, showTxToast]);
+
+  // Show toast on success
+  useEffect(() => {
+    if (isApproved && approveHash) {
+      showTxToast('confirmed', { hash: approveHash, action: 'Approbation token vault' });
+      refetchAllowance();
+    }
+  }, [isApproved, approveHash, showTxToast, refetchAllowance]);
+
+  // Show toast on error
+  useEffect(() => {
+    if (approveError && approveHash) {
+      const error = approveError as Error | { message?: string } | null;
+      const message = (error && 'message' in error ? error.message : String(approveError)) || 'Approbation échouée';
+      showTxToast('failed', { hash: approveHash, error: message, action: 'Approbation token vault' });
+    }
+  }, [approveError, approveHash, showTxToast]);
+
   const amountInWei = amountIn && Number(amountIn) > 0 && shareDecimals
     ? parseUnits(amountIn, shareDecimals)
     : 0n;
@@ -56,11 +83,6 @@ export function useVaultTokenApproval(
       args: [poolAddress, maxUint256],
     });
   };
-
-  // Refetch allowance after approval
-  if (isApproved) {
-    refetchAllowance();
-  }
 
   return {
     allowance,
