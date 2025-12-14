@@ -84,7 +84,7 @@ export function SiteFooter() {
           {/* Right: Navigation links in a single line */}
           <div className="flex flex-wrap items-center justify-end gap-2 text-sm">
             <Link
-              href="/app"
+              href="/app/strategies"
               className="text-white/70 hover:text-white transition-colors"
             >
               Strategies
