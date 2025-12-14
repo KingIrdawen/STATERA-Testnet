@@ -6,7 +6,7 @@ import { useStrategyData } from '@/hooks/useStrategyDataEra';
 import { StrategyCardEra } from '@/components/StrategyCardEra';
 import { DashboardHeader } from '@/components/DashboardHeader';
 import { DashboardSidebar } from '@/components/DashboardSidebar';
-import Footer from '@/components/Footer';
+import { SiteFooter } from '@/components/layout/SiteFooter';
 import type { Strategy } from '@/types/strategy';
 
 // Composant wrapper pour une stratégie avec vérification de dépôt
@@ -90,7 +90,7 @@ export default function StrategyPage() {
         </div>
       </main>
       
-      <Footer />
+      <SiteFooter />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { useAccount, useChainId, useSwitchChain } from 'wagmi';
 import { useSwapStrategies, type SwapStrategy } from '@/hooks/useSwapStrategies';
 import { useSwapQuote, usePerformSwap, type SwapDirection } from '@/hooks/useSwap';
 import { useVaultTokenApproval } from '@/hooks/useVaultTokenApproval';
+import { SwapStrategyCard } from '@/components/dashboard/SwapStrategyCard';
 import { formatUsd } from '@/lib/format';
 
 export function DashboardSwapTab() {
@@ -104,35 +105,27 @@ export function DashboardSwapTab() {
         </div>
       )}
 
-      {/* Strategy selection */}
+      {/* Strategy selection - Cards grid */}
       <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
-        <label className="block text-white text-sm font-semibold mb-2">Select Strategy</label>
-        <select
-          value={selected?.strategy.id || ''}
-          onChange={(e) => {
-            const strategy = swapStrategies.find(s => s.strategy.id === e.target.value);
-            setSelected(strategy || null);
-            setAmountIn(''); // Reset amount when changing strategy
-          }}
-          className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-[#fab062] focus:outline-none"
-        >
-          <option value="">-- Select a strategy --</option>
+        <label className="block text-white text-sm font-semibold mb-4">Select Strategy</label>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {swapStrategies.map((swapStrategy) => (
-            <option key={swapStrategy.strategy.id} value={swapStrategy.strategy.id}>
-              {swapStrategy.strategy.name}
-            </option>
+            <SwapStrategyCard
+              key={swapStrategy.strategy.id}
+              strategy={swapStrategy.strategy}
+              poolAddress={swapStrategy.poolAddress}
+              isSelected={selected?.strategy.id === swapStrategy.strategy.id}
+              onClick={() => {
+                setSelected(swapStrategy);
+                setAmountIn(''); // Reset amount when changing strategy
+              }}
+            />
           ))}
-        </select>
+        </div>
 
-        {selected && (
-          <div className="mt-4 space-y-2">
-            <p className="text-[#5a9a9a] text-sm">
-              <span className="text-gray-400">Pool address: </span>
-              <span className="font-mono text-xs">{selected.poolAddress.slice(0, 6)}...{selected.poolAddress.slice(-4)}</span>
-            </p>
-            {selected.strategy.description && (
-              <p className="text-[#5a9a9a] text-sm">{selected.strategy.description}</p>
-            )}
+        {selected && selected.strategy.description && (
+          <div className="mt-4 p-3 bg-gray-800/50 rounded-lg">
+            <p className="text-[#5a9a9a] text-sm">{selected.strategy.description}</p>
           </div>
         )}
       </div>
