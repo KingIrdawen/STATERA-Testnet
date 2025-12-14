@@ -22,6 +22,12 @@ export function useStrategyPoolAddress(strategy: Strategy | null) {
     let cancelled = false;
 
     async function loadPool() {
+      if (!strategy || !strategy.contracts) {
+        setPoolAddress(undefined);
+        setLoading(false);
+        return;
+      }
+
       setLoading(true);
       try {
         const vaultAddress = strategy.contracts.vaultAddress;
