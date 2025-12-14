@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAccount, useChainId, useSwitchChain, useReadContract, useWriteContract, useWaitForTransactionReceipt, usePublicClient } from 'wagmi';
 import { referralRegistryContract, REFERRAL_REGISTRY_ADDRESS } from '@/contracts/referralRegistry';
 import { getCodeHash } from '@/lib/referralUtils';
-import { useTxToasts } from '@/lib/txToasts';
+import { useToast } from '@/components/Toast';
 import { decodeEventLog } from 'viem';
 
 export function DashboardReferralTab() {
@@ -14,7 +14,7 @@ export function DashboardReferralTab() {
   const publicClient = usePublicClient();
   const EXPECTED_CHAIN_ID = 998;
   const isCorrectChain = chainId === EXPECTED_CHAIN_ID;
-  const { showTxToast } = useTxToasts();
+  const { showToast } = useToast();
 
   // State
   const [referralCode, setReferralCode] = useState('');
@@ -83,42 +83,29 @@ export function DashboardReferralTab() {
   // Extract created code from receipt events
   useEffect(() => {
     if (isCreateCodeSuccess && createCodeReceipt && publicClient) {
-      // Try to decode CodeCreated event to get the raw code
-      // Note: The contract returns the code string, but we can also get it from events
-      // For now, we'll refetch unusedCodes which should include the new code
       refetchUnusedCodes();
     }
   }, [isCreateCodeSuccess, createCodeReceipt, publicClient, refetchUnusedCodes]);
 
-  // Show toast on useCode submitted
-  useEffect(() => {
-    if (useCodeHash) {
-      showTxToast('submitted', { hash: useCodeHash, action: 'Utilisation code referral' });
-    }
-  }, [useCodeHash, showTxToast]);
-
-  // Handle useCode success
+  // Show single toast on final outcome only
   useEffect(() => {
     if (isUseCodeSuccess && useCodeHash) {
-      showTxToast('confirmed', { hash: useCodeHash, action: 'Utilisation code referral' });
+      showToast('success', 'Code referral utilisé avec succès', useCodeHash);
       setReferralCode('');
       refetchWhitelisted();
       refetchReferrer();
     }
-  }, [isUseCodeSuccess, useCodeHash, showTxToast, refetchWhitelisted, refetchReferrer]);
+  }, [isUseCodeSuccess, useCodeHash, showToast, refetchWhitelisted, refetchReferrer]);
 
-  // Handle useCode error with better error decoding
   useEffect(() => {
     if (useCodeError && useCodeHash) {
       const errorObj = useCodeError as Error | { message?: string; shortMessage?: string; data?: any } | null;
       let message = 'Erreur lors de l\'utilisation du code';
       
       if (errorObj) {
-        // Try to extract error name from viem error
         const errorName = (errorObj as any)?.data?.errorName || (errorObj as any)?.errorName;
         const shortMessage = (errorObj as any)?.shortMessage || errorObj?.message || String(useCodeError);
         
-        // Map error names to friendly French messages
         const errorMessages: Record<string, string> = {
           'AlreadyWhitelisted': 'Vous êtes déjà whitelisté.',
           'InvalidCode': 'Code invalide ou inexistant.',
@@ -134,28 +121,19 @@ export function DashboardReferralTab() {
         }
       }
       
-      showTxToast('failed', { hash: useCodeHash, error: message, action: 'Utilisation code referral' });
+      showToast('error', `Utilisation code échouée: ${message}`, useCodeHash);
     }
-  }, [useCodeError, useCodeHash, showTxToast]);
+  }, [useCodeError, useCodeHash, showToast]);
 
-  // Show toast on createCode submitted
-  useEffect(() => {
-    if (createCodeHash) {
-      showTxToast('submitted', { hash: createCodeHash, action: 'Création code referral' });
-    }
-  }, [createCodeHash, showTxToast]);
-
-  // Handle createCode success
   useEffect(() => {
     if (isCreateCodeSuccess && createCodeHash) {
-      showTxToast('confirmed', { hash: createCodeHash, action: 'Création code referral' });
+      showToast('success', 'Code referral créé avec succès', createCodeHash);
       refetchCodesCreated();
       refetchUnusedCodes();
       refetchQuota();
     }
-  }, [isCreateCodeSuccess, createCodeHash, showTxToast, refetchCodesCreated, refetchUnusedCodes, refetchQuota]);
+  }, [isCreateCodeSuccess, createCodeHash, showToast, refetchCodesCreated, refetchUnusedCodes, refetchQuota]);
 
-  // Handle createCode error with better error decoding
   useEffect(() => {
     if (createCodeError && createCodeHash) {
       const errorObj = createCodeError as Error | { message?: string; shortMessage?: string; data?: any } | null;
@@ -178,9 +156,9 @@ export function DashboardReferralTab() {
         }
       }
       
-      showTxToast('failed', { hash: createCodeHash, error: message, action: 'Création code referral' });
+      showToast('error', `Création code échouée: ${message}`, createCodeHash);
     }
-  }, [createCodeError, createCodeHash, showTxToast]);
+  }, [createCodeError, createCodeHash, showToast]);
 
   const normalizeCode = (code: string): string => {
     return code.trim().toUpperCase();
@@ -192,7 +170,7 @@ export function DashboardReferralTab() {
     }
 
     if (!REFERRAL_REGISTRY_ADDRESS) {
-      showTxToast('failed', { error: 'ReferralRegistry n\'est pas configuré', action: 'Utilisation code referral' });
+      showToast('error', 'ReferralRegistry n\'est pas configuré');
       return;
     }
 
@@ -207,7 +185,7 @@ export function DashboardReferralTab() {
     } catch (error) {
       console.error('[DashboardReferralTab] Error hashing code:', error);
       const errorMsg = error instanceof Error ? error.message : 'Erreur lors du hashage du code';
-      showTxToast('failed', { error: errorMsg, action: 'Utilisation code referral' });
+      showToast('error', errorMsg);
     }
   };
 
@@ -217,16 +195,15 @@ export function DashboardReferralTab() {
     }
 
     if (!REFERRAL_REGISTRY_ADDRESS) {
-      showTxToast('failed', { error: 'ReferralRegistry n\'est pas configuré', action: 'Création code referral' });
+      showToast('error', 'ReferralRegistry n\'est pas configuré');
       return;
     }
 
     if (!isWhitelisted) {
-      showTxToast('failed', { error: 'Vous devez être whitelisté pour créer des codes', action: 'Création code referral' });
+      showToast('error', 'Vous devez être whitelisté pour créer des codes');
       return;
     }
 
-    // Call createCode() without arguments (returns string)
     writeCreateCode({
       ...referralRegistryContract(),
       functionName: 'createCode',
@@ -241,7 +218,7 @@ export function DashboardReferralTab() {
       setTimeout(() => setCopiedCode(null), 2000);
     } catch (error) {
       console.error('[DashboardReferralTab] Error copying code:', error);
-      showTxToast('failed', { error: 'Erreur lors de la copie du code', action: 'Copie code' });
+      showToast('error', 'Erreur lors de la copie du code');
     }
   };
 

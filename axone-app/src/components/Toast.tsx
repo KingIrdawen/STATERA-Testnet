@@ -1,4 +1,3 @@
-// FIX: swap hypeIn/value consistency + tx toast notifications + truncate long messages
 'use client';
 
 import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
@@ -18,6 +17,8 @@ interface ToastContextType {
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
+const EXPLORER_BASE_URL = 'https://app.hyperliquid-testnet.xyz/explorer/tx/';
+
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -36,6 +37,12 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
+  const handleExplorerClick = (e: React.MouseEvent, hash: string) => {
+    e.stopPropagation();
+    e.preventDefault();
+    window.open(`${EXPLORER_BASE_URL}${hash}`, '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
@@ -49,13 +56,6 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             ? message
             : message.slice(0, MAX_LEN) + '…';
 
-          const handleHashClick = (e: React.MouseEvent) => {
-            e.stopPropagation();
-            if (toast.hash) {
-              window.open(`https://app.hyperliquid-testnet.xyz/explorer/tx/${toast.hash}`, '_blank', 'noopener,noreferrer');
-            }
-          };
-
           return (
             <div
               key={toast.id}
@@ -65,10 +65,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                   ? 'bg-green-900/90 border-green-600 text-green-100' 
                   : 'bg-red-900/90 border-red-600 text-red-100'
                 }
-                ${toast.hash ? 'cursor-pointer hover:opacity-95 transition-opacity' : ''}
               `}
-              onClick={toast.hash ? handleHashClick : undefined}
-              title={toast.hash ? 'Cliquer pour voir la transaction sur Hyperliquid Explorer' : undefined}
             >
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1 min-w-0">
@@ -96,12 +93,15 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                     )}
                   </p>
                   {toast.hash && (
-                    <p 
-                      className="text-xs mt-1 font-mono opacity-75 break-all hover:opacity-100 transition-opacity underline"
-                      onClick={handleHashClick}
+                    <a
+                      href={`${EXPLORER_BASE_URL}${toast.hash}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => handleExplorerClick(e, toast.hash!)}
+                      className="text-xs mt-2 inline-block font-mono opacity-90 hover:opacity-100 transition-opacity underline text-white/90 hover:text-white"
                     >
-                      {toast.hash.slice(0, 6)}...{toast.hash.slice(-4)}
-                    </p>
+                      Voir sur Explorer ({toast.hash.slice(0, 6)}...{toast.hash.slice(-4)})
+                    </a>
                   )}
                 </div>
                 <button
@@ -130,4 +130,3 @@ export function useToast() {
   }
   return context;
 }
-

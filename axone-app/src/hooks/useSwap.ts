@@ -1,10 +1,9 @@
-// FIX: swap hypeIn/value consistency + tx toast notifications
 import { useMemo, useEffect } from 'react';
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useAccount } from 'wagmi';
 import { parseUnits, formatUnits } from 'viem';
 import { swapPool } from '@/contracts/swapContracts';
 import type { Strategy } from '@/types/strategy';
-import { useTxToasts } from '@/lib/txToasts';
+import { useToast } from '@/components/Toast';
 
 export type SwapDirection = 'HYPE_TO_VAULT' | 'VAULT_TO_HYPE';
 
@@ -40,7 +39,6 @@ export function useSwapQuote({ poolAddress, strategy, direction, amountIn }: Use
     },
   });
 
-
   const amountOutFormatted = useMemo(() => {
     if (!data || !strategy) return '';
     const decimals = direction === 'HYPE_TO_VAULT' ? shareDecimals : hypeDecimals;
@@ -68,33 +66,25 @@ export function usePerformSwap({ poolAddress, strategy, direction, amountIn, amo
   const { address } = useAccount();
   const { writeContract, data: hash, isPending, error: writeError } = useWriteContract();
   const { isLoading: isConfirming, isSuccess, error: txError } = useWaitForTransactionReceipt({ hash });
-  const { showTxToast } = useTxToasts();
+  const { showToast } = useToast();
 
   const shareDecimals = strategy?.contracts.shareDecimals ?? 18;
   const hypeDecimals = 18;
 
-  // Show toast on submitted
-  useEffect(() => {
-    if (hash) {
-      showTxToast('submitted', { hash, action: 'Swap' });
-    }
-  }, [hash, showTxToast]);
-
-  // Show toast on success
+  // Show single toast on final outcome only
   useEffect(() => {
     if (isSuccess && hash) {
-      showTxToast('confirmed', { hash, action: 'Swap' });
+      showToast('success', 'Swap confirmé', hash);
     }
-  }, [isSuccess, hash, showTxToast]);
+  }, [isSuccess, hash, showToast]);
 
-  // Show toast on error
   useEffect(() => {
-    if (writeError || txError) {
+    if ((writeError || txError) && hash) {
       const error = writeError || txError;
       const message = error?.message ?? 'Transaction revert';
-      showTxToast('failed', { hash: hash || undefined, error: message, action: 'Swap' });
+      showToast('error', `Swap échoué: ${message}`, hash);
     }
-  }, [writeError, txError, hash, showTxToast]);
+  }, [writeError, txError, hash, showToast]);
 
   function swap() {
     if (!poolAddress || !address || !amountIn || !strategy) return;
@@ -106,8 +96,6 @@ export function usePerformSwap({ poolAddress, strategy, direction, amountIn, amo
       
       if (direction === 'HYPE_TO_VAULT') {
         // Swap HYPE -> vault: hypeIn = amountInWei, msg.value = amountInWei
-        // The contract expects: swapHypeForVaultToken(uint256 hypeIn, address to)
-        // where hypeIn must equal msg.value
         writeContract({
           ...swapPool(poolAddress),
           functionName: 'swapHypeForVaultToken' as const,
@@ -115,10 +103,7 @@ export function usePerformSwap({ poolAddress, strategy, direction, amountIn, amo
           value: amountInWei, // msg.value must equal hypeIn
         });
       } else {
-        // FIX: swapVaultTokenForHype expects (vaultTokenIn, to). No minAmountOut in ABI.
         // Swap vault -> HYPE: requires approval
-        // The contract expects: swapVaultTokenForHype(uint256 vaultTokenIn, address to)
-        // Note: getAmountOut is used only for display, not as a parameter
         writeContract({
           ...swapPool(poolAddress),
           functionName: 'swapVaultTokenForHype' as const,
@@ -139,4 +124,3 @@ export function usePerformSwap({ poolAddress, strategy, direction, amountIn, amo
     error: (writeError || txError) as Error | null,
   };
 }
-

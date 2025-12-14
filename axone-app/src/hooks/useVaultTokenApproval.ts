@@ -1,10 +1,9 @@
-// FIX: Add approval check and approve function for VAULT_TO_HYPE swaps
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useAccount } from 'wagmi';
 import { parseUnits, maxUint256 } from 'viem';
 import type { Strategy } from '@/types/strategy';
 import { getStrategyContracts } from '@/lib/strategyContracts';
 import { lpTokenAbi } from '@/lib/abi/lpToken';
-import { useTxToasts } from '@/lib/txToasts';
+import { useToast } from '@/components/Toast';
 import { useEffect } from 'react';
 
 /**
@@ -17,7 +16,7 @@ export function useVaultTokenApproval(
   amountIn: string
 ) {
   const { address } = useAccount();
-  const { showTxToast } = useTxToasts();
+  const { showToast } = useToast();
   const contracts = strategy ? getStrategyContracts(strategy) : null;
   const vaultAddress = contracts?.vault.address;
 
@@ -40,29 +39,21 @@ export function useVaultTokenApproval(
     hash: approveHash,
   });
 
-  // Show toast on submitted
-  useEffect(() => {
-    if (approveHash) {
-      showTxToast('submitted', { hash: approveHash, action: 'Approbation token vault' });
-    }
-  }, [approveHash, showTxToast]);
-
-  // Show toast on success
+  // Show single toast on final outcome only
   useEffect(() => {
     if (isApproved && approveHash) {
-      showTxToast('confirmed', { hash: approveHash, action: 'Approbation token vault' });
+      showToast('success', 'Approbation confirmée', approveHash);
       refetchAllowance();
     }
-  }, [isApproved, approveHash, showTxToast, refetchAllowance]);
+  }, [isApproved, approveHash, showToast, refetchAllowance]);
 
-  // Show toast on error
   useEffect(() => {
     if (approveError && approveHash) {
       const error = approveError as Error | { message?: string } | null;
       const message = (error && 'message' in error ? error.message : String(approveError)) || 'Approbation échouée';
-      showTxToast('failed', { hash: approveHash, error: message, action: 'Approbation token vault' });
+      showToast('error', `Approbation échouée: ${message}`, approveHash);
     }
-  }, [approveError, approveHash, showTxToast]);
+  }, [approveError, approveHash, showToast]);
 
   const amountInWei = amountIn && Number(amountIn) > 0 && shareDecimals
     ? parseUnits(amountIn, shareDecimals)
@@ -93,4 +84,3 @@ export function useVaultTokenApproval(
     approveError,
   };
 }
-
