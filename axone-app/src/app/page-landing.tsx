@@ -199,9 +199,9 @@ export default function Home() {
               </div>
             </TextZone>
 
-            <AnimationZone bgColor="bg-black" className="order-2 md:order-none">
-              <div className="flex items-center justify-center h-full p-8">
-                <div className="overflow-hidden w-full">
+            <AnimationZone bgColor="bg-[#121212]" className="order-2 md:order-none">
+              <div className="flex items-center justify-center h-full p-8 bg-[#121212]">
+                <div className="overflow-hidden w-full bg-[#121212]">
                   <Image
                     src="/image_Rebalance launch.png"
                     alt="Smart Rebalancing"
@@ -217,9 +217,9 @@ export default function Home() {
 
           {/* Section 4 - Controlled Inflation */}
           <Section reducedHeight>
-            <AnimationZone bgColor="bg-black" className="order-2 md:order-none">
-              <div className="flex items-center justify-center h-full p-8">
-                <div className="w-full">
+            <AnimationZone bgColor="bg-[#121212]" className="order-2 md:order-none">
+              <div className="flex items-center justify-center h-full p-8 bg-[#121212]">
+                <div className="w-full bg-[#121212]">
                   <Image
                     src="/image_Inflation launch.png"
                     alt="Controlled Inflation"
@@ -263,9 +263,9 @@ export default function Home() {
               </div>
             </TextZone>
 
-            <AnimationZone bgColor="bg-black" className="order-2 md:order-none">
-              <div className="flex items-center justify-center h-full p-8 pb-2">
-                <div className="overflow-hidden w-full">
+            <AnimationZone bgColor="bg-[#121212]" className="order-2 md:order-none">
+              <div className="flex items-center justify-center h-full p-8 pb-2 bg-[#121212]">
+                <div className="overflow-hidden w-full bg-[#121212]">
                   <Image
                     src="/image_axone_launch_variante.png"
                     alt="The STATERA Token"
@@ -281,9 +281,9 @@ export default function Home() {
 
           {/* Section 6 - Revenue */}
           <Section reducedHeight>
-            <AnimationZone bgColor="bg-black" className="order-2 md:order-none">
-              <div className="flex items-center justify-center h-full p-8">
-                <div className="w-full">
+            <AnimationZone bgColor="bg-[#121212]" className="order-2 md:order-none">
+              <div className="flex items-center justify-center h-full p-8 bg-[#121212]">
+                <div className="w-full bg-[#121212]">
                   <Image
                     src="/image_revenus intellingent launch.png"
                     alt="Revenue"
@@ -327,9 +327,9 @@ export default function Home() {
               </div>
             </TextZone>
 
-            <AnimationZone bgColor="bg-black" className="order-2 md:order-none">
-              <div className="flex items-start justify-center h-full p-4 pt-0">
-                <div className="w-full">
+            <AnimationZone bgColor="bg-[#121212]" className="order-2 md:order-none">
+              <div className="flex items-start justify-center h-full p-4 pt-0 bg-[#121212]">
+                <div className="w-full bg-[#121212]">
                   <Image
                     src="/image_reseau_neuronal_incandescent.png"
                     alt="Buyback and Burn"
