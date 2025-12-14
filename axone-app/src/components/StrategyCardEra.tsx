@@ -324,12 +324,18 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
       {/* View More button - only for dashboard tab */}
       {showViewMore && (
         <div className="mt-4 pt-4 border-t border-gray-700">
-          <Link
-            href={`/dashboard/strategy/${strategy.id}`}
-            className="block w-full text-center text-xs text-[#5a9a9a] hover:text-[#fab062] transition-colors"
-          >
-            View more →
-          </Link>
+          {strategy.id ? (
+            <Link
+              href={`/dashboard/strategy/${strategy.id}`}
+              className="block w-full text-center text-xs text-[#5a9a9a] hover:text-[#fab062] transition-colors"
+            >
+              View more →
+            </Link>
+          ) : (
+            <div className="block w-full text-center text-xs text-gray-600 cursor-not-allowed">
+              View more (ID missing)
+            </div>
+          )}
         </div>
       )}
     </div>

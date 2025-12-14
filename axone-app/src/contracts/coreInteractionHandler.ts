@@ -29,6 +29,13 @@ export const coreInteractionHandlerAbi = [
     inputs: [],
     outputs: [{ name: '', type: 'uint64' }],
   },
+  {
+    name: 'spotTokenHYPE',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ name: '', type: 'uint64' }],
+  },
 ] as const
 
 export function coreInteractionHandlerContract(address: string) {
