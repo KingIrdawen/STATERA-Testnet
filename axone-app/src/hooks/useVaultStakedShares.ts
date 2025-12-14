@@ -26,7 +26,7 @@ export function useVaultStakedShares(vaultAddress: Address | undefined): VaultSt
 
   // Find the pool ID for this vault address
   const poolForVault = useMemo(() => {
-    if (!vaultAddress || pools.length === 0) {
+    if (!vaultAddress || !pools || pools.length === 0) {
       return null;
     }
     return pools.find((pool) => pool.stakeToken.toLowerCase() === vaultAddress.toLowerCase()) ?? null;

@@ -42,43 +42,30 @@ export default function StrategyStatsPage() {
   const { switchChain } = useSwitchChain();
   useWhitelistCheck();
 
-  // Debug: log params and strategyId
-  useEffect(() => {
-    console.log('[StrategyStatsPage] Component mounted');
-    console.log('[StrategyStatsPage] params:', params);
-    console.log('[StrategyStatsPage] strategyId:', strategyId);
-  }, [params, strategyId]);
-
   // Find strategy by ID - defensive check for strategies array
   useEffect(() => {
     if (!strategyId) {
-      console.log('[StrategyStatsPage] No strategyId in params');
       setStrategy(null);
       return;
     }
 
     if (loading) {
-      console.log('[StrategyStatsPage] Still loading strategies...');
       return;
     }
 
     if (Array.isArray(strategies) && strategies.length > 0) {
-      console.log('[StrategyStatsPage] Looking for strategy:', strategyId, 'in', strategies.length, 'strategies');
       const found = strategies.find(s => s && s.id === strategyId);
       if (found) {
-        console.log('[StrategyStatsPage] Strategy found:', found.name);
         setStrategy(found);
       } else {
-        console.log('[StrategyStatsPage] Strategy not found. Available IDs:', strategies.map(s => s.id));
         setStrategy(null);
       }
     } else if (!loading && Array.isArray(strategies) && strategies.length === 0) {
-      console.log('[StrategyStatsPage] Strategies array is empty');
       setStrategy(null);
     }
   }, [strategyId, strategies, loading]);
 
-  // Get strategy data
+  // Get strategy data - defensive checks
   const strategyData = useStrategyData(strategy);
   const { symbol: token1Symbol, name: token1Name } = useStrategyToken1Meta(strategy);
   const displayToken1 = token1Symbol || token1Name || 'TOKEN1';
@@ -87,8 +74,8 @@ export default function StrategyStatsPage() {
   const { deposit, isPending: isDepositPending, isConfirmed: isDepositConfirmed } = useStrategyDeposit(strategy);
   const { withdraw, isPending: isWithdrawPending, isConfirmed: isWithdrawConfirmed } = useStrategyWithdraw(strategy);
 
-  // HYPE balance for deposit
-  const isCorrectChain = strategy ? chainId === strategy.contracts.chainId : false;
+  // HYPE balance for deposit - defensive check for strategy.contracts
+  const isCorrectChain = strategy?.contracts ? chainId === strategy.contracts.chainId : false;
   const { data: hypeBalance } = useBalance({
     address,
     query: { enabled: !!address && isCorrectChain },
@@ -98,9 +85,9 @@ export default function StrategyStatsPage() {
   const [depositAmount, setDepositAmount] = useState('');
   const [withdrawAmount, setWithdrawAmount] = useState('');
 
-  // Token composition - read HYPE and TOKEN1 balances from Core
+  // Token composition - read HYPE and TOKEN1 balances from Core - defensive checks
   const contracts = strategy ? getStrategyContracts(strategy) : null;
-  const handlerAddress = strategy?.contracts.handlerAddress;
+  const handlerAddress = strategy?.contracts?.handlerAddress;
 
   // Read handler token IDs (HYPE and TOKEN1) - ensure it's always an array
   const tokenIdContracts: any[] = handlerAddress && contracts?.handler
@@ -126,7 +113,7 @@ export default function StrategyStatsPage() {
   const hypeTokenId = tokenIdsArray[0]?.result as bigint | undefined;
   const token1TokenId = tokenIdsArray[1]?.result as bigint | undefined;
 
-  const l1ReadAddress = strategy?.contracts.l1ReadAddress;
+  const l1ReadAddress = strategy?.contracts?.l1ReadAddress;
 
   // Read token balances and info - ensure it's always an array
   const tokenCompositionContracts: any[] = handlerAddress && l1ReadAddress && hypeTokenId && token1TokenId
@@ -198,11 +185,14 @@ export default function StrategyStatsPage() {
         });
       }
     } catch (e) {
-      console.error('[StrategyStatsPage] Error parsing token composition:', e);
+      // Silently handle token composition parsing errors
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[StrategyStatsPage] Error parsing token composition:', e);
+      }
     }
   }
 
-  const EXPECTED_CHAIN_ID = strategy?.contracts.chainId ?? 998;
+  const EXPECTED_CHAIN_ID = strategy?.contracts?.chainId ?? 998;
 
   // Handlers
   const handleDeposit = async () => {
@@ -211,7 +201,10 @@ export default function StrategyStatsPage() {
       await deposit(depositAmount);
       setDepositAmount('');
     } catch (err) {
-      console.error('[StrategyStatsPage] Deposit error:', err);
+      // Error is handled by toast system
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[StrategyStatsPage] Deposit error:', err);
+      }
     }
   };
 
@@ -221,7 +214,10 @@ export default function StrategyStatsPage() {
       await withdraw(withdrawAmount);
       setWithdrawAmount('');
     } catch (err) {
-      console.error('[StrategyStatsPage] Withdraw error:', err);
+      // Error is handled by toast system
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[StrategyStatsPage] Withdraw error:', err);
+      }
     }
   };
 
@@ -266,7 +262,7 @@ export default function StrategyStatsPage() {
     );
   }
 
-  const shareDecimals = strategy.contracts.shareDecimals ?? 18;
+  const shareDecimals = strategy?.contracts?.shareDecimals ?? 18;
 
   return (
     <div className="min-h-screen bg-[#121212] text-white">
@@ -309,22 +305,24 @@ export default function StrategyStatsPage() {
           <div className="mb-8">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">
               <span className="bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent">
-                {strategy.name}
+                {strategy?.name ?? 'Strategy'}
               </span>
             </h1>
             <p className="text-[#5a9a9a] text-lg mb-4">Strategy statistics and actions</p>
-            {strategy.description && (
+            {strategy?.description && (
               <p className="text-gray-400 text-sm mb-4">{strategy.description}</p>
             )}
             <div className="flex items-center gap-4">
-              <span className={`px-3 py-1 rounded-full text-sm font-semibold border ${
-                strategy.riskLevel === 'low' ? 'bg-green-400/20 border-green-400/30 text-green-400' :
-                strategy.riskLevel === 'medium' ? 'bg-yellow-400/20 border-yellow-400/30 text-yellow-400' :
-                'bg-red-400/20 border-red-400/30 text-red-400'
-              }`}>
-                {strategy.riskLevel}
-              </span>
-              {strategy.status && (
+              {strategy?.riskLevel && (
+                <span className={`px-3 py-1 rounded-full text-sm font-semibold border ${
+                  strategy.riskLevel === 'low' ? 'bg-green-400/20 border-green-400/30 text-green-400' :
+                  strategy.riskLevel === 'medium' ? 'bg-yellow-400/20 border-yellow-400/30 text-yellow-400' :
+                  'bg-red-400/20 border-red-400/30 text-red-400'
+                }`}>
+                  {strategy.riskLevel}
+                </span>
+              )}
+              {strategy?.status && (
                 <span className={`px-3 py-1 rounded text-sm font-semibold ${
                   strategy.status === 'open' ? 'bg-green-400/20 text-green-400' :
                   strategy.status === 'paused' ? 'bg-yellow-400/20 text-yellow-400' :
@@ -506,9 +504,9 @@ export default function StrategyStatsPage() {
           <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-6">
             <h2 className="text-2xl font-bold mb-6 text-white">Token Composition</h2>
             
-            {tokenComposition.length === 0 ? (
+            {!tokenComposition || tokenComposition.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-[#5a9a9a] text-sm">Loading token composition...</p>
+                <p className="text-[#5a9a9a] text-sm">Token composition unavailable</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -523,7 +521,7 @@ export default function StrategyStatsPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {tokenComposition.map((token, idx) => (
+                    {(tokenComposition ?? []).map((token, idx) => (
                       <tr key={idx} className="border-b border-gray-800/50">
                         <td className="py-3 px-4 text-sm text-white">{token.name}</td>
                         <td className="py-3 px-4 text-sm text-gray-400 font-mono">{token.tokenId}</td>
@@ -544,23 +542,23 @@ export default function StrategyStatsPage() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-gray-500 text-sm">Vault Address</span>
-                <span className="text-white font-mono text-xs">{strategy.contracts.vaultAddress}</span>
+                <span className="text-white font-mono text-xs">{strategy?.contracts?.vaultAddress ?? '—'}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-500 text-sm">Handler Address</span>
-                <span className="text-white font-mono text-xs">{strategy.contracts.handlerAddress}</span>
+                <span className="text-white font-mono text-xs">{strategy?.contracts?.handlerAddress ?? '—'}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-500 text-sm">Core Views Address</span>
-                <span className="text-white font-mono text-xs">{strategy.contracts.coreViewsAddress}</span>
+                <span className="text-white font-mono text-xs">{strategy?.contracts?.coreViewsAddress ?? '—'}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-500 text-sm">L1 Read Address</span>
-                <span className="text-white font-mono text-xs">{strategy.contracts.l1ReadAddress}</span>
+                <span className="text-white font-mono text-xs">{strategy?.contracts?.l1ReadAddress ?? '—'}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-500 text-sm">Chain ID</span>
-                <span className="text-white font-mono text-xs">{strategy.contracts.chainId}</span>
+                <span className="text-white font-mono text-xs">{strategy?.contracts?.chainId ?? '—'}</span>
               </div>
             </div>
           </div>
