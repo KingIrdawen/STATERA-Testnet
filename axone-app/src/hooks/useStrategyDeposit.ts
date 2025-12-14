@@ -287,12 +287,17 @@ export function useStrategyDeposit(strategy: Strategy | null) {
         fullMessage += `\nVault: ${vaultShort}\nMontant: ${amountFormatted}`;
         
         // Add contextual diagnostics
-        if (pps1e18 !== undefined || oraclePxHype1e8 !== undefined) {
-          fullMessage += `\n\nDiagnostics:\n`;
-          if (pps1e18 !== undefined) fullMessage += `PPS: ${pps1e18.toString()}\n`;
-          if (nav1e18 !== undefined) fullMessage += `NAV: ${nav1e18.toString()}\n`;
-          if (oraclePxHype1e8 !== undefined) fullMessage += `Oracle HYPE: ${oraclePxHype1e8.toString()}\n`;
-        }
+        fullMessage += `\n\nDiagnostics:\n`;
+        fullMessage += `Vault: ${vaultShort}\n`;
+        fullMessage += `ChainId: ${strategy.contracts.chainId}\n`;
+        if (blockNumber !== undefined) fullMessage += `Block: ${blockNumber.toString()}\n`;
+        if (pps1e18 !== undefined) fullMessage += `PPS: ${pps1e18.toString()}\n`;
+        if (nav1e18 !== undefined) fullMessage += `NAV: ${nav1e18.toString()}\n`;
+        if (oraclePxHype1e8 !== undefined) fullMessage += `Oracle HYPE: ${oraclePxHype1e8.toString()}\n`;
+        if (paused !== undefined) fullMessage += `Paused: ${paused}\n`;
+        if (depositFeeBps !== undefined) fullMessage += `DepositFeeBps: ${depositFeeBps}\n`;
+        if (withdrawFeeBps !== undefined) fullMessage += `WithdrawFeeBps: ${withdrawFeeBps}\n`;
+        if (handlerAddress) fullMessage += `Handler: ${handlerAddress.slice(0, 6)}...${handlerAddress.slice(-4)}\n`;
         
         showTxToast('failed', { error: fullMessage, action: 'Dépôt' });
         throw new Error(errorMessage);
