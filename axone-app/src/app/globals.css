@@ -10,11 +10,11 @@
 
 html, body {
   overflow-x: hidden;
-  background-color: black;
+  background-color: #121212;
 }
 
 body {
-  background-color: black;
+  background-color: #121212;
 }
 
 @theme inline {

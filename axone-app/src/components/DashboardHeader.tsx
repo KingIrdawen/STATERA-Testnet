@@ -22,7 +22,7 @@ export function DashboardHeader() {
   ];
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-[9999] bg-black/50 backdrop-blur-md border-b border-gray-800">
+    <header className="fixed left-0 right-0 top-0 z-[9999] bg-[#121212]/50 backdrop-blur-md border-b border-gray-800">
       {/* Bandeau Wrong Network intégré dans le header */}
       {address && !isCorrectChain && (
         <div className="bg-red-600 text-white text-center py-3 px-4 text-sm font-semibold shadow-lg border-b-2 border-red-700">

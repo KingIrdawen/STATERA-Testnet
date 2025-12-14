@@ -73,13 +73,13 @@ export default function DocsLayout({
   const isActive = (href: string) => pathname === href;
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-[#121212] text-white">
       <Header />
       
       {/* Bouton toggle mobile */}
       <button
         onClick={toggleSidebar}
-        className="md:hidden fixed top-20 left-4 z-[10000] bg-black border border-gray-700 rounded px-3 py-2 text-sm hover:bg-gray-800 transition-colors"
+        className="md:hidden fixed top-20 left-4 z-[10000] bg-[#121212] border border-gray-700 rounded px-3 py-2 text-sm hover:bg-gray-800 transition-colors"
       >
         Table of Contents
       </button>
@@ -88,7 +88,7 @@ export default function DocsLayout({
         {/* Sidebar */}
         <aside
           className={cn(
-            "fixed inset-y-0 left-0 z-[9998] w-80 bg-black p-6 overflow-y-auto md:static md:translate-x-0 transition-transform",
+            "fixed inset-y-0 left-0 z-[9998] w-80 bg-[#121212] p-6 overflow-y-auto md:static md:translate-x-0 transition-transform",
             sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
           )}
         >
@@ -134,7 +134,7 @@ export default function DocsLayout({
       </div>
 
       {/* Footer noir simple */}
-      <footer className="bg-black py-8">
+      <footer className="bg-[#121212] py-8">
         <div className="flex min-h-[60px] md:min-h-[80px]">
           {/* Section gauche - Logos sociaux alignés avec le logo du header */}
           <div className="flex-1 flex items-center justify-start">

@@ -20,8 +20,8 @@ export default function Header() {
   return (
     <header className={`fixed top-0 left-0 right-0 z-[9999] shadow-lg transition-all duration-300 ${
       isScrolled 
-        ? 'bg-black/50 backdrop-blur-md' 
-        : 'bg-black'
+        ? 'bg-[#121212]/50 backdrop-blur-md' 
+        : 'bg-[#121212]'
     }`}>
       <div className="flex min-h-[60px] md:min-h-[80px]">
         {/* Section gauche - Logo */}

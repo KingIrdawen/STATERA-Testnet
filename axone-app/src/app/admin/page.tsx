@@ -126,8 +126,8 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black">
-      <header className="fixed top-0 left-0 right-0 z-[9999] bg-black/50 backdrop-blur-md border-b border-gray-800">
+    <div className="min-h-screen bg-[#121212]">
+      <header className="fixed top-0 left-0 right-0 z-[9999] bg-[#121212]/50 backdrop-blur-md border-b border-gray-800">
         <div className="flex items-center justify-between px-4 sm:px-8 md:px-36 lg:px-48 py-4">
           <Link href="/" className="flex items-center gap-3 sm:gap-4">
             <Image
@@ -173,7 +173,7 @@ export default function AdminPage() {
       </header>
       
       <main className="pt-[60px] md:pt-[80px]">
-        <div className="min-h-screen bg-black px-4 sm:px-8 md:px-36 lg:px-48 py-8">
+        <div className="min-h-screen bg-[#121212] px-4 sm:px-8 md:px-36 lg:px-48 py-8">
           {/* Titre Admin */}
           <div className="text-center mb-12">
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 sm:mb-8">

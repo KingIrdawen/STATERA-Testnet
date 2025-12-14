@@ -27,12 +27,12 @@ export default function StrategiesPage() {
   );
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-[#121212]">
       <DashboardHeader />
       <DashboardSidebar />
 
       <main className={`flex ${address && !isCorrectChain ? 'pt-[104px] md:pt-[124px]' : 'pt-[60px] md:pt-[80px]'}`}>
-        <div className="flex-1 ml-64 min-h-screen bg-black px-4 sm:px-8 py-8">
+        <div className="flex-1 ml-64 min-h-screen bg-[#121212] px-4 sm:px-8 py-8">
           {/* Titre Strategies avec gradient */}
           <div className="text-center mb-12">
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 sm:mb-8">
@@ -43,23 +43,25 @@ export default function StrategiesPage() {
           </div>
 
           {/* Contenu */}
-          <div className="max-w-7xl mx-auto">
-            {loading ? (
-              <div className="text-center py-12">
-                <p className="text-[#5a9a9a] text-lg">Loading strategies...</p>
-              </div>
-            ) : validStrategies.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-[#5a9a9a] text-lg mb-4">No strategies available</p>
-                <p className="text-gray-500 text-sm">Strategies will appear here once deployed</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {validStrategies.map(strategy => (
-                  <StrategyCardEra key={strategy.id} strategy={strategy} showWithdraw={false} showViewMore={true} />
-                ))}
-              </div>
-            )}
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 sm:p-8">
+              {loading ? (
+                <div className="text-center py-12">
+                  <p className="text-[#5a9a9a] text-lg">Loading strategies...</p>
+                </div>
+              ) : validStrategies.length === 0 ? (
+                <div className="text-center py-12">
+                  <p className="text-[#5a9a9a] text-lg mb-4">No strategies available</p>
+                  <p className="text-gray-500 text-sm">Strategies will appear here once deployed</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {validStrategies.map(strategy => (
+                    <StrategyCardEra key={strategy.id} strategy={strategy} showWithdraw={false} showViewMore={true} />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </main>

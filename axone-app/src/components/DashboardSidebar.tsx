@@ -70,7 +70,7 @@ export function DashboardSidebar() {
         maxHeight: `calc(100vh - ${headerHeight}px)`,
       }}
     >
-      <div className="h-full bg-black overflow-y-auto">
+      <div className="h-full bg-[#121212] overflow-y-auto">
         <div className="p-6 space-y-2">
           {menuItems.map((item) => {
             const active = isActive(item.href);

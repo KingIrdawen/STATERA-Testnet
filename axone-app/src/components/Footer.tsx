@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="relative bg-black shadow-lg overflow-hidden">
+    <footer className="relative bg-[#121212] shadow-lg overflow-hidden">
       {/* Contenu du footer */}
       <div className="relative z-10">
       

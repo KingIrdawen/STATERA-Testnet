@@ -14,7 +14,7 @@ export function SiteFooter() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative w-full bg-black overflow-hidden">
+    <footer className="relative w-full bg-[#121212] overflow-hidden">
       {/* Stars background effect */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(250,176,98,0.15)_1px,transparent_0)] [background-size:32px_32px]" />
@@ -27,7 +27,7 @@ export function SiteFooter() {
           <div className="flex items-center gap-4">
             {/* Logo badge */}
             <div className="relative w-14 h-14 rounded-full bg-gradient-to-br from-[#fab062] to-[#5a9a9a] p-0.5 flex-shrink-0">
-              <div className="w-full h-full rounded-full bg-black flex items-center justify-center">
+                <div className="w-full h-full rounded-full bg-[#121212] flex items-center justify-center">
                 <Image
                   src="/Logo-Statera-sandy-brown-détouré.png"
                   alt="Statera Logo"

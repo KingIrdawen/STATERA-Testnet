@@ -6,7 +6,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 export default function VaultsHeader() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-[9999] bg-black/50 backdrop-blur-md border-b border-gray-800">
+    <header className="fixed top-0 left-0 right-0 z-[9999] bg-[#121212]/50 backdrop-blur-md border-b border-gray-800">
       <div className="flex items-center justify-between px-4 sm:px-8 md:px-36 lg:px-48 py-4">
         {/* Logo et nom */}
         <Link href="/" className="flex items-center gap-3 sm:gap-4">
