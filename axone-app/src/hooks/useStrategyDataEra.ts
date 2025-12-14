@@ -129,7 +129,9 @@ export function useStrategyData(strategy: Strategy | null): StrategyData {
     },
   });
 
-  if (!isConfigured || !strategy || !data || !hasContracts) {
+  // Defensive check: ensure data is an array and strategy exists
+  const dataArray = Array.isArray(data) ? data : [];
+  if (!isConfigured || !strategy || dataArray.length === 0 || !hasContracts) {
     return {
       loading: isLoading || isLoadingStaked,
       error: error as Error | null,
@@ -153,14 +155,14 @@ export function useStrategyData(strategy: Strategy | null): StrategyData {
 
   const shareDecimals = (strategy as Strategy).contracts.shareDecimals ?? 18;
 
-  // Parse results
-  const navUsd1e18 = data[0]?.result as bigint | undefined;
-  const ppsUsd1e18 = data[1]?.result as bigint | undefined;
-  const totalSharesRaw = data[2]?.result as bigint | undefined;
-  const userSharesRaw = data[3]?.result as bigint | undefined;
-  const equitySpotUsd1e18 = data[4]?.result as bigint | undefined;
-  const oraclePxHype1e8 = data[5]?.result as bigint | undefined;
-  const oraclePxToken11e8 = data[6]?.result as bigint | undefined;
+  // Parse results - use dataArray which is guaranteed to be an array
+  const navUsd1e18 = dataArray[0]?.result as bigint | undefined;
+  const ppsUsd1e18 = dataArray[1]?.result as bigint | undefined;
+  const totalSharesRaw = dataArray[2]?.result as bigint | undefined;
+  const userSharesRaw = dataArray[3]?.result as bigint | undefined;
+  const equitySpotUsd1e18 = dataArray[4]?.result as bigint | undefined;
+  const oraclePxHype1e8 = dataArray[5]?.result as bigint | undefined;
+  const oraclePxToken11e8 = dataArray[6]?.result as bigint | undefined;
 
   // Format values
   const navUsd = navUsd1e18 ? Number(formatUnits(navUsd1e18, 18)) : undefined;

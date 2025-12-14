@@ -52,6 +52,11 @@ export function useStrategyDeposit(strategy: Strategy | null) {
       throw new Error('Strategy not configured or wallet not connected');
     }
 
+    // Defensive check for contracts
+    if (!strategy.contracts) {
+      throw new Error('Strategy contracts not available');
+    }
+
     const depositIsNative = strategy.contracts.depositIsNative ?? true;
 
     if (depositIsNative) {

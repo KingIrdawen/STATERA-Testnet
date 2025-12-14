@@ -48,6 +48,11 @@ export function useStrategyWithdraw(strategy: Strategy | null) {
       throw new Error('Strategy not configured or wallet not connected');
     }
 
+    // Defensive check for contracts
+    if (!strategy.contracts) {
+      throw new Error('Strategy contracts not available');
+    }
+
     const shareDecimals = strategy.contracts.shareDecimals ?? 18;
     const sharesAmount = parseUnits(shares, shareDecimals);
 

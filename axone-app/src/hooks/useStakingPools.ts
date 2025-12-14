@@ -98,14 +98,15 @@ export function useStakingPools(): StakingPoolsData {
   });
 
   // Build token metadata contracts
+  const poolsDataArray = Array.isArray(poolsData) ? poolsData : [];
   const tokenMetadataContracts = useMemo(() => {
-    if (!poolsData || poolsData.length === 0) {
+    if (!poolsDataArray || poolsDataArray.length === 0) {
       return [];
     }
 
     const contracts: any[] = [];
-    for (let i = 0; i < poolsData.length; i++) {
-      const poolResult = poolsData[i]?.result;
+    for (let i = 0; i < poolsDataArray.length; i++) {
+      const poolResult = poolsDataArray[i]?.result;
       if (!poolResult) continue;
 
       const stakeToken = (poolResult as any[])[0] as `0x${string}`;
@@ -125,7 +126,7 @@ export function useStakingPools(): StakingPoolsData {
       );
     }
     return contracts;
-  }, [poolsData]);
+  }, [poolsDataArray]);
 
   const { data: tokenMetadataData, isLoading: tokenMetadataLoading } = useReadContracts({
     contracts: tokenMetadataContracts,
@@ -136,15 +137,15 @@ export function useStakingPools(): StakingPoolsData {
 
   // Compute pools with metadata
   const pools = useMemo(() => {
-    if (!poolsData || poolsData.length === 0) {
+    if (!poolsDataArray || poolsDataArray.length === 0) {
       return [];
     }
 
     const results: PoolInfo[] = [];
     let tokenMetadataIndex = 0;
 
-    for (let pid = 0; pid < poolsData.length; pid++) {
-      const poolResult = poolsData[pid]?.result;
+    for (let pid = 0; pid < poolsDataArray.length; pid++) {
+      const poolResult = poolsDataArray[pid]?.result;
       if (!poolResult) continue;
 
       const [stakeToken, allocPoint, lastRewardTime, accRewardPerShare, totalStaked] = poolResult as [
@@ -177,7 +178,7 @@ export function useStakingPools(): StakingPoolsData {
     }
 
     return results;
-  }, [poolsData, tokenMetadataData, totalAllocPoint]);
+  }, [poolsDataArray, tokenMetadataData, totalAllocPoint]);
 
   return {
     pools,

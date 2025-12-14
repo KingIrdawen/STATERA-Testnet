@@ -32,9 +32,9 @@ interface TokenComposition {
 const EXPLORER_BASE_URL = 'https://app.hyperliquid-testnet.xyz/explorer/tx/';
 
 export default function StrategyStatsPage() {
-  const params = useParams();
+  const params = useParams<{ id: string }>();
   const router = useRouter();
-  const strategyId = params?.id as string;
+  const strategyId = params?.id;
   const { strategies, loading } = useStrategies();
   const [strategy, setStrategy] = useState<Strategy | null>(null);
   const { address } = useAccount();
