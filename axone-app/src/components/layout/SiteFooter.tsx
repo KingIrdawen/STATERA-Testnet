@@ -20,7 +20,7 @@ export function SiteFooter() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(250,176,98,0.15)_1px,transparent_0)] [background-size:32px_32px]" />
       </div>
 
-      <div className="relative max-w-6xl mx-auto px-6 py-16">
+      <div className="relative w-full px-6 sm:px-8 lg:px-12 py-16">
         {/* Main content: Logo + Social on left, Links on right */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 mb-12">
           {/* Left: Logo + Branding + Social icons */}
@@ -129,14 +129,14 @@ export function SiteFooter() {
 
         {/* Bottom bar: Copyright left, Legal links right */}
         <div className="pt-8 border-t border-gray-800">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-4">
             {/* Copyright - Left */}
             <p className="text-white/50 text-xs">
               © {currentYear} Statera Finance. All rights reserved.
             </p>
             
             {/* Legal links - Right */}
-            <div className="flex flex-wrap items-center gap-2 text-xs">
+            <div className="flex flex-wrap items-center gap-2 text-xs md:justify-end">
               <Link
                 href="#"
                 className="text-white/50 hover:text-white/70 transition-colors"
