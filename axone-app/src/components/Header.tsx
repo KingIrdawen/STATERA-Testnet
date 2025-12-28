@@ -23,10 +23,10 @@ export default function Header() {
         ? 'bg-[#121212]/50 backdrop-blur-md' 
         : 'bg-[#121212]'
     }`}>
-      <div className="flex min-h-[60px] md:min-h-[80px]">
+      <div className="flex min-h-[60px] md:min-h-[80px] w-full">
         {/* Section gauche - Logo */}
         <div className="flex-1 flex items-center justify-start">
-          <div className="px-4 sm:px-8 md:px-36 lg:px-48">
+          <div className="px-6 sm:px-8 lg:px-12">
             <Link href="/" className="flex items-center gap-2 sm:gap-3">
               <Image
                 src="/Logo-Statera-sandy-brown-détouré.png"
@@ -44,7 +44,7 @@ export default function Header() {
 
         {/* Section droite - Navigation */}
         <div className="flex-1 flex items-center justify-end">
-          <div className="px-4 sm:px-8 md:px-36 lg:px-48">
+          <div className="px-6 sm:px-8 lg:px-12">
             <div className="flex items-center gap-3 sm:gap-6">
               <Link
                 href="/docs"
@@ -53,12 +53,12 @@ export default function Header() {
                 Docs
               </Link>
               
-                  <Link
-                    href="/dashboard/strategy"
-                    className="inline-flex items-center px-3 py-1 sm:px-4 sm:py-1.5 md:px-6 md:py-2 rounded-lg bg-[#fab062] text-[#011f26] font-semibold text-xs sm:text-sm md:text-base shadow-2xl transition-all duration-300 hover:bg-[#e89a4a] hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-[#fab062] focus:ring-offset-2 focus:ring-offset-[#011f26] tracking-tight"
-                  >
-                    Launch App
-                  </Link>
+              <Link
+                href="/dashboard/strategy"
+                className="inline-flex items-center px-3 py-1 sm:px-4 sm:py-1.5 md:px-6 md:py-2 rounded-lg bg-[#fab062] text-[#011f26] font-semibold text-xs sm:text-sm md:text-base shadow-2xl transition-all duration-300 hover:bg-[#e89a4a] hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-[#fab062] focus:ring-offset-2 focus:ring-offset-[#011f26] tracking-tight"
+              >
+                Launch App
+              </Link>
             </div>
           </div>
         </div>
