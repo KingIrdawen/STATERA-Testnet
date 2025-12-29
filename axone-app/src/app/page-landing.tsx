@@ -312,6 +312,168 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Smart Rebalancing */}
+      <section className="py-16 sm:py-20 bg-white/5">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+          <Reveal delayMs={100}>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Smart Rebalancing</h2>
+              <p className="text-gray-400 max-w-2xl mx-auto">
+                Automated portfolio management through continuous monitoring and threshold-based execution.
+              </p>
+            </div>
+          </Reveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Reveal delayMs={200}>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+                <h3 className="text-xl font-bold text-white mb-3">Continuous Monitoring</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  Strategies are monitored hourly to track market conditions and portfolio allocations. 
+                  Real-time data ensures positions remain aligned with target allocations.
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delayMs={300}>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+                <h3 className="text-xl font-bold text-white mb-3">Threshold-Based Execution</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  Rebalancing occurs when allocations deviate beyond predefined thresholds. 
+                  This approach minimizes unnecessary transactions while maintaining target exposure.
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delayMs={400}>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+                <h3 className="text-xl font-bold text-white mb-3">Execution Advantages</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  Leveraging Hyperliquid's decentralized order book and high-performance infrastructure, 
+                  rebalancing executes with minimal slippage, low fees, and instant settlement.
+                </p>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Fees & Transparency */}
+      <section className="py-16 sm:py-20">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+          <Reveal delayMs={100}>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Fees & Transparency</h2>
+              <p className="text-gray-400 max-w-2xl mx-auto">
+                Clear fee structure with all costs disclosed upfront.
+              </p>
+            </div>
+          </Reveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <Reveal delayMs={200}>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+                <h3 className="text-xl font-bold text-white mb-4">Vault Fees</h3>
+                <ul className="space-y-3 text-gray-400 text-sm">
+                  <li className="flex items-start">
+                    <span className="text-[#FAB062] mr-2">•</span>
+                    <span><strong className="text-white">Deposit fees:</strong> Applied on shares minted, configurable per vault</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-[#FAB062] mr-2">•</span>
+                    <span><strong className="text-white">Withdrawal fees:</strong> Applied on payout, may vary by amount</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-[#FAB062] mr-2">•</span>
+                    <span><strong className="text-white">Management fees:</strong> Ongoing costs for strategy operation</span>
+                  </li>
+                </ul>
+              </div>
+            </Reveal>
+
+            <Reveal delayMs={300}>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+                <h3 className="text-xl font-bold text-white mb-4">External Fees</h3>
+                <ul className="space-y-3 text-gray-400 text-sm">
+                  <li className="flex items-start">
+                    <span className="text-[#FAB062] mr-2">•</span>
+                    <span><strong className="text-white">Hypercore fees:</strong> Network and execution costs related to Hyperliquid infrastructure</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-[#FAB062] mr-2">•</span>
+                    <span><strong className="text-white">On-chain transparency:</strong> All fees are recorded on-chain and verifiable via block explorer</span>
+                  </li>
+                </ul>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* App Features */}
+      <section className="py-16 sm:py-20 bg-white/5">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+          <Reveal delayMs={100}>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">App Features</h2>
+              <p className="text-gray-400 max-w-2xl mx-auto">
+                Core functionality available in the Statera application.
+              </p>
+            </div>
+          </Reveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Reveal delayMs={200}>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+                <h3 className="text-xl font-bold text-white mb-3">Strategies</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  Users deposit into on-chain vaults implementing predefined strategies. 
+                  Vaults manage exposure and rebalancing automatically. Performance and risk are strategy-dependent.
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delayMs={300}>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+                <h3 className="text-xl font-bold text-white mb-3">Dashboard</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  Central interface to monitor deposits, NAV, performance, and positions. 
+                  Real-time on-chain data and strategy metrics provide full transparency.
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delayMs={400}>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+                <h3 className="text-xl font-bold text-white mb-3">Swap</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  Interface to swap supported assets. Used to enter or rebalance positions within the ecosystem.
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delayMs={500}>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+                <h3 className="text-xl font-bold text-white mb-3">Staking</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  Stake protocol-related tokens. Earn rewards as defined by the protocol mechanics.
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delayMs={600}>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+                <h3 className="text-xl font-bold text-white mb-3">Referral</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  Referral system allowing users to invite others. Rewards or benefits follow the rules 
+                  defined in the referral contracts.
+                </p>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
       {/* Security & Transparency */}
       <section className="py-16 sm:py-20">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">

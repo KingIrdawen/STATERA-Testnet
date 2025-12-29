@@ -128,8 +128,10 @@ export default function DocsLayout({
         </aside>
 
         {/* Contenu principal */}
-        <main className="flex-1 max-w-4xl mx-auto p-8">
-          {children}
+        <main className="flex-1 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-8">
+          <div className="prose prose-invert max-w-none">
+            {children}
+          </div>
           <DocsNavigation />
         </main>
       </div>

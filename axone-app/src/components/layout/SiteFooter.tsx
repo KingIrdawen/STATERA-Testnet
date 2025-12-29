@@ -138,17 +138,17 @@ export function SiteFooter() {
             {/* Legal links - Right */}
             <div className="flex flex-wrap items-center gap-2 text-xs md:justify-end">
               <Link
-                href="#"
+                href="/terms-of-use"
                 className="text-white/50 hover:text-white/70 transition-colors"
               >
                 Terms of Use
               </Link>
               <span className="text-white/50">.</span>
               <Link
-                href="#"
+                href="/users-risk"
                 className="text-white/50 hover:text-white/70 transition-colors"
               >
-                Privacy
+                Users Risk
               </Link>
               <span className="text-white/50">.</span>
               <Link
