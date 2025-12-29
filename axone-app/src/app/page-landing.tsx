@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import { Reveal } from '@/components/landing/Reveal';
+import { AnimatedCounter } from '@/components/landing/AnimatedCounter';
 import Link from 'next/link';
 
 interface LandingStats {
@@ -82,6 +83,72 @@ export default function Home() {
               <p className="text-lg sm:text-xl md:text-2xl text-gray-400 mb-10 sm:mb-12 leading-relaxed font-medium max-w-3xl mx-auto">
                 Automated portfolio management on-chain. Deposit into strategies that rebalance hourly, optimize allocations, and deliver transparent returns.
               </p>
+
+              {/* Metrics - Just below title */}
+              {loading ? (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 sm:mb-12">
+                  <div className="text-center">
+                    <p className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-2">
+                      —
+                    </p>
+                    <p className="text-gray-400 text-sm">Total Deposited</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-2">
+                      —
+                    </p>
+                    <p className="text-gray-400 text-sm">Active Vaults</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-2">
+                      —
+                    </p>
+                    <p className="text-gray-400 text-sm">Total Unique Deposits</p>
+                  </div>
+                </div>
+              ) : error ? (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 sm:mb-12">
+                  <div className="text-center">
+                    <p className="text-red-400 text-sm">Unable to load metrics</p>
+                  </div>
+                </div>
+              ) : stats ? (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 sm:mb-12">
+                  <div className="text-center">
+                    <p className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-2">
+                      <AnimatedCounter
+                        value={stats.totalDepositedUsd}
+                        duration={2000}
+                        formatter={(val) => formatUsd(val)}
+                      />
+                    </p>
+                    <p className="text-gray-400 text-sm">Total Deposited</p>
+                  </div>
+
+                  <div className="text-center">
+                    <p className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-2">
+                      <AnimatedCounter
+                        value={stats.vaultCount}
+                        duration={2000}
+                      />
+                    </p>
+                    <p className="text-gray-400 text-sm">Active Vaults</p>
+                  </div>
+
+                  <div className="text-center">
+                    <p className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-2">
+                      <AnimatedCounter
+                        value={stats.totalDepositCount}
+                        duration={2000}
+                        formatter={(val) => Math.floor(val).toLocaleString()}
+                      />
+                    </p>
+                    <p className="text-gray-400 text-sm" title="Number of deposit transactions across all deployed vaults">
+                      Total Unique Deposits
+                    </p>
+                  </div>
+                </div>
+              ) : null}
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <Link
@@ -100,63 +167,6 @@ export default function Home() {
               </div>
             </div>
           </Reveal>
-        </div>
-      </section>
-
-      {/* Key Metrics */}
-      <section className="py-12 sm:py-16 bg-white/5">
-        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-          <Reveal delayMs={100}>
-            <div className="text-center mb-8">
-              <p className="text-sm text-gray-500 mb-2">Live on-chain data</p>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-8">Platform Metrics</h2>
-            </div>
-          </Reveal>
-
-          {loading ? (
-            <Reveal delayMs={200}>
-              <div className="text-center py-12">
-                <p className="text-gray-500">Loading metrics...</p>
-              </div>
-            </Reveal>
-          ) : error ? (
-            <Reveal delayMs={200}>
-              <div className="text-center py-12">
-                <p className="text-red-400">Unable to load metrics</p>
-              </div>
-            </Reveal>
-          ) : stats ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Reveal delayMs={200}>
-                <div className="bg-white/5 border border-white/10 rounded-lg p-6 text-center">
-                  <p className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-2">
-                    {formatUsd(stats.totalDepositedUsd)}
-                  </p>
-                  <p className="text-gray-400 text-sm">Total Deposited</p>
-                </div>
-              </Reveal>
-
-              <Reveal delayMs={300}>
-                <div className="bg-white/5 border border-white/10 rounded-lg p-6 text-center">
-                  <p className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-2">
-                    {stats.vaultCount}
-                  </p>
-                  <p className="text-gray-400 text-sm">Active Vaults</p>
-                </div>
-              </Reveal>
-
-              <Reveal delayMs={400}>
-                <div className="bg-white/5 border border-white/10 rounded-lg p-6 text-center">
-                  <p className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-2">
-                    {stats.totalDepositCount.toLocaleString()}
-                  </p>
-                  <p className="text-gray-400 text-sm" title="Number of deposit transactions across all deployed vaults">
-                    Total Unique Deposits
-                  </p>
-                </div>
-              </Reveal>
-            </div>
-          ) : null}
         </div>
       </section>
 
