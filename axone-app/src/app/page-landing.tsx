@@ -80,13 +80,15 @@ export default function Home() {
                 <Image
                   src="/Logo-Statera-sandy-brown-détouré.png"
                   alt="Statera Logo"
-                  width={120}
-                  height={120}
-                  className="h-16 w-auto sm:h-20 md:h-24 mb-4"
-                  sizes="(min-width: 768px) 120px, 80px"
+                  width={200}
+                  height={200}
+                  className="h-24 w-auto sm:h-32 md:h-40 lg:h-48 mb-6 sm:mb-8"
+                  sizes="(min-width: 1024px) 200px, (min-width: 768px) 160px, 120px"
                 />
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
-                  Statera
+                <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 sm:mb-8">
+                  <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
+                    Statera
+                  </span>
                 </h2>
               </div>
 
