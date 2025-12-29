@@ -139,6 +139,17 @@ export const vaultAbi = [
     name: 'EmptyVault',
     inputs: [],
   },
+  // Events
+  {
+    type: 'event',
+    name: 'Deposit',
+    inputs: [
+      { name: 'user', type: 'address', indexed: true },
+      { name: 'amount1e18', type: 'uint256', indexed: false },
+      { name: 'sharesMinted', type: 'uint256', indexed: false },
+    ],
+    anonymous: false,
+  },
 ] as const
 
 export function vaultContract(address: string) {

@@ -1,46 +1,344 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import { SiteFooter } from '@/components/layout/SiteFooter';
+import { Reveal } from '@/components/landing/Reveal';
 import Link from 'next/link';
 
+interface LandingStats {
+  vaultCount: number;
+  vaultAddresses: string[];
+  totalDepositCount: number;
+  depositCountByVault: Record<string, number>;
+  fromBlockUsed: number;
+  totalDepositedUsd: number;
+  vaults: Array<{
+    id: string;
+    name: string;
+    riskLevel: string;
+    status: string;
+    tvlUsd: number;
+    vaultAddress: string;
+    chainId: number;
+  }>;
+}
+
+function formatUsd(value: number): string {
+  if (value >= 1_000_000) {
+    return `$${(value / 1_000_000).toFixed(2)}M`;
+  }
+  if (value >= 1_000) {
+    return `$${(value / 1_000).toFixed(2)}K`;
+  }
+  return `$${value.toFixed(2)}`;
+}
+
 export default function Home() {
+  const [stats, setStats] = useState<LandingStats | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchStats() {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/public/landing-stats');
+        if (!response.ok) {
+          throw new Error('Failed to fetch stats');
+        }
+        const data = await response.json();
+        setStats(data);
+        setError(null);
+      } catch (err) {
+        console.error('[Landing] Error fetching stats:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load stats');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchStats();
+  }, []);
+
+  // Get top 6 vaults by TVL
+  const topVaults = stats?.vaults.slice(0, 6) || [];
+
   return (
-    <div className="min-h-screen bg-[#121212] text-white pt-[60px] md:pt-[80px]">
+    <div className="min-h-screen bg-[#121212] text-white">
       <Header />
       
-      {/* Hero Section - Static */}
-      <section className="py-16 sm:py-20">
+      {/* Hero Section */}
+      <section className="py-16 sm:py-20 lg:py-24">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-          <div className="text-center">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 sm:mb-8">
-              <span className="bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent">
-                A Decentralized<br />
-                Investment<br />
-                Solution
-              </span>
-            </h1>
-            
-            <p className="text-base sm:text-lg md:text-xl text-[#5a9a9a] mb-8 sm:mb-10 leading-relaxed font-medium max-w-3xl mx-auto">
-              Statera offers an innovative approach to investment by leveraging blockchain technology to automate and optimize portfolio management while delivering value to its users.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link
-                href="/dashboard/strategy"
-                className="inline-flex items-center justify-center px-8 py-3 rounded-lg bg-[#fab062] text-[#011f26] font-semibold text-base md:text-lg shadow-lg transition-all duration-300 hover:bg-[#e89a4a] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#fab062] focus:ring-offset-2 focus:ring-offset-[#121212]"
-              >
-                Get Started
-              </Link>
+          <Reveal>
+            <div className="text-center">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 sm:mb-8">
+                <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
+                  Decentralized Investment Strategies
+                </span>
+              </h1>
+              
+              <p className="text-lg sm:text-xl md:text-2xl text-gray-400 mb-10 sm:mb-12 leading-relaxed font-medium max-w-3xl mx-auto">
+                Automated portfolio management on-chain. Deposit into strategies that rebalance hourly, optimize allocations, and deliver transparent returns.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Link
+                  href="/dashboard/strategy"
+                  className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-gradient-to-r from-[#EF9B13] to-[#FAB062] text-[#121212] font-semibold text-base md:text-lg shadow-lg transition-all duration-300 hover:from-[#D36A03] hover:to-[#EF9B13] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#FAB062] focus:ring-offset-2 focus:ring-offset-[#121212]"
+                >
+                  Launch App
+                </Link>
 
-              <Link
-                href="/docs"
-                className="inline-flex items-center justify-center px-8 py-3 rounded-lg border-2 border-white text-white font-semibold text-base md:text-lg shadow-lg transition-all duration-300 hover:bg-white hover:text-[#011f26] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#121212]"
-              >
-                Learn More
-              </Link>
+                <Link
+                  href="/docs"
+                  className="inline-flex items-center justify-center px-8 py-4 rounded-lg border-2 border-white/20 text-white font-semibold text-base md:text-lg shadow-lg transition-all duration-300 hover:border-white/40 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-white/40 focus:ring-offset-2 focus:ring-offset-[#121212]"
+                >
+                  Documentation
+                </Link>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Key Metrics */}
+      <section className="py-12 sm:py-16 bg-white/5">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+          <Reveal delayMs={100}>
+            <div className="text-center mb-8">
+              <p className="text-sm text-gray-500 mb-2">Live on-chain data</p>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-8">Platform Metrics</h2>
+            </div>
+          </Reveal>
+
+          {loading ? (
+            <Reveal delayMs={200}>
+              <div className="text-center py-12">
+                <p className="text-gray-500">Loading metrics...</p>
+              </div>
+            </Reveal>
+          ) : error ? (
+            <Reveal delayMs={200}>
+              <div className="text-center py-12">
+                <p className="text-red-400">Unable to load metrics</p>
+              </div>
+            </Reveal>
+          ) : stats ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Reveal delayMs={200}>
+                <div className="bg-white/5 border border-white/10 rounded-lg p-6 text-center">
+                  <p className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-2">
+                    {formatUsd(stats.totalDepositedUsd)}
+                  </p>
+                  <p className="text-gray-400 text-sm">Total Deposited</p>
+                </div>
+              </Reveal>
+
+              <Reveal delayMs={300}>
+                <div className="bg-white/5 border border-white/10 rounded-lg p-6 text-center">
+                  <p className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-2">
+                    {stats.vaultCount}
+                  </p>
+                  <p className="text-gray-400 text-sm">Active Vaults</p>
+                </div>
+              </Reveal>
+
+              <Reveal delayMs={400}>
+                <div className="bg-white/5 border border-white/10 rounded-lg p-6 text-center">
+                  <p className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-2">
+                    {stats.totalDepositCount.toLocaleString()}
+                  </p>
+                  <p className="text-gray-400 text-sm" title="Number of deposit transactions across all deployed vaults">
+                    Total Unique Deposits
+                  </p>
+                </div>
+              </Reveal>
+            </div>
+          ) : null}
+        </div>
+      </section>
+
+      {/* Vaults Preview */}
+      {stats && stats.vaults.length > 0 && (
+        <section className="py-16 sm:py-20">
+          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+            <Reveal delayMs={100}>
+              <div className="text-center mb-12">
+                <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Available Strategies</h2>
+                <p className="text-gray-400 max-w-2xl mx-auto">
+                  Explore our on-chain investment strategies. Each vault is transparent, non-custodial, and managed by automated rebalancing.
+                </p>
+              </div>
+            </Reveal>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {topVaults.map((vault, index) => (
+                <Reveal key={vault.id} delayMs={200 + index * 100}>
+                  <div className="bg-white/5 border border-white/10 rounded-lg p-6 hover:border-[#FAB062]/30 transition-colors">
+                    <div className="flex items-start justify-between mb-4">
+                      <h3 className="text-xl font-bold text-white">{vault.name}</h3>
+                      <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                        vault.riskLevel === 'low' ? 'bg-green-500/20 text-green-400' :
+                        vault.riskLevel === 'medium' ? 'bg-yellow-500/20 text-yellow-400' :
+                        'bg-red-500/20 text-red-400'
+                      }`}>
+                        {vault.riskLevel}
+                      </span>
+                    </div>
+                    
+                    <div className="space-y-2 mb-4">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-400">TVL</span>
+                        <span className="text-white font-semibold">{formatUsd(vault.tvlUsd)}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-400">Status</span>
+                        <span className={`font-semibold ${
+                          vault.status === 'open' ? 'text-green-400' : 'text-yellow-400'
+                        }`}>
+                          {vault.status}
+                        </span>
+                      </div>
+                    </div>
+
+                    <Link
+                      href="/dashboard/strategy"
+                      className="block w-full text-center px-4 py-2 rounded-lg bg-gradient-to-r from-[#EF9B13] to-[#FAB062] text-[#121212] font-semibold text-sm hover:from-[#D36A03] hover:to-[#EF9B13] transition-all"
+                    >
+                      Open Vault
+                    </Link>
+                  </div>
+                </Reveal>
+              ))}
             </div>
           </div>
+        </section>
+      )}
+
+      {/* How It Works */}
+      <section className="py-16 sm:py-20 bg-white/5">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+          <Reveal delayMs={100}>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">How It Works</h2>
+              <p className="text-gray-400 max-w-2xl mx-auto">
+                Statera simplifies DeFi investment through automated, transparent strategies.
+              </p>
+            </div>
+          </Reveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Reveal delayMs={200}>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#EF9B13] to-[#FAB062] flex items-center justify-center text-[#121212] font-bold text-xl mb-4">
+                  1
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">Deposit</h3>
+                <p className="text-gray-400 text-sm">
+                  Deposit HYPE into a strategy vault. Your funds remain in your control—non-custodial and on-chain.
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delayMs={300}>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#EF9B13] to-[#FAB062] flex items-center justify-center text-[#121212] font-bold text-xl mb-4">
+                  2
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">Vault Shares</h3>
+                <p className="text-gray-400 text-sm">
+                  Receive vault shares representing your position. Shares are ERC20 tokens you can transfer or stake.
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delayMs={400}>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#EF9B13] to-[#FAB062] flex items-center justify-center text-[#121212] font-bold text-xl mb-4">
+                  3
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">Rebalancing</h3>
+                <p className="text-gray-400 text-sm">
+                  Strategies automatically rebalance hourly to optimize allocations and capture market opportunities.
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delayMs={500}>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#EF9B13] to-[#FAB062] flex items-center justify-center text-[#121212] font-bold text-xl mb-4">
+                  4
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">Transparency</h3>
+                <p className="text-gray-400 text-sm">
+                  All positions, rebalancing, and fees are recorded on-chain. View your strategy's performance in real-time.
+                </p>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Security & Transparency */}
+      <section className="py-16 sm:py-20">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+          <Reveal delayMs={100}>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Security & Transparency</h2>
+            </div>
+          </Reveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <Reveal delayMs={200}>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+                <h3 className="text-xl font-bold text-white mb-3">Non-Custodial</h3>
+                <p className="text-gray-400">
+                  Your funds never leave your wallet. Vault shares are ERC20 tokens you control. Withdraw at any time.
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delayMs={300}>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+                <h3 className="text-xl font-bold text-white mb-3">On-Chain Accounting</h3>
+                <p className="text-gray-400">
+                  All deposits, withdrawals, and rebalancing operations are recorded on-chain. Verify everything via block explorer.
+                </p>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="py-16 sm:py-20 bg-white/5">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+          <Reveal delayMs={100}>
+            <div className="text-center">
+              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
+                Ready to Get Started?
+              </h2>
+              <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
+                Join the decentralized investment revolution. Start with as little as you want, withdraw anytime.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Link
+                  href="/dashboard/strategy"
+                  className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-gradient-to-r from-[#EF9B13] to-[#FAB062] text-[#121212] font-semibold text-base md:text-lg shadow-lg transition-all duration-300 hover:from-[#D36A03] hover:to-[#EF9B13] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#FAB062] focus:ring-offset-2 focus:ring-offset-[#121212]"
+                >
+                  Launch App
+                </Link>
+                <Link
+                  href="/docs"
+                  className="inline-flex items-center justify-center px-8 py-4 rounded-lg border-2 border-white/20 text-white font-semibold text-base md:text-lg shadow-lg transition-all duration-300 hover:border-white/40 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-white/40 focus:ring-offset-2 focus:ring-offset-[#121212]"
+                >
+                  Read Documentation
+                </Link>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
       
