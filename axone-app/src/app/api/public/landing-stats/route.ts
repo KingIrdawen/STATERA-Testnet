@@ -1,8 +1,13 @@
 import { NextResponse } from 'next/server';
-import { createPublicClient, http, formatUnits } from 'viem';
+import { createPublicClient, http, formatUnits, parseAbiItem } from 'viem';
 import { getAllStrategies } from '@/lib/strategyRepo';
 import { ABIS } from '@/lib/abis';
 import type { Strategy } from '@/types/strategy';
+
+// Define Deposit event EXACTLY as in VaultContract.sol
+const DepositEvent = parseAbiItem(
+  'event Deposit(address indexed user, uint256 amount1e18, uint256 sharesMinted)'
+);
 
 // Get RPC URL from env (same as wagmi config)
 const rpcUrl = process.env.NEXT_PUBLIC_HYPEREVM_RPC_URL || 'https://hyperliquid-testnet.core.chainstack.com/98107cd968ac1c4168c442fa6b1fe200/evm';
@@ -80,18 +85,9 @@ async function scanDepositEvents(
     const chunkEnd = currentEnd > toBlock ? toBlock : currentEnd;
 
     try {
-      // Extract Deposit event from ABI
-      const depositEvent = ABIS.vault.find(
-        (item) => item.type === 'event' && item.name === 'Deposit'
-      );
-
-      if (!depositEvent || depositEvent.type !== 'event') {
-        throw new Error(`Deposit event not found in vault ABI`);
-      }
-
       const logs = await publicClient.getLogs({
         address: vaultAddress,
-        event: depositEvent,
+        event: DepositEvent,
         fromBlock: currentStart,
         toBlock: chunkEnd,
       });
@@ -152,8 +148,10 @@ export async function GET() {
     // Scan deposit events for each vault in parallel
     const depositCountPromises = validStrategies.map(async (strategy: Strategy) => {
       const vaultAddress = strategy.contracts.vaultAddress as `0x${string}`;
+      console.log(`[landing-stats] Scanning vault ${vaultAddress} (strategy: ${strategy.name || strategy.id})`);
       try {
         const depositCount = await scanDepositEvents(vaultAddress, FROM_BLOCK, latestBlock);
+        console.log(`[landing-stats] Vault ${vaultAddress} total deposits: ${depositCount}`);
         return { vaultAddress, depositCount };
       } catch (error) {
         console.error(`[landing-stats] Failed to scan vault ${vaultAddress}:`, error);
