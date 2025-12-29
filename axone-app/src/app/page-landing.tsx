@@ -71,27 +71,23 @@ export default function Home() {
       <Header />
       
       {/* Hero Section */}
-      <section className="py-16 sm:py-20 lg:py-24">
-        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+      <section className="py-16 sm:py-20 lg:py-24 relative">
+        {/* Logo background */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+          <Image
+            src="/Logo-Statera-sandy-brown-détouré.png"
+            alt="Statera Logo"
+            width={600}
+            height={600}
+            className="h-64 w-auto sm:h-80 md:h-96 lg:h-[500px] opacity-10"
+            sizes="(min-width: 1024px) 500px, (min-width: 768px) 400px, 300px"
+            priority
+          />
+        </div>
+        
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
           <Reveal>
             <div className="text-center">
-              {/* Logo and Statera title */}
-              <div className="flex flex-col items-center justify-center mb-8 sm:mb-10">
-                <Image
-                  src="/Logo-Statera-sandy-brown-détouré.png"
-                  alt="Statera Logo"
-                  width={200}
-                  height={200}
-                  className="h-24 w-auto sm:h-32 md:h-40 lg:h-48 mb-6 sm:mb-8"
-                  sizes="(min-width: 1024px) 200px, (min-width: 768px) 160px, 120px"
-                />
-                <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 sm:mb-8">
-                  <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
-                    Statera
-                  </span>
-                </h2>
-              </div>
-
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 sm:mb-8">
                 <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                   Decentralized Investment Strategies
