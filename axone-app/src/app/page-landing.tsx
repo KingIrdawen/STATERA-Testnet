@@ -77,10 +77,10 @@ export default function Home() {
           <Image
             src="/Logo-Statera-sandy-brown-détouré.png"
             alt="Statera Logo"
-            width={600}
-            height={600}
-            className="h-64 w-auto sm:h-80 md:h-96 lg:h-[500px] opacity-10"
-            sizes="(min-width: 1024px) 500px, (min-width: 768px) 400px, 300px"
+            width={1200}
+            height={1200}
+            className="h-96 w-auto sm:h-[500px] md:h-[600px] lg:h-[800px] opacity-10"
+            sizes="(min-width: 1024px) 800px, (min-width: 768px) 600px, 400px"
             priority
           />
         </div>
@@ -88,6 +88,12 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
           <Reveal>
             <div className="text-center">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-4 sm:mb-6">
+                <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
+                  Statera
+                </span>
+              </h2>
+              
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 sm:mb-8">
                 <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                   Decentralized Investment Strategies
