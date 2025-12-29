@@ -40,7 +40,7 @@ export default function UsersRiskPage() {
 
           <div className="prose prose-invert max-w-none space-y-8">
             <Reveal delayMs={200}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                     1. Legal & Regulatory Risks
@@ -90,7 +90,7 @@ export default function UsersRiskPage() {
             </Reveal>
 
             <Reveal delayMs={300}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                     2. Financial Risks
@@ -137,7 +137,7 @@ export default function UsersRiskPage() {
             </Reveal>
 
             <Reveal delayMs={400}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                     3. Technical & Infrastructure Risks
@@ -258,7 +258,7 @@ export default function UsersRiskPage() {
             </Reveal>
 
             <Reveal delayMs={500}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                     4. User Risks & Responsibilities
@@ -313,7 +313,7 @@ export default function UsersRiskPage() {
             </Reveal>
 
             <Reveal delayMs={600}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                     5. Economic Model Risks
@@ -343,7 +343,7 @@ export default function UsersRiskPage() {
             </Reveal>
 
             <Reveal delayMs={700}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                     Risk Summary Table

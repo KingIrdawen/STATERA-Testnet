@@ -131,7 +131,7 @@ export default function DocsLayout({
 
         {/* Contenu principal */}
         <main className="flex-1 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-8">
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
             <div className="prose prose-invert max-w-none">
               {children}
             </div>
