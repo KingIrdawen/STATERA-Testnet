@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import Header from '@/components/Header';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import { Reveal } from '@/components/landing/Reveal';
@@ -74,6 +75,21 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <Reveal>
             <div className="text-center">
+              {/* Logo and Statera title */}
+              <div className="flex flex-col items-center justify-center mb-8 sm:mb-10">
+                <Image
+                  src="/Logo-Statera-sandy-brown-détouré.png"
+                  alt="Statera Logo"
+                  width={120}
+                  height={120}
+                  className="h-16 w-auto sm:h-20 md:h-24 mb-4"
+                  sizes="(min-width: 768px) 120px, 80px"
+                />
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
+                  Statera
+                </h2>
+              </div>
+
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 sm:mb-8">
                 <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                   Decentralized Investment Strategies
@@ -130,6 +146,7 @@ export default function Home() {
                       <AnimatedCounter
                         value={stats.vaultCount}
                         duration={2000}
+                        formatter={(val) => Math.floor(val).toString()}
                       />
                     </p>
                     <p className="text-gray-400 text-sm">Active Vaults</p>
