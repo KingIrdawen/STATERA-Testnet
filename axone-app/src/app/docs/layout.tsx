@@ -100,8 +100,10 @@ export default function DocsLayout({
                 <Link
                   href={section.href}
                   className={cn(
-                    "text-sm font-semibold text-[#fab062] uppercase tracking-wide mb-3 block hover:text-white transition-colors",
-                    isActive(section.href) && "text-white"
+                    "text-sm font-semibold uppercase tracking-wide mb-3 block transition-colors",
+                    isActive(section.href) 
+                      ? "bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent"
+                      : "bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent hover:opacity-80"
                   )}
                 >
                   {section.title}
@@ -113,8 +115,8 @@ export default function DocsLayout({
                       <Link
                         href={item.href}
                         className={cn(
-                          "text-[#5a9a9a] hover:text-white hover:bg-gray-800 rounded-md px-3 py-2 transition-colors block",
-                          isActive(item.href) && "text-white bg-gray-800 rounded-md"
+                          "text-white hover:bg-gray-800 rounded-md px-3 py-2 transition-colors block",
+                          isActive(item.href) && "bg-gray-800 rounded-md"
                         )}
                       >
                         {item.title}
@@ -129,10 +131,12 @@ export default function DocsLayout({
 
         {/* Contenu principal */}
         <main className="flex-1 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-8">
-          <div className="prose prose-invert max-w-none">
-            {children}
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+            <div className="prose prose-invert max-w-none">
+              {children}
+            </div>
+            <DocsNavigation />
           </div>
-          <DocsNavigation />
         </main>
       </div>
 

@@ -37,7 +37,7 @@ export default function TermsOfUsePage() {
 
           <div className="prose prose-invert max-w-none space-y-8">
             <Reveal delayMs={200}>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
                 <p className="text-white leading-relaxed mb-6">
                   These Terms of Use ("Terms") govern your access to and use of the software products and services (the "Services") provided through the Statera front-end user interface (the "Interface"), including but not limited to https://statera.example and https://app.statera.example, which allows users to interact with the Statera Protocol — a decentralized, non-custodial blockchain-based protocol (the "Protocol").
                 </p>
@@ -48,7 +48,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={300}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                     1. Acceptance of Terms
@@ -61,7 +61,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={400}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                     2. Description of Services
@@ -86,7 +86,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={500}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                     3. Assumption of Risk
@@ -129,7 +129,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={600}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                     4. Eligibility
@@ -150,7 +150,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={700}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                     5. Prohibited Activities
@@ -173,7 +173,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={800}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                     6. Intellectual Property
@@ -189,7 +189,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={900}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                     7. Third-Party Links & Ecosystem Projects
@@ -210,7 +210,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={1000}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                     8. No Liability
@@ -229,7 +229,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={1100}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                     9. Indemnification
@@ -242,7 +242,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={1200}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                     10. Modifications to These Terms
@@ -260,7 +260,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={1300}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                     11. Governing Law & Dispute Resolution
@@ -276,7 +276,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={1400}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                     12. Severability
@@ -289,7 +289,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={1500}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                     13. Entire Agreement

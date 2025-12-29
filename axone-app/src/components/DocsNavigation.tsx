@@ -50,8 +50,8 @@ export default function DocsNavigation() {
           href={prev.slug}
           className={linkClassName}
         >
-          <span className="text-sm text-[#5a9a9a] mb-2 flex items-center gap-2">
-            <ArrowLeft size={16} className="text-[#fab062]" />
+          <span className="text-sm mb-2 flex items-center gap-2" style={{ color: '#FAB062' }}>
+            <ArrowLeft size={16} style={{ color: '#FAB062' }} />
             Previous page
           </span>
           <span className="text-lg font-semibold text-white group-hover:text-[#fab062] transition-colors text-left">
@@ -66,9 +66,9 @@ export default function DocsNavigation() {
           href={next.slug}
           className={linkClassName}
         >
-          <span className="text-sm text-[#5a9a9a] mb-2 flex items-center justify-end gap-2">
+          <span className="text-sm mb-2 flex items-center justify-end gap-2" style={{ color: '#FAB062' }}>
             Next page
-            <ArrowRight size={16} className="text-[#fab062]" />
+            <ArrowRight size={16} style={{ color: '#FAB062' }} />
           </span>
           <span className="text-lg font-semibold text-white group-hover:text-[#fab062] transition-colors text-right">
             {next.label}
