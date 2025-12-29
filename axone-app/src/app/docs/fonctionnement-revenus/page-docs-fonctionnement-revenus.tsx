@@ -14,12 +14,12 @@ export default function DocsFonctionnementRevenusPage() {
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-white mb-4">Protocol Mechanics – Revenue Generation</h1>
+        <h1 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">Protocol Mechanics – Revenue Generation</span></h1>
       </div>
 
       <div className="prose prose-invert max-w-none">
         <section>
-          <p className="text-[#5a9a9a] leading-relaxed">
+          <p className="text-white leading-relaxed">
             The Protocol Mechanics section explains how users can participate in Statera strategies and earn rewards.
           </p>
         </section>

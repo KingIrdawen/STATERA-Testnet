@@ -14,30 +14,30 @@ export default function DocsTokenAxnAlignmentPage() {
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-white mb-4">The STA Token: Rewarding Alignment</h1>
-        <p className="text-xl text-[#5a9a9a] leading-relaxed">
+        <h1 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">The STA Token: Rewarding Alignment</span></h1>
+        <p className="text-xl text-white leading-relaxed">
           The STA token is not just an access or speculative token. It is Statera&apos;s alignment currency.
         </p>
       </div>
 
       <div className="prose prose-invert max-w-none">
         <section className="space-y-6">
-          <p className="text-[#5a9a9a] leading-relaxed">
+          <p className="text-white leading-relaxed">
             The <strong>STA token</strong> is not just an access or speculative token.
           </p>
-          <p className="text-[#5a9a9a] leading-relaxed">
+          <p className="text-white leading-relaxed">
             It is Statera&apos;s <strong>alignment currency</strong>—an asset that rewards those who believe in the protocol, participate in it, and contribute to its growth.
           </p>
-          <p className="text-[#5a9a9a] leading-relaxed">
+          <p className="text-white leading-relaxed">
             Every STA holder is <strong>morally and economically aligned</strong> with Statera&apos;s success.
           </p>
-          <p className="text-[#5a9a9a] leading-relaxed">
+          <p className="text-white leading-relaxed">
             Whether you use an index, stake your liquid token, or engage with the ecosystem, STA allows you to <strong>capture a share of the value you help create.</strong>
           </p>
-          <p className="text-[#5a9a9a] leading-relaxed">
+          <p className="text-white leading-relaxed">
             This is not just a token.
           </p>
-          <p className="text-[#5a9a9a] leading-relaxed font-semibold">
+          <p className="text-white leading-relaxed font-semibold">
             It is <strong>proof of commitment</strong>—and a reward for those who choose to build with us.
           </p>
         </section>

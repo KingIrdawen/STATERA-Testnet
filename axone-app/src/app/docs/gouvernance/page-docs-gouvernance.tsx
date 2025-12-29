@@ -14,29 +14,29 @@ export default function DocsGouvernancePage() {
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-white mb-4">Protocol Governance</h1>
-        <p className="text-xl text-[#5a9a9a] leading-relaxed">
+        <h1 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">Protocol Governance</span></h1>
+        <p className="text-xl text-white leading-relaxed">
           With Statera, there are no empty promises—only real, meaningful participation for STA holders.
         </p>
       </div>
 
       <div className="prose prose-invert max-w-none">
         <section className="space-y-6">
-          <p className="text-[#5a9a9a] leading-relaxed">
+          <p className="text-white leading-relaxed">
             It&apos;s no secret: many decentralized protocols promise governance utility for their tokens, only to leave users disappointed.
           </p>
-          <p className="text-[#5a9a9a] leading-relaxed">
+          <p className="text-white leading-relaxed">
             With Statera, there are <strong>no empty promises</strong>—only <strong>real, meaningful participation</strong> for STA holders in the protocol&apos;s technical and strategic decisions.
           </p>
-          <p className="text-[#5a9a9a] leading-relaxed">
+          <p className="text-white leading-relaxed">
             Statera&apos;s roadmap includes the launch of a <strong>fully-fledged DAO</strong>, enabling STA holders to:
           </p>
-          <ul className="text-[#5a9a9a] leading-relaxed ml-6 space-y-2">
+          <ul className="text-white leading-relaxed ml-6 space-y-2">
             <li><strong>Propose or vote</strong> to add new indices</li>
             <li><strong>Modify parameters</strong> of existing indices (rebalancing frequency, adding/removing assets, adjusting weights)</li>
             <li><strong>Adjust the protocol&apos;s revenue allocation strategy</strong></li>
           </ul>
-          <p className="text-[#5a9a9a] leading-relaxed">
+          <p className="text-white leading-relaxed">
             Governance will be <strong>transparent, decentralized, and driven by the community</strong>—ensuring that those who contribute the most have the greatest say.
           </p>
         </section>
