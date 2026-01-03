@@ -333,7 +333,7 @@ export default function Home() {
       )}
 
       {/* How It Works */}
-      <section className="py-16 sm:py-20 bg-white/5">
+      <section className="py-16 sm:py-20 bg-[#121212]">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <Reveal delayMs={100}>
             <div className="text-center mb-12">
@@ -397,7 +397,7 @@ export default function Home() {
       </section>
 
       {/* Smart Rebalancing */}
-      <section className="py-16 sm:py-20 bg-white/5">
+      <section className="py-16 sm:py-20 bg-[#121212]">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <Reveal delayMs={100}>
             <div className="text-center mb-12">
@@ -495,7 +495,7 @@ export default function Home() {
       </section>
 
       {/* App Features */}
-      <section className="py-16 sm:py-20 bg-white/5">
+      <section className="py-16 sm:py-20 bg-[#121212]">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <Reveal delayMs={100}>
             <div className="text-center mb-12">
@@ -590,7 +590,7 @@ export default function Home() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-16 sm:py-20 bg-white/5">
+      <section className="py-16 sm:py-20 bg-[#121212]">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <Reveal delayMs={100}>
             <div className="text-center">
