@@ -11,7 +11,7 @@ const pagesOrder = [
   { slug: "/docs/vision-valeurs", label: "Vision and Values" },
   { slug: "/docs/token-axn-alignment", label: "The STA Token: Rewarding Alignment" },
   { slug: "/docs/protocole", label: "Protocol" },
-  { slug: "/docs/index-axone", label: "What is a Statera Index?" },
+  { slug: "/docs/index-statera", label: "What is a Statera Index?" },
   { slug: "/docs/smart-rebalancing", label: "Smart Rebalancing: The Core Innovation of Statera" },
   { slug: "/docs/hyperunit", label: "Statera x HyperUnit" },
   { slug: "/docs/fonctionnement-revenus", label: "Protocol Mechanics – Revenue Generation" },

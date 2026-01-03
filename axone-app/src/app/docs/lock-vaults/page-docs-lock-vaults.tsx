@@ -49,6 +49,13 @@ export default function DocsLockVaultsPage() {
             <li>Accrued rewards</li>
             <li>Their share in the vault</li>
           </ul>
+          <div className="flex justify-center my-8">
+            <img 
+              src="/images/docs/staking-strategique-era-sta.png" 
+              alt="Staking stratégique avec ERA et STA" 
+              className="max-w-full h-auto rounded-lg"
+            />
+          </div>
           </section>
 
           <section>
@@ -125,6 +132,14 @@ export default function DocsLockVaultsPage() {
           <p className="text-white leading-relaxed mb-4">
             → <strong>STA reward</strong>: 1.49% × 10,000,000 = <strong>149,000 STA</strong>
           </p>
+
+          <div className="flex justify-center my-8">
+            <img 
+              src="/images/docs/strategie-statera-rendement-alice.png" 
+              alt="Stratégie Statera et rendement d'Alice" 
+              className="max-w-full h-auto rounded-lg"
+            />
+          </div>
 
           <h3 className="text-xl font-bold text-white mb-4 mt-6">🔹 Alice withdraws after 12 months – Revalued index value</h3>
           <p className="text-white leading-relaxed mb-4">

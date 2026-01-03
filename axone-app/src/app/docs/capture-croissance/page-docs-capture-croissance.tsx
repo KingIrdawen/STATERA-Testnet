@@ -95,14 +95,12 @@ export default function DocsCaptureCroissancePage() {
             The more platform activity grows, the stronger the <strong>Buyback & Burn</strong> mechanism becomes—acting as an <strong>engine of scarcity and appreciation</strong> for STA.
           </p>
 
-          <div className="mt-8">
-            <p className="text-white font-semibold mb-2">Visuel :</p>
-            <p className="text-white leading-relaxed mb-1">
-              User pays fee (HYPE)
-            </p>
-            <p className="text-white leading-relaxed">
-              --&gt; 50% buy STA and burn / 50% distributed to STA depositors in STA Staking Vault
-            </p>
+          <div className="flex justify-center my-8">
+            <img 
+              src="/images/docs/distribution-frais-statera-protocol.png" 
+              alt="Distribution des frais Statera Protocol" 
+              className="max-w-full h-auto rounded-lg"
+            />
           </div>
           </section>
         </div>

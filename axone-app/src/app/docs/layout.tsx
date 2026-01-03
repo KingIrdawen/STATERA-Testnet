@@ -34,7 +34,7 @@ export default function DocsLayout({
       title: 'Protocol',
       href: '/docs/protocole',
       children: [
-        { title: 'What is a Statera Index?', href: '/docs/index-axone' },
+        { title: 'What is a Statera Index?', href: '/docs/index-statera' },
         { title: 'Smart Rebalancing: The Core Innovation of Statera', href: '/docs/smart-rebalancing' },
         { title: 'Statera x HyperUnit', href: '/docs/hyperunit' },
       ],

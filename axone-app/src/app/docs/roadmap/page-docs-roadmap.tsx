@@ -22,9 +22,13 @@ export default function DocsRoadmapPage() {
 
       <div className="prose prose-invert max-w-none">
         <section>
-          <p className="text-white leading-relaxed">
-            Content coming soon...
-          </p>
+          <div className="flex justify-center my-8">
+            <img 
+              src="/images/docs/evenements-cles-statera-token-tge.png" 
+              alt="Événements clés de Statera Token TGE" 
+              className="max-w-full h-auto rounded-lg"
+            />
+          </div>
         </section>
       </div>
     </div>
