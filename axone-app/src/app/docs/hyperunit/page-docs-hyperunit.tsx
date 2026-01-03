@@ -53,20 +53,12 @@ export default function HyperUnitPage() {
             With HyperUnit, <strong>your Bitcoin is truly Bitcoin, your Ethereum is truly Ethereum—natively, securely, and transparently on Hyperliquid.</strong>
           </p>
 
-          <div className="mt-8">
-            <p className="text-white font-semibold mb-2">Visuel :</p>
-            <p className="text-white leading-relaxed mb-1">
-              <strong>User: Deposits HYPE → [Statera Protocol] → Receives ERA1 token</strong>
-            </p>
-            <p className="text-white leading-relaxed mb-1">
-              <strong>→ ERA1 represents 50% BTC / 50% HYPE exposure</strong>
-            </p>
-            <p className="text-white leading-relaxed mb-1">
-              <strong>→ Index auto-rebalances via Hypercore when threshold breached</strong>
-            </p>
-            <p className="text-white leading-relaxed">
-              <strong>→ User can: Hold, transfer, deposit, or redeem ERA1 for HYPE</strong>
-            </p>
+          <div className="flex justify-center my-8">
+            <img 
+              src="/images/docs/protocole-statera-token-era1.png" 
+              alt="Protocole Statera et Token ERA1" 
+              className="max-w-full h-auto rounded-lg"
+            />
           </div>
         </section>
       </div>
