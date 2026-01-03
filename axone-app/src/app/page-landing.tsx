@@ -188,219 +188,96 @@ export default function Home() {
               </div>
 
               {/* How the protocol works */}
-              <Reveal delayMs={200}>
-                <div className="mt-16 sm:mt-20 relative overflow-visible">
-                  <div className="text-center mb-8">
-                    <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">How the protocol works</h2>
-                    <p className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto">
-                      A concise overview of the core building blocks behind Statera.
-                    </p>
-                  </div>
-
-                  {/* Row 1: 3 cartes */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto overflow-visible">
-                    {/* Card 1: Smart Rebalancing */}
-                    <Reveal delayMs={0}>
-                      <div className="group relative focus-within:outline-none focus-visible:outline-2 focus-visible:outline-[#EF9B13] focus-visible:outline-offset-2 rounded-lg" tabIndex={0}>
-                        {/* Carte compacte (dans le flux) */}
-                        <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[140px] flex flex-col justify-center items-center transition-all duration-300">
-                          <h3 className="text-lg font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-3 text-center">
-                            Smart Rebalancing
-                          </h3>
-                          <div className="relative w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32">
-                            <Image
-                              src="/images/landing/smart-rebalancing.png"
-                              alt="Smart Rebalancing"
-                              fill
-                              className="object-contain"
-                              sizes="(max-width: 640px) 96px, (max-width: 1024px) 112px, 128px"
-                            />
-                          </div>
-                        </div>
-                        {/* Overlay (hors flux) */}
-                        <div className="absolute left-0 top-0 w-full bg-[#121212] border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.08] group-focus-within:scale-[1.08] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20 shadow-xl">
-                          <h3 className="text-lg font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-3 text-center">
-                            Smart Rebalancing
-                          </h3>
-                          <div className="relative w-28 h-28 mb-3 mx-auto">
-                            <Image
-                              src="/images/landing/smart-rebalancing.png"
-                              alt="Smart Rebalancing"
-                              fill
-                              className="object-contain"
-                              sizes="112px"
-                            />
-                          </div>
-                          <p className="text-white/70 text-sm leading-relaxed">
-                            Monitors target allocation and triggers rebalancing when deviations exceed predefined thresholds, keeping the index aligned over time.
-                          </p>
-                        </div>
-                      </div>
-                    </Reveal>
-
-                    {/* Card 2: STA Token */}
-                    <Reveal delayMs={80}>
-                      <div className="group relative focus-within:outline-none focus-visible:outline-2 focus-visible:outline-[#EF9B13] focus-visible:outline-offset-2 rounded-lg" tabIndex={0}>
-                        {/* Carte compacte (dans le flux) */}
-                        <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[140px] flex flex-col justify-center items-center transition-all duration-300">
-                          <h3 className="text-lg font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-3 text-center">
-                            STA Token
-                          </h3>
-                          <div className="relative w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32">
-                            <Image
-                              src="/images/landing/sta-token.png"
-                              alt="STA Token"
-                              fill
-                              className="object-contain"
-                              sizes="(max-width: 640px) 96px, (max-width: 1024px) 112px, 128px"
-                            />
-                          </div>
-                        </div>
-                        {/* Overlay (hors flux) */}
-                        <div className="absolute left-0 top-0 w-full bg-[#121212] border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.08] group-focus-within:scale-[1.08] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20 shadow-xl">
-                          <h3 className="text-lg font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-3 text-center">
-                            STA Token
-                          </h3>
-                          <div className="relative w-28 h-28 mb-3 mx-auto">
-                            <Image
-                              src="/images/landing/sta-token.png"
-                              alt="STA Token"
-                              fill
-                              className="object-contain"
-                              sizes="112px"
-                            />
-                          </div>
-                          <p className="text-white/70 text-sm leading-relaxed">
-                            The protocol&apos;s native token used across the ecosystem for governance and incentives as described in the documentation.
-                          </p>
-                        </div>
-                      </div>
-                    </Reveal>
-
-                    {/* Card 3: Hypercore Execution */}
-                    <Reveal delayMs={160}>
-                      <div className="group relative focus-within:outline-none focus-visible:outline-2 focus-visible:outline-[#EF9B13] focus-visible:outline-offset-2 rounded-lg" tabIndex={0}>
-                        {/* Carte compacte (dans le flux) */}
-                        <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[140px] flex flex-col justify-center items-center transition-all duration-300">
-                          <h3 className="text-lg font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-3 text-center">
-                            Hypercore Execution
-                          </h3>
-                          <div className="relative w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32">
-                            <Image
-                              src="/images/landing/hypercore-execution.png"
-                              alt="Hypercore Execution"
-                              fill
-                              className="object-contain"
-                              sizes="(max-width: 640px) 96px, (max-width: 1024px) 112px, 128px"
-                            />
-                          </div>
-                        </div>
-                        {/* Overlay (hors flux) */}
-                        <div className="absolute left-0 top-0 w-full bg-[#121212] border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.08] group-focus-within:scale-[1.08] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20 shadow-xl">
-                          <h3 className="text-lg font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-3 text-center">
-                            Hypercore Execution
-                          </h3>
-                          <div className="relative w-28 h-28 mb-3 mx-auto">
-                            <Image
-                              src="/images/landing/hypercore-execution.png"
-                              alt="Hypercore Execution"
-                              fill
-                              className="object-contain"
-                              sizes="112px"
-                            />
-                          </div>
-                          <p className="text-white/70 text-sm leading-relaxed">
-                            Execution layer designed for efficient on-chain operations, optimizing routing and execution characteristics for strategy implementation.
-                          </p>
-                        </div>
-                      </div>
-                    </Reveal>
-                  </div>
-
-                  {/* Row 2: 2 cartes centrées en quinconce */}
-                  <div className="mt-6 flex justify-center lg:pl-16 overflow-visible">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-4xl overflow-visible">
-                      {/* Card 4: Rewarding */}
-                      <Reveal delayMs={240}>
-                        <div className="group relative focus-within:outline-none focus-visible:outline-2 focus-visible:outline-[#EF9B13] focus-visible:outline-offset-2 rounded-lg" tabIndex={0}>
-                          {/* Carte compacte (dans le flux) */}
-                          <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[140px] flex flex-col justify-center items-center transition-all duration-300">
-                            <h3 className="text-lg font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-3 text-center">
-                              Rewarding
-                            </h3>
-                            <div className="relative w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32">
-                              <Image
-                                src="/images/landing/rewarding.png"
-                                alt="Rewarding"
-                                fill
-                                className="object-contain"
-                                sizes="(max-width: 640px) 96px, (max-width: 1024px) 112px, 128px"
-                              />
-                            </div>
-                          </div>
-                          {/* Overlay (hors flux) */}
-                          <div className="absolute left-0 top-0 w-full bg-[#121212] border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.08] group-focus-within:scale-[1.08] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20 shadow-xl">
-                            <h3 className="text-lg font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-3 text-center">
-                              Rewarding
-                            </h3>
-                            <div className="relative w-28 h-28 mb-3 mx-auto">
-                              <Image
-                                src="/images/landing/rewarding.png"
-                                alt="Rewarding"
-                                fill
-                                className="object-contain"
-                                sizes="112px"
-                              />
-                            </div>
-                            <p className="text-white/70 text-sm leading-relaxed">
-                              Participation-based rewards tied to protocol mechanics, including staking and usage incentives as documented.
-                            </p>
-                          </div>
-                        </div>
-                      </Reveal>
-
-                      {/* Card 5: Strategy */}
-                      <Reveal delayMs={320}>
-                        <div className="group relative focus-within:outline-none focus-visible:outline-2 focus-visible:outline-[#EF9B13] focus-visible:outline-offset-2 rounded-lg" tabIndex={0}>
-                          {/* Carte compacte (dans le flux) */}
-                          <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[140px] flex flex-col justify-center items-center transition-all duration-300">
-                            <h3 className="text-lg font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-3 text-center">
-                              Strategy
-                            </h3>
-                            <div className="relative w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32">
-                              <Image
-                                src="/images/landing/strategy.png"
-                                alt="Strategy"
-                                fill
-                                className="object-contain"
-                                sizes="(max-width: 640px) 96px, (max-width: 1024px) 112px, 128px"
-                              />
-                            </div>
-                          </div>
-                          {/* Overlay (hors flux) */}
-                          <div className="absolute left-0 top-0 w-full bg-[#121212] border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.08] group-focus-within:scale-[1.08] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20 shadow-xl">
-                            <h3 className="text-lg font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-3 text-center">
-                              Strategy
-                            </h3>
-                            <div className="relative w-28 h-28 mb-3 mx-auto">
-                              <Image
-                                src="/images/landing/strategy.png"
-                                alt="Strategy"
-                                fill
-                                className="object-contain"
-                                sizes="112px"
-                              />
-                            </div>
-                            <p className="text-white/70 text-sm leading-relaxed">
-                              Each vault follows a defined strategy with target exposures and rules. The strategy governs rebalancing behavior and how deposits are managed over time. Choose based on your preferred risk profile and allocation.
-                            </p>
-                          </div>
-                        </div>
-                      </Reveal>
+              <div className="mt-16 sm:mt-20 py-16 sm:py-20">
+                <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+                  {/* Part A: Headline + Subheadline */}
+                  <Reveal delayMs={0}>
+                    <div className="text-center mb-12 sm:mb-16">
+                      <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-4">
+                        Web3 investing, simplified and optimized.
+                      </h2>
+                      <p className="text-lg sm:text-xl text-white/70 max-w-3xl mx-auto">
+                        Statera turns DeFi complexity into a streamlined, accessible experience.
+                      </p>
                     </div>
+                  </Reveal>
+
+                  {/* Part B: Short narrative */}
+                  <div className="space-y-8 sm:space-y-12 mb-16 sm:mb-20">
+                    {/* Block 1 */}
+                    <Reveal delayMs={80}>
+                      <div className="max-w-4xl mx-auto">
+                        <h3 className="text-2xl sm:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-4">
+                          A unified investment experience
+                        </h3>
+                        <p className="text-base sm:text-lg text-white/70 leading-relaxed">
+                          Statera Index combines DeFi execution with a simple interface. Deposit into strategies that manage positions automatically, providing access to diversified exposure through a single transaction.
+                        </p>
+                      </div>
+                    </Reveal>
+
+                    {/* Block 2 */}
+                    <Reveal delayMs={160}>
+                      <div className="max-w-4xl mx-auto">
+                        <h3 className="text-2xl sm:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-4">
+                          An intelligent protocol layer
+                        </h3>
+                        <p className="text-base sm:text-lg text-white/70 leading-relaxed">
+                          The protocol manages positions automatically according to strategy rules, designed to improve efficiency and manage risk. Rebalancing occurs when allocations deviate from targets, keeping strategies aligned with their intended exposures.
+                        </p>
+                      </div>
+                    </Reveal>
+                  </div>
+
+                  {/* Part C: Why Statera? */}
+                  <Reveal delayMs={220}>
+                    <h3 className="text-2xl sm:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] text-center mb-8 sm:mb-12">
+                      Why Statera?
+                    </h3>
+                  </Reveal>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+                    {/* Item 1 */}
+                    <Reveal delayMs={280}>
+                      <div className="border-t border-white/10 pt-6">
+                        <div className="h-[2px] w-8 bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-4"></div>
+                        <h4 className="text-xl font-semibold text-white mb-3">
+                          One deposit, diversified exposure
+                        </h4>
+                        <p className="text-white/70 text-sm sm:text-base leading-relaxed">
+                          A single deposit provides access to an index-style portfolio designed to stay aligned with its target allocation.
+                        </p>
+                      </div>
+                    </Reveal>
+
+                    {/* Item 2 */}
+                    <Reveal delayMs={360}>
+                      <div className="border-t border-white/10 pt-6">
+                        <div className="h-[2px] w-8 bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-4"></div>
+                        <h4 className="text-xl font-semibold text-white mb-3">
+                          Adaptive by design
+                        </h4>
+                        <p className="text-white/70 text-sm sm:text-base leading-relaxed">
+                          Strategy logic and rebalancing are designed to respond to market moves while keeping risk constraints in view.
+                        </p>
+                      </div>
+                    </Reveal>
+
+                    {/* Item 3 */}
+                    <Reveal delayMs={440}>
+                      <div className="border-t border-white/10 pt-6">
+                        <div className="h-[2px] w-8 bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-4"></div>
+                        <h4 className="text-xl font-semibold text-white mb-3">
+                          On-chain transparency
+                        </h4>
+                        <p className="text-white/70 text-sm sm:text-base leading-relaxed">
+                          Key operations are verifiable on-chain, enabling auditable execution and clear accounting.
+                        </p>
+                      </div>
+                    </Reveal>
                   </div>
                 </div>
-              </Reveal>
+              </div>
             </div>
           </Reveal>
         </div>

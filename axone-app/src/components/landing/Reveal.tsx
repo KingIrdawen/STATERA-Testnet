@@ -31,12 +31,12 @@ export function Reveal({ children, delayMs = 0, className = '' }: RevealProps) {
   return (
     <div
       ref={ref}
-      className={`transition-all duration-700 ease-out ${
+      className={`transition-all duration-500 ease-out ${
         shouldAnimate && !prefersReducedMotion
           ? 'opacity-100 translate-y-0'
           : prefersReducedMotion
           ? 'opacity-100'
-          : 'opacity-0 translate-y-3'
+          : 'opacity-0 translate-y-6'
       } ${className}`}
     >
       {children}
