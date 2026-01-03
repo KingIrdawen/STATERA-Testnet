@@ -40,6 +40,13 @@ export default function DocsTokenAxnAlignmentPage() {
           <p className="text-white leading-relaxed font-semibold">
             It is <strong>proof of commitment</strong>—and a reward for those who choose to build with us.
           </p>
+          <div className="flex justify-center my-8">
+            <img 
+              src="/images/docs/sphere-centrale-lignes-energetiques.png" 
+              alt="Sphère centrale et lignes énergétiques" 
+              className="max-w-full h-auto rounded-lg"
+            />
+          </div>
         </section>
       </div>
     </div>
