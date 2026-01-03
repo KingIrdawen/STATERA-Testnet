@@ -90,7 +90,7 @@ export default function Home() {
             <div className="text-center">
               <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-4 sm:mb-6">
                 <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
-                  Statera
+                  STATERA
                 </span>
               </h2>
               
@@ -239,7 +239,7 @@ export default function Home() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
                     {/* Item 1 */}
                     <Reveal delayMs={280}>
-                      <div className="border-t border-white/10 pt-6">
+                      <div className="bg-white/5 border border-white/10 rounded-lg p-6">
                         <div className="h-[2px] w-8 bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-4"></div>
                         <h4 className="text-xl font-semibold text-white mb-3">
                           One deposit, diversified exposure
@@ -252,7 +252,7 @@ export default function Home() {
 
                     {/* Item 2 */}
                     <Reveal delayMs={360}>
-                      <div className="border-t border-white/10 pt-6">
+                      <div className="bg-white/5 border border-white/10 rounded-lg p-6">
                         <div className="h-[2px] w-8 bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-4"></div>
                         <h4 className="text-xl font-semibold text-white mb-3">
                           Adaptive by design
@@ -265,7 +265,7 @@ export default function Home() {
 
                     {/* Item 3 */}
                     <Reveal delayMs={440}>
-                      <div className="border-t border-white/10 pt-6">
+                      <div className="bg-white/5 border border-white/10 rounded-lg p-6">
                         <div className="h-[2px] w-8 bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-4"></div>
                         <h4 className="text-xl font-semibold text-white mb-3">
                           On-chain transparency
