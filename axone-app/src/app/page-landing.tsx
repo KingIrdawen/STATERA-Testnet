@@ -209,7 +209,7 @@ export default function Home() {
                           </h3>
                         </div>
                         {/* Overlay (hors flux) */}
-                        <div className="absolute inset-0 bg-white/5 border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.03] group-focus-within:scale-[1.03] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20">
+                        <div className="absolute left-0 top-0 w-full min-h-[180px] bg-white/5 border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.05] group-focus-within:scale-[1.05] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20">
                           <h3 className="text-lg font-medium text-white mb-3">
                             Smart Rebalancing
                           </h3>
@@ -230,7 +230,7 @@ export default function Home() {
                           </h3>
                         </div>
                         {/* Overlay (hors flux) */}
-                        <div className="absolute inset-0 bg-white/5 border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.03] group-focus-within:scale-[1.03] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20">
+                        <div className="absolute left-0 top-0 w-full min-h-[180px] bg-white/5 border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.05] group-focus-within:scale-[1.05] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20">
                           <h3 className="text-lg font-medium text-white mb-3">
                             STA Token
                           </h3>
@@ -251,7 +251,7 @@ export default function Home() {
                           </h3>
                         </div>
                         {/* Overlay (hors flux) */}
-                        <div className="absolute inset-0 bg-white/5 border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.03] group-focus-within:scale-[1.03] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20">
+                        <div className="absolute left-0 top-0 w-full min-h-[180px] bg-white/5 border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.05] group-focus-within:scale-[1.05] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20">
                           <h3 className="text-lg font-medium text-white mb-3">
                             Hypercore Execution
                           </h3>
@@ -276,7 +276,7 @@ export default function Home() {
                             </h3>
                           </div>
                           {/* Overlay (hors flux) */}
-                          <div className="absolute inset-0 bg-white/5 border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.03] group-focus-within:scale-[1.03] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20">
+                          <div className="absolute left-0 top-0 w-full min-h-[180px] bg-white/5 border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.05] group-focus-within:scale-[1.05] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20">
                             <h3 className="text-lg font-medium text-white mb-3">
                               Rewarding
                             </h3>
@@ -297,7 +297,7 @@ export default function Home() {
                             </h3>
                           </div>
                           {/* Overlay (hors flux) */}
-                          <div className="absolute inset-0 bg-white/5 border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.03] group-focus-within:scale-[1.03] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20">
+                          <div className="absolute left-0 top-0 w-full min-h-[180px] bg-white/5 border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.05] group-focus-within:scale-[1.05] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20">
                             <h3 className="text-lg font-medium text-white mb-3">
                               Referral
                             </h3>
