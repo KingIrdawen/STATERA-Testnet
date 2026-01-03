@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function HyperUnitPage() {
   return (
@@ -54,11 +55,17 @@ export default function HyperUnitPage() {
           </p>
 
           <div className="flex justify-center my-8">
-            <img 
-              src="/images/docs/protocole-statera-token-era1.png" 
-              alt="Protocole Statera et Token ERA1" 
-              className="max-w-full h-auto rounded-lg"
-            />
+            <div className="relative w-full max-w-4xl rounded-lg overflow-hidden">
+              <Image 
+                src="/images/docs/protocole-statera-token-era1.png" 
+                alt="Protocole Statera et Token ERA1" 
+                width={1200}
+                height={800}
+                className="rounded-lg"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                quality={90}
+              />
+            </div>
           </div>
         </section>
       </div>

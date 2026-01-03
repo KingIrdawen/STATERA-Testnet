@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function DocsRoadmapPage() {
   return (
@@ -23,11 +24,17 @@ export default function DocsRoadmapPage() {
       <div className="prose prose-invert max-w-none">
         <section>
           <div className="flex justify-center my-8">
-            <img 
-              src="/images/docs/evenements-cles-statera-token-tge.png" 
-              alt="Événements clés de Statera Token TGE" 
-              className="max-w-full h-auto rounded-lg"
-            />
+            <div className="relative w-full max-w-4xl rounded-lg overflow-hidden">
+              <Image 
+                src="/images/docs/evenements-cles-statera-token-tge.png" 
+                alt="Événements clés de Statera Token TGE" 
+                width={1200}
+                height={800}
+                className="rounded-lg"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                quality={90}
+              />
+            </div>
           </div>
         </section>
       </div>

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function DocsLockVaultsPage() {
   return (
@@ -50,11 +51,17 @@ export default function DocsLockVaultsPage() {
             <li>Their share in the vault</li>
           </ul>
           <div className="flex justify-center my-8">
-            <img 
-              src="/images/docs/staking-strategique-era-sta.png" 
-              alt="Staking stratégique avec ERA et STA" 
-              className="max-w-full h-auto rounded-lg"
-            />
+            <div className="relative w-full max-w-4xl rounded-lg overflow-hidden">
+              <Image 
+                src="/images/docs/staking-strategique-era-sta.png" 
+                alt="Staking stratégique avec ERA et STA" 
+                width={1200}
+                height={800}
+                className="rounded-lg"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                quality={90}
+              />
+            </div>
           </div>
           </section>
 
@@ -134,11 +141,17 @@ export default function DocsLockVaultsPage() {
           </p>
 
           <div className="flex justify-center my-8">
-            <img 
-              src="/images/docs/strategie-statera-rendement-alice.png" 
-              alt="Stratégie Statera et rendement d'Alice" 
-              className="max-w-full h-auto rounded-lg"
-            />
+            <div className="relative w-full max-w-4xl rounded-lg overflow-hidden">
+              <Image 
+                src="/images/docs/strategie-statera-rendement-alice.png" 
+                alt="Stratégie Statera et rendement d'Alice" 
+                width={1200}
+                height={800}
+                className="rounded-lg"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                quality={90}
+              />
+            </div>
           </div>
 
           <h3 className="text-xl font-bold text-white mb-4 mt-6">🔹 Alice withdraws after 12 months – Revalued index value</h3>

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function DocsProtocolPage() {
   return (
@@ -23,11 +24,17 @@ export default function DocsProtocolPage() {
             The Statera Protocol section covers the core concepts and innovations that power the platform.
           </p>
           <div className="flex justify-center my-8">
-            <img 
-              src="/images/docs/infographie-statera-protocol-indices-crypto-intelligents.png" 
-              alt="Infographie Statera Protocol - indices crypto intelligents" 
-              className="max-w-full h-auto rounded-lg"
-            />
+            <div className="relative w-full max-w-4xl rounded-lg overflow-hidden">
+              <Image 
+                src="/images/docs/infographie-statera-protocol-indices-crypto-intelligents.png" 
+                alt="Infographie Statera Protocol - indices crypto intelligents" 
+                width={1200}
+                height={800}
+                className="rounded-lg"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                quality={90}
+              />
+            </div>
           </div>
         </section>
       </div>

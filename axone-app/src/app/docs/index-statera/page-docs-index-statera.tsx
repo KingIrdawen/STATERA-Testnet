@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function DocsIndexStateraPage() {
   return (
@@ -44,11 +45,17 @@ export default function DocsIndexStateraPage() {
             <strong>Returns, peace of mind, and traceability</strong> — Statera delivers the <strong>smoothest Web3 investing experience.</strong>
           </p>
           <div className="flex justify-center my-8">
-            <img 
-              src="/images/docs/investissez-indices-crypto-intelligents.png" 
-              alt="Investissez dans des indices crypto intelligents" 
-              className="max-w-full h-auto rounded-lg"
-            />
+            <div className="relative w-full max-w-4xl rounded-lg overflow-hidden">
+              <Image 
+                src="/images/docs/investissez-indices-crypto-intelligents.png" 
+                alt="Investissez dans des indices crypto intelligents" 
+                width={1200}
+                height={800}
+                className="rounded-lg"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                quality={90}
+              />
+            </div>
           </div>
         </section>
       </div>

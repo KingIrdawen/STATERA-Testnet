@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function DocsTokenAxnAlignmentPage() {
   return (
@@ -41,11 +42,17 @@ export default function DocsTokenAxnAlignmentPage() {
             It is <strong>proof of commitment</strong>—and a reward for those who choose to build with us.
           </p>
           <div className="flex justify-center my-8">
-            <img 
-              src="/images/docs/sphere-centrale-lignes-energetiques.png" 
-              alt="Sphère centrale et lignes énergétiques" 
-              className="max-w-full h-auto rounded-lg"
-            />
+            <div className="relative w-full max-w-4xl rounded-lg overflow-hidden">
+              <Image 
+                src="/images/docs/sphere-centrale-lignes-energetiques.png" 
+                alt="Sphère centrale et lignes énergétiques" 
+                width={1200}
+                height={800}
+                className="rounded-lg"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                quality={90}
+              />
+            </div>
           </div>
         </section>
       </div>
