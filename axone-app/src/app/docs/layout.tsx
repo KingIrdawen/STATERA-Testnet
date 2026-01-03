@@ -89,7 +89,7 @@ export default function DocsLayout({
         {/* Sidebar */}
         <aside
           className={cn(
-            "fixed inset-y-0 left-0 z-[9998] w-80 bg-[#121212] p-6 overflow-y-auto md:static md:translate-x-0 transition-transform",
+            "fixed inset-y-0 left-0 z-[9998] w-80 bg-[#121212] p-6 overflow-y-auto md:fixed md:top-[80px] md:translate-x-0 transition-transform",
             sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
           )}
         >
@@ -130,7 +130,7 @@ export default function DocsLayout({
         </aside>
 
         {/* Contenu principal */}
-        <main className="flex-1 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-8">
+        <main className="flex-1 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-8 md:ml-80">
           <div className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
             <div className="prose prose-invert max-w-none">
               {children}
