@@ -10,7 +10,7 @@ const pagesOrder = [
   { slug: "/docs/mission", label: "Mission" },
   { slug: "/docs/vision-valeurs", label: "Vision and Values" },
   { slug: "/docs/token-axn-alignment", label: "The STA Token: Rewarding Alignment" },
-  { slug: "/docs/protocole", label: "Protocol" },
+  { slug: "/docs/protocol", label: "Protocol" },
   { slug: "/docs/index-statera", label: "What is a Statera Index?" },
   { slug: "/docs/smart-rebalancing", label: "Smart Rebalancing: The Core Innovation of Statera" },
   { slug: "/docs/hyperunit", label: "Statera x HyperUnit" },
