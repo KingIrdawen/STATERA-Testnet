@@ -186,6 +186,90 @@ export default function Home() {
                   Documentation
                 </Link>
               </div>
+
+              {/* How the protocol works */}
+              <Reveal delayMs={200}>
+                <div className="mt-16 sm:mt-20">
+                  <div className="text-center mb-8">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">How the protocol works</h2>
+                    <p className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto">
+                      A concise overview of the core building blocks behind Statera.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                    {/* Card 1: Smart Rebalancing */}
+                    <Reveal delayMs={0}>
+                      <div className="group bg-white/5 border border-white/10 rounded-lg p-6 transition-all duration-300 hover:scale-[1.03] hover:border-[#EF9B13]/50 hover:z-10 relative cursor-pointer focus-within:scale-[1.03] focus-within:border-[#EF9B13]/50 focus-within:z-10">
+                        <h3 className="text-lg font-medium text-white mb-0 group-hover:mb-3 group-focus-within:mb-3 transition-all duration-300">
+                          Smart Rebalancing
+                        </h3>
+                        <div className="overflow-hidden max-h-0 group-hover:max-h-96 group-focus-within:max-h-96 transition-all duration-300">
+                          <p className="text-white/70 text-sm leading-relaxed pt-2">
+                            Monitors target allocation and triggers rebalancing when deviations exceed predefined thresholds, keeping the index aligned over time.
+                          </p>
+                        </div>
+                      </div>
+                    </Reveal>
+
+                    {/* Card 2: STA Token */}
+                    <Reveal delayMs={80}>
+                      <div className="group bg-white/5 border border-white/10 rounded-lg p-6 transition-all duration-300 hover:scale-[1.03] hover:border-[#EF9B13]/50 hover:z-10 relative cursor-pointer focus-within:scale-[1.03] focus-within:border-[#EF9B13]/50 focus-within:z-10">
+                        <h3 className="text-lg font-medium text-white mb-0 group-hover:mb-3 group-focus-within:mb-3 transition-all duration-300">
+                          STA Token
+                        </h3>
+                        <div className="overflow-hidden max-h-0 group-hover:max-h-96 group-focus-within:max-h-96 transition-all duration-300">
+                          <p className="text-white/70 text-sm leading-relaxed pt-2">
+                            The protocol&apos;s native token used across the ecosystem for governance and incentives as described in the documentation.
+                          </p>
+                        </div>
+                      </div>
+                    </Reveal>
+
+                    {/* Card 3: Hypercore Execution */}
+                    <Reveal delayMs={160}>
+                      <div className="group bg-white/5 border border-white/10 rounded-lg p-6 transition-all duration-300 hover:scale-[1.03] hover:border-[#EF9B13]/50 hover:z-10 relative cursor-pointer focus-within:scale-[1.03] focus-within:border-[#EF9B13]/50 focus-within:z-10">
+                        <h3 className="text-lg font-medium text-white mb-0 group-hover:mb-3 group-focus-within:mb-3 transition-all duration-300">
+                          Hypercore Execution
+                        </h3>
+                        <div className="overflow-hidden max-h-0 group-hover:max-h-96 group-focus-within:max-h-96 transition-all duration-300">
+                          <p className="text-white/70 text-sm leading-relaxed pt-2">
+                            Execution layer designed for efficient on-chain operations, optimizing routing and execution characteristics for strategy implementation.
+                          </p>
+                        </div>
+                      </div>
+                    </Reveal>
+
+                    {/* Card 4: Rewarding */}
+                    <Reveal delayMs={240}>
+                      <div className="group bg-white/5 border border-white/10 rounded-lg p-6 transition-all duration-300 hover:scale-[1.03] hover:border-[#EF9B13]/50 hover:z-10 relative cursor-pointer focus-within:scale-[1.03] focus-within:border-[#EF9B13]/50 focus-within:z-10 sm:col-span-2 lg:col-span-1 lg:col-start-2">
+                        <h3 className="text-lg font-medium text-white mb-0 group-hover:mb-3 group-focus-within:mb-3 transition-all duration-300">
+                          Rewarding
+                        </h3>
+                        <div className="overflow-hidden max-h-0 group-hover:max-h-96 group-focus-within:max-h-96 transition-all duration-300">
+                          <p className="text-white/70 text-sm leading-relaxed pt-2">
+                            Participation-based rewards tied to protocol mechanics, including staking and usage incentives as documented.
+                          </p>
+                        </div>
+                      </div>
+                    </Reveal>
+
+                    {/* Card 5: Referral */}
+                    <Reveal delayMs={320}>
+                      <div className="group bg-white/5 border border-white/10 rounded-lg p-6 transition-all duration-300 hover:scale-[1.03] hover:border-[#EF9B13]/50 hover:z-10 relative cursor-pointer focus-within:scale-[1.03] focus-within:border-[#EF9B13]/50 focus-within:z-10 sm:col-span-2 lg:col-span-1 lg:col-start-3">
+                        <h3 className="text-lg font-medium text-white mb-0 group-hover:mb-3 group-focus-within:mb-3 transition-all duration-300">
+                          Referral
+                        </h3>
+                        <div className="overflow-hidden max-h-0 group-hover:max-h-96 group-focus-within:max-h-96 transition-all duration-300">
+                          <p className="text-white/70 text-sm leading-relaxed pt-2">
+                            Referral flow that lets users invite others and unlock benefits defined by the referral rules in the application.
+                          </p>
+                        </div>
+                      </div>
+                    </Reveal>
+                  </div>
+                </div>
+              </Reveal>
             </div>
           </Reveal>
         </div>
