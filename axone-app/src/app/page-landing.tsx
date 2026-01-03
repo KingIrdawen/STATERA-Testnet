@@ -198,18 +198,18 @@ export default function Home() {
                   </div>
 
                   {/* Row 1: 3 cartes */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto overflow-visible">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto overflow-visible">
                     {/* Card 1: Smart Rebalancing */}
                     <Reveal delayMs={0}>
                       <div className="group relative focus-within:outline-none focus-visible:outline-2 focus-visible:outline-[#EF9B13] focus-visible:outline-offset-2 rounded-lg" tabIndex={0}>
                         {/* Carte compacte (dans le flux) */}
-                        <div className="bg-white/5 border border-white/10 rounded-lg p-6 transition-all duration-300 group-hover:opacity-30 group-focus-within:opacity-30">
+                        <div className="bg-white/5 border border-white/10 rounded-lg p-6 h-[100px] flex items-center transition-all duration-300">
                           <h3 className="text-lg font-medium text-white">
                             Smart Rebalancing
                           </h3>
                         </div>
                         {/* Overlay (hors flux) */}
-                        <div className="absolute left-0 top-0 w-full min-h-[180px] bg-white/5 border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.05] group-focus-within:scale-[1.05] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20">
+                        <div className="absolute left-0 top-0 w-full bg-[#121212] border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.08] group-focus-within:scale-[1.08] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20 shadow-xl">
                           <h3 className="text-lg font-medium text-white mb-3">
                             Smart Rebalancing
                           </h3>
@@ -224,13 +224,13 @@ export default function Home() {
                     <Reveal delayMs={80}>
                       <div className="group relative focus-within:outline-none focus-visible:outline-2 focus-visible:outline-[#EF9B13] focus-visible:outline-offset-2 rounded-lg" tabIndex={0}>
                         {/* Carte compacte (dans le flux) */}
-                        <div className="bg-white/5 border border-white/10 rounded-lg p-6 transition-all duration-300 group-hover:opacity-30 group-focus-within:opacity-30">
+                        <div className="bg-white/5 border border-white/10 rounded-lg p-6 h-[100px] flex items-center transition-all duration-300">
                           <h3 className="text-lg font-medium text-white">
                             STA Token
                           </h3>
                         </div>
                         {/* Overlay (hors flux) */}
-                        <div className="absolute left-0 top-0 w-full min-h-[180px] bg-white/5 border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.05] group-focus-within:scale-[1.05] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20">
+                        <div className="absolute left-0 top-0 w-full bg-[#121212] border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.08] group-focus-within:scale-[1.08] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20 shadow-xl">
                           <h3 className="text-lg font-medium text-white mb-3">
                             STA Token
                           </h3>
@@ -245,13 +245,13 @@ export default function Home() {
                     <Reveal delayMs={160}>
                       <div className="group relative focus-within:outline-none focus-visible:outline-2 focus-visible:outline-[#EF9B13] focus-visible:outline-offset-2 rounded-lg" tabIndex={0}>
                         {/* Carte compacte (dans le flux) */}
-                        <div className="bg-white/5 border border-white/10 rounded-lg p-6 transition-all duration-300 group-hover:opacity-30 group-focus-within:opacity-30">
+                        <div className="bg-white/5 border border-white/10 rounded-lg p-6 h-[100px] flex items-center transition-all duration-300">
                           <h3 className="text-lg font-medium text-white">
                             Hypercore Execution
                           </h3>
                         </div>
                         {/* Overlay (hors flux) */}
-                        <div className="absolute left-0 top-0 w-full min-h-[180px] bg-white/5 border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.05] group-focus-within:scale-[1.05] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20">
+                        <div className="absolute left-0 top-0 w-full bg-[#121212] border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.08] group-focus-within:scale-[1.08] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20 shadow-xl">
                           <h3 className="text-lg font-medium text-white mb-3">
                             Hypercore Execution
                           </h3>
@@ -264,19 +264,19 @@ export default function Home() {
                   </div>
 
                   {/* Row 2: 2 cartes centrées en quinconce */}
-                  <div className="mt-4 flex justify-center lg:pl-16 overflow-visible">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-4xl overflow-visible">
+                  <div className="mt-6 flex justify-center lg:pl-16 overflow-visible">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-4xl overflow-visible">
                       {/* Card 4: Rewarding */}
                       <Reveal delayMs={240}>
                         <div className="group relative focus-within:outline-none focus-visible:outline-2 focus-visible:outline-[#EF9B13] focus-visible:outline-offset-2 rounded-lg" tabIndex={0}>
                           {/* Carte compacte (dans le flux) */}
-                          <div className="bg-white/5 border border-white/10 rounded-lg p-6 transition-all duration-300 group-hover:opacity-30 group-focus-within:opacity-30">
+                          <div className="bg-white/5 border border-white/10 rounded-lg p-6 h-[100px] flex items-center transition-all duration-300">
                             <h3 className="text-lg font-medium text-white">
                               Rewarding
                             </h3>
                           </div>
                           {/* Overlay (hors flux) */}
-                          <div className="absolute left-0 top-0 w-full min-h-[180px] bg-white/5 border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.05] group-focus-within:scale-[1.05] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20">
+                          <div className="absolute left-0 top-0 w-full bg-[#121212] border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.08] group-focus-within:scale-[1.08] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20 shadow-xl">
                             <h3 className="text-lg font-medium text-white mb-3">
                               Rewarding
                             </h3>
@@ -291,13 +291,13 @@ export default function Home() {
                       <Reveal delayMs={320}>
                         <div className="group relative focus-within:outline-none focus-visible:outline-2 focus-visible:outline-[#EF9B13] focus-visible:outline-offset-2 rounded-lg" tabIndex={0}>
                           {/* Carte compacte (dans le flux) */}
-                          <div className="bg-white/5 border border-white/10 rounded-lg p-6 transition-all duration-300 group-hover:opacity-30 group-focus-within:opacity-30">
+                          <div className="bg-white/5 border border-white/10 rounded-lg p-6 h-[100px] flex items-center transition-all duration-300">
                             <h3 className="text-lg font-medium text-white">
                               Referral
                             </h3>
                           </div>
                           {/* Overlay (hors flux) */}
-                          <div className="absolute left-0 top-0 w-full min-h-[180px] bg-white/5 border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.05] group-focus-within:scale-[1.05] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20">
+                          <div className="absolute left-0 top-0 w-full bg-[#121212] border border-white/10 rounded-lg p-6 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-100 group-hover:scale-[1.08] group-focus-within:scale-[1.08] group-hover:border-[#EF9B13]/50 group-focus-within:border-[#EF9B13]/50 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto z-20 shadow-xl">
                             <h3 className="text-lg font-medium text-white mb-3">
                               Referral
                             </h3>
