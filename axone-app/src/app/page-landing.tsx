@@ -74,7 +74,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="py-16 sm:py-20 lg:py-24 relative">
         {/* Logo background */}
-        <div className="absolute inset-x-0 top-[45%] flex items-center justify-center pointer-events-none z-0 -translate-y-1/2">
+        <div className="absolute inset-x-0 top-24 sm:top-28 flex items-center justify-center pointer-events-none z-0">
           <Image
             src="/Logo-Statera-sandy-brown-détouré.png"
             alt="Statera Logo"
@@ -105,7 +105,7 @@ export default function Home() {
                 }
                 .statera-shimmer {
                   background-size: 200% 100%;
-                  animation: shimmer 5s infinite;
+                  animation: shimmer 1.5s infinite;
                 }
               `}</style>
               
