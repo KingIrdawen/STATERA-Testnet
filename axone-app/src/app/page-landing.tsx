@@ -73,7 +73,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="py-16 sm:py-20 lg:py-24 relative">
         {/* Logo background */}
-        <div className="absolute inset-x-0 top-[60%] flex items-center justify-center pointer-events-none z-0 -translate-y-1/2">
+        <div className="absolute inset-x-0 top-[45%] flex items-center justify-center pointer-events-none z-0 -translate-y-1/2">
           <Image
             src="/Logo-Statera-sandy-brown-détouré.png"
             alt="Statera Logo"
@@ -89,10 +89,24 @@ export default function Home() {
           <Reveal>
             <div className="text-center">
               <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-4 sm:mb-6">
-                <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent relative inline-block statera-shimmer">
                   STATERA
                 </span>
               </h2>
+              <style jsx global>{`
+                @keyframes shimmer {
+                  0%, 90%, 100% {
+                    background-position: -200% center;
+                  }
+                  5%, 85% {
+                    background-position: 200% center;
+                  }
+                }
+                .statera-shimmer {
+                  background-size: 200% 100%;
+                  animation: shimmer 5s infinite;
+                }
+              `}</style>
               
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 sm:mb-8">
                 <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
