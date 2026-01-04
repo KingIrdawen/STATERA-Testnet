@@ -188,13 +188,26 @@ export default function Home() {
                 </Link>
               </div>
 
+              {/* The art of Volatility */}
+              <div className="py-24 sm:py-32">
+                <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+                  <Reveal delayMs={0}>
+                    <div className="text-center">
+                      <p className="text-2xl sm:text-3xl md:text-4xl italic text-white/80">
+                        "The art of Volatility"
+                      </p>
+                    </div>
+                  </Reveal>
+                </div>
+              </div>
+
               {/* How the protocol works */}
               <div className="py-16 sm:py-20">
                 <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
                   {/* Part A: Headline + Subheadline */}
                   <Reveal delayMs={0}>
                     <div className="text-center mb-12 sm:mb-16">
-                      <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-4">
+                      <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-4 leading-relaxed">
                         Web3 investing, simplified and optimized.
                       </h2>
                       <p className="text-lg sm:text-xl text-white/70 max-w-3xl mx-auto">
@@ -428,7 +441,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <Reveal delayMs={200}>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[240px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
                 <h3 className="text-xl font-bold text-[#EF9B13] mb-4">Vault Fees</h3>
                 <p className="text-white font-medium mb-2">
                   Deposit, withdrawal, and management fees
@@ -440,7 +453,7 @@ export default function Home() {
             </Reveal>
 
             <Reveal delayMs={300}>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[240px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
                 <h3 className="text-xl font-bold text-[#EF9B13] mb-4">External Fees</h3>
                 <p className="text-white font-medium mb-2">
                   Network and execution costs
