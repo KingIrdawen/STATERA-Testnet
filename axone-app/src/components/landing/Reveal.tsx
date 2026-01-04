@@ -31,7 +31,7 @@ export function Reveal({ children, delayMs = 0, className = '' }: RevealProps) {
   return (
     <div
       ref={ref}
-      className={`transition-all duration-800 ease-out ${
+      className={`transition-all duration-[1800ms] ease-out ${
         shouldAnimate && !prefersReducedMotion
           ? 'opacity-100 translate-y-0'
           : prefersReducedMotion
