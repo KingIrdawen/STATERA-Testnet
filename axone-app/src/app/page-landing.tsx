@@ -318,11 +318,11 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Reveal delayMs={200}>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#EF9B13] to-[#FAB062] flex items-center justify-center text-[#121212] font-bold text-xl mb-4">
                   1
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">Deposit</h3>
+                <h3 className="text-lg font-bold text-[#EF9B13] mb-2">Deposit</h3>
                 <p className="text-gray-400 text-sm">
                   Deposit HYPE into a strategy vault. Your funds remain in your control—non-custodial and on-chain.
                 </p>
@@ -330,11 +330,11 @@ export default function Home() {
             </Reveal>
 
             <Reveal delayMs={300}>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#EF9B13] to-[#FAB062] flex items-center justify-center text-[#121212] font-bold text-xl mb-4">
                   2
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">Vault Shares</h3>
+                <h3 className="text-lg font-bold text-[#EF9B13] mb-2">Vault Shares</h3>
                 <p className="text-gray-400 text-sm">
                   Receive vault shares representing your position. Shares are ERC20 tokens you can transfer or stake.
                 </p>
@@ -342,11 +342,11 @@ export default function Home() {
             </Reveal>
 
             <Reveal delayMs={400}>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#EF9B13] to-[#FAB062] flex items-center justify-center text-[#121212] font-bold text-xl mb-4">
                   3
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">Rebalancing</h3>
+                <h3 className="text-lg font-bold text-[#EF9B13] mb-2">Rebalancing</h3>
                 <p className="text-gray-400 text-sm">
                   Strategies automatically rebalance hourly to optimize allocations and capture market opportunities.
                 </p>
@@ -354,11 +354,11 @@ export default function Home() {
             </Reveal>
 
             <Reveal delayMs={500}>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#EF9B13] to-[#FAB062] flex items-center justify-center text-[#121212] font-bold text-xl mb-4">
                   4
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">Transparency</h3>
+                <h3 className="text-lg font-bold text-[#EF9B13] mb-2">Transparency</h3>
                 <p className="text-gray-400 text-sm">
                   All positions, rebalancing, and fees are recorded on-chain. View your strategy's performance in real-time.
                 </p>
@@ -382,8 +382,8 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Reveal delayMs={200}>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-                <h3 className="text-xl font-bold text-white mb-3">Continuous Monitoring</h3>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[220px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-[#EF9B13] mb-3">Continuous Monitoring</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">
                   Strategies are monitored hourly to track market conditions and portfolio allocations. 
                   Real-time data ensures positions remain aligned with target allocations.
@@ -392,8 +392,8 @@ export default function Home() {
             </Reveal>
 
             <Reveal delayMs={300}>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-                <h3 className="text-xl font-bold text-white mb-3">Threshold-Based Execution</h3>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[220px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-[#EF9B13] mb-3">Threshold-Based Execution</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">
                   Rebalancing occurs when allocations deviate beyond predefined thresholds. 
                   This approach minimizes unnecessary transactions while maintaining target exposure.
@@ -402,8 +402,8 @@ export default function Home() {
             </Reveal>
 
             <Reveal delayMs={400}>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-                <h3 className="text-xl font-bold text-white mb-3">Execution Advantages</h3>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[220px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-[#EF9B13] mb-3">Execution Advantages</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">
                   Leveraging Hyperliquid's decentralized order book and high-performance infrastructure, 
                   rebalancing executes with minimal slippage, low fees, and instant settlement.
@@ -428,8 +428,8 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <Reveal delayMs={200}>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-                <h3 className="text-xl font-bold text-white mb-4">Vault Fees</h3>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[240px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-[#EF9B13] mb-4">Vault Fees</h3>
                 <ul className="space-y-3 text-gray-400 text-sm">
                   <li className="flex items-start">
                     <span className="text-[#FAB062] mr-2">•</span>
@@ -448,8 +448,8 @@ export default function Home() {
             </Reveal>
 
             <Reveal delayMs={300}>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-                <h3 className="text-xl font-bold text-white mb-4">External Fees</h3>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[240px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-[#EF9B13] mb-4">External Fees</h3>
                 <ul className="space-y-3 text-gray-400 text-sm">
                   <li className="flex items-start">
                     <span className="text-[#FAB062] mr-2">•</span>
@@ -480,8 +480,8 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Reveal delayMs={200}>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-                <h3 className="text-xl font-bold text-white mb-3">Strategies</h3>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-[#EF9B13] mb-3">Strategies</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">
                   Users deposit into on-chain vaults implementing predefined strategies. 
                   Vaults manage exposure and rebalancing automatically. Performance and risk are strategy-dependent.
@@ -490,8 +490,8 @@ export default function Home() {
             </Reveal>
 
             <Reveal delayMs={300}>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-                <h3 className="text-xl font-bold text-white mb-3">Dashboard</h3>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-[#EF9B13] mb-3">Dashboard</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">
                   Central interface to monitor deposits, NAV, performance, and positions. 
                   Real-time on-chain data and strategy metrics provide full transparency.
@@ -500,8 +500,8 @@ export default function Home() {
             </Reveal>
 
             <Reveal delayMs={400}>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-                <h3 className="text-xl font-bold text-white mb-3">Swap</h3>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-[#EF9B13] mb-3">Swap</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">
                   Interface to swap supported assets. Used to enter or rebalance positions within the ecosystem.
                 </p>
@@ -509,8 +509,8 @@ export default function Home() {
             </Reveal>
 
             <Reveal delayMs={500}>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-                <h3 className="text-xl font-bold text-white mb-3">Staking</h3>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-[#EF9B13] mb-3">Staking</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">
                   Stake protocol-related tokens. Earn rewards as defined by the protocol mechanics.
                 </p>
@@ -518,8 +518,8 @@ export default function Home() {
             </Reveal>
 
             <Reveal delayMs={600}>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-                <h3 className="text-xl font-bold text-white mb-3">Referral</h3>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-[#EF9B13] mb-3">Referral</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">
                   Referral system allowing users to invite others. Rewards or benefits follow the rules 
                   defined in the referral contracts.
@@ -541,8 +541,8 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <Reveal delayMs={200}>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-                <h3 className="text-xl font-bold text-white mb-3">Non-Custodial</h3>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[180px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-[#EF9B13] mb-3">Non-Custodial</h3>
                 <p className="text-gray-400">
                   Your funds never leave your wallet. Vault shares are ERC20 tokens you control. Withdraw at any time.
                 </p>
@@ -550,8 +550,8 @@ export default function Home() {
             </Reveal>
 
             <Reveal delayMs={300}>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-                <h3 className="text-xl font-bold text-white mb-3">On-Chain Accounting</h3>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[180px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-[#EF9B13] mb-3">On-Chain Accounting</h3>
                 <p className="text-gray-400">
                   All deposits, withdrawals, and rebalancing operations are recorded on-chain. Verify everything via block explorer.
                 </p>
