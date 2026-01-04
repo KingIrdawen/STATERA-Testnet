@@ -1,6 +1,6 @@
 {
   "regions": ["iad1"],
-  "installCommand": "pnpm install --no-frozen-lockfile",
+  "installCommand": "corepack enable && pnpm install --no-frozen-lockfile",
   "buildCommand": "pnpm run build",
   "crons": [
     {

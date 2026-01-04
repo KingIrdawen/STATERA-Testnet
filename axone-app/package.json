@@ -2,7 +2,12 @@
   "name": "statera-app",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20 <21"
+  },
+  "packageManager": "pnpm@10.10.0",
   "scripts": {
+    "preinstall": "corepack enable",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
