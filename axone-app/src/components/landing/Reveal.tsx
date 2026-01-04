@@ -12,8 +12,9 @@ interface RevealProps {
 export function Reveal({ children, delayMs = 0, className = '' }: RevealProps) {
   const [hasAnimated, setHasAnimated] = useState(false);
   const { ref, inView } = useInView({
-    threshold: 0.1,
+    threshold: 0.05,
     triggerOnce: true,
+    rootMargin: '100px 0px',
   });
 
   useEffect(() => {

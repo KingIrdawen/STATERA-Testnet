@@ -189,7 +189,7 @@ export default function Home() {
               </div>
 
               {/* The art of Volatility */}
-              <div className="py-24 sm:py-32">
+              <div className="py-16 sm:py-20">
                 <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
                   <Reveal delayMs={0}>
                     <div className="text-center">
