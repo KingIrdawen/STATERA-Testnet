@@ -33,16 +33,22 @@ const features: FeatureCard[] = [
 ];
 
 export function WhyStateraMarquee() {
-  // Duplicate features for seamless loop
-  const duplicatedFeatures = [...features, ...features];
+  // Split features into two rows
+  const topRow = features.slice(0, 3); // Cards 1-3
+  const bottomRow = features.slice(3, 6); // Cards 4-6
+
+  // Duplicate for seamless loop
+  const duplicatedTopRow = [...topRow, ...topRow];
+  const duplicatedBottomRow = [...bottomRow, ...bottomRow];
 
   return (
-    <div className="w-full overflow-hidden">
-      <div className="marquee-container group">
-        <div className="marquee-track">
-          {duplicatedFeatures.map((feature, index) => (
+    <div className="w-full overflow-hidden" style={{ '--card-w': '260px', '--gap': '1.5rem' } as React.CSSProperties}>
+      {/* Top row */}
+      <div className="marquee-container group mb-4">
+        <div className="marquee-track marquee-track-top">
+          {duplicatedTopRow.map((feature, index) => (
             <div
-              key={index}
+              key={`top-${index}`}
               className="marquee-card flex-shrink-0 w-[260px] sm:w-[280px] h-[120px] bg-white/5 border border-white/10 rounded-lg p-4 hover:border-[#EF9B13]/50 transition-colors duration-300"
             >
               <h4 className="text-[#EF9B13] font-medium text-base mb-2">
@@ -55,13 +61,33 @@ export function WhyStateraMarquee() {
           ))}
         </div>
       </div>
+
+      {/* Bottom row with offset */}
+      <div className="marquee-container group">
+        <div className="marquee-track marquee-track-bottom">
+          {duplicatedBottomRow.map((feature, index) => (
+            <div
+              key={`bottom-${index}`}
+              className="marquee-card flex-shrink-0 w-[260px] sm:w-[280px] h-[120px] bg-white/5 border border-white/10 rounded-lg p-4 hover:border-[#EF9B13]/50 transition-colors duration-300"
+            >
+              <h4 className="text-[#EF9B13] font-medium text-base mb-2">
+                {feature.title}
+              </h4>
+              <p className="text-white/70 text-sm leading-relaxed">
+                {feature.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <style jsx global>{`
-        @keyframes marquee {
+        @keyframes marquee-left-to-right {
           0% {
-            transform: translateX(0);
+            transform: translateX(calc(-50% - 0.75rem));
           }
           100% {
-            transform: translateX(calc(-50% - 0.75rem));
+            transform: translateX(0);
           }
         }
 
@@ -75,7 +101,11 @@ export function WhyStateraMarquee() {
           display: flex;
           gap: 1.5rem;
           width: fit-content;
-          animation: marquee 40s linear infinite;
+          animation: marquee-left-to-right 40s linear infinite;
+        }
+
+        .marquee-track-bottom {
+          transform: translateX(calc(var(--card-w) / 2 + 0.75rem));
         }
 
         .marquee-container:hover .marquee-track {
@@ -85,6 +115,9 @@ export function WhyStateraMarquee() {
         @media (prefers-reduced-motion: reduce) {
           .marquee-track {
             animation: none;
+          }
+          .marquee-track-bottom {
+            transform: translateX(calc(var(--card-w) / 2 + 0.75rem));
           }
           .marquee-container {
             overflow-x: auto;
@@ -100,6 +133,9 @@ export function WhyStateraMarquee() {
         @media (max-width: 640px) {
           .marquee-card {
             width: 240px;
+          }
+          .marquee-track-bottom {
+            transform: translateX(calc(240px / 2 + 0.75rem));
           }
         }
       `}</style>
