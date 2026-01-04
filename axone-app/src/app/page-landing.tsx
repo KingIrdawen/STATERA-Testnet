@@ -73,7 +73,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="py-16 sm:py-20 lg:py-24 relative">
         {/* Logo background */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+        <div className="absolute inset-x-0 top-[60%] flex items-center justify-center pointer-events-none z-0 -translate-y-1/2">
           <Image
             src="/Logo-Statera-sandy-brown-détouré.png"
             alt="Statera Logo"
