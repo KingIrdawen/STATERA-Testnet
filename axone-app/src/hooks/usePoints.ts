@@ -1,54 +1,170 @@
-import { useAccount, useReadContract } from 'wagmi'
-import { useMemo, useEffect, useState } from 'react'
+import { useAccount } from 'wagmi';
+import { useState, useEffect } from 'react';
 
-/**
- * Hook pour récupérer les points de l'utilisateur connecté
- * TODO: À configurer avec le smart contract une fois déployé
- * 
- * Note: Une fois le smart contract configuré, les points se mettront à jour automatiquement
- * via useReadContract qui se rafraîchit automatiquement avec Wagmi
- */
+export interface PointsData {
+  total: number;
+  daily?: Record<string, {
+    swapPoints: number;
+    lpPoints: number;
+    vaultPoints: number;
+    referralPoints: number;
+    totalPoints: number;
+  }>;
+}
+
+export interface LeaderboardEntry {
+  address: string;
+  points: number;
+  rank: number;
+}
+
 export function usePoints() {
-  const { address } = useAccount()
-  const [refreshKey, setRefreshKey] = useState(0)
+  const { address } = useAccount();
+  const [points, setPoints] = useState<PointsData | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // TODO: Remplacer par l'appel réel au smart contract
-  // Exemple de structure future :
-  // const { data: pointsData, isLoading, error } = useReadContract({
-  //   address: POINTS_CONTRACT_ADDRESS,
-  //   abi: pointsContractAbi,
-  //   functionName: 'getUserPoints',
-  //   args: [address],
-  //   query: {
-  //     enabled: !!address,
-  //     refetchInterval: 60 * 60 * 1000, // Rafraîchir toutes les heures
-  //   },
-  // })
-
-  const points = useMemo(() => {
-    // Pour l'instant, retourner 0 en attendant le smart contract
-    return '0'
-  }, [])
-
-  // Rafraîchir automatiquement toutes les heures (une fois le smart contract configuré)
   useEffect(() => {
-    if (!address) return
+    if (!address) {
+      setPoints(null);
+      setIsLoading(false);
+      return;
+    }
 
-    const interval = setInterval(() => {
-      setRefreshKey((prev) => prev + 1)
-    }, 60 * 60 * 1000) // 1 heure
+    let cancelled = false;
+    setIsLoading(true);
+    setError(null);
 
-    return () => clearInterval(interval)
-  }, [address])
+    async function fetchPoints() {
+      try {
+        const res = await fetch(`/api/points?address=${address}`);
+        if (!res.ok) {
+          throw new Error('Failed to fetch points');
+        }
 
-  const isLoading = false
-  const error = null
+        const data = await res.json();
+        if (!cancelled) {
+          setPoints(data.points);
+          setError(null);
+        }
+      } catch (e) {
+        if (!cancelled) {
+          setError(e instanceof Error ? e.message : 'Unknown error');
+          setPoints(null);
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    fetchPoints();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [address]);
 
   return {
-    points,
+    points: points?.total ?? 0,
+    daily: points?.daily,
     isLoading,
     error,
     address,
-  }
+  };
 }
 
+export function useLeaderboard(limit: number = 100, offset: number = 0) {
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    setIsLoading(true);
+    setError(null);
+
+    async function fetchLeaderboard() {
+      try {
+        const res = await fetch(`/api/points?leaderboard=true&limit=${limit}&offset=${offset}`);
+        if (!res.ok) {
+          throw new Error('Failed to fetch leaderboard');
+        }
+
+        const data = await res.json();
+        if (!cancelled) {
+          setLeaderboard(data.leaderboard || []);
+          setError(null);
+        }
+      } catch (e) {
+        if (!cancelled) {
+          setError(e instanceof Error ? e.message : 'Unknown error');
+          setLeaderboard([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    fetchLeaderboard();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [limit, offset]);
+
+  return { leaderboard, isLoading, error };
+}
+
+export function useUserRank(address: string | undefined) {
+  const [rank, setRank] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!address) {
+      setRank(null);
+      setIsLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+    setIsLoading(true);
+    setError(null);
+
+    async function fetchRank() {
+      try {
+        const res = await fetch(`/api/points?rank=true&address=${address}`);
+        if (!res.ok) {
+          throw new Error('Failed to fetch rank');
+        }
+
+        const data = await res.json();
+        if (!cancelled) {
+          setRank(data.rank);
+          setError(null);
+        }
+      } catch (e) {
+        if (!cancelled) {
+          setError(e instanceof Error ? e.message : 'Unknown error');
+          setRank(null);
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    fetchRank();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [address]);
+
+  return { rank, isLoading, error };
+}

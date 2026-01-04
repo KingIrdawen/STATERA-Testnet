@@ -1,0 +1,12 @@
+{
+  "regions": ["iad1"],
+  "installCommand": "pnpm install --no-frozen-lockfile",
+  "buildCommand": "pnpm run build",
+  "crons": [
+    {
+      "path": "/api/points/calculate?secret=CRON_SECRET_PLACEHOLDER",
+      "schedule": "0 0 * * *"
+    }
+  ]
+}
+
