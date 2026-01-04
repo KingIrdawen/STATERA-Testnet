@@ -1,7 +1,7 @@
 {
   "regions": ["iad1"],
-  "installCommand": "corepack enable && pnpm -v && pnpm config set registry https://registry.npmjs.org/ && pnpm config set fetch-retries 10 && pnpm config set fetch-retry-mintimeout 20000 && pnpm config set fetch-retry-maxtimeout 120000 && pnpm install --no-frozen-lockfile",
-  "buildCommand": "pnpm build",
+  "installCommand": "npm ci",
+  "buildCommand": "npm run build",
   "crons": [
     {
       "path": "/api/points/calculate?secret=CRON_SECRET_PLACEHOLDER",
