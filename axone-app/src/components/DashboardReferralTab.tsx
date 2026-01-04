@@ -1,17 +1,17 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { useAccount, useChainId, useSwitchChain, useReadContract, useWriteContract, useWaitForTransactionReceipt, usePublicClient } from 'wagmi';
+import { useAccount, useChainId, useSwitchChain, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { referralRegistryContract, REFERRAL_REGISTRY_ADDRESS } from '@/contracts/referralRegistry';
 import { getCodeHash } from '@/lib/referralUtils';
 import { useToast } from '@/components/Toast';
 import { decodeEventLog, parseAbiItem, type Address } from 'viem';
+import { getPublicClient } from '@/lib/publicClient';
 
 export function DashboardReferralTab() {
   const { address } = useAccount();
   const chainId = useChainId();
   const { switchChain } = useSwitchChain();
-  const publicClient = usePublicClient();
   const EXPECTED_CHAIN_ID = 998;
   const isCorrectChain = chainId === EXPECTED_CHAIN_ID;
   const { showToast } = useToast();
@@ -21,6 +21,7 @@ export function DashboardReferralTab() {
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [allCodes, setAllCodes] = useState<Array<{ codeHash: `0x${string}`; rawCode?: string; used: boolean }>>([]);
   const [loadingCodes, setLoadingCodes] = useState(false);
+  const [codesError, setCodesError] = useState<string | null>(null);
 
   // Read whitelist status
   const { data: isWhitelisted, refetch: refetchWhitelisted } = useReadContract({
@@ -84,10 +85,10 @@ export function DashboardReferralTab() {
 
   // Extract created code from receipt events
   useEffect(() => {
-    if (isCreateCodeSuccess && createCodeReceipt && publicClient) {
+    if (isCreateCodeSuccess && createCodeReceipt) {
       refetchUnusedCodes();
     }
-  }, [isCreateCodeSuccess, createCodeReceipt, publicClient, refetchUnusedCodes]);
+  }, [isCreateCodeSuccess, createCodeReceipt, refetchUnusedCodes]);
 
   // Show single toast on final outcome only
   useEffect(() => {
@@ -280,16 +281,27 @@ export function DashboardReferralTab() {
 
   // Fetch all created codes from on-chain events
   useEffect(() => {
-    if (!address || !isCorrectChain || !REFERRAL_REGISTRY_ADDRESS || !publicClient) {
+    // Only run in browser
+    if (typeof window === 'undefined') return;
+    
+    if (!address || !isCorrectChain || !REFERRAL_REGISTRY_ADDRESS) {
       setAllCodes([]);
+      setLoadingCodes(false);
+      setCodesError(null);
       return;
     }
 
     let cancelled = false;
+    let timeoutId: NodeJS.Timeout | null = null;
 
     async function fetchAllCodes() {
       setLoadingCodes(true);
+      setCodesError(null);
+      
       try {
+        // Use HTTP public client (independent from wallet provider)
+        const publicClient = getPublicClient();
+        
         // Define CodeCreated event
         const CodeCreatedEvent = parseAbiItem(
           'event CodeCreated(bytes32 indexed codeHash, address indexed creator, uint256 creatorCount, uint256 quota)'
@@ -297,22 +309,39 @@ export function DashboardReferralTab() {
 
         // Use the same fromBlock as landing stats
         const FROM_BLOCK = 420000000n;
-        if (!publicClient) return;
         
-        const latestBlock = await publicClient.getBlockNumber();
+        // Helper to create timeout promise
+        const createTimeout = (ms: number) => new Promise<never>((_, reject) => {
+          const id = setTimeout(() => {
+            reject(new Error('Request timeout: Failed to load codes after 30 seconds'));
+          }, ms);
+          if (timeoutId) clearTimeout(timeoutId);
+          timeoutId = id;
+        });
+        
+        const latestBlock = await Promise.race([
+          publicClient.getBlockNumber(),
+          createTimeout(30000),
+        ]);
 
         // Scan CodeCreated events for this creator
-        const logs = await publicClient.getLogs({
-          address: REFERRAL_REGISTRY_ADDRESS,
-          event: CodeCreatedEvent,
-          args: {
-            creator: address,
-          },
-          fromBlock: FROM_BLOCK,
-          toBlock: latestBlock,
-        });
+        const logs = await Promise.race([
+          publicClient.getLogs({
+            address: REFERRAL_REGISTRY_ADDRESS,
+            event: CodeCreatedEvent,
+            args: {
+              creator: address,
+            },
+            fromBlock: FROM_BLOCK,
+            toBlock: latestBlock,
+          }),
+          createTimeout(30000),
+        ]);
 
-        if (cancelled) return;
+        if (cancelled) {
+          if (timeoutId) clearTimeout(timeoutId);
+          return;
+        }
 
         // Create a map of codeHash -> rawCode from unused codes
         const unusedCodesMap = new Map<string, string>();
@@ -353,17 +382,29 @@ export function DashboardReferralTab() {
           };
         });
 
-        const codesResults = await Promise.all(codePromises);
-        const codes = codesResults.filter((c) => c !== null) as Array<{ codeHash: `0x${string}`; rawCode?: string; used: boolean }>;
+        const codesResults = await Promise.race([
+          Promise.all(codePromises),
+          createTimeout(30000),
+        ]);
+        
+        const codes = (codesResults as Array<{ codeHash: `0x${string}`; rawCode?: string; used: boolean } | null>)
+          .filter((c) => c !== null) as Array<{ codeHash: `0x${string}`; rawCode?: string; used: boolean }>;
+        
         if (!cancelled) {
           setAllCodes(codes);
+          setCodesError(null);
         }
       } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         console.error('[DashboardReferralTab] Error fetching codes:', error);
         if (!cancelled) {
           setAllCodes([]);
+          setCodesError(errorMessage.includes('timeout') 
+            ? 'Request timeout. Please try again.' 
+            : 'Failed to load codes. Please retry.');
         }
       } finally {
+        if (timeoutId) clearTimeout(timeoutId);
         if (!cancelled) {
           setLoadingCodes(false);
         }
@@ -374,8 +415,9 @@ export function DashboardReferralTab() {
 
     return () => {
       cancelled = true;
+      if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [address, isCorrectChain, REFERRAL_REGISTRY_ADDRESS, publicClient, unusedCodesList.join(',')]);
+  }, [address, isCorrectChain, REFERRAL_REGISTRY_ADDRESS, unusedCodesList.join(',')]);
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
@@ -487,13 +529,31 @@ export function DashboardReferralTab() {
             <div className="text-center py-8">
               <p className="text-[#5a9a9a] text-sm">Loading codes...</p>
             </div>
+          ) : codesError ? (
+            <div className="text-center py-8">
+              <p className="text-red-400 text-sm mb-4">{codesError}</p>
+              <button
+                onClick={() => {
+                  setCodesError(null);
+                  // Trigger refetch by updating a dependency
+                  const currentList = unusedCodesList.join(',');
+                  // Force re-run by toggling state
+                  setTimeout(() => {
+                    window.location.reload();
+                  }, 100);
+                }}
+                className="px-4 py-2 bg-[#fab062] text-black rounded-lg text-sm font-semibold hover:bg-[#e89a4a] transition-colors"
+              >
+                Retry
+              </button>
+            </div>
           ) : allCodes.length === 0 && codesCreatedNum === 0 ? (
             <div className="text-center py-8">
               <p className="text-[#5a9a9a] text-center">No codes created yet.</p>
             </div>
           ) : allCodes.length === 0 && codesCreatedNum > 0 ? (
             <div className="text-center py-8">
-              <p className="text-[#5a9a9a] text-center">Loading codes...</p>
+              <p className="text-[#5a9a9a] text-center">No codes found. They may have expired or been revoked.</p>
             </div>
           ) : (
             <div className="space-y-2">

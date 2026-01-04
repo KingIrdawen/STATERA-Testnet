@@ -20,6 +20,9 @@ export default function ConsoleErrorFilter() {
       'ERR_BLOCKED_BY_CLIENT',
       'Failed to fetch',
       'coinbase',
+      'Cannot set property ethereum',
+      'which has only a getter',
+      'net::ERR_BLOCKED_BY_CLIENT',
     ];
 
     // Fonction pour vérifier si une erreur doit être ignorée
@@ -39,6 +42,32 @@ export default function ConsoleErrorFilter() {
       // Sinon, on ignore silencieusement
     };
 
+    // Intercepter les erreurs non gérées (window.onerror)
+    const originalOnError = window.onerror;
+    window.onerror = (message, source, lineno, colno, error) => {
+      const messageStr = String(message);
+      if (shouldIgnore(messageStr)) {
+        return true; // Supprimer l'erreur
+      }
+      if (originalOnError) {
+        return originalOnError(message, source, lineno, colno, error);
+      }
+      return false;
+    };
+
+    // Intercepter les promesses rejetées non gérées
+    const originalUnhandledRejection = window.onunhandledrejection;
+    window.onunhandledrejection = ((event: PromiseRejectionEvent) => {
+      const message = event.reason?.message || String(event.reason || '');
+      if (shouldIgnore(message)) {
+        event.preventDefault(); // Supprimer l'erreur
+        return;
+      }
+      if (originalUnhandledRejection) {
+        originalUnhandledRejection.call(window, event);
+      }
+    }) as typeof window.onunhandledrejection;
+
     // Remplacer console.warn (au cas où)
     console.warn = (...args: unknown[]) => {
       const message = args.map(arg => String(arg)).join(' ');
@@ -52,6 +81,8 @@ export default function ConsoleErrorFilter() {
     return () => {
       console.error = originalError;
       console.warn = originalWarn;
+      window.onerror = originalOnError;
+      window.onunhandledrejection = originalUnhandledRejection;
     };
   }, []);
 
