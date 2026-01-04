@@ -63,8 +63,8 @@ export function WhyStateraMarquee() {
       </div>
 
       {/* Bottom row with offset */}
-      <div className="marquee-container group">
-        <div className="marquee-track marquee-track-bottom">
+      <div className="marquee-container group translate-x-[120px] sm:translate-x-[140px] lg:translate-x-[130px]">
+        <div className="marquee-track">
           {duplicatedBottomRow.map((feature, index) => (
             <div
               key={`bottom-${index}`}
@@ -104,10 +104,6 @@ export function WhyStateraMarquee() {
           animation: marquee-left-to-right 40s linear infinite;
         }
 
-        .marquee-track-bottom {
-          transform: translateX(calc(var(--card-w) / 2 + 0.75rem));
-        }
-
         .marquee-container:hover .marquee-track {
           animation-play-state: paused;
         }
@@ -115,9 +111,6 @@ export function WhyStateraMarquee() {
         @media (prefers-reduced-motion: reduce) {
           .marquee-track {
             animation: none;
-          }
-          .marquee-track-bottom {
-            transform: translateX(calc(var(--card-w) / 2 + 0.75rem));
           }
           .marquee-container {
             overflow-x: auto;
@@ -133,9 +126,6 @@ export function WhyStateraMarquee() {
         @media (max-width: 640px) {
           .marquee-card {
             width: 240px;
-          }
-          .marquee-track-bottom {
-            transform: translateX(calc(240px / 2 + 0.75rem));
           }
         }
       `}</style>
