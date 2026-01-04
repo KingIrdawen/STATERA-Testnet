@@ -18,6 +18,7 @@ import { useStrategyToken1Meta } from '@/hooks/useStrategyToken1Meta';
 import { getStrategyContracts } from '@/lib/strategyContracts';
 import { formatUsd } from '@/lib/format';
 import { l1readContract } from '@/contracts/l1read';
+import { usePpsHistory } from '@/hooks/usePpsHistory';
 
 // Token composition interface
 interface TokenComposition {
@@ -94,6 +95,10 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
   const strategyData = useStrategyData(strategy);
   const { symbol: token1Symbol, name: token1Name } = useStrategyToken1Meta(strategy);
   const displayToken1 = token1Symbol || token1Name || 'TOKEN1';
+
+  // Fetch PPS history for APR calculation
+  const vaultAddress = strategy?.contracts?.vaultAddress;
+  const { data: ppsHistory } = usePpsHistory(vaultAddress, 1000); // Get enough history for 30D
 
   // Deposit/Withdraw hooks
   const { deposit, isPending: isDepositPending } = useStrategyDeposit(strategy);
@@ -281,6 +286,104 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
     }
   };
 
+  // Calculate APR from PPS history
+  const calculateApr = useMemo(() => {
+    const aprs: { '1D': number | null; '7D': number | null; '30D': number | null } = {
+      '1D': null,
+      '7D': null,
+      '30D': null,
+    };
+
+    if (!ppsHistory?.entries || ppsHistory.entries.length === 0) {
+      return aprs;
+    }
+
+    // Convert entries to HistoryPoint format and sort by timestamp ascending
+    type HistoryPoint = { t: number; pps: number };
+    const points: HistoryPoint[] = ppsHistory.entries
+      .map(entry => {
+        // Parse PPS - could be 1e18 format or decimal string
+        let pps: number;
+        try {
+          const ppsStr = entry.pps;
+          // If it looks like a bigint (very large number), assume 1e18 format
+          if (ppsStr.includes('e') || Number(ppsStr) > 1e10) {
+            pps = Number(formatUnits(BigInt(ppsStr), 18));
+          } else {
+            pps = Number(ppsStr);
+          }
+          if (isNaN(pps) || pps <= 0) return null;
+          return { t: entry.timestamp, pps };
+        } catch {
+          return null;
+        }
+      })
+      .filter((p): p is HistoryPoint => p !== null)
+      .sort((a, b) => a.t - b.t); // Sort ascending by timestamp
+
+    if (points.length === 0) {
+      return aprs;
+    }
+
+    const nowPoint = points[points.length - 1]; // Latest point
+    if (!nowPoint || nowPoint.pps <= 0) {
+      return aprs;
+    }
+
+    // Calculate APR for each window
+    const windows = [
+      { key: '1D' as const, days: 1 },
+      { key: '7D' as const, days: 7 },
+      { key: '30D' as const, days: 30 },
+    ];
+
+    for (const window of windows) {
+      const targetTime = nowPoint.t - window.days * 24 * 60 * 60 * 1000;
+      
+      // Find the point closest to targetTime (or closest earlier)
+      let thenPoint: HistoryPoint | null = null;
+      let minDiff = Infinity;
+      
+      for (const point of points) {
+        if (point.t <= targetTime) {
+          const diff = targetTime - point.t;
+          if (diff < minDiff) {
+            minDiff = diff;
+            thenPoint = point;
+          }
+        }
+      }
+
+      // If no earlier point found, try closest point (even if later)
+      if (!thenPoint) {
+        for (const point of points) {
+          const diff = Math.abs(point.t - targetTime);
+          if (diff < minDiff) {
+            minDiff = diff;
+            thenPoint = point;
+          }
+        }
+      }
+
+      if (thenPoint && thenPoint.pps > 0) {
+        const deltaDays = (nowPoint.t - thenPoint.t) / (1000 * 60 * 60 * 24);
+        
+        // Only calculate if we have at least 0.5 days of data
+        if (deltaDays >= 0.5) {
+          const growth = (nowPoint.pps / thenPoint.pps) - 1;
+          const apr = growth * (365 / deltaDays);
+          
+          // Check for valid number
+          if (isFinite(apr) && !isNaN(apr)) {
+            aprs[window.key] = apr;
+          }
+        }
+      }
+    }
+
+    return aprs;
+  }, [ppsHistory]);
+
   // Check for RPC errors (429 rate limit)
   const hasRpcError = isTokenIdsError || isTokenDataError || strategyData.error;
   const rpcErrorMessage = hasRpcError
@@ -444,9 +547,27 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
                 )}
 
                 <div className="bg-gray-800/50 rounded-lg p-4">
-                  <p className="text-gray-500 text-xs mb-2">APR (30d)</p>
-                  <p className="text-white text-2xl font-bold">—</p>
-                  {/* TODO: Implement APR calculation when historical dataset is available */}
+                  <p className="text-gray-500 text-xs mb-2">APR (1D)</p>
+                  <p className="text-white text-2xl font-bold">
+                    {calculateApr['1D'] !== null ? `${(calculateApr['1D'] * 100).toFixed(2)}%` : '—'}
+                  </p>
+                  <p className="text-gray-500 text-[10px] mt-1">Annualized (historical)</p>
+                </div>
+
+                <div className="bg-gray-800/50 rounded-lg p-4">
+                  <p className="text-gray-500 text-xs mb-2">APR (7D)</p>
+                  <p className="text-white text-2xl font-bold">
+                    {calculateApr['7D'] !== null ? `${(calculateApr['7D'] * 100).toFixed(2)}%` : '—'}
+                  </p>
+                  <p className="text-gray-500 text-[10px] mt-1">Annualized (historical)</p>
+                </div>
+
+                <div className="bg-gray-800/50 rounded-lg p-4">
+                  <p className="text-gray-500 text-xs mb-2">APR (30D)</p>
+                  <p className="text-white text-2xl font-bold">
+                    {calculateApr['30D'] !== null ? `${(calculateApr['30D'] * 100).toFixed(2)}%` : '—'}
+                  </p>
+                  <p className="text-gray-500 text-[10px] mt-1">Annualized (historical)</p>
                 </div>
               </div>
             )}
@@ -579,32 +700,6 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
             )}
           </div>
 
-          {/* Contract Addresses */}
-          <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
-            <h2 className="text-2xl font-bold mb-4 text-white">Contract Addresses</h2>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-gray-500 text-sm">Vault Address</span>
-                <span className="text-white font-mono text-xs">{strategy?.contracts?.vaultAddress ?? '—'}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-500 text-sm">Handler Address</span>
-                <span className="text-white font-mono text-xs">{strategy?.contracts?.handlerAddress ?? '—'}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-500 text-sm">Core Views Address</span>
-                <span className="text-white font-mono text-xs">{strategy?.contracts?.coreViewsAddress ?? '—'}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-500 text-sm">L1 Read Address</span>
-                <span className="text-white font-mono text-xs">{strategy?.contracts?.l1ReadAddress ?? '—'}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-500 text-sm">Chain ID</span>
-                <span className="text-white font-mono text-xs">{strategy?.contracts?.chainId ?? '—'}</span>
-              </div>
-            </div>
-          </div>
         </div>
       </main>
 

@@ -34,5 +34,8 @@ export const kv = {
   set: async (key: string, value: any): Promise<void> => {
     return getKv().set(key, value);
   },
+  lrange: async <T>(key: string, start: number, stop: number): Promise<T[]> => {
+    return getKv().lrange<T>(key, start, stop);
+  },
 };
 
