@@ -167,17 +167,25 @@ export function DashboardArbitrageTab() {
 
                   {/* Recommendation */}
                   <td className="py-4 px-4 text-center">
-                    <span
-                      className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
-                        opp.recommendation === 'swap'
-                          ? 'bg-green-400/20 text-green-400 border border-green-400/30'
-                          : opp.recommendation === 'vault'
-                          ? 'bg-red-400/20 text-red-400 border border-red-400/30'
-                          : 'bg-gray-400/20 text-gray-400 border border-gray-400/30'
-                      }`}
-                    >
-                      {opp.recommendation === 'swap' ? 'Use Swap' : opp.recommendation === 'vault' ? 'Use Vault' : 'Neutral'}
-                    </span>
+                    {opp.recommendation === 'swap' ? (
+                      <Link
+                        href={`/dashboard/swap?strategyId=${opp.strategy.id}`}
+                        className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-green-400/20 text-green-400 border border-green-400/30 hover:bg-green-400/30 transition-colors"
+                      >
+                        Use Swap
+                      </Link>
+                    ) : opp.recommendation === 'vault' ? (
+                      <Link
+                        href={`/dashboard/strategy/${opp.strategy.id}`}
+                        className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-red-400/20 text-red-400 border border-red-400/30 hover:bg-red-400/30 transition-colors"
+                      >
+                        Use Vault
+                      </Link>
+                    ) : (
+                      <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-gray-400/20 text-gray-400 border border-gray-400/30">
+                        Neutral
+                      </span>
+                    )}
                   </td>
                 </tr>
               ))}

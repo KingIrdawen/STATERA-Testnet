@@ -22,6 +22,13 @@ export default function DocsProtocolePage() {
           <p className="text-white leading-relaxed">
             The Statera Protocol section covers the core concepts and innovations that power the platform.
           </p>
+          <div className="flex justify-center my-8">
+            <img 
+              src="/images/docs/infographie-statera-protocol-indices-crypto-intelligents.png" 
+              alt="Infographie Statera Protocol - indices crypto intelligents" 
+              className="max-w-full h-auto rounded-lg"
+            />
+          </div>
         </section>
       </div>
     </div>

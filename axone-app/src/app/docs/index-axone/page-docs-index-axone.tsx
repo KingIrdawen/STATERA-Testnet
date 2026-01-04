@@ -43,9 +43,13 @@ export default function DocsIndexStateraPage() {
           <p className="text-white leading-relaxed">
             <strong>Returns, peace of mind, and traceability</strong> — Statera delivers the <strong>smoothest Web3 investing experience.</strong>
           </p>
-          <p className="text-white leading-relaxed italic">
-            🔍 <em>But how exactly does smart rebalancing work? And why every hour?</em>
-          </p>
+          <div className="flex justify-center my-8">
+            <img 
+              src="/images/docs/investissez-indices-crypto-intelligents.png" 
+              alt="Investissez dans des indices crypto intelligents" 
+              className="max-w-full h-auto rounded-lg"
+            />
+          </div>
         </section>
       </div>
 

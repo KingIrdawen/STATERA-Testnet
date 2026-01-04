@@ -15,7 +15,7 @@ export function DashboardHeader() {
   const isCorrectChain = chainId === EXPECTED_CHAIN_ID;
 
   const dashboardLinks = [
-    { href: '/dashboard/strategy', label: 'Strategy' },
+    { href: '/dashboard/strategy', label: 'My Strategy' },
     { href: '/dashboard/staking', label: 'Staking' },
     { href: '/dashboard/swap', label: 'Swap' },
     { href: '/dashboard/arbitrage', label: 'Arbitrage' },

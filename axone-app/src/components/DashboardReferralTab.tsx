@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useAccount, useChainId, useSwitchChain, useReadContract, useWriteContract, useWaitForTransactionReceipt, usePublicClient } from 'wagmi';
 import { referralRegistryContract, REFERRAL_REGISTRY_ADDRESS } from '@/contracts/referralRegistry';
 import { getCodeHash } from '@/lib/referralUtils';
 import { useToast } from '@/components/Toast';
-import { decodeEventLog } from 'viem';
+import { decodeEventLog, parseAbiItem, type Address } from 'viem';
 
 export function DashboardReferralTab() {
   const { address } = useAccount();
@@ -19,6 +19,8 @@ export function DashboardReferralTab() {
   // State
   const [referralCode, setReferralCode] = useState('');
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
+  const [allCodes, setAllCodes] = useState<Array<{ codeHash: `0x${string}`; rawCode?: string; used: boolean }>>([]);
+  const [loadingCodes, setLoadingCodes] = useState(false);
 
   // Read whitelist status
   const { data: isWhitelisted, refetch: refetchWhitelisted } = useReadContract({
@@ -276,6 +278,105 @@ export function DashboardReferralTab() {
   const unusedCodesList = unusedCodes as string[] | undefined || [];
   const hasReferrer = referrer && referrer !== '0x0000000000000000000000000000000000000000';
 
+  // Fetch all created codes from on-chain events
+  useEffect(() => {
+    if (!address || !isCorrectChain || !REFERRAL_REGISTRY_ADDRESS || !publicClient) {
+      setAllCodes([]);
+      return;
+    }
+
+    let cancelled = false;
+
+    async function fetchAllCodes() {
+      setLoadingCodes(true);
+      try {
+        // Define CodeCreated event
+        const CodeCreatedEvent = parseAbiItem(
+          'event CodeCreated(bytes32 indexed codeHash, address indexed creator, uint256 creatorCount, uint256 quota)'
+        );
+
+        // Use the same fromBlock as landing stats
+        const FROM_BLOCK = 420000000n;
+        if (!publicClient) return;
+        
+        const latestBlock = await publicClient.getBlockNumber();
+
+        // Scan CodeCreated events for this creator
+        const logs = await publicClient.getLogs({
+          address: REFERRAL_REGISTRY_ADDRESS,
+          event: CodeCreatedEvent,
+          args: {
+            creator: address,
+          },
+          fromBlock: FROM_BLOCK,
+          toBlock: latestBlock,
+        });
+
+        if (cancelled) return;
+
+        // Create a map of codeHash -> rawCode from unused codes
+        const unusedCodesMap = new Map<string, string>();
+        for (const rawCode of unusedCodesList) {
+          const hash = getCodeHash(rawCode);
+          unusedCodesMap.set(hash.toLowerCase(), rawCode);
+        }
+
+        // For each codeHash from logs, check if it's used
+        const codePromises = logs.map(async (log) => {
+          const decoded = decodeEventLog({
+            abi: [CodeCreatedEvent],
+            data: log.data,
+            topics: log.topics,
+          });
+
+          const codeHash = (decoded.args as { codeHash: `0x${string}`; creator: Address; creatorCount: bigint; quota: bigint }).codeHash;
+
+          // Check if code is used
+          if (!REFERRAL_REGISTRY_ADDRESS) return null;
+          
+          const codeData = await publicClient.readContract({
+            address: REFERRAL_REGISTRY_ADDRESS,
+            abi: referralRegistryContract().abi,
+            functionName: 'codes',
+            args: [codeHash],
+          }) as [Address, boolean, bigint];
+
+          const used = codeData[1];
+
+          // Find raw code from unused codes map
+          const rawCode = unusedCodesMap.get(codeHash.toLowerCase());
+
+          return {
+            codeHash,
+            rawCode,
+            used,
+          };
+        });
+
+        const codesResults = await Promise.all(codePromises);
+        const codes = codesResults.filter((c) => c !== null) as Array<{ codeHash: `0x${string}`; rawCode?: string; used: boolean }>;
+        if (!cancelled) {
+          setAllCodes(codes);
+        }
+      } catch (error) {
+        console.error('[DashboardReferralTab] Error fetching codes:', error);
+        if (!cancelled) {
+          setAllCodes([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoadingCodes(false);
+        }
+      }
+    }
+
+    fetchAllCodes();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [address, isCorrectChain, REFERRAL_REGISTRY_ADDRESS, publicClient, unusedCodesList.join(',')]);
+
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
       {/* Section 1: Your referral status */}
@@ -378,32 +479,55 @@ export function DashboardReferralTab() {
         </div>
       )}
 
-      {/* Section 5: Unused codes list */}
-      {isWhitelisted && unusedCodesList.length > 0 && (
+      {/* Section 5: All codes list with status */}
+      {isWhitelisted && (
         <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
-          <h3 className="text-2xl font-bold text-white mb-4">Unused Codes</h3>
-          <div className="space-y-2">
-            {unusedCodesList.map((code, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg"
-              >
-                <span className="text-white font-mono text-sm truncate flex-1 mr-4">{code}</span>
-                <button
-                  onClick={() => handleCopyCode(code)}
-                  className="px-4 py-2 bg-[#5a9a9a] text-white rounded-lg text-xs font-semibold hover:bg-[#4a8a8a] transition-colors flex-shrink-0"
+          <h3 className="text-2xl font-bold text-white mb-4">All Created Codes</h3>
+          {loadingCodes ? (
+            <div className="text-center py-8">
+              <p className="text-[#5a9a9a] text-sm">Loading codes...</p>
+            </div>
+          ) : allCodes.length === 0 && codesCreatedNum === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-[#5a9a9a] text-center">No codes created yet.</p>
+            </div>
+          ) : allCodes.length === 0 && codesCreatedNum > 0 ? (
+            <div className="text-center py-8">
+              <p className="text-[#5a9a9a] text-center">Loading codes...</p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {allCodes.map((codeItem, index) => (
+                <div
+                  key={codeItem.codeHash}
+                  className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg"
                 >
-                  {copiedCode === code ? 'Copied!' : 'Copy'}
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {isWhitelisted && unusedCodesList.length === 0 && codesCreatedNum > 0 && (
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
-          <p className="text-[#5a9a9a] text-center">No unused codes available</p>
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <span className="text-white font-mono text-sm truncate">
+                      {codeItem.rawCode || `${codeItem.codeHash.slice(0, 6)}...${codeItem.codeHash.slice(-4)}`}
+                    </span>
+                    <span
+                      className={`px-2 py-1 rounded text-xs font-semibold flex-shrink-0 ${
+                        codeItem.used
+                          ? 'bg-red-400/20 text-red-400 border border-red-400/30'
+                          : 'bg-green-400/20 text-green-400 border border-green-400/30'
+                      }`}
+                    >
+                      {codeItem.used ? 'Used' : 'Unused'}
+                    </span>
+                  </div>
+                  {codeItem.rawCode && (
+                    <button
+                      onClick={() => handleCopyCode(codeItem.rawCode!)}
+                      className="px-4 py-2 bg-[#5a9a9a] text-white rounded-lg text-xs font-semibold hover:bg-[#4a8a8a] transition-colors flex-shrink-0 ml-2"
+                    >
+                      {copiedCode === codeItem.rawCode ? 'Copied!' : 'Copy'}
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

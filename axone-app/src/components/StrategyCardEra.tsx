@@ -166,13 +166,13 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
       ) : (
         <div className="space-y-3 mb-4">
           <div className="flex justify-between items-center">
-            <span className="text-gray-500 text-xs">Total dans le contrat (TVL)</span>
+            <span className="text-gray-500 text-xs">Total in contract (TVL)</span>
             <span className="text-white text-sm font-mono">
               {strategyData.tvlUsd !== undefined ? formatUsd(strategyData.tvlUsd, 2) : '-'}
             </span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-gray-500 text-xs">Votre dépôt</span>
+            <span className="text-gray-500 text-xs">Your deposit</span>
             <span className="text-white text-sm font-mono">
               {strategyData.userValueUsd !== undefined ? formatUsd(strategyData.userValueUsd, 2) : '-'}
             </span>
@@ -184,14 +184,14 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
             </span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-gray-500 text-xs">Vos parts (total)</span>
+            <span className="text-gray-500 text-xs">Your shares (total)</span>
             <span className="text-white text-sm font-mono">
               {strategyData.userShares !== undefined ? strategyData.userShares.toFixed(6) : '-'}
             </span>
           </div>
           {strategyData.userSharesStaked !== undefined && strategyData.userSharesStaked > 0 && (
             <div className="flex justify-between items-center">
-              <span className="text-gray-500 text-xs">Parts stakées (staking)</span>
+              <span className="text-gray-500 text-xs">Staked shares (staking)</span>
               <span className="text-white text-sm font-mono">
                 {strategyData.userSharesStaked.toFixed(6)}
               </span>
@@ -252,12 +252,12 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
             {/* Preflight health check warnings */}
             {strategyData.ppsUsd !== undefined && strategyData.ppsUsd === 0 && (
               <p className="text-yellow-400 text-xs mt-1">
-                ⚠️ Oracle indisponible ou vault non initialisé.
+                ⚠️ Oracle unavailable or vault not initialized.
               </p>
             )}
             {strategyData.oracleHypeUsd !== undefined && strategyData.oracleHypeUsd === 0 && (
               <p className="text-yellow-400 text-xs mt-1">
-                ⚠️ Prix oracle HYPE indisponible.
+                ⚠️ HYPE oracle price unavailable.
               </p>
             )}
             {depositError && (
@@ -273,7 +273,7 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
                 <div className="mb-3 p-2 bg-gray-800/50 rounded-lg border border-gray-700">
                   {strategyData.userSharesStaked !== undefined && strategyData.userSharesStaked > 0 && (
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-gray-400">Shares stakées (staking):</span>
+                      <span className="text-gray-400">Staked shares (staking):</span>
                       <span className="text-white font-mono">{strategyData.userSharesStaked.toFixed(6)}</span>
                     </div>
                   )}

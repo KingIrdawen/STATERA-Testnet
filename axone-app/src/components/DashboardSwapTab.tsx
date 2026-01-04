@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useAccount, useChainId, useSwitchChain, useBalance, useReadContract } from 'wagmi';
 import { formatUnits } from 'viem';
 import { useSwapStrategies, type SwapStrategy } from '@/hooks/useSwapStrategies';
@@ -10,17 +11,29 @@ import { SwapStrategyCard } from '@/components/dashboard/SwapStrategyCard';
 import { getStrategyContracts } from '@/lib/strategyContracts';
 import { formatUsd } from '@/lib/format';
 
-export function DashboardSwapTab() {
+function SwapTabContent() {
   const { address } = useAccount();
   const chainId = useChainId();
   const { switchChain } = useSwitchChain();
   const EXPECTED_CHAIN_ID = 998;
   const isCorrectChain = chainId === EXPECTED_CHAIN_ID;
 
+  const searchParams = useSearchParams();
   const { swapStrategies, loading, error } = useSwapStrategies();
   const [selected, setSelected] = useState<SwapStrategy | null>(null);
   const [direction, setDirection] = useState<SwapDirection>('HYPE_TO_VAULT');
   const [amountIn, setAmountIn] = useState('');
+
+  // Preselect strategy from query param
+  useEffect(() => {
+    const strategyId = searchParams?.get('strategyId');
+    if (strategyId && swapStrategies.length > 0 && !selected) {
+      const found = swapStrategies.find(s => s.strategy.id === strategyId);
+      if (found) {
+        setSelected(found);
+      }
+    }
+  }, [searchParams, swapStrategies, selected]);
 
   const quote = useSwapQuote({
     poolAddress: selected?.poolAddress,
@@ -316,6 +329,14 @@ export function DashboardSwapTab() {
         </div>
       )}
     </div>
+  );
+}
+
+export function DashboardSwapTab() {
+  return (
+    <Suspense fallback={<div className="text-center py-12"><p className="text-[#5a9a9a] text-lg">Loading...</p></div>}>
+      <SwapTabContent />
+    </Suspense>
   );
 }
 
