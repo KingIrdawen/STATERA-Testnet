@@ -3,11 +3,10 @@
 import { useMemo, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount, useChainId, useSwitchChain, useBalance, useReadContracts } from 'wagmi';
 import { formatUnits } from 'viem';
 import { SiteFooter } from '@/components/layout/SiteFooter';
+import { DashboardHeader } from '@/components/DashboardHeader';
 import { useWhitelistCheck } from '@/hooks/useWhitelistCheck';
 import type { Strategy } from '@/types/strategy';
 import { useStrategies } from '@/hooks/useStrategies';
@@ -396,26 +395,8 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
 
   return (
     <div className="min-h-screen bg-[#121212] text-white">
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 bg-[#121212]/80 backdrop-blur-sm border-b border-gray-800 z-[9999]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            <Link href="/dashboard/strategy" className="flex items-center gap-3">
-              <Image
-                src="/Logo-Statera-sandy-brown-détouré.png"
-                alt="Statera Logo"
-                width={48}
-                height={48}
-                className="h-8 w-auto sm:h-10 md:h-12"
-                sizes="(min-width: 768px) 150px, 120px"
-              />
-            </Link>
-            <div className="flex items-center gap-4">
-              <ConnectButton />
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* Header with navigation */}
+      <DashboardHeader />
 
       {/* Main Content */}
       <main className="pt-20 md:pt-24 pb-20">

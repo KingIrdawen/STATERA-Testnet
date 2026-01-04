@@ -61,7 +61,10 @@ export function DashboardHeader() {
             {/* Navigation centrée */}
             <nav className="flex items-center gap-4 sm:gap-6 absolute left-1/2 transform -translate-x-1/2">
               {dashboardLinks.map((link) => {
-                const isActive = pathname === link.href;
+                // For "My Strategy", also consider /dashboard/strategy/[id] as active
+                const isActive = link.href === '/dashboard/strategy'
+                  ? pathname === link.href || pathname?.startsWith('/dashboard/strategy/')
+                  : pathname === link.href;
                 return (
                   <Link
                     key={link.href}
