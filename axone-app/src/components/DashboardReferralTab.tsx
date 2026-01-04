@@ -226,54 +226,7 @@ export function DashboardReferralTab() {
     }
   };
 
-  // Not connected
-  if (!address) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-8 max-w-md text-center">
-          <h3 className="text-2xl font-bold text-white mb-4">Connect Wallet</h3>
-          <p className="text-[#5a9a9a]">
-            Please connect your wallet to use the referral system.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  // Wrong network
-  if (!isCorrectChain) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-8 max-w-md text-center">
-          <h3 className="text-2xl font-bold text-white mb-4">Wrong Network</h3>
-          <p className="text-[#5a9a9a] mb-6">
-            Please switch to HyperEVM Testnet (Chain ID {EXPECTED_CHAIN_ID}) to use the referral system.
-          </p>
-          <button
-            onClick={() => switchChain({ chainId: EXPECTED_CHAIN_ID })}
-            className="w-full px-6 py-3 bg-[#fab062] text-black rounded-lg text-sm font-semibold hover:bg-[#e89a4a] transition-colors"
-          >
-            Switch to HyperEVM Testnet
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // Not configured
-  if (!REFERRAL_REGISTRY_ADDRESS) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-8 max-w-md text-center">
-          <h3 className="text-2xl font-bold text-white mb-4">Not Configured</h3>
-          <p className="text-[#5a9a9a]">
-            ReferralRegistry is not configured. Please configure NEXT_PUBLIC_REFERRAL_REGISTRY_ADDRESS.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
+  // Compute derived values (before early returns)
   const codesCreatedNum = codesCreated ? Number(codesCreated) : 0;
   const codesQuotaNum = codesQuota ? Number(codesQuota) : 0;
   const codesAvailable = codesQuotaNum - codesCreatedNum;
@@ -281,6 +234,7 @@ export function DashboardReferralTab() {
   const hasReferrer = referrer && referrer !== '0x0000000000000000000000000000000000000000';
 
   // Load created codes from on-chain events and status
+  // MUST be declared before any early returns (React hooks rule)
   const loadCreatedCodes = useCallback(async () => {
     if (typeof window === 'undefined') {
       return;
@@ -436,6 +390,54 @@ export function DashboardReferralTab() {
   useEffect(() => {
     loadCreatedCodes();
   }, [loadCreatedCodes, refetchTrigger]);
+
+  // Not connected
+  if (!address) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-8 max-w-md text-center">
+          <h3 className="text-2xl font-bold text-white mb-4">Connect Wallet</h3>
+          <p className="text-[#5a9a9a]">
+            Please connect your wallet to use the referral system.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Wrong network
+  if (!isCorrectChain) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-8 max-w-md text-center">
+          <h3 className="text-2xl font-bold text-white mb-4">Wrong Network</h3>
+          <p className="text-[#5a9a9a] mb-6">
+            Please switch to HyperEVM Testnet (Chain ID {EXPECTED_CHAIN_ID}) to use the referral system.
+          </p>
+          <button
+            onClick={() => switchChain({ chainId: EXPECTED_CHAIN_ID })}
+            className="w-full px-6 py-3 bg-[#fab062] text-black rounded-lg text-sm font-semibold hover:bg-[#e89a4a] transition-colors"
+          >
+            Switch to HyperEVM Testnet
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Not configured
+  if (!REFERRAL_REGISTRY_ADDRESS) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-8 max-w-md text-center">
+          <h3 className="text-2xl font-bold text-white mb-4">Not Configured</h3>
+          <p className="text-[#5a9a9a]">
+            ReferralRegistry is not configured. Please configure NEXT_PUBLIC_REFERRAL_REGISTRY_ADDRESS.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
