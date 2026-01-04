@@ -1,0 +1,14 @@
+{
+  "name": "statera-root",
+  "private": true,
+  "scripts": {
+    "install:app": "cd axone-app && npm ci",
+    "build": "cd axone-app && npm run build",
+    "dev": "cd axone-app && npm run dev",
+    "start": "cd axone-app && npm run start"
+  },
+  "engines": {
+    "node": ">=20 <21"
+  }
+}
+
