@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAccount, useChainId, useSwitchChain, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { referralRegistryContract, REFERRAL_REGISTRY_ADDRESS } from '@/contracts/referralRegistry';
 import { getCodeHash } from '@/lib/referralUtils';
@@ -19,7 +19,7 @@ export function DashboardReferralTab() {
   // State
   const [referralCode, setReferralCode] = useState('');
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
-  const [allCodes, setAllCodes] = useState<Array<{ codeHash: `0x${string}`; rawCode?: string; used: boolean }>>([]);
+  const [allCodes, setAllCodes] = useState<Array<{ codeHash: `0x${string}`; display: string; used: boolean }>>([]);
   const [loadingCodes, setLoadingCodes] = useState(false);
   const [codesError, setCodesError] = useState<string | null>(null);
   const [refetchTrigger, setRefetchTrigger] = useState(0);
@@ -280,18 +280,12 @@ export function DashboardReferralTab() {
   const unusedCodesList = unusedCodes as string[] | undefined || [];
   const hasReferrer = referrer && referrer !== '0x0000000000000000000000000000000000000000';
 
-  // Memoize unused codes list string for stable dependency
-  const unusedCodesKey = useMemo(() => unusedCodesList.join(','), [unusedCodesList.join(',')]);
-
-  // Fetch all created codes from on-chain events
-  // This hook must be called unconditionally (React rules)
-  useEffect(() => {
-    // Only run in browser
+  // Load created codes from on-chain events and status
+  const loadCreatedCodes = useCallback(async () => {
     if (typeof window === 'undefined') {
       return;
     }
-    
-    // Early exit conditions - but hook is still called
+
     if (!address || !isCorrectChain || !REFERRAL_REGISTRY_ADDRESS) {
       setAllCodes([]);
       setLoadingCodes(false);
@@ -299,138 +293,149 @@ export function DashboardReferralTab() {
       return;
     }
 
-    let cancelled = false;
-    let timeoutId: NodeJS.Timeout | null = null;
+    setLoadingCodes(true);
+    setCodesError(null);
 
-    async function fetchAllCodes() {
-      setLoadingCodes(true);
-      setCodesError(null);
+    try {
+      if (!REFERRAL_REGISTRY_ADDRESS) {
+        throw new Error('REFERRAL_REGISTRY_ADDRESS is not configured');
+      }
+
+      const publicClient = getPublicClient();
+      const registryAddress = REFERRAL_REGISTRY_ADDRESS;
       
-      try {
-        // Use HTTP public client (independent from wallet provider)
-        const publicClient = getPublicClient();
-        
-        // Define CodeCreated event
-        const CodeCreatedEvent = parseAbiItem(
-          'event CodeCreated(bytes32 indexed codeHash, address indexed creator, uint256 creatorCount, uint256 quota)'
-        );
+      // Define CodeCreated event
+      const CodeCreatedEvent = parseAbiItem(
+        'event CodeCreated(bytes32 indexed codeHash, address indexed creator, uint256 creatorCount, uint256 quota)'
+      );
 
-        // Use the same fromBlock as landing stats
-        const FROM_BLOCK = 420000000n;
-        
-        // Helper to create timeout promise
-        const createTimeout = (ms: number) => new Promise<never>((_, reject) => {
-          const id = setTimeout(() => {
-            reject(new Error('Request timeout: Failed to load codes after 30 seconds'));
-          }, ms);
-          if (timeoutId) clearTimeout(timeoutId);
-          timeoutId = id;
+      // Use the same fromBlock as landing stats
+      const REFERRAL_FROM_BLOCK = 420000000n;
+      
+      // Get latest block
+      const latestBlock = await publicClient.getBlockNumber();
+
+      // Step 1: Get all CodeCreated events for this creator
+      const logs = await publicClient.getLogs({
+        address: registryAddress,
+        event: CodeCreatedEvent,
+        args: {
+          creator: address,
+        },
+        fromBlock: REFERRAL_FROM_BLOCK,
+        toBlock: latestBlock,
+      });
+
+      // Deduplicate hashes (keep unique, order by blockNumber descending)
+      const uniqueHashes = new Map<`0x${string}`, bigint>();
+      for (const log of logs) {
+        const decoded = decodeEventLog({
+          abi: [CodeCreatedEvent],
+          data: log.data,
+          topics: log.topics,
         });
-        
-        const latestBlock = await Promise.race([
-          publicClient.getBlockNumber(),
-          createTimeout(30000),
-        ]);
-
-        // Scan CodeCreated events for this creator
-        const logs = await Promise.race([
-          publicClient.getLogs({
-            address: REFERRAL_REGISTRY_ADDRESS,
-            event: CodeCreatedEvent,
-            args: {
-              creator: address,
-            },
-            fromBlock: FROM_BLOCK,
-            toBlock: latestBlock,
-          }),
-          createTimeout(30000),
-        ]);
-
-        if (cancelled) {
-          if (timeoutId) clearTimeout(timeoutId);
-          return;
+        const codeHash = (decoded.args as { codeHash: `0x${string}`; creator: Address; creatorCount: bigint; quota: bigint }).codeHash;
+        const blockNumber = log.blockNumber;
+        // Keep the most recent occurrence
+        if (!uniqueHashes.has(codeHash) || (uniqueHashes.get(codeHash)! < blockNumber)) {
+          uniqueHashes.set(codeHash, blockNumber);
         }
+      }
 
-        // Create a map of codeHash -> rawCode from unused codes
-        const unusedCodesMap = new Map<string, string>();
-        for (const rawCode of unusedCodesList) {
+      const codeHashes = Array.from(uniqueHashes.keys());
+
+      if (codeHashes.length === 0) {
+        setAllCodes([]);
+        setLoadingCodes(false);
+        return;
+      }
+
+      // Step 2: Try to get unused raw codes (optional, don't block on failure)
+      let rawCodeMap = new Map<string, string>();
+      try {
+        const unusedRawCodes = await publicClient.readContract({
+          address: registryAddress,
+          abi: referralRegistryContract().abi,
+          functionName: 'getUnusedCodes',
+          args: [address],
+        }) as string[];
+
+        // Build map: hash -> raw code
+        for (const rawCode of unusedRawCodes) {
           const hash = getCodeHash(rawCode);
-          unusedCodesMap.set(hash.toLowerCase(), rawCode);
+          rawCodeMap.set(hash.toLowerCase(), rawCode);
         }
+      } catch (error) {
+        // getUnusedCodes failed - continue without raw codes
+        console.warn('[DashboardReferralTab] getUnusedCodes failed, continuing with hashes only:', error);
+      }
 
-        // For each codeHash from logs, check if it's used
-        const codePromises = logs.map(async (log) => {
-          const decoded = decodeEventLog({
-            abi: [CodeCreatedEvent],
-            data: log.data,
-            topics: log.topics,
-          });
-
-          const codeHash = (decoded.args as { codeHash: `0x${string}`; creator: Address; creatorCount: bigint; quota: bigint }).codeHash;
-
-          // Check if code is used
-          if (!REFERRAL_REGISTRY_ADDRESS) return null;
-          
+      // Step 3: For each hash, read its status
+      const codePromises = codeHashes.map(async (codeHash) => {
+        try {
           const codeData = await publicClient.readContract({
-            address: REFERRAL_REGISTRY_ADDRESS,
+            address: registryAddress,
             abi: referralRegistryContract().abi,
             functionName: 'codes',
             args: [codeHash],
           }) as [Address, boolean, bigint];
 
           const used = codeData[1];
-
-          // Find raw code from unused codes map
-          const rawCode = unusedCodesMap.get(codeHash.toLowerCase());
+          const rawCode = rawCodeMap.get(codeHash.toLowerCase());
+          
+          // Display: raw code if available, else shortened hash
+          const display = rawCode || `${codeHash.slice(0, 6)}...${codeHash.slice(-4)}`;
 
           return {
             codeHash,
-            rawCode,
+            display,
             used,
           };
-        });
+        } catch (error) {
+          console.error(`[DashboardReferralTab] Error reading code ${codeHash}:`, error);
+          // Return with unknown status if read fails
+          return {
+            codeHash,
+            display: `${codeHash.slice(0, 6)}...${codeHash.slice(-4)}`,
+            used: false, // Default to unused if we can't read
+          };
+        }
+      });
 
-        const codesResults = await Promise.race([
-          Promise.all(codePromises),
-          createTimeout(30000),
-        ]);
-        
-        const codes = (codesResults as Array<{ codeHash: `0x${string}`; rawCode?: string; used: boolean } | null>)
-          .filter((c) => c !== null) as Array<{ codeHash: `0x${string}`; rawCode?: string; used: boolean }>;
-        
-        if (!cancelled) {
-          setAllCodes(codes);
-          setCodesError(null);
-        }
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        const errorStack = error instanceof Error ? error.stack : undefined;
-        console.error('[DashboardReferralTab] Error fetching codes:', {
-          message: errorMessage,
-          stack: errorStack,
-          error,
-        });
-        if (!cancelled) {
-          setAllCodes([]);
-          setCodesError(errorMessage.includes('timeout') 
-            ? 'Request timeout. Please try again.' 
-            : 'Failed to load codes. Please retry.');
-        }
-      } finally {
-        if (timeoutId) clearTimeout(timeoutId);
-        if (!cancelled) {
-          setLoadingCodes(false);
-        }
-      }
+      const codes = await Promise.all(codePromises);
+      
+      // Sort by blockNumber descending (most recent first)
+      const codesWithBlocks = codes.map((code, index) => ({
+        ...code,
+        blockNumber: uniqueHashes.get(code.codeHash) || 0n,
+      }));
+      codesWithBlocks.sort((a, b) => {
+        if (a.blockNumber > b.blockNumber) return -1;
+        if (a.blockNumber < b.blockNumber) return 1;
+        return 0;
+      });
+
+      setAllCodes(codesWithBlocks.map(({ blockNumber, ...code }) => code));
+      setCodesError(null);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorStack = error instanceof Error ? error.stack : undefined;
+      console.error('[DashboardReferralTab] Error loading created codes:', {
+        message: errorMessage,
+        stack: errorStack,
+        error,
+      });
+      setAllCodes([]);
+      setCodesError('Failed to load codes. Please retry.');
+    } finally {
+      setLoadingCodes(false);
     }
+  }, [address, isCorrectChain, REFERRAL_REGISTRY_ADDRESS]);
 
-    fetchAllCodes();
-
-    return () => {
-      cancelled = true;
-      if (timeoutId) clearTimeout(timeoutId);
-    };
-  }, [address, isCorrectChain, REFERRAL_REGISTRY_ADDRESS, unusedCodesKey, refetchTrigger]);
+  // Call loadCreatedCodes when conditions are met
+  useEffect(() => {
+    loadCreatedCodes();
+  }, [loadCreatedCodes, refetchTrigger]);
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
@@ -549,7 +554,7 @@ export function DashboardReferralTab() {
                 onClick={() => {
                   setCodesError(null);
                   setAllCodes([]);
-                  // Trigger refetch by incrementing trigger
+                  // Trigger refetch
                   setRefetchTrigger(prev => prev + 1);
                 }}
                 className="px-4 py-2 bg-[#fab062] text-black rounded-lg text-sm font-semibold hover:bg-[#e89a4a] transition-colors"
@@ -567,14 +572,14 @@ export function DashboardReferralTab() {
             </div>
           ) : (
             <div className="space-y-2">
-              {allCodes.map((codeItem, index) => (
+              {allCodes.map((codeItem) => (
                 <div
                   key={codeItem.codeHash}
                   className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg"
                 >
                   <div className="flex items-center gap-3 flex-1 min-w-0">
                     <span className="text-white font-mono text-sm truncate">
-                      {codeItem.rawCode || `${codeItem.codeHash.slice(0, 6)}...${codeItem.codeHash.slice(-4)}`}
+                      {codeItem.display}
                     </span>
                     <span
                       className={`px-2 py-1 rounded text-xs font-semibold flex-shrink-0 ${
@@ -586,12 +591,12 @@ export function DashboardReferralTab() {
                       {codeItem.used ? 'Used' : 'Unused'}
                     </span>
                   </div>
-                  {codeItem.rawCode && (
+                  {codeItem.display.length > 10 && !codeItem.display.startsWith('0x') && (
                     <button
-                      onClick={() => handleCopyCode(codeItem.rawCode!)}
+                      onClick={() => handleCopyCode(codeItem.display)}
                       className="px-4 py-2 bg-[#5a9a9a] text-white rounded-lg text-xs font-semibold hover:bg-[#4a8a8a] transition-colors flex-shrink-0 ml-2"
                     >
-                      {copiedCode === codeItem.rawCode ? 'Copied!' : 'Copy'}
+                      {copiedCode === codeItem.display ? 'Copied!' : 'Copy'}
                     </button>
                   )}
                 </div>
