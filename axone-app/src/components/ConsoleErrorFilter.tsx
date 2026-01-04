@@ -23,6 +23,11 @@ export default function ConsoleErrorFilter() {
       'Cannot set property ethereum',
       'which has only a getter',
       'net::ERR_BLOCKED_BY_CLIENT',
+      'requestProvider',
+      'error setting the global Ethereum provider',
+      'Failed to assign ethereum proxy',
+      'ethereumProxy',
+      'provider-injection',
     ];
 
     // Fonction pour vérifier si une erreur doit être ignorée

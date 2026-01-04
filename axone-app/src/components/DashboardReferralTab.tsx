@@ -22,6 +22,7 @@ export function DashboardReferralTab() {
   const [allCodes, setAllCodes] = useState<Array<{ codeHash: `0x${string}`; rawCode?: string; used: boolean }>>([]);
   const [loadingCodes, setLoadingCodes] = useState(false);
   const [codesError, setCodesError] = useState<string | null>(null);
+  const [refetchTrigger, setRefetchTrigger] = useState(0);
 
   // Read whitelist status
   const { data: isWhitelisted, refetch: refetchWhitelisted } = useReadContract({
@@ -279,11 +280,18 @@ export function DashboardReferralTab() {
   const unusedCodesList = unusedCodes as string[] | undefined || [];
   const hasReferrer = referrer && referrer !== '0x0000000000000000000000000000000000000000';
 
+  // Memoize unused codes list string for stable dependency
+  const unusedCodesKey = useMemo(() => unusedCodesList.join(','), [unusedCodesList.join(',')]);
+
   // Fetch all created codes from on-chain events
+  // This hook must be called unconditionally (React rules)
   useEffect(() => {
     // Only run in browser
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined') {
+      return;
+    }
     
+    // Early exit conditions - but hook is still called
     if (!address || !isCorrectChain || !REFERRAL_REGISTRY_ADDRESS) {
       setAllCodes([]);
       setLoadingCodes(false);
@@ -396,7 +404,12 @@ export function DashboardReferralTab() {
         }
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        console.error('[DashboardReferralTab] Error fetching codes:', error);
+        const errorStack = error instanceof Error ? error.stack : undefined;
+        console.error('[DashboardReferralTab] Error fetching codes:', {
+          message: errorMessage,
+          stack: errorStack,
+          error,
+        });
         if (!cancelled) {
           setAllCodes([]);
           setCodesError(errorMessage.includes('timeout') 
@@ -417,7 +430,7 @@ export function DashboardReferralTab() {
       cancelled = true;
       if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [address, isCorrectChain, REFERRAL_REGISTRY_ADDRESS, unusedCodesList.join(',')]);
+  }, [address, isCorrectChain, REFERRAL_REGISTRY_ADDRESS, unusedCodesKey, refetchTrigger]);
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
@@ -535,12 +548,9 @@ export function DashboardReferralTab() {
               <button
                 onClick={() => {
                   setCodesError(null);
-                  // Trigger refetch by updating a dependency
-                  const currentList = unusedCodesList.join(',');
-                  // Force re-run by toggling state
-                  setTimeout(() => {
-                    window.location.reload();
-                  }, 100);
+                  setAllCodes([]);
+                  // Trigger refetch by incrementing trigger
+                  setRefetchTrigger(prev => prev + 1);
                 }}
                 className="px-4 py-2 bg-[#fab062] text-black rounded-lg text-sm font-semibold hover:bg-[#e89a4a] transition-colors"
               >
