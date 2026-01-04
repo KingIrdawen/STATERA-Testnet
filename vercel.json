@@ -1,5 +1,0 @@
-{
-  "installCommand": "cd axone-app && npm ci",
-  "buildCommand": "cd axone-app && npm run build"
-}
-
