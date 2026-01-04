@@ -1,14 +1,12 @@
 'use client';
 
 import { useAccount } from 'wagmi';
-import { useState } from 'react';
 import { DashboardHeader } from '@/components/DashboardHeader';
 import { DashboardSidebar } from '@/components/DashboardSidebar';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import { useWhitelistCheck } from '@/hooks/useWhitelistCheck';
 import { usePoints, useLeaderboard, useUserRank } from '@/hooks/usePoints';
-import { ExternalLink, Copy, Check } from 'lucide-react';
-import type { Address } from 'viem';
+import { ExternalLink } from 'lucide-react';
 
 const EXPLORER_URL = 'https://hyperscan-testnet.hyperliquid.xyz';
 
@@ -16,54 +14,16 @@ function formatAddress(address: string): string {
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
 }
 
-function CopyButton({ text }: { text: string }) {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (e) {
-      console.error('Failed to copy:', e);
-    }
-  };
-
-  return (
-    <button
-      onClick={handleCopy}
-      className="flex items-center gap-2 px-4 py-2 bg-[#EF9B13] hover:bg-[#D36A03] text-white rounded-lg transition-colors text-sm font-medium"
-    >
-      {copied ? (
-        <>
-          <Check className="w-4 h-4" />
-          Copied!
-        </>
-      ) : (
-        <>
-          <Copy className="w-4 h-4" />
-          Copy Link
-        </>
-      )}
-    </button>
-  );
-}
-
 export default function PointsPage() {
   const { address } = useAccount();
   useWhitelistCheck();
-  const { points, isLoading: pointsLoading } = usePoints();
+  const { points, daily, isLoading: pointsLoading } = usePoints();
   const { leaderboard, isLoading: leaderboardLoading } = useLeaderboard(100, 0);
   const { rank, isLoading: rankLoading } = useUserRank(address);
-  const [activeTab, setActiveTab] = useState<'my' | 'leaderboard'>('my');
 
-  // Build referral link (if referral system exists)
-  const referralLink = address
-    ? `${typeof window !== 'undefined' ? window.location.origin : ''}/dashboard/referral?ref=${address}`
-    : '';
-
-  // Calculate daily earning (simplified - would need actual calculation)
-  const dailyEarning = 0; // TODO: Calculate from recent days
+  // Get today's points breakdown if available
+  const today = new Date().toISOString().split('T')[0];
+  const todayPoints = daily?.[today];
 
   return (
     <div className="min-h-screen bg-[#121212]">
@@ -92,78 +52,42 @@ export default function PointsPage() {
             )}
           </div>
 
-          {/* Two horizontal info cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div className="bg-gray-800/50 border border-white/10 rounded-lg p-6">
-              <h3 className="text-white font-semibold mb-2">Earning Points Per Day</h3>
-              <p className="text-3xl font-bold text-[#EF9B13]">{dailyEarning.toLocaleString()}</p>
-            </div>
-            <div className="bg-gray-800/50 border border-white/10 rounded-lg p-6">
-              <h3 className="text-white font-semibold mb-2">Referrals</h3>
-              {address ? (
-                <div className="space-y-3">
-                  <p className="text-gray-400 text-sm">No referrals yet</p>
-                  {referralLink && <CopyButton text={referralLink} />}
-                </div>
-              ) : (
-                <p className="text-gray-400 text-sm">Connect wallet to get referral link</p>
-              )}
-            </div>
-          </div>
-
-          {/* Tabs */}
-          <div className="flex gap-4 mb-6 border-b border-white/10">
-            <button
-              onClick={() => setActiveTab('my')}
-              className={`px-6 py-3 font-semibold transition-colors ${
-                activeTab === 'my'
-                  ? 'text-[#EF9B13] border-b-2 border-[#EF9B13]'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              My Points
-            </button>
-            <button
-              onClick={() => setActiveTab('leaderboard')}
-              className={`px-6 py-3 font-semibold transition-colors ${
-                activeTab === 'leaderboard'
-                  ? 'text-[#EF9B13] border-b-2 border-[#EF9B13]'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              Leaderboard
-            </button>
-          </div>
-
-          {/* Tab content */}
-          {activeTab === 'my' ? (
-            <div className="bg-gray-800/50 border border-white/10 rounded-lg p-6">
-              {!address ? (
-                <div className="text-center py-12">
-                  <p className="text-gray-400">Connect your wallet to view your points</p>
-                </div>
-              ) : pointsLoading ? (
-                <div className="text-center py-12">
-                  <p className="text-gray-400">Loading points...</p>
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="text-white font-semibold mb-4">Total Points</h3>
-                    <p className="text-4xl font-bold text-[#EF9B13]">
-                      {points.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                    </p>
-                  </div>
-                  {rank !== null && (
+          {/* Points breakdown (smaller text) */}
+          {address && (todayPoints || pointsLoading) && (
+            <div className="mb-8">
+              <div className="bg-gray-800/50 border border-white/10 rounded-lg p-4 max-w-2xl mx-auto">
+                <h3 className="text-white/70 text-sm font-semibold mb-3 text-center">Points Breakdown</h3>
+                {pointsLoading ? (
+                  <p className="text-gray-400 text-sm text-center">Loading breakdown...</p>
+                ) : todayPoints ? (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                     <div>
-                      <h3 className="text-white font-semibold mb-4">Your Rank</h3>
-                      <p className="text-3xl font-bold text-white">#{rank}</p>
+                      <p className="text-gray-400 text-xs mb-1">Swap</p>
+                      <p className="text-white text-sm font-medium">{todayPoints.swapPoints.toLocaleString()}</p>
                     </div>
-                  )}
-                </div>
-              )}
+                    <div>
+                      <p className="text-gray-400 text-xs mb-1">LP</p>
+                      <p className="text-white text-sm font-medium">{todayPoints.lpPoints.toLocaleString()}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400 text-xs mb-1">Vault</p>
+                      <p className="text-white text-sm font-medium">{todayPoints.vaultPoints.toLocaleString()}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400 text-xs mb-1">Referral</p>
+                      <p className="text-white text-sm font-medium">{todayPoints.referralPoints.toLocaleString()}</p>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-gray-400 text-sm text-center">No points breakdown available yet</p>
+                )}
+              </div>
             </div>
-          ) : (
+          )}
+
+          {/* Leaderboard */}
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-white mb-6 text-center">Leaderboard</h2>
             <div className="bg-gray-800/50 border border-white/10 rounded-lg overflow-hidden">
               {leaderboardLoading ? (
                 <div className="text-center py-12">
@@ -188,6 +112,7 @@ export default function PointsPage() {
                         {leaderboard.map((entry) => (
                           <tr
                             key={entry.address}
+                            id={`rank-${entry.rank}`}
                             className="border-t border-white/10 hover:bg-gray-900/30 transition-colors"
                           >
                             <td className="px-6 py-4 text-white font-medium">#{entry.rank}</td>
@@ -234,7 +159,7 @@ export default function PointsPage() {
                 </>
               )}
             </div>
-          )}
+          </div>
         </div>
       </main>
 
