@@ -430,36 +430,24 @@ export default function Home() {
             <Reveal delayMs={200}>
               <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[240px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
                 <h3 className="text-xl font-bold text-[#EF9B13] mb-4">Vault Fees</h3>
-                <ul className="space-y-3 text-gray-400 text-sm">
-                  <li className="flex items-start">
-                    <span className="text-[#FAB062] mr-2">•</span>
-                    <span><strong className="text-white">Deposit fees:</strong> Applied on shares minted, configurable per vault</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-[#FAB062] mr-2">•</span>
-                    <span><strong className="text-white">Withdrawal fees:</strong> Applied on payout, may vary by amount</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-[#FAB062] mr-2">•</span>
-                    <span><strong className="text-white">Management fees:</strong> Ongoing costs for strategy operation</span>
-                  </li>
-                </ul>
+                <p className="text-white font-medium mb-2">
+                  Deposit, withdrawal, and management fees
+                </p>
+                <p className="text-white/70 text-sm">
+                  Applied on shares minted and payouts, configurable per vault. Ongoing costs for strategy operation.
+                </p>
               </div>
             </Reveal>
 
             <Reveal delayMs={300}>
               <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[240px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
                 <h3 className="text-xl font-bold text-[#EF9B13] mb-4">External Fees</h3>
-                <ul className="space-y-3 text-gray-400 text-sm">
-                  <li className="flex items-start">
-                    <span className="text-[#FAB062] mr-2">•</span>
-                    <span><strong className="text-white">Hypercore fees:</strong> Network and execution costs related to Hyperliquid infrastructure</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-[#FAB062] mr-2">•</span>
-                    <span><strong className="text-white">On-chain transparency:</strong> All fees are recorded on-chain and verifiable via block explorer</span>
-                  </li>
-                </ul>
+                <p className="text-white font-medium mb-2">
+                  Network and execution costs
+                </p>
+                <p className="text-white/70 text-sm">
+                  Hypercore fees related to Hyperliquid infrastructure. All fees are recorded on-chain and verifiable via block explorer.
+                </p>
               </div>
             </Reveal>
           </div>
@@ -504,6 +492,15 @@ export default function Home() {
                 <h3 className="text-xl font-bold text-[#EF9B13] mb-3">Swap</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">
                   Interface to swap supported assets. Used to enter or rebalance positions within the ecosystem.
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delayMs={450}>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center hover:border-[#EF9B13]/50 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-[#EF9B13] mb-3">Arbitrage</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  Automated arbitrage execution designed to capture price discrepancies across venues when opportunities arise.
                 </p>
               </div>
             </Reveal>
