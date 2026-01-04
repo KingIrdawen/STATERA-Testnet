@@ -475,80 +475,154 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
           )}
 
           {/* SECTION A — Key Metrics */}
-          <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-6">
-            <h2 className="text-2xl font-bold mb-6 text-white">Key Metrics</h2>
+          <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 sm:p-8 mb-6">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-8 text-white">Key Metrics</h2>
             
             {strategyData.loading ? (
-              <div className="text-center py-8">
-                <p className="text-[#5a9a9a] text-sm">Loading metrics...</p>
+              <div className="text-center py-12">
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#fab062]"></div>
+                <p className="text-[#5a9a9a] text-sm mt-4">Loading metrics...</p>
               </div>
             ) : strategyData.error && !rpcErrorMessage ? (
               <div className="p-4 bg-red-900/20 border border-red-600/30 rounded-lg">
                 <p className="text-red-400 text-sm">Error loading metrics: {strategyData.error.message}</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-gray-800/50 rounded-lg p-4">
-                  <p className="text-gray-500 text-xs mb-2">Total Shares</p>
-                  <p className="text-white text-2xl font-bold">
-                    {strategyData.totalShares !== undefined ? strategyData.totalShares.toFixed(4) : '—'}
-                  </p>
+              <div className="space-y-8">
+                {/* Primary Metrics - TVL, PPS, Total Shares */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+                  <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 border border-gray-700/50 rounded-xl p-5 sm:p-6 hover:border-[#fab062]/30 transition-all duration-300 hover:shadow-lg hover:shadow-[#fab062]/10">
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-gray-400 text-xs sm:text-sm font-medium uppercase tracking-wide">TVL</p>
+                      <svg className="w-5 h-5 text-[#fab062]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <p className="text-white text-2xl sm:text-3xl font-bold mb-1">
+                      {strategyData.tvlUsd !== undefined ? formatUsd(strategyData.tvlUsd, 2) : '—'}
+                    </p>
+                    <p className="text-gray-500 text-xs">Total Value Locked</p>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 border border-gray-700/50 rounded-xl p-5 sm:p-6 hover:border-[#fab062]/30 transition-all duration-300 hover:shadow-lg hover:shadow-[#fab062]/10">
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-gray-400 text-xs sm:text-sm font-medium uppercase tracking-wide">PPS</p>
+                      <svg className="w-5 h-5 text-[#fab062]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                      </svg>
+                    </div>
+                    <p className="text-white text-2xl sm:text-3xl font-bold mb-1">
+                      {strategyData.ppsUsd !== undefined ? formatUsd(strategyData.ppsUsd, 4) : '—'}
+                    </p>
+                    <p className="text-gray-500 text-xs">Price Per Share</p>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 border border-gray-700/50 rounded-xl p-5 sm:p-6 hover:border-[#fab062]/30 transition-all duration-300 hover:shadow-lg hover:shadow-[#fab062]/10">
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-gray-400 text-xs sm:text-sm font-medium uppercase tracking-wide">Total Shares</p>
+                      <svg className="w-5 h-5 text-[#fab062]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                      </svg>
+                    </div>
+                    <p className="text-white text-2xl sm:text-3xl font-bold mb-1">
+                      {strategyData.totalShares !== undefined ? strategyData.totalShares.toFixed(4) : '—'}
+                    </p>
+                    <p className="text-gray-500 text-xs">All Shares Issued</p>
+                  </div>
                 </div>
 
-                {address && (
-                  <div className="bg-gray-800/50 rounded-lg p-4">
-                    <p className="text-gray-500 text-xs mb-2">Your Shares</p>
-                    <p className="text-white text-2xl font-bold">
-                      {strategyData.userShares !== undefined ? strategyData.userShares.toFixed(4) : '—'}
-                    </p>
+                {/* User Metrics - Only shown if connected */}
+                {address && (strategyData.userShares !== undefined || strategyData.userValueUsd !== undefined) && (
+                  <div className="border-t border-gray-700/50 pt-8">
+                    <h3 className="text-lg font-semibold text-gray-300 mb-4">Your Position</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                      <div className="bg-gradient-to-br from-[#fab062]/10 to-[#fab062]/5 border border-[#fab062]/20 rounded-xl p-5 sm:p-6 hover:border-[#fab062]/40 transition-all duration-300">
+                        <div className="flex items-center justify-between mb-3">
+                          <p className="text-[#fab062] text-xs sm:text-sm font-medium uppercase tracking-wide">Your Shares</p>
+                          <svg className="w-5 h-5 text-[#fab062]/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                          </svg>
+                        </div>
+                        <p className="text-white text-2xl sm:text-3xl font-bold mb-1">
+                          {strategyData.userShares !== undefined ? strategyData.userShares.toFixed(4) : '—'}
+                        </p>
+                        <p className="text-gray-400 text-xs">Your total shares (wallet + staked)</p>
+                      </div>
+
+                      <div className="bg-gradient-to-br from-[#fab062]/10 to-[#fab062]/5 border border-[#fab062]/20 rounded-xl p-5 sm:p-6 hover:border-[#fab062]/40 transition-all duration-300">
+                        <div className="flex items-center justify-between mb-3">
+                          <p className="text-[#fab062] text-xs sm:text-sm font-medium uppercase tracking-wide">Your Value</p>
+                          <svg className="w-5 h-5 text-[#fab062]/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <p className="text-white text-2xl sm:text-3xl font-bold mb-1">
+                          {strategyData.userValueUsd !== undefined ? formatUsd(strategyData.userValueUsd, 2) : '—'}
+                        </p>
+                        <p className="text-gray-400 text-xs">Your deposited value (USDT)</p>
+                      </div>
+                    </div>
                   </div>
                 )}
 
-                <div className="bg-gray-800/50 rounded-lg p-4">
-                  <p className="text-gray-500 text-xs mb-2">TVL (USDT)</p>
-                  <p className="text-white text-2xl font-bold">
-                    {strategyData.tvlUsd !== undefined ? formatUsd(strategyData.tvlUsd, 2) : '—'}
-                  </p>
-                </div>
-
-                <div className="bg-gray-800/50 rounded-lg p-4">
-                  <p className="text-gray-500 text-xs mb-2">PPS (USDT)</p>
-                  <p className="text-white text-2xl font-bold">
-                    {strategyData.ppsUsd !== undefined ? formatUsd(strategyData.ppsUsd, 4) : '—'}
-                  </p>
-                </div>
-
-                {address && (
-                  <div className="bg-gray-800/50 rounded-lg p-4">
-                    <p className="text-gray-500 text-xs mb-2">Your Deposited Value (USDT)</p>
-                    <p className="text-white text-2xl font-bold">
-                      {strategyData.userValueUsd !== undefined ? formatUsd(strategyData.userValueUsd, 2) : '—'}
-                    </p>
+                {/* APR Metrics */}
+                <div className="border-t border-gray-700/50 pt-8">
+                  <h3 className="text-lg font-semibold text-gray-300 mb-4">Performance (APR)</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+                    {(['1D', '7D', '30D'] as const).map((period) => {
+                      const apr = calculateApr[period];
+                      const aprValue = apr !== null ? apr * 100 : null;
+                      const isPositive = aprValue !== null && aprValue > 0;
+                      const isNegative = aprValue !== null && aprValue < 0;
+                      
+                      return (
+                        <div
+                          key={period}
+                          className={`bg-gradient-to-br rounded-xl p-5 sm:p-6 border transition-all duration-300 hover:shadow-lg ${
+                            isPositive
+                              ? 'from-green-900/20 to-green-800/10 border-green-700/30 hover:border-green-600/50 hover:shadow-green-500/10'
+                              : isNegative
+                              ? 'from-red-900/20 to-red-800/10 border-red-700/30 hover:border-red-600/50 hover:shadow-red-500/10'
+                              : 'from-gray-800/60 to-gray-900/60 border-gray-700/50 hover:border-gray-600/50'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between mb-3">
+                            <p className="text-gray-400 text-xs sm:text-sm font-medium uppercase tracking-wide">APR ({period})</p>
+                            {aprValue !== null && (
+                              <svg
+                                className={`w-5 h-5 ${
+                                  isPositive ? 'text-green-400/60' : isNegative ? 'text-red-400/60' : 'text-gray-500/60'
+                                }`}
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                {isPositive ? (
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                ) : isNegative ? (
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
+                                ) : (
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14" />
+                                )}
+                              </svg>
+                            )}
+                          </div>
+                          <p
+                            className={`text-2xl sm:text-3xl font-bold mb-1 ${
+                              isPositive
+                                ? 'text-green-400'
+                                : isNegative
+                                ? 'text-red-400'
+                                : 'text-white'
+                            }`}
+                          >
+                            {aprValue !== null ? `${aprValue.toFixed(2)}%` : '—'}
+                          </p>
+                          <p className="text-gray-500 text-xs">Annualized (historical)</p>
+                        </div>
+                      );
+                    })}
                   </div>
-                )}
-
-                <div className="bg-gray-800/50 rounded-lg p-4">
-                  <p className="text-gray-500 text-xs mb-2">APR (1D)</p>
-                  <p className="text-white text-2xl font-bold">
-                    {calculateApr['1D'] !== null ? `${(calculateApr['1D'] * 100).toFixed(2)}%` : '—'}
-                  </p>
-                  <p className="text-gray-500 text-[10px] mt-1">Annualized (historical)</p>
-                </div>
-
-                <div className="bg-gray-800/50 rounded-lg p-4">
-                  <p className="text-gray-500 text-xs mb-2">APR (7D)</p>
-                  <p className="text-white text-2xl font-bold">
-                    {calculateApr['7D'] !== null ? `${(calculateApr['7D'] * 100).toFixed(2)}%` : '—'}
-                  </p>
-                  <p className="text-gray-500 text-[10px] mt-1">Annualized (historical)</p>
-                </div>
-
-                <div className="bg-gray-800/50 rounded-lg p-4">
-                  <p className="text-gray-500 text-xs mb-2">APR (30D)</p>
-                  <p className="text-white text-2xl font-bold">
-                    {calculateApr['30D'] !== null ? `${(calculateApr['30D'] * 100).toFixed(2)}%` : '—'}
-                  </p>
-                  <p className="text-gray-500 text-[10px] mt-1">Annualized (historical)</p>
                 </div>
               </div>
             )}
