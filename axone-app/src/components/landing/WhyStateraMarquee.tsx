@@ -63,8 +63,8 @@ export function WhyStateraMarquee() {
       </div>
 
       {/* Bottom row with offset */}
-      <div className="marquee-container group translate-x-[120px] sm:translate-x-[140px] lg:translate-x-[130px]">
-        <div className="marquee-track">
+      <div className="marquee-container group">
+        <div className="marquee-track marquee-track-bottom">
           {duplicatedBottomRow.map((feature, index) => (
             <div
               key={`bottom-${index}`}
@@ -91,6 +91,15 @@ export function WhyStateraMarquee() {
           }
         }
 
+        @keyframes marquee-left-to-right-bottom {
+          0% {
+            transform: translateX(calc(-50% - 0.75rem + var(--offset-x, 130px)));
+          }
+          100% {
+            transform: translateX(var(--offset-x, 130px));
+          }
+        }
+
         .marquee-container {
           width: 100%;
           overflow: hidden;
@@ -104,6 +113,29 @@ export function WhyStateraMarquee() {
           animation: marquee-left-to-right 40s linear infinite;
         }
 
+        .marquee-track-bottom {
+          --offset-x: 130px;
+          animation: marquee-left-to-right-bottom 40s linear infinite;
+        }
+
+        @media (min-width: 640px) and (max-width: 1023px) {
+          .marquee-track-bottom {
+            --offset-x: 140px;
+          }
+        }
+
+        @media (min-width: 1024px) {
+          .marquee-track-bottom {
+            --offset-x: 130px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .marquee-track-bottom {
+            --offset-x: 120px;
+          }
+        }
+
         .marquee-container:hover .marquee-track {
           animation-play-state: paused;
         }
@@ -111,6 +143,9 @@ export function WhyStateraMarquee() {
         @media (prefers-reduced-motion: reduce) {
           .marquee-track {
             animation: none;
+          }
+          .marquee-track-bottom {
+            transform: translateX(var(--offset-x, 130px));
           }
           .marquee-container {
             overflow-x: auto;
