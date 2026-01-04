@@ -15,28 +15,40 @@ export const runtime = 'nodejs';
  * POST /api/points/calculate
  * Cron-triggerable route to calculate and store daily points
  * 
- * Validates secret via x-cron-secret header or ?secret= param
+ * Validates via Vercel cron header (x-vercel-cron) or manual secret param for testing
  * Determines "day" using UTC timezone (YYYY-MM-DD format)
  * If already processed, returns 200 with "already done"
  * Otherwise computes points, stores in Redis, updates leaderboard
  */
 export async function POST(req: Request) {
   try {
-    // Validate secret
+    // Validate authentication
+    // Priority 1: Vercel cron header (most secure, no secret in URL)
+    const vercelCronHeader = req.headers.get('x-vercel-cron');
+    const isVercelCron = vercelCronHeader === '1';
+
+    // Priority 2: Manual secret param (for testing/debugging)
     const url = new URL(req.url);
     const secretParam = url.searchParams.get('secret');
-    const secretHeader = req.headers.get('x-cron-secret');
-    const secret = secretParam || secretHeader;
 
-    const expectedSecret = process.env.CRON_SECRET;
-    if (!expectedSecret) {
-      return NextResponse.json(
-        { error: 'CRON_SECRET not configured' },
-        { status: 500 }
-      );
+    let isAuthorized = false;
+
+    if (isVercelCron) {
+      // Vercel cron request - automatically authorized
+      isAuthorized = true;
+    } else if (secretParam) {
+      // Manual secret for testing
+      const expectedSecret = process.env.CRON_SECRET;
+      if (!expectedSecret) {
+        return NextResponse.json(
+          { error: 'CRON_SECRET not configured' },
+          { status: 500 }
+        );
+      }
+      isAuthorized = secretParam === expectedSecret;
     }
 
-    if (secret !== expectedSecret) {
+    if (!isAuthorized) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

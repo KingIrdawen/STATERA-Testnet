@@ -5,11 +5,7 @@
   "engines": {
     "node": ">=20 <21"
   },
-  "packageManager": "pnpm@10.10.0",
   "scripts": {
-    "preinstall": "corepack enable",
-    "vercel:install": "pnpm config set registry https://registry.npmjs.org/ && pnpm install --no-frozen-lockfile",
-    "vercel:build": "pnpm build",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
