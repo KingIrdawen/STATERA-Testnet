@@ -123,9 +123,13 @@ export function useStrategyData(strategy: Strategy | null): StrategyData {
     contracts,
     query: {
       enabled: isConfigured,
-      retry: 1,
-      staleTime: 30_000, // 30 seconds
-      gcTime: 5 * 60 * 1000, // 5 minutes
+      staleTime: 60_000, // 1 minute
+      gcTime: 5 * 60_000, // 5 minutes
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchInterval: false,
+      retry: 2,
+      retryDelay: (attemptIndex: number) => Math.min(1000 * 2 ** attemptIndex, 8000),
     },
   });
 
