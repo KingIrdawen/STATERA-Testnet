@@ -172,7 +172,7 @@ export default function Home() {
                 </div>
               ) : null}
               
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-20 sm:mb-24">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-28 sm:mb-32">
                 <Link
                   href="/dashboard/strategy"
                   className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-gradient-to-r from-[#EF9B13] to-[#FAB062] text-[#121212] font-semibold text-base md:text-lg shadow-lg transition-all duration-300 hover:from-[#D36A03] hover:to-[#EF9B13] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#FAB062] focus:ring-offset-2 focus:ring-offset-[#121212]"
