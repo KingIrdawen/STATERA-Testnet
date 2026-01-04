@@ -6,6 +6,7 @@ import Header from '@/components/Header';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import { Reveal } from '@/components/landing/Reveal';
 import { AnimatedCounter } from '@/components/landing/AnimatedCounter';
+import { WhyStateraMarquee } from '@/components/landing/WhyStateraMarquee';
 import Link from 'next/link';
 
 interface LandingStats {
@@ -250,45 +251,8 @@ export default function Home() {
                     </h3>
                   </Reveal>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-                    {/* Item 1 */}
-                    <Reveal delayMs={280}>
-                      <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-                        <div className="h-[2px] w-8 bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-4"></div>
-                        <h4 className="text-xl font-semibold text-white mb-3">
-                          One deposit, diversified exposure
-                        </h4>
-                        <p className="text-white/70 text-sm sm:text-base leading-relaxed">
-                          A single deposit provides access to an index-style portfolio designed to stay aligned with its target allocation.
-                        </p>
-                      </div>
-                    </Reveal>
-
-                    {/* Item 2 */}
-                    <Reveal delayMs={360}>
-                      <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-                        <div className="h-[2px] w-8 bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-4"></div>
-                        <h4 className="text-xl font-semibold text-white mb-3">
-                          Adaptive by design
-                        </h4>
-                        <p className="text-white/70 text-sm sm:text-base leading-relaxed">
-                          Strategy logic and rebalancing are designed to respond to market moves while keeping risk constraints in view.
-                        </p>
-                      </div>
-                    </Reveal>
-
-                    {/* Item 3 */}
-                    <Reveal delayMs={440}>
-                      <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-                        <div className="h-[2px] w-8 bg-gradient-to-r from-[#EF9B13] to-[#FAB062] mb-4"></div>
-                        <h4 className="text-xl font-semibold text-white mb-3">
-                          On-chain transparency
-                        </h4>
-                        <p className="text-white/70 text-sm sm:text-base leading-relaxed">
-                          Key operations are verifiable on-chain, enabling auditable execution and clear accounting.
-                        </p>
-                      </div>
-                    </Reveal>
+                  <div className="w-full px-6 sm:px-8 lg:px-12">
+                    <WhyStateraMarquee />
                   </div>
                 </div>
               </div>
