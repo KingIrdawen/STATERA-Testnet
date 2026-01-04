@@ -90,57 +90,10 @@ export default function Home() {
           <Reveal>
             <div className="text-center">
               <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-4 sm:mb-6">
-                <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent relative inline-block statera-shine overflow-hidden">
+                <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
                   STATERA
                 </span>
               </h2>
-              <style jsx global>{`
-                @keyframes statera-shine {
-                  0% {
-                    transform: translateX(-120%);
-                    opacity: 0;
-                  }
-                  10% {
-                    opacity: 1;
-                  }
-                  35% {
-                    transform: translateX(220%);
-                    opacity: 1;
-                  }
-                  45% {
-                    opacity: 0;
-                  }
-                  100% {
-                    opacity: 0;
-                  }
-                }
-
-                .statera-shine::after {
-                  content: '';
-                  position: absolute;
-                  top: 0;
-                  left: -60%;
-                  width: 60%;
-                  height: 100%;
-                  background: linear-gradient(
-                    90deg,
-                    transparent 0%,
-                    rgba(255, 255, 255, 0.4) 30%,
-                    rgba(239, 155, 19, 0.6) 50%,
-                    rgba(255, 255, 255, 0.4) 70%,
-                    transparent 100%
-                  );
-                  mix-blend-mode: screen;
-                  pointer-events: none;
-                  animation: statera-shine 6s ease-in-out infinite;
-                }
-
-                @media (prefers-reduced-motion: reduce) {
-                  .statera-shine::after {
-                    animation: none;
-                  }
-                }
-              `}</style>
               
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 sm:mb-8">
                 <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
@@ -298,7 +251,7 @@ export default function Home() {
       {stats && stats.vaults.length > 0 && (
         <section className="py-16 sm:py-20">
           <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-            <Reveal delayMs={100}>
+            <Reveal delayMs={300}>
               <div className="text-center mb-12">
                 <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Available Strategies</h2>
                 <p className="text-gray-400 max-w-2xl mx-auto">
@@ -354,7 +307,7 @@ export default function Home() {
       {/* How It Works */}
       <section className="py-16 sm:py-20 bg-[#121212]">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-          <Reveal delayMs={100}>
+          <Reveal delayMs={300}>
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">How It Works</h2>
               <p className="text-gray-400 max-w-2xl mx-auto">
@@ -418,7 +371,7 @@ export default function Home() {
       {/* Smart Rebalancing */}
       <section className="py-16 sm:py-20 bg-[#121212]">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-          <Reveal delayMs={100}>
+          <Reveal delayMs={300}>
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Smart Rebalancing</h2>
               <p className="text-gray-400 max-w-2xl mx-auto">
@@ -464,7 +417,7 @@ export default function Home() {
       {/* Fees & Transparency */}
       <section className="py-16 sm:py-20">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-          <Reveal delayMs={100}>
+          <Reveal delayMs={300}>
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Fees & Transparency</h2>
               <p className="text-gray-400 max-w-2xl mx-auto">
@@ -516,7 +469,7 @@ export default function Home() {
       {/* App Features */}
       <section className="py-16 sm:py-20 bg-[#121212]">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-          <Reveal delayMs={100}>
+          <Reveal delayMs={300}>
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">App Features</h2>
               <p className="text-gray-400 max-w-2xl mx-auto">
@@ -580,7 +533,7 @@ export default function Home() {
       {/* Security & Transparency */}
       <section className="py-16 sm:py-20">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-          <Reveal delayMs={100}>
+          <Reveal delayMs={300}>
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Security & Transparency</h2>
             </div>
@@ -611,7 +564,7 @@ export default function Home() {
       {/* Final CTA */}
       <section className="py-16 sm:py-20 bg-[#121212]">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-          <Reveal delayMs={100}>
+          <Reveal delayMs={300}>
             <div className="text-center">
               <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
                 Ready to Get Started?
