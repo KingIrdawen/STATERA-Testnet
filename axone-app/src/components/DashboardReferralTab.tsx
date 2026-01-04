@@ -255,25 +255,25 @@ export function DashboardReferralTab() {
       : null;
 
     return (
-      <div className="flex flex-col items-center p-4 bg-gray-800/50 rounded-lg text-center">
-        <span className="font-mono bg-gray-900 px-3 py-1 rounded break-all text-white mb-4">
-          {code}
-        </span>
-        <div className="flex gap-2">
+      <div className="p-4 bg-gray-800/50 rounded-lg">
+        <div className="flex items-center justify-between gap-4 mb-2">
+          <span className="font-mono bg-gray-900 px-3 py-1 rounded break-all text-white flex-1 min-w-0">
+            {code}
+          </span>
           <button
             onClick={() => handleCopyCode(code)}
-            className="text-sm bg-[#5a9a9a] hover:bg-[#4a8a8a] px-3 py-1 rounded transition text-white"
+            className="text-sm bg-[#5a9a9a] hover:bg-[#4a8a8a] px-3 py-1 rounded transition text-white flex-shrink-0"
           >
             {copiedCode === code ? 'Copied!' : 'Copy'}
           </button>
         </div>
         {daysRemaining !== null && daysRemaining > 0 && (
-          <p className="text-gray-400 text-xs mt-2">
+          <p className="text-gray-400 text-xs mt-1">
             Expires in ~{daysRemaining} day{daysRemaining !== 1 ? 's' : ''}
           </p>
         )}
         {daysRemaining !== null && daysRemaining <= 0 && (
-          <p className="text-red-400 text-xs mt-2">Expired</p>
+          <p className="text-red-400 text-xs mt-1">Expired</p>
         )}
       </div>
     );
