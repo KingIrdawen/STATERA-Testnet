@@ -8,6 +8,7 @@ import { Reveal } from '@/components/landing/Reveal';
 import { AnimatedCounter } from '@/components/landing/AnimatedCounter';
 import { WhyStateraMarquee } from '@/components/landing/WhyStateraMarquee';
 import Link from 'next/link';
+import { playfairDisplay } from '@/lib/fonts';
 
 interface LandingStats {
   vaultCount: number;
@@ -130,8 +131,8 @@ export default function Home() {
           </div>
 
           <div className="absolute right-64 bottom-72 hidden lg:block text-right">
-            <p className="text-lg lg:text-xl italic tracking-[0.08em] text-[#C9A36A]/80">
-              The Art of Volatility
+            <p className={`${playfairDisplay.className} text-lg lg:text-xl italic tracking-[0.06em] text-[#C9A36A]/80`}>
+              The Art of Volatility...
             </p>
           </div>
 
@@ -147,8 +148,8 @@ export default function Home() {
             </div>
 
             <div className="mt-3 text-right lg:hidden">
-              <p className="text-sm italic tracking-[0.08em] text-[#C9A36A]/80">
-                The Art of Volatility
+              <p className={`${playfairDisplay.className} text-sm italic tracking-[0.06em] text-[#C9A36A]/80`}>
+                The Art of Volatility...
               </p>
             </div>
           </div>
