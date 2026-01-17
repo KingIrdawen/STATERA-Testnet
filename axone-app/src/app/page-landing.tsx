@@ -131,7 +131,7 @@ export default function Home() {
           </div>
 
           <div className="absolute right-64 bottom-72 hidden lg:block text-right">
-            <p className={`${playfairDisplay.className} text-lg lg:text-xl italic tracking-[0.06em] text-[#C9A36A]/80`}>
+            <p className={`${playfairDisplay.className} text-xl lg:text-2xl italic tracking-[0.06em] text-[#C9A36A]/80`}>
               The Art of Volatility...
             </p>
           </div>
@@ -148,7 +148,7 @@ export default function Home() {
             </div>
 
             <div className="mt-3 text-right lg:hidden">
-              <p className={`${playfairDisplay.className} text-sm italic tracking-[0.06em] text-[#C9A36A]/80`}>
+              <p className={`${playfairDisplay.className} text-base italic tracking-[0.06em] text-[#C9A36A]/80`}>
                 The Art of Volatility...
               </p>
             </div>
