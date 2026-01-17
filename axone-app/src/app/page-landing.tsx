@@ -72,10 +72,22 @@ export default function Home() {
       <Header />
       
       {/* Hero Section */}
-      <section className="py-16 sm:py-20 lg:py-24 relative">
+      <section className="py-16 sm:py-20 lg:py-24 relative min-h-[70vh] lg:min-h-[75vh] overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <Image
+            src="/Image-titre.png"
+            alt="Statera visual"
+            fill
+            className="object-cover object-right"
+            sizes="(min-width: 1280px) 100vw, (min-width: 1024px) 100vw, 100vw"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#121212] via-[#121212]/65 to-transparent" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_right,rgba(201,163,106,0.18),rgba(18,18,18,0.85))]" />
+        </div>
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 relative">
           <Reveal>
-            <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] items-center">
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-center">
               <div className="text-left max-w-2xl">
                 <p className="text-[0.7rem] sm:text-xs tracking-[0.32em] uppercase text-[rgba(230,230,230,0.7)]">
                   Decentralized Investment Strategies
@@ -104,18 +116,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="relative w-full min-h-[300px] sm:min-h-[360px] lg:min-h-[460px] lg:w-[110%] lg:justify-self-end">
-                <div className="absolute inset-0">
-                  <Image
-                    src="/Image-titre.png"
-                    alt="Statera visual"
-                    fill
-                    className="object-contain object-right"
-                    sizes="(min-width: 1280px) 42vw, (min-width: 1024px) 45vw, 100vw"
-                    priority
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#121212] via-[#121212]/60 to-transparent" />
-                </div>
+              <div className="relative w-full min-h-[240px] sm:min-h-[280px] lg:min-h-[360px]">
                 <div className="absolute right-6 bottom-6 hidden lg:block text-right">
                   <p className="text-lg lg:text-xl italic tracking-[0.08em] text-[#C9A36A]/90">
                     "The art of Volatility"
@@ -145,7 +146,7 @@ export default function Home() {
               {loading ? (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {['Total Deposited', 'Active Vaults', 'Total Unique Deposits'].map((label) => (
-                    <div key={label} className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6">
+                    <div key={label} className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
                       <p className="text-[0.65rem] uppercase tracking-[0.2em] text-[rgba(230,230,230,0.7)] mb-3">
                         {label}
                       </p>
@@ -159,7 +160,7 @@ export default function Home() {
                 </div>
               ) : stats ? (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6">
+                  <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
                     <p className="text-[0.65rem] uppercase tracking-[0.2em] text-[rgba(230,230,230,0.7)] mb-3">
                       Total Deposited
                     </p>
@@ -172,7 +173,7 @@ export default function Home() {
                     </p>
                   </div>
 
-                  <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6">
+                  <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
                     <p className="text-[0.65rem] uppercase tracking-[0.2em] text-[rgba(230,230,230,0.7)] mb-3">
                       Active Vaults
                     </p>
@@ -185,7 +186,7 @@ export default function Home() {
                     </p>
                   </div>
 
-                  <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6">
+                  <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
                     <p className="text-[0.65rem] uppercase tracking-[0.2em] text-[rgba(230,230,230,0.7)] mb-3">
                       Total Unique Deposits
                     </p>
