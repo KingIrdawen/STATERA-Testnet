@@ -136,8 +136,8 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mt-auto pb-8">
-            <div className="border-t border-[#C9A36A]/20 pt-4">
+          <div className="mt-auto pb-6">
+            <div className="border-t border-[#C9A36A]/20 pt-2">
               <div className="flex flex-wrap items-center justify-center gap-3 text-[0.65rem] sm:text-xs tracking-[0.24em] uppercase text-[rgba(230,230,230,0.7)]">
                 <span>Non-Custodial Architecture</span>
                 <span className="hidden sm:inline text-[#C9A36A]/40">•</span>
