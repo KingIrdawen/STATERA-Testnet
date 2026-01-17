@@ -75,7 +75,7 @@ export default function Home() {
       <section className="py-16 sm:py-20 lg:py-24 relative">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 relative">
           <Reveal>
-            <div className="grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] items-start">
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] items-center">
               <div className="text-left max-w-2xl">
                 <p className="text-[0.7rem] sm:text-xs tracking-[0.32em] uppercase text-[rgba(230,230,230,0.7)]">
                   Decentralized Investment Strategies
@@ -104,7 +104,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="relative w-full min-h-[280px] sm:min-h-[340px] lg:min-h-[420px]">
+              <div className="relative w-full min-h-[300px] sm:min-h-[360px] lg:min-h-[460px] lg:w-[110%] lg:justify-self-end">
                 <div className="absolute inset-0">
                   <Image
                     src="/Image-titre.png"
