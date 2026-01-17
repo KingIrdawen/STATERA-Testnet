@@ -136,8 +136,8 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mt-auto pb-6">
-            <div className="border-t border-[#C9A36A]/20 pt-2">
+          <div className="mt-auto pb-4">
+            <div className="border-t border-[#C9A36A]/20 pt-1">
               <div className="flex flex-wrap items-center justify-center gap-3 text-[0.65rem] sm:text-xs tracking-[0.24em] uppercase text-[rgba(230,230,230,0.7)]">
                 <span>Non-Custodial Architecture</span>
                 <span className="hidden sm:inline text-[#C9A36A]/40">•</span>
@@ -268,7 +268,15 @@ export default function Home() {
                     </h3>
                   </Reveal>
 
-                  <div className="w-full px-6 sm:px-8 lg:px-12">
+                  <div
+                    className="w-full px-6 sm:px-8 lg:px-12 relative"
+                    style={{
+                      maskImage:
+                        'linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)',
+                      WebkitMaskImage:
+                        'linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)',
+                    }}
+                  >
                     <WhyStateraMarquee />
                   </div>
                 </div>
