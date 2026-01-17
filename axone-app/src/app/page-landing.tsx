@@ -115,7 +115,7 @@ export default function Home() {
                     src="/Image-titre.png"
                     alt="Statera visual"
                     fill
-                    className="object-cover object-right"
+                    className="object-contain object-right"
                     sizes="(min-width: 1280px) 520px, (min-width: 1024px) 720px, 100vw"
                     priority
                   />
