@@ -79,13 +79,18 @@ export default function Home() {
               src="/Image-titre.png"
               alt="Statera visual"
               fill
-              className="object-cover object-right opacity-20"
+              className="object-cover object-right"
               sizes="(min-width: 1280px) 50vw, (min-width: 1024px) 60vw, 100vw"
               priority
             />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-r from-[#121212] via-[#121212]/95 to-transparent" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_right,rgba(201,163,106,0.18),rgba(18,18,18,0.95))]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#121212] via-[#121212]/60 to-transparent" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_right,rgba(201,163,106,0.2),rgba(18,18,18,0.85))]" />
+          <div className="absolute right-10 bottom-10 hidden md:block text-right">
+            <p className="text-lg lg:text-xl italic tracking-[0.08em] text-[#C9A36A]/90">
+              "The art of Volatility"
+            </p>
+          </div>
         </div>
         
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
@@ -126,6 +131,12 @@ export default function Home() {
                 <span className="hidden sm:inline text-[#C9A36A]/40">•</span>
                 <span>On-Chain Transparency</span>
               </div>
+            </div>
+
+            <div className="mt-6 text-right md:hidden">
+              <p className="text-base italic tracking-[0.08em] text-[#C9A36A]/90">
+                "The art of Volatility"
+              </p>
             </div>
 
             {/* KPI block */}
@@ -188,19 +199,6 @@ export default function Home() {
                 </div>
               ) : null}
             </div>
-
-              {/* The art of Volatility */}
-              <div className="py-16 sm:py-20">
-                <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-                  <Reveal delayMs={0}>
-                    <div className="text-center">
-                      <p className="text-2xl sm:text-3xl md:text-4xl italic text-[rgba(230,230,230,0.7)]">
-                        "The art of Volatility"
-                      </p>
-                    </div>
-                  </Reveal>
-                </div>
-              </div>
 
               {/* How the protocol works */}
               <div className="py-16 sm:py-20">
