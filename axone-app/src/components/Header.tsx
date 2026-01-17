@@ -18,10 +18,10 @@ export default function Header() {
   }, []);
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-[9999] shadow-lg transition-all duration-300 ${
+    <header className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 border-b border-[#C9A36A]/15 ${
       isScrolled 
-        ? 'bg-[#121212]/50 backdrop-blur-md' 
-        : 'bg-[#121212]'
+        ? 'bg-[#121212]/90 backdrop-blur-md' 
+        : 'bg-[#121212]/70'
     }`}>
       <div className="flex min-h-[60px] md:min-h-[80px] w-full">
         {/* Section gauche - Logo */}
@@ -37,7 +37,7 @@ export default function Header() {
                 className="h-8 w-auto sm:h-10 md:h-12"
                 priority
               />
-              <span className="text-white font-bold text-lg sm:text-xl md:text-2xl tracking-tight">Statera</span>
+              <span className="text-[#E6E6E6] font-bold text-lg sm:text-xl md:text-2xl tracking-tight">Statera</span>
             </Link>
           </div>
         </div>
@@ -48,14 +48,14 @@ export default function Header() {
             <div className="flex items-center gap-3 sm:gap-6">
               <Link
                 href="/docs"
-                className="text-white font-bold text-xs sm:text-sm md:text-base hover:text-[#fab062] transition-colors tracking-tight"
+                className="text-[#E6E6E6] font-semibold text-xs sm:text-sm md:text-base hover:text-[#C9A36A] transition-colors tracking-tight"
               >
                 Docs
               </Link>
               
               <Link
                 href="/dashboard/strategy"
-                className="inline-flex items-center px-3 py-1 sm:px-4 sm:py-1.5 md:px-6 md:py-2 rounded-lg bg-[#fab062] text-[#011f26] font-semibold text-xs sm:text-sm md:text-base shadow-2xl transition-all duration-300 hover:bg-[#e89a4a] hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-[#fab062] focus:ring-offset-2 focus:ring-offset-[#011f26] tracking-tight"
+                className="inline-flex items-center px-3 py-1 sm:px-4 sm:py-1.5 md:px-6 md:py-2 rounded-lg bg-[#C9A36A] text-[#121212] font-semibold text-xs sm:text-sm md:text-base shadow-lg transition-all duration-300 hover:bg-[#b8935f] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#C9A36A]/60 focus:ring-offset-2 focus:ring-offset-[#121212] tracking-tight"
               >
                 Launch App
               </Link>

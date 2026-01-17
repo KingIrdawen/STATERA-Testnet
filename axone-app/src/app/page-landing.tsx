@@ -72,58 +72,59 @@ export default function Home() {
       <Header />
       
       {/* Hero Section */}
-      <section className="py-16 sm:py-20 lg:py-24 relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute inset-y-0 right-0 w-full sm:w-3/5 lg:w-1/2">
-            <Image
-              src="/Image-titre.png"
-              alt="Statera visual"
-              fill
-              className="object-cover object-right"
-              sizes="(min-width: 1280px) 50vw, (min-width: 1024px) 60vw, 100vw"
-              priority
-            />
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-r from-[#121212] via-[#121212]/60 to-transparent" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_right,rgba(201,163,106,0.2),rgba(18,18,18,0.85))]" />
-          <div className="absolute right-10 bottom-10 hidden md:block text-right">
-            <p className="text-lg lg:text-xl italic tracking-[0.08em] text-[#C9A36A]/90">
-              "The art of Volatility"
-            </p>
-          </div>
-        </div>
-        
-        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
+      <section className="py-16 sm:py-20 lg:py-24 relative">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 relative">
           <Reveal>
-            <div className="text-left max-w-2xl">
-              <p className="text-[0.7rem] sm:text-xs tracking-[0.32em] uppercase text-[rgba(230,230,230,0.7)]">
-                Decentralized Investment Strategies
-              </p>
-              <h1 className="mt-4 text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[0.12em] text-[#C9A36A]">
-                STATERA
-              </h1>
-              <p className="mt-6 text-base sm:text-lg text-[#E6E6E6] leading-relaxed">
-                Non-custodial access to disciplined volatility exposure, powered by rules-based allocation and transparent on-chain execution.
-              </p>
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] items-start">
+              <div className="text-left max-w-2xl">
+                <p className="text-[0.7rem] sm:text-xs tracking-[0.32em] uppercase text-[rgba(230,230,230,0.7)]">
+                  Decentralized Investment Strategies
+                </p>
+                <h1 className="mt-4 text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[0.12em] text-[#C9A36A]">
+                  STATERA
+                </h1>
+                <p className="mt-6 text-base sm:text-lg text-[#E6E6E6] leading-relaxed">
+                  Non-custodial access to disciplined volatility exposure, powered by rules-based allocation and transparent on-chain execution.
+                </p>
 
-              <div className="mt-8 flex flex-col sm:flex-row gap-4 items-start">
-                <Link
-                  href="/dashboard/strategy"
-                  className="inline-flex items-center justify-center px-7 py-3 rounded-lg bg-[#C9A36A] text-[#121212] font-semibold text-sm sm:text-base shadow-lg transition-all duration-300 hover:bg-[#b8935f] focus:outline-none focus:ring-2 focus:ring-[#C9A36A]/60 focus:ring-offset-2 focus:ring-offset-[#121212]"
-                >
-                  Access Platform
-                </Link>
+                <div className="mt-8 flex flex-col sm:flex-row gap-4 items-start">
+                  <Link
+                    href="/dashboard/strategy"
+                    className="inline-flex items-center justify-center px-7 py-3 rounded-lg bg-[#C9A36A] text-[#121212] font-semibold text-sm sm:text-base shadow-lg transition-all duration-300 hover:bg-[#b8935f] focus:outline-none focus:ring-2 focus:ring-[#C9A36A]/60 focus:ring-offset-2 focus:ring-offset-[#121212]"
+                  >
+                    Access Platform
+                  </Link>
 
-                <Link
-                  href="/docs"
-                  className="inline-flex items-center justify-center px-7 py-3 rounded-lg border border-[#C9A36A]/30 text-[#E6E6E6] font-semibold text-sm sm:text-base shadow-lg transition-all duration-300 hover:border-[#C9A36A]/60 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[#C9A36A]/40 focus:ring-offset-2 focus:ring-offset-[#121212]"
-                >
-                  View Documentation
-                </Link>
+                  <Link
+                    href="/docs"
+                    className="inline-flex items-center justify-center px-7 py-3 rounded-lg border border-[#C9A36A]/30 text-[#E6E6E6] font-semibold text-sm sm:text-base shadow-lg transition-all duration-300 hover:border-[#C9A36A]/60 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[#C9A36A]/40 focus:ring-offset-2 focus:ring-offset-[#121212]"
+                  >
+                    View Documentation
+                  </Link>
+                </div>
+              </div>
+
+              <div className="relative w-full min-h-[280px] sm:min-h-[340px] lg:min-h-[420px]">
+                <div className="absolute inset-0">
+                  <Image
+                    src="/Image-titre.png"
+                    alt="Statera visual"
+                    fill
+                    className="object-contain object-right"
+                    sizes="(min-width: 1280px) 42vw, (min-width: 1024px) 45vw, 100vw"
+                    priority
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#121212] via-[#121212]/60 to-transparent" />
+                </div>
+                <div className="absolute right-6 bottom-6 hidden lg:block text-right">
+                  <p className="text-lg lg:text-xl italic tracking-[0.08em] text-[#C9A36A]/90">
+                    "The art of Volatility"
+                  </p>
+                </div>
               </div>
             </div>
 
-            <div className="mt-10 border-t border-[#C9A36A]/20 pt-6">
+            <div className="mt-8 border-t border-[#C9A36A]/20 pt-6">
               <div className="flex flex-wrap items-center gap-3 text-[0.65rem] sm:text-xs tracking-[0.24em] uppercase text-[rgba(230,230,230,0.7)]">
                 <span>Non-Custodial Architecture</span>
                 <span className="hidden sm:inline text-[#C9A36A]/40">•</span>
@@ -133,7 +134,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="mt-6 text-right md:hidden">
+            <div className="mt-4 text-right lg:hidden">
               <p className="text-base italic tracking-[0.08em] text-[#C9A36A]/90">
                 "The art of Volatility"
               </p>

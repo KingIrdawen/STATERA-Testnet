@@ -16,17 +16,17 @@ export function SiteFooter() {
   return (
     <footer className="relative w-full bg-[#121212] overflow-hidden">
       {/* Stars background effect */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(250,176,98,0.15)_1px,transparent_0)] [background-size:32px_32px]" />
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(201,163,106,0.15)_1px,transparent_0)] [background-size:32px_32px]" />
       </div>
 
-      <div className="relative w-full px-6 sm:px-8 lg:px-12 py-16">
+      <div className="relative w-full px-6 sm:px-8 lg:px-12 py-16 border-t border-[#C9A36A]/15">
         {/* Main content: Logo + Social on left, Links on right */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 mb-12">
           {/* Left: Logo + Branding + Social icons */}
           <div className="flex items-center gap-4">
             {/* Logo badge */}
-            <div className="relative w-14 h-14 rounded-full bg-gradient-to-br from-[#fab062] to-[#5a9a9a] p-0.5 flex-shrink-0">
+            <div className="relative w-14 h-14 rounded-full bg-gradient-to-br from-[#C9A36A] to-[#5a9a9a] p-0.5 flex-shrink-0">
                 <div className="w-full h-full rounded-full bg-[#121212] flex items-center justify-center">
                 <Image
                   src="/Logo-Statera-sandy-brown-détouré.png"
@@ -38,8 +38,8 @@ export function SiteFooter() {
               </div>
             </div>
             <div className="flex flex-col">
-              <span className="text-white font-bold text-xl">STATERA</span>
-              <span className="text-[#fab062] text-xs font-semibold uppercase tracking-wider">
+              <span className="text-[#E6E6E6] font-bold text-xl">STATERA</span>
+              <span className="text-[#C9A36A] text-xs font-semibold uppercase tracking-wider">
                 FINANCE
               </span>
             </div>
@@ -49,7 +49,7 @@ export function SiteFooter() {
                 href={EXTERNAL_LINKS.x}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/70 hover:text-white transition-colors"
+                className="text-[rgba(230,230,230,0.7)] hover:text-[#C9A36A] transition-colors"
                 aria-label="X (Twitter)"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -60,7 +60,7 @@ export function SiteFooter() {
                 href={EXTERNAL_LINKS.discord}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/70 hover:text-white transition-colors"
+                className="text-[rgba(230,230,230,0.7)] hover:text-[#C9A36A] transition-colors"
                 aria-label="Discord"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -71,7 +71,7 @@ export function SiteFooter() {
                 href={EXTERNAL_LINKS.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/70 hover:text-white transition-colors"
+                className="text-[rgba(230,230,230,0.7)] hover:text-[#C9A36A] transition-colors"
                 aria-label="GitHub"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -85,42 +85,42 @@ export function SiteFooter() {
           <div className="flex flex-wrap items-center justify-end gap-2 text-sm">
             <Link
               href="/app/strategies"
-              className="text-white/70 hover:text-white transition-colors"
+              className="text-[rgba(230,230,230,0.7)] hover:text-[#C9A36A] transition-colors"
             >
               Strategies
             </Link>
-            <span className="text-white/50">.</span>
+            <span className="text-[rgba(230,230,230,0.45)]">.</span>
             <Link
               href="/dashboard/strategy"
-              className="text-white/70 hover:text-white transition-colors"
+              className="text-[rgba(230,230,230,0.7)] hover:text-[#C9A36A] transition-colors"
             >
               Dashboard
             </Link>
-            <span className="text-white/50">.</span>
+            <span className="text-[rgba(230,230,230,0.45)]">.</span>
             <Link
               href="/dashboard/swap"
-              className="text-white/70 hover:text-white transition-colors"
+              className="text-[rgba(230,230,230,0.7)] hover:text-[#C9A36A] transition-colors"
             >
               Swap
             </Link>
-            <span className="text-white/50">.</span>
+            <span className="text-[rgba(230,230,230,0.45)]">.</span>
             <Link
               href="/dashboard/staking"
-              className="text-white/70 hover:text-white transition-colors"
+              className="text-[rgba(230,230,230,0.7)] hover:text-[#C9A36A] transition-colors"
             >
               Staking
             </Link>
-            <span className="text-white/50">.</span>
+            <span className="text-[rgba(230,230,230,0.45)]">.</span>
             <Link
               href="/dashboard/referral"
-              className="text-white/70 hover:text-white transition-colors"
+              className="text-[rgba(230,230,230,0.7)] hover:text-[#C9A36A] transition-colors"
             >
               Referral
             </Link>
-            <span className="text-white/50">.</span>
+            <span className="text-[rgba(230,230,230,0.45)]">.</span>
             <Link
               href="/docs"
-              className="text-white/70 hover:text-white transition-colors"
+              className="text-[rgba(230,230,230,0.7)] hover:text-[#C9A36A] transition-colors"
             >
               Documentation
             </Link>
@@ -128,10 +128,10 @@ export function SiteFooter() {
         </div>
 
         {/* Bottom bar: Copyright left, Legal links right */}
-        <div className="pt-8 border-t border-gray-800">
+        <div className="pt-8 border-t border-[#C9A36A]/15">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-4">
             {/* Copyright - Left */}
-            <p className="text-white/50 text-xs">
+            <p className="text-[rgba(230,230,230,0.7)] text-xs">
               © {currentYear} Statera Finance. All rights reserved.
             </p>
             
@@ -139,21 +139,21 @@ export function SiteFooter() {
             <div className="flex flex-wrap items-center gap-2 text-xs md:justify-end">
               <Link
                 href="/terms-of-use"
-                className="text-white/50 hover:text-white/70 transition-colors"
+                className="text-[rgba(230,230,230,0.7)] hover:text-[#C9A36A] transition-colors"
               >
                 Terms of Use
               </Link>
-              <span className="text-white/50">.</span>
+              <span className="text-[rgba(230,230,230,0.45)]">.</span>
               <Link
                 href="/users-risk"
-                className="text-white/50 hover:text-white/70 transition-colors"
+                className="text-[rgba(230,230,230,0.7)] hover:text-[#C9A36A] transition-colors"
               >
                 Users Risk
               </Link>
-              <span className="text-white/50">.</span>
+              <span className="text-[rgba(230,230,230,0.45)]">.</span>
               <Link
                 href="#"
-                className="text-white/50 hover:text-white/70 transition-colors"
+                className="text-[rgba(230,230,230,0.7)] hover:text-[#C9A36A] transition-colors"
               >
                 Cookies
               </Link>
