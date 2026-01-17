@@ -72,31 +72,34 @@ export default function Home() {
       <Header />
       
       {/* Hero Section */}
-      <section className="py-16 sm:py-20 lg:py-24 relative min-h-[70vh] lg:min-h-[75vh] overflow-hidden">
+      <section className="relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <Image
-            src="/Image-titre.png"
-            alt="Statera visual"
-            fill
-            className="object-cover object-right"
-            sizes="(min-width: 1280px) 100vw, (min-width: 1024px) 100vw, 100vw"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#121212] via-[#121212]/65 to-transparent" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_right,rgba(201,163,106,0.18),rgba(18,18,18,0.85))]" />
+          <div className="absolute inset-y-0 right-0 w-full lg:w-1/2">
+            <Image
+              src="/Image-titre.png"
+              alt="Statera visual"
+              fill
+              className="object-cover object-right"
+              sizes="(min-width: 1280px) 50vw, (min-width: 1024px) 50vw, 100vw"
+              priority
+            />
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#121212] via-[#121212]/80 to-transparent" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_right,rgba(0,0,0,0.35),rgba(18,18,18,0.9))]" />
         </div>
-        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 relative">
+
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10 min-h-[70vh] lg:min-h-[80vh] flex flex-col">
           <Reveal>
-            <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-center">
+            <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-center flex-1 py-16 sm:py-20">
               <div className="text-left max-w-2xl">
-                <p className="text-[0.7rem] sm:text-xs tracking-[0.32em] uppercase text-[rgba(230,230,230,0.7)]">
-                  Decentralized Investment Strategies
-                </p>
-                <h1 className="mt-4 text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[0.12em] text-[#C9A36A]">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[0.12em] text-[#C9A36A]">
                   STATERA
                 </h1>
-                <p className="mt-6 text-base sm:text-lg text-[#E6E6E6] leading-relaxed">
-                  Non-custodial access to disciplined volatility exposure, powered by rules-based allocation and transparent on-chain execution.
+                <p className="mt-4 text-[0.7rem] sm:text-xs tracking-[0.32em] uppercase text-[#C9A36A]/80">
+                  Decentralized Investment Strategies
+                </p>
+                <p className="mt-6 text-base sm:text-lg text-[rgba(230,230,230,0.7)] leading-relaxed max-w-xl">
+                  On-chain portfolio strategies with institutional-grade risk management, delivering transparent exposure through disciplined, rules-based allocation.
                 </p>
 
                 <div className="mt-8 flex flex-col sm:flex-row gap-4 items-start">
@@ -104,7 +107,7 @@ export default function Home() {
                     href="/dashboard/strategy"
                     className="inline-flex items-center justify-center px-7 py-3 rounded-lg bg-[#C9A36A] text-[#121212] font-semibold text-sm sm:text-base shadow-lg transition-all duration-300 hover:bg-[#b8935f] focus:outline-none focus:ring-2 focus:ring-[#C9A36A]/60 focus:ring-offset-2 focus:ring-offset-[#121212]"
                   >
-                    Access Platform
+                    ACCESS PLATFORM
                   </Link>
 
                   <Link
@@ -116,17 +119,19 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="relative w-full min-h-[240px] sm:min-h-[280px] lg:min-h-[360px]">
+              <div className="relative w-full min-h-[260px] sm:min-h-[320px] lg:min-h-[420px]">
                 <div className="absolute right-6 bottom-6 hidden lg:block text-right">
-                  <p className="text-lg lg:text-xl italic tracking-[0.08em] text-[#C9A36A]/90">
-                    "The art of Volatility"
+                  <p className="text-lg lg:text-xl italic tracking-[0.08em] text-[#C9A36A]/80">
+                    The Art of Volatility
                   </p>
                 </div>
               </div>
             </div>
+          </Reveal>
 
-            <div className="mt-8 border-t border-[#C9A36A]/20 pt-6">
-              <div className="flex flex-wrap items-center gap-3 text-[0.65rem] sm:text-xs tracking-[0.24em] uppercase text-[rgba(230,230,230,0.7)]">
+          <div className="mt-auto pb-8">
+            <div className="border-t border-[#C9A36A]/20 pt-4">
+              <div className="flex flex-wrap items-center justify-center gap-3 text-[0.65rem] sm:text-xs tracking-[0.24em] uppercase text-[rgba(230,230,230,0.7)]">
                 <span>Non-Custodial Architecture</span>
                 <span className="hidden sm:inline text-[#C9A36A]/40">•</span>
                 <span>Rules-Based Allocation</span>
@@ -135,72 +140,77 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="mt-4 text-right lg:hidden">
-              <p className="text-base italic tracking-[0.08em] text-[#C9A36A]/90">
-                "The art of Volatility"
+            <div className="mt-3 text-right lg:hidden">
+              <p className="text-sm italic tracking-[0.08em] text-[#C9A36A]/80">
+                The Art of Volatility
               </p>
             </div>
+          </div>
+        </div>
+      </section>
 
-            {/* KPI block */}
-            <div className="mt-10">
-              {loading ? (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {['Total Deposited', 'Active Vaults', 'Total Unique Deposits'].map((label) => (
-                    <div key={label} className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
-                      <p className="text-[0.65rem] uppercase tracking-[0.2em] text-[rgba(230,230,230,0.7)] mb-3">
-                        {label}
-                      </p>
-                      <p className="text-3xl sm:text-4xl font-semibold text-[#C9A36A]">—</p>
-                    </div>
-                  ))}
+      {/* KPI block */}
+      <section className="py-12 sm:py-16">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {['Total Deposited', 'Active Vaults', 'Total Unique Deposits'].map((label) => (
+                <div key={label} className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
+                  <p className="text-[0.65rem] uppercase tracking-[0.2em] text-[rgba(230,230,230,0.7)] mb-3">
+                    {label}
+                  </p>
+                  <p className="text-3xl sm:text-4xl font-semibold text-[#C9A36A]">—</p>
                 </div>
-              ) : error ? (
-                <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 text-sm text-[rgba(230,230,230,0.7)]">
-                  Unable to load metrics.
-                </div>
-              ) : stats ? (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
-                    <p className="text-[0.65rem] uppercase tracking-[0.2em] text-[rgba(230,230,230,0.7)] mb-3">
-                      Total Deposited
-                    </p>
-                    <p className="text-3xl sm:text-4xl font-semibold text-[#C9A36A]">
-                      <AnimatedCounter
-                        value={stats.totalDepositedUsd}
-                        duration={2000}
-                        formatter={(val) => formatUsd(val)}
-                      />
-                    </p>
-                  </div>
-
-                  <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
-                    <p className="text-[0.65rem] uppercase tracking-[0.2em] text-[rgba(230,230,230,0.7)] mb-3">
-                      Active Vaults
-                    </p>
-                    <p className="text-3xl sm:text-4xl font-semibold text-[#C9A36A]">
-                      <AnimatedCounter
-                        value={stats.vaultCount}
-                        duration={2000}
-                        formatter={(val) => Math.floor(val).toString()}
-                      />
-                    </p>
-                  </div>
-
-                  <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
-                    <p className="text-[0.65rem] uppercase tracking-[0.2em] text-[rgba(230,230,230,0.7)] mb-3">
-                      Total Unique Deposits
-                    </p>
-                    <p className="text-3xl sm:text-4xl font-semibold text-[#C9A36A]" title="Number of deposit transactions across all deployed vaults">
-                      <AnimatedCounter
-                        value={stats.totalDepositCount}
-                        duration={2000}
-                        formatter={(val) => Math.floor(val).toLocaleString()}
-                      />
-                    </p>
-                  </div>
-                </div>
-              ) : null}
+              ))}
             </div>
+          ) : error ? (
+            <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 text-sm text-[rgba(230,230,230,0.7)]">
+              Unable to load metrics.
+            </div>
+          ) : stats ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
+                <p className="text-[0.65rem] uppercase tracking-[0.2em] text-[rgba(230,230,230,0.7)] mb-3">
+                  Total Deposited
+                </p>
+                <p className="text-3xl sm:text-4xl font-semibold text-[#C9A36A]">
+                  <AnimatedCounter
+                    value={stats.totalDepositedUsd}
+                    duration={2000}
+                    formatter={(val) => formatUsd(val)}
+                  />
+                </p>
+              </div>
+
+              <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
+                <p className="text-[0.65rem] uppercase tracking-[0.2em] text-[rgba(230,230,230,0.7)] mb-3">
+                  Active Vaults
+                </p>
+                <p className="text-3xl sm:text-4xl font-semibold text-[#C9A36A]">
+                  <AnimatedCounter
+                    value={stats.vaultCount}
+                    duration={2000}
+                    formatter={(val) => Math.floor(val).toString()}
+                  />
+                </p>
+              </div>
+
+              <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
+                <p className="text-[0.65rem] uppercase tracking-[0.2em] text-[rgba(230,230,230,0.7)] mb-3">
+                  Total Unique Deposits
+                </p>
+                <p className="text-3xl sm:text-4xl font-semibold text-[#C9A36A]" title="Number of deposit transactions across all deployed vaults">
+                  <AnimatedCounter
+                    value={stats.totalDepositCount}
+                    duration={2000}
+                    formatter={(val) => Math.floor(val).toLocaleString()}
+                  />
+                </p>
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </section>
 
               {/* How the protocol works */}
               <div className="py-16 sm:py-20">
@@ -256,9 +266,6 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-            </Reveal>
-        </div>
-      </section>
 
       {/* Vaults Preview */}
       {stats && stats.vaults.length > 0 && (
