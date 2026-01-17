@@ -73,7 +73,7 @@ export default function Home() {
       <Header />
       
       {/* Hero Section */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden bg-[#121212]">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute inset-0">
             <div className="max-w-7xl mx-auto h-full px-6 sm:px-8 lg:px-12">
@@ -90,7 +90,7 @@ export default function Home() {
             </div>
           </div>
           <div className="absolute inset-0 bg-gradient-to-r from-[#121212] via-[#121212]/80 to-transparent" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_right,rgba(0,0,0,0.35),rgba(18,18,18,0.9))]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_right,rgba(18,18,18,0.35),rgba(18,18,18,0.9))]" />
         </div>
 
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10 min-h-[75vh] lg:min-h-[85vh] flex flex-col">
@@ -130,7 +130,7 @@ export default function Home() {
             </Reveal>
           </div>
 
-          <div className="absolute right-64 bottom-72 hidden lg:block text-right">
+          <div className="absolute right-56 bottom-72 hidden lg:block text-right">
             <p className={`${playfairDisplay.className} text-xl lg:text-2xl italic tracking-[0.06em] text-[#C9A36A]/80`}>
               The Art of Volatility...
             </p>
