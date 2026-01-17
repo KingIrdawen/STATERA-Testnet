@@ -129,7 +129,7 @@ export default function Home() {
             </Reveal>
           </div>
 
-          <div className="absolute right-16 bottom-24 hidden lg:block text-right">
+          <div className="absolute right-32 bottom-40 hidden lg:block text-right">
             <p className="text-lg lg:text-xl italic tracking-[0.08em] text-[#C9A36A]/80">
               The Art of Volatility
             </p>
