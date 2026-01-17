@@ -74,16 +74,6 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute inset-y-0 right-0 w-full lg:w-1/2">
-            <Image
-              src="/Image-titre.png"
-              alt="Statera visual"
-              fill
-              className="object-cover object-right"
-              sizes="(min-width: 1280px) 50vw, (min-width: 1024px) 50vw, 100vw"
-              priority
-            />
-          </div>
           <div className="absolute inset-0 bg-gradient-to-r from-[#121212] via-[#121212]/80 to-transparent" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_right,rgba(0,0,0,0.35),rgba(18,18,18,0.9))]" />
         </div>
@@ -119,11 +109,21 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="relative w-full min-h-[260px] sm:min-h-[320px] lg:min-h-[420px]">
-                <div className="absolute right-6 bottom-6 hidden lg:block text-right">
-                  <p className="text-lg lg:text-xl italic tracking-[0.08em] text-[#C9A36A]/80">
-                    The Art of Volatility
-                  </p>
+              <div className="relative w-full flex justify-end">
+                <div className="relative w-full max-w-[520px] sm:max-w-[620px] lg:max-w-[720px] h-[260px] sm:h-[320px] lg:h-[420px] justify-self-end lg:translate-x-2 2xl:translate-x-4">
+                  <Image
+                    src="/Image-titre.png"
+                    alt="Statera visual"
+                    fill
+                    className="object-cover object-right"
+                    sizes="(min-width: 1280px) 520px, (min-width: 1024px) 720px, 100vw"
+                    priority
+                  />
+                  <div className="absolute right-6 bottom-6 hidden lg:block text-right">
+                    <p className="text-lg lg:text-xl italic tracking-[0.08em] text-[#C9A36A]/80">
+                      The Art of Volatility
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
