@@ -44,6 +44,21 @@ body {
   font-variation-settings: normal;
 }
 
+.brand-typography {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.brand-typography :is(h1, h2, h3, h4, h5, h6) {
+  letter-spacing: 0.04em;
+}
+
+.brand-typography .uppercase {
+  letter-spacing: 0.14em;
+}
+
 /* Animation de respiration pour le bouton Launch App */
 @keyframes breathe {
   0% {

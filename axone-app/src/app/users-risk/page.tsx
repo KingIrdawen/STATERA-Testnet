@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 export default function UsersRiskPage() {
   return (
-    <div className="min-h-screen bg-[#121212] text-white">
+    <div className="min-h-screen bg-[#121212] text-white brand-typography">
       <Header />
       
       <main className="pt-[60px] md:pt-[80px] pb-16">

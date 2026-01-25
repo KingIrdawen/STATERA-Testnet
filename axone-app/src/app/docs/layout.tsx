@@ -74,7 +74,7 @@ export default function DocsLayout({
   const isActive = (href: string) => pathname === href;
 
   return (
-    <div className="min-h-screen bg-[#121212] text-white">
+    <div className="min-h-screen bg-[#121212] text-white brand-typography">
       <Header />
       
       {/* Bouton toggle mobile */}
