@@ -98,10 +98,10 @@ export default function Home() {
             <Reveal>
               <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-center w-full">
                 <div className="text-left max-w-2xl">
-                  <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[0.12em] text-[#C9A36A]">
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[0.07em] text-[#C9A36A]">
                     STATERA
                   </h1>
-                  <p className="mt-4 text-[0.7rem] sm:text-xs tracking-[0.32em] uppercase text-[#C9A36A]/80">
+                  <p className="mt-4 text-[0.7rem] sm:text-xs tracking-[0.14em] uppercase text-[#C9A36A]/80">
                     Decentralized Investment Strategies
                   </p>
                   <p className="mt-6 text-base sm:text-lg text-[rgba(230,230,230,0.7)] leading-relaxed max-w-xl">
@@ -138,7 +138,7 @@ export default function Home() {
 
           <div className="mt-auto" style={{ paddingBottom: '5px' }}>
             <div className="border-t border-[#C9A36A]/20">
-              <div className="flex flex-wrap items-center justify-center gap-3 text-[0.65rem] sm:text-xs tracking-[0.24em] uppercase text-[rgba(230,230,230,0.7)]">
+              <div className="flex flex-wrap items-center justify-center gap-3 text-[0.65rem] sm:text-xs tracking-[0.14em] uppercase text-[rgba(230,230,230,0.7)]">
                 <span>Non-Custodial Architecture</span>
                 <span className="hidden sm:inline text-[#C9A36A]/40">•</span>
                 <span>Rules-Based Allocation</span>
@@ -163,7 +163,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {['Total Deposited', 'Active Vaults', 'Total Unique Deposits'].map((label) => (
                 <div key={label} className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
-                  <p className="text-[0.65rem] uppercase tracking-[0.2em] text-[rgba(230,230,230,0.7)] mb-3">
+                  <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.7)] mb-3">
                     {label}
                   </p>
                   <p className="text-3xl sm:text-4xl font-semibold text-[#C9A36A]">—</p>
@@ -177,7 +177,7 @@ export default function Home() {
           ) : stats ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
-                <p className="text-[0.65rem] uppercase tracking-[0.2em] text-[rgba(230,230,230,0.7)] mb-3">
+                <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.7)] mb-3">
                   Total Deposited
                 </p>
                 <p className="text-3xl sm:text-4xl font-semibold text-[#C9A36A]">
@@ -190,7 +190,7 @@ export default function Home() {
               </div>
 
               <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
-                <p className="text-[0.65rem] uppercase tracking-[0.2em] text-[rgba(230,230,230,0.7)] mb-3">
+                <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.7)] mb-3">
                   Active Vaults
                 </p>
                 <p className="text-3xl sm:text-4xl font-semibold text-[#C9A36A]">
@@ -203,7 +203,7 @@ export default function Home() {
               </div>
 
               <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
-                <p className="text-[0.65rem] uppercase tracking-[0.2em] text-[rgba(230,230,230,0.7)] mb-3">
+                <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.7)] mb-3">
                   Total Unique Deposits
                 </p>
                 <p className="text-3xl sm:text-4xl font-semibold text-[#C9A36A]" title="Number of deposit transactions across all deployed vaults">
@@ -225,7 +225,7 @@ export default function Home() {
                   {/* Part A: Headline + Subheadline */}
                   <Reveal delayMs={0}>
                     <div className="text-center mb-12 sm:mb-16">
-                      <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#C9A36A] tracking-[0.08em] mb-4 leading-relaxed">
+                      <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4 leading-relaxed">
                         Web3 investing, simplified and optimized.
                       </h2>
                       <p className="text-lg sm:text-xl text-[rgba(230,230,230,0.7)] max-w-3xl mx-auto">
@@ -239,7 +239,7 @@ export default function Home() {
                     {/* Block 1 */}
                     <Reveal delayMs={80}>
                       <div className="max-w-4xl mx-auto">
-                        <h3 className="text-2xl sm:text-3xl font-semibold text-[#C9A36A] tracking-[0.08em] mb-4">
+                        <h3 className="text-2xl sm:text-3xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">
                           A unified investment experience
                         </h3>
                         <p className="text-base sm:text-lg text-[rgba(230,230,230,0.7)] leading-relaxed">
@@ -251,7 +251,7 @@ export default function Home() {
                     {/* Block 2 */}
                     <Reveal delayMs={160}>
                       <div className="max-w-4xl mx-auto">
-                        <h3 className="text-2xl sm:text-3xl font-semibold text-[#C9A36A] tracking-[0.08em] mb-4">
+                        <h3 className="text-2xl sm:text-3xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">
                           An intelligent protocol layer
                         </h3>
                         <p className="text-base sm:text-lg text-[rgba(230,230,230,0.7)] leading-relaxed">
@@ -263,7 +263,7 @@ export default function Home() {
 
                   {/* Part C: Why Statera? */}
                   <Reveal delayMs={220}>
-                    <h3 className="text-2xl sm:text-3xl font-semibold text-[#C9A36A] tracking-[0.08em] text-center mb-8 sm:mb-12">
+                    <h3 className="text-2xl sm:text-3xl font-semibold text-[#C9A36A] tracking-[0.04em] text-center mb-8 sm:mb-12">
                       Why Statera?
                     </h3>
                   </Reveal>
@@ -288,7 +288,7 @@ export default function Home() {
           <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
             <Reveal delayMs={300}>
               <div className="text-center mb-12">
-                <h2 className="text-3xl sm:text-4xl font-semibold text-[#C9A36A] tracking-[0.08em] mb-4">
+                <h2 className="text-3xl sm:text-4xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">
                   Available Strategies
                 </h2>
                 <p className="text-[rgba(230,230,230,0.7)] max-w-2xl mx-auto">
@@ -346,7 +346,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <Reveal delayMs={300}>
             <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-semibold text-[#C9A36A] tracking-[0.08em] mb-4">
+              <h2 className="text-3xl sm:text-4xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">
                 How It Works
               </h2>
               <p className="text-[rgba(230,230,230,0.7)] max-w-2xl mx-auto">
@@ -412,7 +412,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <Reveal delayMs={300}>
             <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-semibold text-[#C9A36A] tracking-[0.08em] mb-4">
+              <h2 className="text-3xl sm:text-4xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">
                 Smart Rebalancing
               </h2>
               <p className="text-[rgba(230,230,230,0.7)] max-w-2xl mx-auto">
@@ -460,7 +460,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <Reveal delayMs={300}>
             <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-semibold text-[#C9A36A] tracking-[0.08em] mb-4">
+              <h2 className="text-3xl sm:text-4xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">
                 Fees & Transparency
               </h2>
               <p className="text-[rgba(230,230,230,0.7)] max-w-2xl mx-auto">
@@ -502,7 +502,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <Reveal delayMs={300}>
             <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-semibold text-[#C9A36A] tracking-[0.08em] mb-4">
+              <h2 className="text-3xl sm:text-4xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">
                 App Features
               </h2>
               <p className="text-[rgba(230,230,230,0.7)] max-w-2xl mx-auto">
@@ -577,7 +577,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <Reveal delayMs={300}>
             <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-semibold text-[#C9A36A] tracking-[0.08em] mb-4">
+              <h2 className="text-3xl sm:text-4xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">
                 Security & Transparency
               </h2>
             </div>
@@ -610,7 +610,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <Reveal delayMs={300}>
             <div className="text-center">
-              <h2 className="text-3xl sm:text-4xl font-semibold text-[#C9A36A] tracking-[0.08em] mb-6">
+              <h2 className="text-3xl sm:text-4xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-6">
                 Ready to Get Started?
               </h2>
               <p className="text-[rgba(230,230,230,0.7)] mb-8 max-w-2xl mx-auto">
