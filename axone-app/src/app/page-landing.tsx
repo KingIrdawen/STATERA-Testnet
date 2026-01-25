@@ -152,7 +152,7 @@ export default function Home() {
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {['Total Deposited', 'Active Vaults', 'Total Unique Deposits'].map((label) => (
-                <div key={label} className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
+                <div key={label} className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-start text-center min-h-[140px] pt-3">
                   <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.7)] mb-3">
                     {label}
                   </p>
@@ -166,7 +166,7 @@ export default function Home() {
             </div>
           ) : stats ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
+              <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-start text-center min-h-[140px] pt-3">
                 <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.7)] mb-3">
                   Total Deposited
                 </p>
@@ -179,7 +179,7 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
+              <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-start text-center min-h-[140px] pt-3">
                 <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.7)] mb-3">
                   Active Vaults
                 </p>
@@ -192,7 +192,7 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
+              <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-start text-center min-h-[140px] pt-3">
                 <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.7)] mb-3">
                   Total Unique Deposits
                 </p>
