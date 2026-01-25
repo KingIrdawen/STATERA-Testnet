@@ -130,23 +130,13 @@ export default function Home() {
             </Reveal>
           </div>
 
-          <div className="absolute right-56 bottom-72 hidden lg:block text-right">
+          <div className="absolute right-56 bottom-60 hidden lg:block text-right">
             <p className={`${playfairDisplay.className} text-xl lg:text-2xl italic tracking-[0.06em] text-[#C9A36A]/80`}>
               The Art of Volatility...
             </p>
           </div>
 
           <div className="mt-auto" style={{ paddingBottom: '5px' }}>
-            <div className="border-t border-[#C9A36A]/20">
-              <div className="flex flex-wrap items-center justify-center gap-3 text-[0.65rem] sm:text-xs tracking-[0.14em] uppercase text-[rgba(230,230,230,0.7)]">
-                <span>Non-Custodial Architecture</span>
-                <span className="hidden sm:inline text-[#C9A36A]/40">•</span>
-                <span>Rules-Based Allocation</span>
-                <span className="hidden sm:inline text-[#C9A36A]/40">•</span>
-                <span>On-Chain Transparency</span>
-              </div>
-            </div>
-
             <div className="mt-3 text-right lg:hidden">
               <p className={`${playfairDisplay.className} text-base italic tracking-[0.06em] text-[#C9A36A]/80`}>
                 The Art of Volatility...
