@@ -147,7 +147,7 @@ export default function Home() {
       </section>
 
       {/* KPI block */}
-      <section className="pt-2 pb-12 sm:pt-3 sm:pb-16 -mt-12 sm:-mt-16 relative z-20">
+      <section className="pt-1 pb-12 sm:pt-2 sm:pb-16 -mt-16 sm:-mt-20 relative z-20">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
