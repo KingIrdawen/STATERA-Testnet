@@ -152,7 +152,7 @@ export function SiteFooter() {
               </Link>
               <span className="text-[rgba(230,230,230,0.45)]">.</span>
               <Link
-                href="#"
+                href="/cookies"
                 className="text-[rgba(230,230,230,0.7)] hover:text-[#C9A36A] transition-colors"
               >
                 Cookies
