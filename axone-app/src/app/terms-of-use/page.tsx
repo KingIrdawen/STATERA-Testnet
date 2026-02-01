@@ -292,7 +292,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={1600}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     14. Contact & Governance
