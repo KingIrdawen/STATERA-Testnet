@@ -14,10 +14,8 @@ export default function TermsOfUsePage() {
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-12">
           <Reveal delayMs={100}>
             <div className="mb-12">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">
-                <span className="text-[#C9A36A]">
-                  Statera – Terms of use
-                </span>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4 leading-relaxed">
+                Statera – Terms of use
               </h1>
               <p className="text-gray-400 text-sm">
                 Last Updated: November 14, 2025
@@ -41,7 +39,7 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
-                    1. Acceptance of Terms
+                    Acceptance of Terms
                   </span>
                 </h2>
                 <p className="text-white leading-relaxed">
@@ -54,7 +52,7 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
-                    2. Description of Services
+                    Description of Services
                   </span>
                 </h2>
                 <p className="text-white leading-relaxed mb-4">
@@ -79,7 +77,7 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
-                    3. Assumption of Risk
+                    Assumption of Risk
                   </span>
                 </h2>
                 
@@ -122,7 +120,7 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
-                    4. Eligibility
+                    Eligibility
                   </span>
                 </h2>
                 <p className="text-white leading-relaxed mb-4">
@@ -143,7 +141,7 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
-                    5. Prohibited Activities
+                    Prohibited Activities
                   </span>
                 </h2>
                 <p className="text-white leading-relaxed mb-4">
@@ -166,7 +164,7 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
-                    6. Intellectual Property
+                    Intellectual Property
                   </span>
                 </h2>
                 <p className="text-white leading-relaxed mb-4">
@@ -182,7 +180,7 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
-                    7. Third-Party Links & Ecosystem Projects
+                    Third-Party Links & Ecosystem Projects
                   </span>
                 </h2>
                 <p className="text-white leading-relaxed mb-4">
@@ -203,7 +201,7 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
-                    8. No Liability
+                    No Liability
                   </span>
                 </h2>
                 <p className="text-white leading-relaxed mb-4 font-semibold">
@@ -222,7 +220,7 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
-                    9. Indemnification
+                    Indemnification
                   </span>
                 </h2>
                 <p className="text-white leading-relaxed">
@@ -235,7 +233,7 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
-                    10. Modifications to These Terms
+                    Modifications to These Terms
                   </span>
                 </h2>
                 <p className="text-white leading-relaxed mb-4">
@@ -253,7 +251,7 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
-                    11. Governing Law & Dispute Resolution
+                    Governing Law & Dispute Resolution
                   </span>
                 </h2>
                 <p className="text-white leading-relaxed mb-4">
@@ -269,7 +267,7 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
-                    12. Severability
+                    Severability
                   </span>
                 </h2>
                 <p className="text-white leading-relaxed">
@@ -282,7 +280,7 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
-                    13. Entire Agreement
+                    Entire Agreement
                   </span>
                 </h2>
                 <p className="text-white leading-relaxed">
@@ -295,7 +293,7 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
-                    14. Contact & Governance
+                    Contact & Governance
                   </span>
                 </h2>
                 <p className="text-white leading-relaxed mb-4">

@@ -24,10 +24,8 @@ export default function UsersRiskPage() {
 
           <Reveal delayMs={100}>
             <div className="mb-12">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">
-                <span className="text-[#C9A36A]">
-                  Risks
-                </span>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4 leading-relaxed">
+                Risks
               </h1>
               <p className="text-white leading-relaxed">
                 Statera is a decentralized, non-custodial protocol built on open-source smart contracts. It is designed to empower users with automated portfolio management, intelligent rebalancing, and community-driven value redistribution — all without intermediaries.
@@ -40,7 +38,7 @@ export default function UsersRiskPage() {
 
           <div className="prose prose-invert max-w-none space-y-8">
             <Reveal delayMs={200}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     1. Legal & Regulatory Risks
@@ -90,7 +88,7 @@ export default function UsersRiskPage() {
             </Reveal>
 
             <Reveal delayMs={300}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     2. Financial Risks
@@ -137,7 +135,7 @@ export default function UsersRiskPage() {
             </Reveal>
 
             <Reveal delayMs={400}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     3. Technical & Infrastructure Risks
@@ -258,7 +256,7 @@ export default function UsersRiskPage() {
             </Reveal>
 
             <Reveal delayMs={500}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     4. User Risks & Responsibilities
@@ -313,7 +311,7 @@ export default function UsersRiskPage() {
             </Reveal>
 
             <Reveal delayMs={600}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     5. Economic Model Risks
@@ -343,7 +341,7 @@ export default function UsersRiskPage() {
             </Reveal>
 
             <Reveal delayMs={700}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     Risk Summary Table

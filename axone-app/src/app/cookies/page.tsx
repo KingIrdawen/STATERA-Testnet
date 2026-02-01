@@ -14,10 +14,8 @@ export default function CookiesPage() {
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-12">
           <Reveal delayMs={100}>
             <div className="mb-12">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">
-                <span className="text-[#C9A36A]">
-                  Cookies Policy
-                </span>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4 leading-relaxed">
+                Cookies Policy
               </h1>
               <p className="text-gray-400 text-sm">
                 Last Updated: November 14, 2025
