@@ -25,18 +25,14 @@ export function SiteFooter() {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 mb-12">
           {/* Left: Logo + Branding + Social icons */}
           <div className="flex items-center gap-4">
-            {/* Logo badge */}
-            <div className="relative w-14 h-14 rounded-full bg-gradient-to-br from-[#C9A36A] to-[#5a9a9a] p-0.5 flex-shrink-0">
-                <div className="w-full h-full rounded-full bg-[#121212] flex items-center justify-center">
-                <Image
-                  src="/Logo-Statera-sandy-brown-détouré.png"
-                  alt="Statera Logo"
-                  width={40}
-                  height={40}
-                  className="w-10 h-10"
-                />
-              </div>
-            </div>
+            {/* Logo */}
+            <Image
+              src="/Logo-Statera-sandy-brown-détouré.png"
+              alt="Statera Logo"
+              width={40}
+              height={40}
+              className="w-10 h-10 flex-shrink-0"
+            />
             <div className="flex flex-col">
               <span className="text-[#E6E6E6] font-bold text-xl">STATERA</span>
               <span className="text-[#C9A36A] text-xs font-semibold uppercase tracking-wider">
