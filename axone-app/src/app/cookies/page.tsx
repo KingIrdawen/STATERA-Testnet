@@ -12,16 +12,6 @@ export default function CookiesPage() {
 
       <main className="pt-[60px] md:pt-[80px] pb-16">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-12">
-          <Reveal>
-            <nav className="mb-8">
-              <ol className="flex items-center space-x-2 text-sm text-gray-400">
-                <li><Link href="/" className="hover:text-white transition-colors">Home</Link></li>
-                <li className="text-gray-600">/</li>
-                <li className="text-white">Cookies</li>
-              </ol>
-            </nav>
-          </Reveal>
-
           <Reveal delayMs={100}>
             <div className="mb-12">
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">
@@ -37,7 +27,7 @@ export default function CookiesPage() {
 
           <div className="prose prose-invert max-w-none space-y-8">
             <Reveal delayMs={200}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     What Are Cookies?
@@ -53,14 +43,14 @@ export default function CookiesPage() {
             </Reveal>
 
             <Reveal delayMs={300}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     Types of Cookies We Use
                   </span>
                 </h2>
                 
-                <h3 className="text-xl font-bold text-white mb-4 mt-6">Strictly Necessary Cookies</h3>
+                <h3 className="text-xl font-bold text-[#C9A36A] mb-4 mt-6">Strictly Necessary Cookies</h3>
                 <p className="text-white leading-relaxed mb-4">
                   These cookies are essential for the website to function properly. They enable core functionality such as security, network management, and accessibility. Without these cookies, services you have asked for cannot be provided.
                 </p>
@@ -68,7 +58,7 @@ export default function CookiesPage() {
                   These cookies do not store any personally identifiable information and cannot be disabled in our systems.
                 </p>
 
-                <h3 className="text-xl font-bold text-white mb-4 mt-6">Performance and Analytics Cookies</h3>
+                <h3 className="text-xl font-bold text-[#C9A36A] mb-4 mt-6">Performance and Analytics Cookies</h3>
                 <p className="text-white leading-relaxed mb-4">
                   These cookies help us understand how visitors interact with our website by collecting and reporting information anonymously. They allow us to recognize and count the number of visitors and see how visitors move around our website.
                 </p>
@@ -76,7 +66,7 @@ export default function CookiesPage() {
                   This helps us improve the way our website works, for example, by ensuring that users find what they are looking for easily.
                 </p>
 
-                <h3 className="text-xl font-bold text-white mb-4 mt-6">Functional Cookies</h3>
+                <h3 className="text-xl font-bold text-[#C9A36A] mb-4 mt-6">Functional Cookies</h3>
                 <p className="text-white leading-relaxed mb-4">
                   These cookies enable the website to provide enhanced functionality and personalization. They may be set by us or by third-party providers whose services we have added to our pages.
                 </p>
@@ -84,7 +74,7 @@ export default function CookiesPage() {
                   If you do not allow these cookies, some or all of these services may not function properly.
                 </p>
 
-                <h3 className="text-xl font-bold text-white mb-4 mt-6">Advertising Cookies</h3>
+                <h3 className="text-xl font-bold text-[#C9A36A] mb-4 mt-6">Advertising Cookies</h3>
                 <p className="text-white leading-relaxed mb-4">
                   These cookies may be set through our site by our advertising partners. They may be used by those companies to build a profile of your interests and show you relevant adverts on other sites.
                 </p>
@@ -95,7 +85,7 @@ export default function CookiesPage() {
             </Reveal>
 
             <Reveal delayMs={400}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     How We Use Cookies on This Site
@@ -117,7 +107,7 @@ export default function CookiesPage() {
             </Reveal>
 
             <Reveal delayMs={500}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     Third-Party Cookies
@@ -141,7 +131,7 @@ export default function CookiesPage() {
             </Reveal>
 
             <Reveal delayMs={600}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     Cookie Management and Browser Controls
@@ -154,24 +144,24 @@ export default function CookiesPage() {
                   However, please note that disabling cookies may affect the functionality of this website and many other websites that you visit. Disabling cookies will usually result in also disabling certain functionality and features of this site.
                 </p>
                 
-                <h3 className="text-xl font-bold text-white mb-4 mt-6">How to Manage Cookies in Your Browser</h3>
+                <h3 className="text-xl font-bold text-[#C9A36A] mb-4 mt-6">How to Manage Cookies in Your Browser</h3>
                 
-                <h4 className="text-lg font-bold text-white mb-3 mt-4">Google Chrome</h4>
+                <h4 className="text-lg font-bold text-[#C9A36A] mb-3 mt-4">Google Chrome</h4>
                 <p className="text-white leading-relaxed mb-4">
                   Go to Settings → Privacy and security → Cookies and other site data. You can choose to block all cookies, block third-party cookies, or allow all cookies.
                 </p>
 
-                <h4 className="text-lg font-bold text-white mb-3 mt-4">Safari</h4>
+                <h4 className="text-lg font-bold text-[#C9A36A] mb-3 mt-4">Safari</h4>
                 <p className="text-white leading-relaxed mb-4">
                   Go to Preferences → Privacy. You can choose to block all cookies or manage cookie preferences for specific websites.
                 </p>
 
-                <h4 className="text-lg font-bold text-white mb-3 mt-4">Firefox</h4>
+                <h4 className="text-lg font-bold text-[#C9A36A] mb-3 mt-4">Firefox</h4>
                 <p className="text-white leading-relaxed mb-4">
                   Go to Options → Privacy & Security. Under Cookies and Site Data, you can choose to block cookies or manage exceptions.
                 </p>
 
-                <h4 className="text-lg font-bold text-white mb-3 mt-4">Microsoft Edge</h4>
+                <h4 className="text-lg font-bold text-[#C9A36A] mb-3 mt-4">Microsoft Edge</h4>
                 <p className="text-white leading-relaxed">
                   Go to Settings → Cookies and site permissions → Cookies and site data. You can choose to block all cookies, block third-party cookies, or allow all cookies.
                 </p>
@@ -179,7 +169,7 @@ export default function CookiesPage() {
             </Reveal>
 
             <Reveal delayMs={700}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     Consent and Preferences
@@ -198,7 +188,7 @@ export default function CookiesPage() {
             </Reveal>
 
             <Reveal delayMs={800}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     Data Retention
@@ -218,7 +208,7 @@ export default function CookiesPage() {
             </Reveal>
 
             <Reveal delayMs={900}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     Updates to This Policy
@@ -237,7 +227,7 @@ export default function CookiesPage() {
             </Reveal>
 
             <Reveal delayMs={1000}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     Contact Information

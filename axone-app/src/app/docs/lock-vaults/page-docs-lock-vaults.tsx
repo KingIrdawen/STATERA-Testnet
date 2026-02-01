@@ -68,7 +68,7 @@ export default function DocsLockVaultsPage() {
           <section>
             <h2 className="text-2xl font-bold mb-6"><span className="text-[#C9A36A]">Real-World Example: Alice invests 25 HYPE in the ERA1 strategy</span></h2>
           
-          <h3 className="text-xl font-bold text-white mb-4 mt-6">🔹 Context</h3>
+          <h3 className="text-xl font-bold text-[#C9A36A] mb-4 mt-6">🔹 Context</h3>
           <ul className="text-white leading-relaxed mb-4 ml-6 space-y-2">
             <li>Alice deposits <strong>25 HYPE</strong> into the <strong>ERA1 strategy (50% BTC, 50% HYPE)</strong></li>
             <li>Entry fee: <strong>0.125 HYPE (0.5%)</strong></li>
@@ -154,7 +154,7 @@ export default function DocsLockVaultsPage() {
             </div>
           </div>
 
-          <h3 className="text-xl font-bold text-white mb-4 mt-6">🔹 Alice withdraws after 12 months – Revalued index value</h3>
+          <h3 className="text-xl font-bold text-[#C9A36A] mb-4 mt-6">🔹 Alice withdraws after 12 months – Revalued index value</h3>
           <p className="text-white leading-relaxed mb-4">
             Assumption: the ERA1 price increased by <strong>20% (including management fees)</strong>
           </p>
@@ -166,7 +166,7 @@ export default function DocsLockVaultsPage() {
             <li>→ 29.85 – 0.149 = <strong>29.70 HYPE</strong></li>
           </ul>
 
-          <h3 className="text-xl font-bold text-white mb-4 mt-6">📈 Alice&apos;s Total Gains</h3>
+          <h3 className="text-xl font-bold text-[#C9A36A] mb-4 mt-6">📈 Alice&apos;s Total Gains</h3>
           <div className="overflow-x-auto mb-4">
             <table className="w-full border-collapse border border-gray-600">
               <thead>

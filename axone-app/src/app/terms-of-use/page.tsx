@@ -12,16 +12,6 @@ export default function TermsOfUsePage() {
       
       <main className="pt-[60px] md:pt-[80px] pb-16">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-12">
-          <Reveal>
-            <nav className="mb-8">
-              <ol className="flex items-center space-x-2 text-sm text-gray-400">
-                <li><Link href="/" className="hover:text-white transition-colors">Home</Link></li>
-                <li className="text-gray-600">/</li>
-                <li className="text-white">Terms of Use</li>
-              </ol>
-            </nav>
-          </Reveal>
-
           <Reveal delayMs={100}>
             <div className="mb-12">
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">
@@ -37,7 +27,7 @@ export default function TermsOfUsePage() {
 
           <div className="prose prose-invert max-w-none space-y-8">
             <Reveal delayMs={200}>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <div>
                 <p className="text-white leading-relaxed mb-6">
                   These Terms of Use ("Terms") govern your access to and use of the software products and services (the "Services") provided through the Statera front-end user interface (the "Interface"), including but not limited to https://statera.example and https://app.statera.example, which allows users to interact with the Statera Protocol — a decentralized, non-custodial blockchain-based protocol (the "Protocol").
                 </p>
@@ -48,7 +38,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={300}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     1. Acceptance of Terms
@@ -61,7 +51,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={400}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     2. Description of Services
@@ -86,19 +76,19 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={500}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     3. Assumption of Risk
                   </span>
                 </h2>
                 
-                <h3 className="text-xl font-bold text-white mb-4 mt-6">3.1. No Warranties</h3>
+                <h3 className="text-xl font-bold text-[#C9A36A] mb-4 mt-6">3.1. No Warranties</h3>
                 <p className="text-white leading-relaxed mb-4 font-semibold">
                   THE SERVICES AND THE STATERA PROTOCOL ARE PROVIDED "AS IS" AND "AS AVAILABLE", WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT. NO WARRANTY IS MADE REGARDING THE SECURITY, ACCURACY, RELIABILITY, OR AVAILABILITY OF THE PROTOCOL OR ITS UNDERLYING TECHNOLOGY.
                 </p>
 
-                <h3 className="text-xl font-bold text-white mb-4 mt-6">3.2. No Financial Advice</h3>
+                <h3 className="text-xl font-bold text-[#C9A36A] mb-4 mt-6">3.2. No Financial Advice</h3>
                 <p className="text-white leading-relaxed mb-4">
                   Nothing contained in the Services constitutes financial, investment, legal, tax, or other professional advice. You are solely responsible for:
                 </p>
@@ -107,7 +97,7 @@ export default function TermsOfUsePage() {
                   <li>Consulting with qualified professionals before making any decisions</li>
                 </ul>
 
-                <h3 className="text-xl font-bold text-white mb-4 mt-6">3.3. Assumption of Risk</h3>
+                <h3 className="text-xl font-bold text-[#C9A36A] mb-4 mt-6">3.3. Assumption of Risk</h3>
                 <p className="text-white leading-relaxed mb-4 font-semibold">
                   YOU EXPRESSLY ACKNOWLEDGE AND AGREE THAT:
                 </p>
@@ -129,7 +119,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={600}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     4. Eligibility
@@ -150,7 +140,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={700}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     5. Prohibited Activities
@@ -173,7 +163,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={800}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     6. Intellectual Property
@@ -189,7 +179,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={900}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     7. Third-Party Links & Ecosystem Projects
@@ -210,7 +200,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={1000}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     8. No Liability
@@ -229,7 +219,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={1100}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     9. Indemnification
@@ -242,7 +232,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={1200}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     10. Modifications to These Terms
@@ -260,7 +250,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={1300}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     11. Governing Law & Dispute Resolution
@@ -276,7 +266,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={1400}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     12. Severability
@@ -289,7 +279,7 @@ export default function TermsOfUsePage() {
             </Reveal>
 
             <Reveal delayMs={1500}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
+              <section>
                 <h2 className="text-2xl font-bold mb-6">
                   <span className="text-[#C9A36A]">
                     13. Entire Agreement

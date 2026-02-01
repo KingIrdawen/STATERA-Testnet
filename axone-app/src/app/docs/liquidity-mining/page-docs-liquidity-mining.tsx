@@ -79,7 +79,7 @@ export default function DocsLiquidityMiningPage() {
 
             <h2 className="text-2xl font-bold mb-6 mt-8"><span className="text-[#C9A36A]">Example :</span></h2>
           
-          <h3 className="text-xl font-bold text-white mb-4 mt-6">🚀 Initial State – At TGE</h3>
+          <h3 className="text-xl font-bold text-[#C9A36A] mb-4 mt-6">🚀 Initial State – At TGE</h3>
           <ul className="text-white leading-relaxed mb-4 ml-6 space-y-2">
             <li><strong>LP vault composition</strong>: 50,000,000 STA (50% of initial supply) - 125,000 HYPE (from pre-TGE deposits)</li>
             <li><strong>Initial STA price</strong>: 0.10 USDC --&gt; 0.0025 HYPE</li>
@@ -97,9 +97,9 @@ export default function DocsLiquidityMiningPage() {
             <li>Participates in inflation rewards</li>
           </ul>
 
-          <h3 className="text-xl font-bold text-white mb-4 mt-6">📅 Phase 1 – Month 1 (Post-TGE)</h3>
+          <h3 className="text-xl font-bold text-[#C9A36A] mb-4 mt-6">📅 Phase 1 – Month 1 (Post-TGE)</h3>
           
-          <h4 className="text-lg font-bold text-white mb-4 mt-4">📈 Market Activity</h4>
+          <h4 className="text-lg font-bold text-[#C9A36A] mb-4 mt-4">📈 Market Activity</h4>
           <ul className="text-white leading-relaxed mb-4 ml-6 space-y-2">
             <li>High demand → STA trades up to 0.004 HYPE (+60%)</li>
             <li><strong>New Statera LP reserves (approx)</strong>:</li>
@@ -109,7 +109,7 @@ export default function DocsLiquidityMiningPage() {
             <li>→ Each <strong>1 STAlp = 0.0036 HYPE + 0.9 STA</strong> (new accounting value)</li>
           </ul>
 
-          <h4 className="text-lg font-bold text-white mb-4 mt-4">New Deposit – User B (Post-TGE Contributor)</h4>
+          <h4 className="text-lg font-bold text-[#C9A36A] mb-4 mt-4">New Deposit – User B (Post-TGE Contributor)</h4>
           <ul className="text-white leading-relaxed mb-4 ml-6 space-y-2">
             <li>Wants to mint 100,000 STAlp</li>
             <li>Must deposit <strong>market-balanced liquidity</strong>: 360 HYPE + 90&apos;000 STA</li>
@@ -119,7 +119,7 @@ export default function DocsLiquidityMiningPage() {
             <li>Immediately deposits them into the <strong>LP Staking Vault</strong></li>
           </ul>
 
-          <h4 className="text-lg font-bold text-white mb-4 mt-4">LP Staking Vault – Monthly Inflation Distribution</h4>
+          <h4 className="text-lg font-bold text-[#C9A36A] mb-4 mt-4">LP Staking Vault – Monthly Inflation Distribution</h4>
           <ul className="text-white leading-relaxed mb-4 ml-6 space-y-2">
             <li><strong>Monthly inflation (1/12 of 10%)</strong>: 833,333.333 STA</li>
             <li><strong>Total deposits in LP Staking Vault</strong>:</li>

@@ -63,28 +63,28 @@ export default function DocsLesIndexPage() {
 
             <h2 className="text-2xl font-bold mb-6 mt-8"><span className="text-[#C9A36A]">Protocol fees</span></h2>
             
-            <h3 className="text-xl font-bold text-white mb-4 mt-6">Entry fees: 0.5%</h3>
+            <h3 className="text-xl font-bold text-[#C9A36A] mb-4 mt-6">Entry fees: 0.5%</h3>
             <ul className="text-white leading-relaxed ml-6 space-y-2 mb-6">
               <li>Charged when a user deposits HYPE into a strategy.</li>
               <li>0.5% of the deposited amount is taken as a fee, paid in HYPE.</li>
               <li>The remaining 99.5% is used to calculate the user&apos;s initial investment NAV.</li>
             </ul>
 
-            <h3 className="text-xl font-bold text-white mb-4 mt-6">Exit fees: 0.5%</h3>
+            <h3 className="text-xl font-bold text-[#C9A36A] mb-4 mt-6">Exit fees: 0.5%</h3>
             <ul className="text-white leading-relaxed ml-6 space-y-2 mb-6">
               <li>Charged when a user withdraws funds from a strategy.</li>
               <li>0.5% of the withdrawal amount (based on current NAV) is deducted in HYPE.</li>
               <li>The user receives the remaining 99.5%.</li>
             </ul>
 
-            <h3 className="text-xl font-bold text-white mb-4 mt-6">Management fees: 0.95% per year</h3>
+            <h3 className="text-xl font-bold text-[#C9A36A] mb-4 mt-6">Management fees: 0.95% per year</h3>
             <ul className="text-white leading-relaxed ml-6 space-y-2 mb-6">
               <li>Charged continuously on the total capital invested in a strategy.</li>
               <li>Accrued over time (e.g., calculated hourly or daily) and deducted directly from the pool, reducing the overall NAV for all participants.</li>
               <li>Applies regardless of performance.</li>
             </ul>
 
-            <h3 className="text-xl font-bold text-white mb-4 mt-6">External fees:</h3>
+            <h3 className="text-xl font-bold text-[#C9A36A] mb-4 mt-6">External fees:</h3>
             <ul className="text-white leading-relaxed ml-6 space-y-2">
               <li>Additional fees are taken by Hypercore to perform rebalancing transactions.</li>
               <li>Incurred only during automated rebalancing transactions.</li>
