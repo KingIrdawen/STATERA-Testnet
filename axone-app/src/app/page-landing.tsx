@@ -98,13 +98,13 @@ export default function Home() {
             <Reveal>
               <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-center w-full">
                 <div className="text-left max-w-2xl">
-                  <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[0.07em] text-[#C9A36A]">
+                  <h1 className="text-5xl sm:text-6xl md:text-7xl font-semibold tracking-[0.07em] text-[#C9A36A]">
                     STATERA
                   </h1>
-                  <p className="mt-4 text-[0.7rem] sm:text-xs tracking-[0.14em] uppercase text-[#C9A36A]/80">
+                  <p className="mt-4 text-xs sm:text-sm tracking-[0.14em] uppercase text-[#C9A36A]/80">
                     Decentralized Investment Strategies
                   </p>
-                  <p className="mt-6 text-base sm:text-lg text-[rgba(230,230,230,0.7)] leading-relaxed max-w-xl">
+                  <p className="mt-6 text-lg sm:text-xl text-[rgba(230,230,230,0.7)] leading-relaxed max-w-xl">
                     On-chain portfolio strategies with institutional-grade risk management, delivering transparent exposure through disciplined, rules-based allocation.
                   </p>
 
