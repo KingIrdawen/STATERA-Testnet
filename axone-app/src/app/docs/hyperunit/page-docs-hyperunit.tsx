@@ -15,7 +15,7 @@ export default function HyperUnitPage() {
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">Statera x HyperUnit</span></h1>
+        <h1 className="text-4xl font-bold mb-4"><span className="text-[#C9A36A]">Statera x HyperUnit</span></h1>
         <p className="text-xl text-white leading-relaxed">
           A protocol&apos;s performance is only as strong as the security of its foundations.
         </p>

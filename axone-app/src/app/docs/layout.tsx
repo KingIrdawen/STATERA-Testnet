@@ -74,7 +74,7 @@ export default function DocsLayout({
   const isActive = (href: string) => pathname === href;
 
   return (
-    <div className="min-h-screen bg-[#121212] text-white statera-docs-typo">
+    <div className="min-h-screen bg-[#121212] text-white brand-typography">
       <Header />
       
       {/* Bouton toggle mobile */}
@@ -102,8 +102,8 @@ export default function DocsLayout({
                   className={cn(
                     "text-sm font-semibold uppercase tracking-wide mb-3 block transition-colors",
                     isActive(section.href) 
-                      ? "bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent"
-                      : "bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent hover:opacity-80"
+                      ? "text-[#C9A36A]"
+                      : "text-[#C9A36A] hover:opacity-80"
                   )}
                 >
                   {section.title}
@@ -131,7 +131,7 @@ export default function DocsLayout({
 
         {/* Contenu principal */}
         <main className="flex-1 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-8">
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
             <div className="prose prose-invert max-w-none">
               {children}
             </div>

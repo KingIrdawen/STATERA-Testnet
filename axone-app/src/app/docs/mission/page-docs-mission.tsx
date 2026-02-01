@@ -14,7 +14,7 @@ export default function DocsMissionPage() {
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">Mission</span></h1>
+        <h1 className="text-4xl font-bold mb-4"><span className="text-[#C9A36A]">Mission</span></h1>
         <p className="text-xl text-white leading-relaxed mb-4">
           Statera indices enable investors of all levels to access sophisticated investment strategies—automatically managed to maximize returns, without effort and without trusted intermediaries.
         </p>

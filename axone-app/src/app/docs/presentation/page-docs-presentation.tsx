@@ -14,8 +14,8 @@ export default function DocsPresentationPage() {
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">Introduction Page</span></h1>
-        <p className="text-2xl font-bold text-[#fab062] mb-8">
+        <h1 className="text-4xl font-bold mb-4"><span className="text-[#C9A36A]">Introduction Page</span></h1>
+        <p className="text-2xl font-bold text-[#C9A36A] mb-8">
           Statera – The smart way to diversify
         </p>
       </div>
@@ -23,7 +23,7 @@ export default function DocsPresentationPage() {
       <div className="prose prose-invert max-w-none">
         <div className="space-y-12">
           <section>
-            <h2 className="text-2xl font-bold mb-6"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">Mission</span></h2>
+            <h2 className="text-2xl font-bold mb-6"><span className="text-[#C9A36A]">Mission</span></h2>
             <p className="text-white leading-relaxed mb-4">
               Statera indices enable investors of all levels to access sophisticated investment strategies—automatically managed to maximize returns, without effort and without trusted intermediaries.
             </p>
@@ -33,7 +33,7 @@ export default function DocsPresentationPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold mb-6"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">Vision and Values</span></h2>
+            <h2 className="text-2xl font-bold mb-6"><span className="text-[#C9A36A]">Vision and Values</span></h2>
             <p className="text-white leading-relaxed mb-4">
               The Statera protocol is fully aligned with Hyperliquid&apos;s core values:
             </p>
@@ -59,7 +59,7 @@ export default function DocsPresentationPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold mb-6"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">The STA Token: Rewarding Alignment</span></h2>
+            <h2 className="text-2xl font-bold mb-6"><span className="text-[#C9A36A]">The STA Token: Rewarding Alignment</span></h2>
             <p className="text-white leading-relaxed mb-4">
               The <strong>STA token</strong> is not just an access or speculative token.
             </p>

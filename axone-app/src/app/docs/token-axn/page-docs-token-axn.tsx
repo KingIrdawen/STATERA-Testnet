@@ -14,7 +14,7 @@ export default function DocsTokenAxnPage() {
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">The STA token: capture the value of the Statera protocol</span></h1>
+        <h1 className="text-4xl font-bold mb-4"><span className="text-[#C9A36A]">The STA token: capture the value of the Statera protocol</span></h1>
         <p className="text-xl text-white leading-relaxed">
           At Statera, our token is not just a utility token—it is deeply integrated into the ecosystem and our strategies.
         </p>

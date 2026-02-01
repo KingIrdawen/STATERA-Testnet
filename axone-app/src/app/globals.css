@@ -44,110 +44,75 @@ body {
   font-variation-settings: normal;
 }
 
+/* Statera Brand Typography - Unified Charter (matches landing page) */
 .brand-typography {
-  font-family: var(--font-inter), system-ui, sans-serif;
-  letter-spacing: 0.01em;
+  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
+  color: #E6E6E6;
+  letter-spacing: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Headings: Inter with champagne color and tracking (matches landing) */
 .brand-typography :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
+  color: #C9A36A;
   letter-spacing: 0.04em;
+  font-weight: 600;
 }
 
-.brand-typography .uppercase {
+/* Hero-like headings can use 0.07em tracking (as on landing) */
+.brand-typography h1 {
+  letter-spacing: 0.07em;
+}
+
+/* Small uppercase labels: tracking 0.14em (matches landing) */
+.brand-typography .uppercase,
+.brand-typography [class*="uppercase"] {
   letter-spacing: 0.14em;
 }
 
-/* Statera Docs & Legal Pages Typography Charter */
-/* Matches Charte graphique_V1.pdf specifications */
-.statera-docs-typo {
+/* Override Tailwind Typography (.prose) to enforce landing charter */
+.brand-typography .prose {
+  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
+  color: #E6E6E6;
+}
+
+.brand-typography .prose :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
+  color: #C9A36A;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+
+.brand-typography .prose h1 {
+  letter-spacing: 0.07em;
+}
+
+.brand-typography .prose p,
+.brand-typography .prose li,
+.brand-typography .prose span:not([class*="gradient"]) {
   font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
   color: #E6E6E6;
   letter-spacing: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Headings: Canela Sans with tracking 0.08-0.12em (default 0.10em) and champagne color */
-.statera-docs-typo :is(h1, h2, h3, h4, h5, h6) {
-  font-family: var(--font-canela, 'Canela Sans'), Georgia, serif;
-  letter-spacing: 0.10em;
-  color: #C9A36A;
-  font-weight: 600;
-}
-
-/* Headings with gradient spans should inherit Canela Sans typography */
-.statera-docs-typo :is(h1, h2, h3, h4, h5, h6) span[class*="gradient"],
-.statera-docs-typo :is(h1, h2, h3, h4, h5, h6) span[class*="bg-gradient"] {
-  font-family: var(--font-canela, 'Canela Sans'), Georgia, serif;
-  letter-spacing: 0.10em;
-  font-weight: 600;
-}
-
-/* Override prose heading styles to match Statera charter */
-.statera-docs-typo .prose :is(h1, h2, h3, h4, h5, h6) {
-  font-family: var(--font-canela, 'Canela Sans'), Georgia, serif;
-  letter-spacing: 0.10em;
-  color: #C9A36A;
-  font-weight: 600;
-}
-
-.statera-docs-typo .prose :is(h1, h2, h3, h4, h5, h6) span[class*="gradient"],
-.statera-docs-typo .prose :is(h1, h2, h3, h4, h5, h6) span[class*="bg-gradient"] {
-  font-family: var(--font-canela, 'Canela Sans'), Georgia, serif;
-  letter-spacing: 0.10em;
-  font-weight: 600;
-}
-
-/* Body text: Inter with primary color */
-.statera-docs-typo p,
-.statera-docs-typo li,
-.statera-docs-typo span:not([class*="gradient"]) {
-  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
+.brand-typography .prose strong {
   color: #E6E6E6;
-  letter-spacing: 0;
+  font-weight: 600;
 }
 
 /* Muted text color */
-.statera-docs-typo .text-gray-400,
-.statera-docs-typo .text-gray-500,
-.statera-docs-typo p.text-gray-400,
-.statera-docs-typo p.text-gray-500 {
+.brand-typography .text-gray-400,
+.brand-typography .text-gray-500,
+.brand-typography p.text-gray-400,
+.brand-typography p.text-gray-500 {
   color: rgba(230, 230, 230, 0.70);
 }
 
-/* CTA / Small labels: Inter SemiBold with subtle tracking */
-.statera-docs-typo .uppercase,
-.statera-docs-typo [class*="uppercase"] {
+/* Links styling */
+.brand-typography a {
   font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-}
-
-/* Links styling - keep existing link colors but ensure Inter font */
-.statera-docs-typo a {
-  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
-}
-
-/* Preserve gradient text spans (used in headings) - already covered above but kept for specificity */
-.statera-docs-typo span[class*="gradient"]:not(:is(h1, h2, h3, h4, h5, h6) span) {
-  font-family: var(--font-canela, 'Canela Sans'), Georgia, serif;
-  letter-spacing: 0.10em;
-}
-
-/* Ensure prose doesn't override our typography */
-.statera-docs-typo .prose {
-  color: #E6E6E6;
-}
-
-.statera-docs-typo .prose p {
-  color: #E6E6E6;
-}
-
-.statera-docs-typo .prose strong {
-  color: #E6E6E6;
-  font-weight: 600;
 }
 
 /* Animation de respiration pour le bouton Launch App */

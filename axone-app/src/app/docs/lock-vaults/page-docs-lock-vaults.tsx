@@ -15,7 +15,7 @@ export default function DocsLockVaultsPage() {
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">Strategy staking: transform your ERA token in STA rewards</span></h1>
+        <h1 className="text-4xl font-bold mb-4"><span className="text-[#C9A36A]">Strategy staking: transform your ERA token in STA rewards</span></h1>
         <p className="text-xl text-white leading-relaxed">
           Users can deposit their liquid tokens into our Strategy Staking vault to earn rewards in STA, Statera&apos;s native token.
         </p>
@@ -24,25 +24,25 @@ export default function DocsLockVaultsPage() {
       <div className="prose prose-invert max-w-none">
         <div className="space-y-12">
           <section>
-            <h2 className="text-2xl font-bold mb-6"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">How it works:</span></h2>
+            <h2 className="text-2xl font-bold mb-6"><span className="text-[#C9A36A]">How it works:</span></h2>
             <ul className="text-white leading-relaxed mb-6 ml-6 space-y-2">
             <li>The user deposits their liquid tokens into the Strategy Staking vault</li>
             <li>There is <strong>no minimum lock-up period</strong> and <strong>no penalties</strong> for withdrawing</li>
             <li>Rewards in <strong>STA are accrued continuously</strong> and can be claimed at any time</li>
           </ul>
 
-            <h2 className="text-2xl font-bold mb-6 mt-8"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">Source of rewards:</span></h2>
+            <h2 className="text-2xl font-bold mb-6 mt-8"><span className="text-[#C9A36A]">Source of rewards:</span></h2>
             <ul className="text-white leading-relaxed mb-6 ml-6 space-y-2">
             <li><strong>100% of the annual 10% inflation</strong> of the STA token is allocated to the Strategy Staking vaults</li>
             <li>→ <strong>Linear reward distribution over time</strong>: 1 month of participation = 1/12 of annual rewards (shared proportionally among vault depositors)</li>
           </ul>
 
-            <h2 className="text-2xl font-bold mb-6 mt-8"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">Incentive to stay:</span></h2>
+            <h2 className="text-2xl font-bold mb-6 mt-8"><span className="text-[#C9A36A]">Incentive to stay:</span></h2>
             <p className="text-white leading-relaxed mb-6">
             Rewards accumulate continuously while your tokens are staked.
           </p>
 
-            <h2 className="text-2xl font-bold mb-6 mt-8"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">Real-time dashboard:</span></h2>
+            <h2 className="text-2xl font-bold mb-6 mt-8"><span className="text-[#C9A36A]">Real-time dashboard:</span></h2>
           <p className="text-white leading-relaxed mb-4">
             An on-chain dashboard allows users to monitor:
           </p>
@@ -66,7 +66,7 @@ export default function DocsLockVaultsPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold mb-6"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">Real-World Example: Alice invests 25 HYPE in the ERA1 strategy</span></h2>
+            <h2 className="text-2xl font-bold mb-6"><span className="text-[#C9A36A]">Real-World Example: Alice invests 25 HYPE in the ERA1 strategy</span></h2>
           
           <h3 className="text-xl font-bold text-white mb-4 mt-6">🔹 Context</h3>
           <ul className="text-white leading-relaxed mb-4 ml-6 space-y-2">

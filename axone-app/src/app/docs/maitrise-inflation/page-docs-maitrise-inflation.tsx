@@ -14,7 +14,7 @@ export default function DocsMaitriseInflationPage() {
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">Managing Inflation</span></h1>
+        <h1 className="text-4xl font-bold mb-4"><span className="text-[#C9A36A]">Managing Inflation</span></h1>
         <p className="text-xl text-white leading-relaxed">
           The STA token is designed to grow with the ecosystem and reward those who sustain the protocol.
         </p>

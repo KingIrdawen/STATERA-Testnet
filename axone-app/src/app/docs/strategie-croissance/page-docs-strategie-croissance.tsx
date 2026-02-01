@@ -14,7 +14,7 @@ export default function DocsStrategieCroissancePage() {
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">Growth Strategy – Roadmap</span></h1>
+        <h1 className="text-4xl font-bold mb-4"><span className="text-[#C9A36A]">Growth Strategy – Roadmap</span></h1>
       </div>
 
       <div className="prose prose-invert max-w-none">

@@ -14,7 +14,7 @@ export default function DocsFonctionnementRevenusPage() {
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">Protocol Mechanics – Revenue Generation</span></h1>
+        <h1 className="text-4xl font-bold mb-4"><span className="text-[#C9A36A]">Protocol Mechanics – Revenue Generation</span></h1>
       </div>
 
       <div className="prose prose-invert max-w-none">

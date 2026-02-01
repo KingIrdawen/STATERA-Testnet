@@ -15,7 +15,7 @@ export default function DocsIndexStateraPage() {
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">What is a Statera Index?</span></h1>
+        <h1 className="text-4xl font-bold mb-4"><span className="text-[#C9A36A]">What is a Statera Index?</span></h1>
         <p className="text-xl text-white leading-relaxed">
           A Statera Index is an automated, diversified crypto portfolio, designed to simplify on-chain investing.
         </p>

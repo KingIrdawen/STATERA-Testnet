@@ -14,7 +14,7 @@ export default function DocsVisionValeursPage() {
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">Vision and Values</span></h1>
+        <h1 className="text-4xl font-bold mb-4"><span className="text-[#C9A36A]">Vision and Values</span></h1>
         <p className="text-xl text-white leading-relaxed">
           The Statera protocol is fully aligned with Hyperliquid&apos;s core values.
         </p>

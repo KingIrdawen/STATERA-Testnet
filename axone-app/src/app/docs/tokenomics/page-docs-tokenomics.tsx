@@ -14,7 +14,7 @@ export default function DocsTokenomicsPage() {
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">Tokenomics</span></h1>
+        <h1 className="text-4xl font-bold mb-4"><span className="text-[#C9A36A]">Tokenomics</span></h1>
         <p className="text-xl text-white leading-relaxed">
           Convinced by the performance and value created by our products, we&apos;ve made a radical choice: 100% of protocol revenue is redistributed to the community.
         </p>
@@ -43,7 +43,7 @@ export default function DocsTokenomicsPage() {
             A model that is <strong>fair, transparent, and deeply community-driven.</strong>
           </p>
 
-            <h2 className="text-2xl font-bold mb-6 mt-8"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">Supply and Inflation: Balancing Growth and Value</span></h2>
+            <h2 className="text-2xl font-bold mb-6 mt-8"><span className="text-[#C9A36A]">Supply and Inflation: Balancing Growth and Value</span></h2>
           <ul className="text-white leading-relaxed mb-4 ml-6 space-y-2">
             <li><strong>Initial total supply</strong>: 100,000,000 STA</li>
             <li><strong>Emission model</strong>: 10% annual inflation, issued continuously to fund long-term rewards</li>
@@ -56,7 +56,7 @@ export default function DocsTokenomicsPage() {
             This model ensures <strong>long-term sustainability</strong> while protecting token value from excessive dilution.
           </p>
 
-            <h2 className="text-2xl font-bold mb-6 mt-8"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">Distribution: Fair, Community-First, No Privileges</span></h2>
+            <h2 className="text-2xl font-bold mb-6 mt-8"><span className="text-[#C9A36A]">Distribution: Fair, Community-First, No Privileges</span></h2>
           <p className="text-white leading-relaxed mb-4">
             All STA supply will be distributed at launch across two equitable channels:
           </p>

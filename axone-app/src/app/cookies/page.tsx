@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 export default function CookiesPage() {
   return (
-    <div className="min-h-screen bg-[#121212] text-white statera-docs-typo">
+    <div className="min-h-screen bg-[#121212] text-white brand-typography">
       <Header />
 
       <main className="pt-[60px] md:pt-[80px] pb-16">
@@ -25,7 +25,7 @@ export default function CookiesPage() {
           <Reveal delayMs={100}>
             <div className="mb-12">
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">
-                <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
+                <span className="text-[#C9A36A]">
                   Cookies Policy
                 </span>
               </h1>
@@ -37,9 +37,9 @@ export default function CookiesPage() {
 
           <div className="prose prose-invert max-w-none space-y-8">
             <Reveal delayMs={200}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
                 <h2 className="text-2xl font-bold mb-6">
-                  <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
+                  <span className="text-[#C9A36A]">
                     What Are Cookies?
                   </span>
                 </h2>
@@ -53,9 +53,9 @@ export default function CookiesPage() {
             </Reveal>
 
             <Reveal delayMs={300}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
                 <h2 className="text-2xl font-bold mb-6">
-                  <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
+                  <span className="text-[#C9A36A]">
                     Types of Cookies We Use
                   </span>
                 </h2>
@@ -95,9 +95,9 @@ export default function CookiesPage() {
             </Reveal>
 
             <Reveal delayMs={400}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
                 <h2 className="text-2xl font-bold mb-6">
-                  <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
+                  <span className="text-[#C9A36A]">
                     How We Use Cookies on This Site
                   </span>
                 </h2>
@@ -117,9 +117,9 @@ export default function CookiesPage() {
             </Reveal>
 
             <Reveal delayMs={500}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
                 <h2 className="text-2xl font-bold mb-6">
-                  <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
+                  <span className="text-[#C9A36A]">
                     Third-Party Cookies
                   </span>
                 </h2>
@@ -141,9 +141,9 @@ export default function CookiesPage() {
             </Reveal>
 
             <Reveal delayMs={600}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
                 <h2 className="text-2xl font-bold mb-6">
-                  <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
+                  <span className="text-[#C9A36A]">
                     Cookie Management and Browser Controls
                   </span>
                 </h2>
@@ -179,9 +179,9 @@ export default function CookiesPage() {
             </Reveal>
 
             <Reveal delayMs={700}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
                 <h2 className="text-2xl font-bold mb-6">
-                  <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
+                  <span className="text-[#C9A36A]">
                     Consent and Preferences
                   </span>
                 </h2>
@@ -198,9 +198,9 @@ export default function CookiesPage() {
             </Reveal>
 
             <Reveal delayMs={800}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
                 <h2 className="text-2xl font-bold mb-6">
-                  <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
+                  <span className="text-[#C9A36A]">
                     Data Retention
                   </span>
                 </h2>
@@ -218,9 +218,9 @@ export default function CookiesPage() {
             </Reveal>
 
             <Reveal delayMs={900}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
                 <h2 className="text-2xl font-bold mb-6">
-                  <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
+                  <span className="text-[#C9A36A]">
                     Updates to This Policy
                   </span>
                 </h2>
@@ -237,9 +237,9 @@ export default function CookiesPage() {
             </Reveal>
 
             <Reveal delayMs={1000}>
-              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#FAB062]/20 ring-1 ring-[#FAB062]/10">
+              <section className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 shadow-lg shadow-[#C9A36A]/20 ring-1 ring-[#C9A36A]/10">
                 <h2 className="text-2xl font-bold mb-6">
-                  <span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">
+                  <span className="text-[#C9A36A]">
                     Contact Information
                   </span>
                 </h2>

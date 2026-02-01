@@ -15,7 +15,7 @@ export default function DocsCaptureCroissancePage() {
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">Capturing Growth – Revenue Distribution</span></h1>
+        <h1 className="text-4xl font-bold mb-4"><span className="text-[#C9A36A]">Capturing Growth – Revenue Distribution</span></h1>
         <p className="text-xl text-white leading-relaxed">
           At Statera, we believe a decentralized protocol must first serve its community.
         </p>
@@ -59,7 +59,7 @@ export default function DocsCaptureCroissancePage() {
             Statera does <strong>not extract value for centralized stakeholders</strong>. Instead, it <strong>redistributes value fairly, predictably, and automatically</strong>—a model that embodies our vision of a <strong>sustainable, community-driven, and economically resilient protocol</strong>, where every participant benefits from Statera&apos;s success.
           </p>
 
-            <h2 className="text-2xl font-bold mb-6 mt-8"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">Direct Redistribution</span></h2>
+            <h2 className="text-2xl font-bold mb-6 mt-8"><span className="text-[#C9A36A]">Direct Redistribution</span></h2>
           <p className="text-white leading-relaxed mb-4">
             50% of all protocol fees are deposited into a <strong>dedicated vault</strong>, fully controlled by <strong>audited smart contracts</strong>. This vault powers a <strong>continuous stream of automatic distributions</strong> to STA holders who <strong>deposit their tokens into the STA Staking Vault</strong>— demonstrating long-term commitment to the protocol.
           </p>
@@ -77,7 +77,7 @@ export default function DocsCaptureCroissancePage() {
             <li>✅ STA holders are incentivized to deposit on STA Staking Vault, increasing protocol stability and community engagement</li>
           </ul>
 
-            <h2 className="text-2xl font-bold mb-6 mt-8"><span className="bg-gradient-to-r from-[#EF9B13] via-[#FAB062] to-[#D36A03] bg-clip-text text-transparent">Buyback & Burn</span></h2>
+            <h2 className="text-2xl font-bold mb-6 mt-8"><span className="text-[#C9A36A]">Buyback & Burn</span></h2>
           <p className="text-white leading-relaxed mb-4">
             We&apos;ve designed a <strong>simple but powerful mechanism</strong> to support long-term token value and deliver direct impact to our community.
           </p>
