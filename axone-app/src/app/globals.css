@@ -80,9 +80,22 @@ body {
 
 .brand-typography .prose :is(h1, h2, h3, h4, h5, h6) {
   font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
-  color: #C9A36A;
+  color: #C9A36A !important;
   letter-spacing: 0.04em;
   font-weight: 600;
+}
+
+/* Ensure h2 headings and their spans are champagne color even with prose-invert */
+.brand-typography .prose.prose-invert h2,
+.brand-typography .prose.prose-invert h2 span,
+.brand-typography .prose h2,
+.brand-typography .prose h2 span {
+  color: #C9A36A !important;
+}
+
+/* Override the span rule for headings - spans inside h2 should be champagne */
+.brand-typography .prose :is(h1, h2, h3, h4, h5, h6) span {
+  color: #C9A36A !important;
 }
 
 .brand-typography .prose h1 {

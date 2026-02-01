@@ -49,7 +49,7 @@ export function WhyStateraMarquee() {
           {duplicatedTopRow.map((feature, index) => (
             <div
               key={`top-${index}`}
-              className="marquee-card flex-shrink-0 w-[260px] sm:w-[280px] h-[120px] bg-white/5 border border-white/10 rounded-lg p-4 hover:border-[#EF9B13]/50 transition-colors duration-300"
+              className="marquee-card flex-shrink-0 w-[260px] sm:w-[280px] h-[120px] bg-white/5 border border-white/10 rounded-lg p-4 hover:border-[#EF9B13]/50 transition-colors duration-300 text-center"
             >
               <h4 className="text-[#EF9B13] font-medium text-base mb-2">
                 {feature.title}
@@ -68,7 +68,7 @@ export function WhyStateraMarquee() {
           {duplicatedBottomRow.map((feature, index) => (
             <div
               key={`bottom-${index}`}
-              className="marquee-card flex-shrink-0 w-[260px] sm:w-[280px] h-[120px] bg-white/5 border border-white/10 rounded-lg p-4 hover:border-[#EF9B13]/50 transition-colors duration-300"
+              className="marquee-card flex-shrink-0 w-[260px] sm:w-[280px] h-[120px] bg-white/5 border border-white/10 rounded-lg p-4 hover:border-[#EF9B13]/50 transition-colors duration-300 text-center"
             >
               <h4 className="text-[#EF9B13] font-medium text-base mb-2">
                 {feature.title}

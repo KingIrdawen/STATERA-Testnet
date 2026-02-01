@@ -228,7 +228,7 @@ export default function Home() {
                   <div className="space-y-8 sm:space-y-12 mb-16 sm:mb-20">
                     {/* Block 1 */}
                     <Reveal delayMs={80}>
-                      <div className="max-w-4xl mx-auto">
+                      <div className="max-w-4xl mx-auto text-center">
                         <h3 className="text-2xl sm:text-3xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">
                           A unified investment experience
                         </h3>
@@ -240,7 +240,7 @@ export default function Home() {
 
                     {/* Block 2 */}
                     <Reveal delayMs={160}>
-                      <div className="max-w-4xl mx-auto">
+                      <div className="max-w-4xl mx-auto text-center">
                         <h3 className="text-2xl sm:text-3xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">
                           An intelligent protocol layer
                         </h3>
