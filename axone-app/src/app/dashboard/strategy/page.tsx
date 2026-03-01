@@ -20,7 +20,7 @@ function DemoPortfolioOverview() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-      <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-5 hover:border-[#C9A36A]/35 transition-colors duration-300">
+      <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-5 hover:border-[#C9A36A]/35 transition-colors duration-300 flex flex-col items-center justify-center text-center">
         <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)] mb-2">
           Total Portfolio Value
         </p>
@@ -29,7 +29,7 @@ function DemoPortfolioOverview() {
         </p>
         <p className="text-[0.65rem] text-[rgba(230,230,230,0.25)] mt-1 tracking-[0.08em] uppercase">Demo data</p>
       </div>
-      <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-5 hover:border-[#C9A36A]/35 transition-colors duration-300">
+      <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-5 hover:border-[#C9A36A]/35 transition-colors duration-300 flex flex-col items-center justify-center text-center">
         <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)] mb-2">
           24h PnL
         </p>
@@ -38,7 +38,7 @@ function DemoPortfolioOverview() {
         </p>
         <p className="text-[0.65rem] text-[rgba(230,230,230,0.25)] mt-1 tracking-[0.08em] uppercase">Demo data</p>
       </div>
-      <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-5 hover:border-[#C9A36A]/35 transition-colors duration-300">
+      <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-5 hover:border-[#C9A36A]/35 transition-colors duration-300 flex flex-col items-center justify-center text-center">
         <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)] mb-2">
           24h Return
         </p>
@@ -203,11 +203,10 @@ export default function StrategyPage() {
           <DemoPortfolioOverview />
 
           {/* Section titre stratégies */}
-          <div className="flex items-center gap-4 mb-6">
-            <h2 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] uppercase text-sm">
+          <div className="text-center mb-6">
+            <h2 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] uppercase">
               Active Strategies
             </h2>
-            <div className="flex-1 border-t border-[#C9A36A]/15" />
           </div>
 
           {/* Grille des stratégies */}
