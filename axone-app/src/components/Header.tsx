@@ -18,10 +18,10 @@ export default function Header() {
   }, []);
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 border-b border-[#C9A36A]/15 ${
-      isScrolled 
-        ? 'bg-[#121212]/90 backdrop-blur-md' 
-        : 'bg-[#121212]/70'
+    <header className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 border-b border-[rgba(255,255,255,0.05)] ${
+      isScrolled
+        ? 'bg-black/90 backdrop-blur-md'
+        : 'bg-transparent'
     }`}>
       <div className="flex min-h-[60px] md:min-h-[80px] w-full">
         {/* Section gauche - Logo */}
@@ -52,10 +52,10 @@ export default function Header() {
               >
                 Docs
               </Link>
-              
+
               <Link
                 href="/dashboard/strategy"
-                className="inline-flex items-center px-3 py-1 sm:px-4 sm:py-1.5 md:px-6 md:py-2 rounded-lg bg-[#C9A36A] text-[#121212] font-semibold text-xs sm:text-sm md:text-base shadow-lg transition-all duration-300 hover:bg-[#b8935f] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#C9A36A]/60 focus:ring-offset-2 focus:ring-offset-[#121212] tracking-tight"
+                className="inline-flex items-center px-3 py-1 sm:px-4 sm:py-1.5 md:px-6 md:py-2 rounded-lg border border-[#C9A36A] text-[#C9A36A] font-semibold text-xs sm:text-sm md:text-base transition-all duration-[250ms] ease-out hover:bg-[#C9A36A]/10 focus:outline-none tracking-tight"
               >
                 Launch App
               </Link>
