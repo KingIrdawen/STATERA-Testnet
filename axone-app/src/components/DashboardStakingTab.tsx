@@ -93,17 +93,26 @@ export function DashboardStakingTab() {
         {/* Overview démo */}
         <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6">
           <h3 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">Staking Overview</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              { label: 'Total Pools', value: DEMO_STAKING_POOLS.length.toString() },
-              { label: 'Total Staked (USD)', value: `$${DEMO_STAKING_TOTAL_STAKED_USD.toLocaleString()}` },
-              { label: 'Your Pending Rewards', value: `${DEMO_STAKING_PENDING_REWARDS} STA` },
-            ].map(({ label, value }) => (
-              <div key={label} className="bg-white/3 border border-[#C9A36A]/10 rounded-lg p-4">
-                <p className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)] mb-2">{label}</p>
-                <p className="text-[#C9A36A] text-xl font-bold font-mono">{value}</p>
-              </div>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-white/3 border border-[#C9A36A]/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+              <p className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)] mb-2">Total Pools</p>
+              <p className="text-[#C9A36A] text-xl font-bold font-mono">{DEMO_STAKING_POOLS.length}</p>
+            </div>
+            <div className="bg-white/3 border border-[#C9A36A]/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+              <p className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)] mb-2">Total Staked (USD)</p>
+              <p className="text-[#C9A36A] text-xl font-bold font-mono">${DEMO_STAKING_TOTAL_STAKED_USD.toLocaleString()}</p>
+            </div>
+            <div className="bg-white/3 border border-[#C9A36A]/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+              <p className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)] mb-2">Your Staking</p>
+              <p className="text-[#C9A36A] text-xl font-bold font-mono">—</p>
+            </div>
+            <div className="bg-white/3 border border-[#C9A36A]/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+              <p className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)] mb-2">Pending Rewards</p>
+              <p className="text-[#C9A36A] text-xl font-bold font-mono mb-3">{DEMO_STAKING_PENDING_REWARDS} STA</p>
+              <button disabled className="px-4 py-1.5 bg-[#C9A36A]/30 text-[#C9A36A]/50 text-xs font-semibold rounded-lg cursor-not-allowed">
+                Claim
+              </button>
+            </div>
           </div>
         </div>
 
@@ -149,27 +158,40 @@ export function DashboardStakingTab() {
     return userPools.find(up => up.pid === pid);
   };
 
+  const handleClaimAll = () => {
+    userPools
+      .filter(up => up.pendingReward > 0n)
+      .forEach(up => harvest(up.pid));
+  };
+
   return (
     <div className="space-y-6">
       {/* Summary Stats */}
       <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6">
-        <h3 className="text-2xl font-bold text-white mb-4">Staking Overview</h3>
+        <h3 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">Staking Overview</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white/3 border border-[#C9A36A]/10 rounded-lg p-4">
+          <div className="bg-white/3 border border-[#C9A36A]/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
             <p className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)] mb-2">Total Pools</p>
-            <p className="text-white text-2xl font-bold">{pools.length}</p>
+            <p className="text-[#C9A36A] text-2xl font-bold font-mono">{pools.length}</p>
           </div>
-          <div className="bg-white/3 border border-[#C9A36A]/10 rounded-lg p-4">
-            <p className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)] mb-2">Your Total Staked</p>
-            <p className="text-white text-2xl font-bold">
+          <div className="bg-white/3 border border-[#C9A36A]/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+            <p className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)] mb-2">Your Staking</p>
+            <p className="text-[#C9A36A] text-2xl font-bold font-mono">
               {totalStaked > 0n ? formatUnits(totalStaked, 18) : '0'}
             </p>
           </div>
-          <div className="bg-white/3 border border-[#C9A36A]/10 rounded-lg p-4">
-            <p className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)] mb-2">Total Pending Rewards</p>
-            <p className="text-white text-2xl font-bold">
+          <div className="bg-white/3 border border-[#C9A36A]/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+            <p className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)] mb-2">Pending Rewards</p>
+            <p className="text-[#C9A36A] text-2xl font-bold font-mono mb-3">
               {totalPendingReward > 0n ? formatUnits(totalPendingReward, 18) : '0'}
             </p>
+            <button
+              onClick={handleClaimAll}
+              disabled={isPending || isConfirming || totalPendingReward === 0n}
+              className="px-4 py-1.5 bg-[#C9A36A] text-black text-xs font-semibold rounded-lg hover:bg-[#b8935f] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              {isPending || isConfirming ? 'Processing...' : 'Claim'}
+            </button>
           </div>
         </div>
       </div>
