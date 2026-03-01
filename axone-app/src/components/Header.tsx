@@ -48,7 +48,7 @@ export default function Header() {
             <div className="flex items-center gap-3 sm:gap-6">
               <Link
                 href="/docs"
-                className="text-[#E6E6E6] font-semibold text-xs sm:text-sm md:text-base hover:text-[#C9A36A] transition-colors tracking-tight"
+                className="hidden sm:inline-flex text-[#E6E6E6] font-semibold text-xs sm:text-sm md:text-base hover:text-[#C9A36A] transition-colors tracking-tight"
               >
                 Docs
               </Link>

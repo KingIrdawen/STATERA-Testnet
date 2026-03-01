@@ -729,24 +729,24 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
               </div>
             ) : (
               <div className="overflow-x-auto">
-                <table className="w-full">
+                <table className="w-full min-w-[640px]">
                   <thead>
                     <tr className="border-b border-[#C9A36A]/15">
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-400">Token Name</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-400">Token ID</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-gray-400">Balance in Strategy</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-gray-400">Value (USDT)</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-gray-400">Oracle Price (USDT)</th>
+                      <th className="text-left py-3 px-2 sm:px-4 text-sm font-semibold text-gray-400">Token Name</th>
+                      <th className="text-left py-3 px-2 sm:px-4 text-sm font-semibold text-gray-400">Token ID</th>
+                      <th className="text-right py-3 px-2 sm:px-4 text-sm font-semibold text-gray-400">Balance in Strategy</th>
+                      <th className="text-right py-3 px-2 sm:px-4 text-sm font-semibold text-gray-400">Value (USDT)</th>
+                      <th className="text-right py-3 px-2 sm:px-4 text-sm font-semibold text-gray-400">Oracle Price (USDT)</th>
                     </tr>
                   </thead>
                   <tbody>
                     {(tokenComposition ?? []).map((token, idx) => (
                       <tr key={idx} className="border-b border-[#C9A36A]/8">
-                        <td className="py-3 px-4 text-sm text-white">{token.name}</td>
-                        <td className="py-3 px-4 text-sm text-gray-400 font-mono">{token.tokenId}</td>
-                        <td className="py-3 px-4 text-sm text-white text-right">{token.balance.toFixed(6)}</td>
-                        <td className="py-3 px-4 text-sm text-white text-right">{formatUsd(token.valueUsd, 2)}</td>
-                        <td className="py-3 px-4 text-sm text-white text-right">{formatUsd(token.oraclePriceUsd, 4)}</td>
+                        <td className="py-3 px-2 sm:px-4 text-sm text-white">{token.name}</td>
+                        <td className="py-3 px-2 sm:px-4 text-sm text-gray-400 font-mono">{token.tokenId}</td>
+                        <td className="py-3 px-2 sm:px-4 text-sm text-white text-right">{token.balance.toFixed(6)}</td>
+                        <td className="py-3 px-2 sm:px-4 text-sm text-white text-right">{formatUsd(token.valueUsd, 2)}</td>
+                        <td className="py-3 px-2 sm:px-4 text-sm text-white text-right">{formatUsd(token.oraclePriceUsd, 4)}</td>
                       </tr>
                     ))}
                   </tbody>

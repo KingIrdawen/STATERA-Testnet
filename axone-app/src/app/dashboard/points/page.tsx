@@ -133,9 +133,9 @@ export default function PointsPage() {
                     <table className="w-full">
                       <thead className="border-b border-[#C9A36A]/15">
                         <tr>
-                          <th className="px-6 py-4 text-left text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)]">Rank</th>
-                          <th className="px-6 py-4 text-left text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)]">Wallet</th>
-                          <th className="px-6 py-4 text-right text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)]">Points</th>
+                          <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)]">Rank</th>
+                          <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)]">Wallet</th>
+                          <th className="px-3 sm:px-6 py-3 sm:py-4 text-right text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)]">Points</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -151,7 +151,7 @@ export default function PointsPage() {
                                   : 'hover:bg-white/3'
                               }`}
                             >
-                              <td className="px-6 py-4">
+                              <td className="px-3 sm:px-6 py-3 sm:py-4">
                                 <span className={`font-semibold text-sm ${
                                   entry.rank === 1 ? 'text-yellow-400' :
                                   entry.rank === 2 ? 'text-gray-300' :
@@ -161,7 +161,7 @@ export default function PointsPage() {
                                   #{entry.rank}
                                 </span>
                               </td>
-                              <td className="px-6 py-4">
+                              <td className="px-3 sm:px-6 py-3 sm:py-4">
                                 <div className="flex items-center gap-2">
                                   <span className="text-[#E6E6E6] font-mono text-sm">
                                     {formatAddress(entry.address)}
@@ -181,7 +181,7 @@ export default function PointsPage() {
                                   )}
                                 </div>
                               </td>
-                              <td className="px-6 py-4 text-right">
+                              <td className="px-3 sm:px-6 py-3 sm:py-4 text-right">
                                 <span className="text-[#E6E6E6] font-semibold font-mono text-sm">
                                   {entry.points.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </span>

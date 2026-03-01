@@ -72,7 +72,7 @@ export function DashboardArbitrageTab() {
           </p>
 
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full min-w-[560px]">
               <thead>
                 <tr className="border-b border-[#C9A36A]/15">
                   <th className="text-left py-3 px-4 text-[0.65rem] uppercase tracking-[0.12em] text-[rgba(230,230,230,0.4)]">Strategy</th>
@@ -150,7 +150,7 @@ export function DashboardArbitrageTab() {
 
         {/* Table */}
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full min-w-[560px]">
             <thead>
               <tr className="border-b border-gray-700">
                 <th className="text-left py-3 px-4 text-gray-400 text-sm font-semibold">Strategy</th>
