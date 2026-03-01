@@ -148,20 +148,23 @@ function ActiveStrategiesGrid({ strategies, loading }: { strategies: Strategy[];
   );
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+    <div className="flex flex-wrap justify-center gap-6">
       {/* Stratégies réelles (avec retrait disponible) */}
       {validStrategies.map(strategy => (
-        <StrategyCardEra
-          key={strategy.id}
-          strategy={strategy}
-          showWithdraw={true}
-          showViewMore={true}
-        />
+        <div key={strategy.id} className="w-full lg:w-[calc(50%-12px)] xl:w-[calc(33.333%-16px)] min-w-0">
+          <StrategyCardEra
+            strategy={strategy}
+            showWithdraw={true}
+            showViewMore={true}
+          />
+        </div>
       ))}
 
       {/* Cartes démo supplémentaires */}
       {DEMO_EXTRA_STRATEGIES.map(demo => (
-        <DemoStrategyCard key={demo.id} demo={demo} />
+        <div key={demo.id} className="w-full lg:w-[calc(50%-12px)] xl:w-[calc(33.333%-16px)] min-w-0">
+          <DemoStrategyCard demo={demo} />
+        </div>
       ))}
     </div>
   );

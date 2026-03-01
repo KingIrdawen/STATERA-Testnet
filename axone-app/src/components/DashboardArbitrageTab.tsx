@@ -38,7 +38,7 @@ export function DashboardArbitrageTab() {
   if (isLoading) {
     return (
       <div className="text-center py-12">
-        <p className="text-[#5a9a9a] text-lg">Loading arbitrage opportunities...</p>
+        <p className="text-[rgba(230,230,230,0.5)] text-lg">Loading arbitrage opportunities...</p>
       </div>
     );
   }

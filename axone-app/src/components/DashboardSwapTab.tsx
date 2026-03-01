@@ -102,7 +102,7 @@ function SwapTabContent() {
   if (loading) {
     return (
       <div className="text-center py-12">
-        <p className="text-[#5a9a9a] text-lg">Loading swap pools...</p>
+        <p className="text-[rgba(230,230,230,0.5)] text-lg">Loading swap pools...</p>
       </div>
     );
   }
@@ -413,7 +413,7 @@ function SwapTabContent() {
 
 export function DashboardSwapTab() {
   return (
-    <Suspense fallback={<div className="text-center py-12"><p className="text-[#5a9a9a] text-lg">Loading...</p></div>}>
+    <Suspense fallback={<div className="text-center py-12"><p className="text-[rgba(230,230,230,0.5)] text-lg">Loading...</p></div>}>
       <SwapTabContent />
     </Suspense>
   );

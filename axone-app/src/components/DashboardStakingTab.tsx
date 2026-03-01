@@ -63,7 +63,7 @@ export function DashboardStakingTab() {
   if (poolsLoading || userDataLoading) {
     return (
       <div className="text-center py-12">
-        <p className="text-[#5a9a9a] text-lg">Loading staking data...</p>
+        <p className="text-[rgba(230,230,230,0.5)] text-lg">Loading staking data...</p>
       </div>
     );
   }
