@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import { SiteFooter } from '@/components/layout/SiteFooter';
@@ -69,117 +69,78 @@ export default function Home() {
   const topVaults = stats?.vaults.slice(0, 6) || [];
 
   return (
-    <div className="min-h-screen bg-[#0B0B0B] text-white">
+    <div className="min-h-screen bg-[#121212] text-white">
       <Header />
-
-      {/* ── Hero Section ── */}
-      <section
-        className="relative overflow-hidden"
-        style={{
-          background:
-            'radial-gradient(circle at 70% 50%, rgba(212,175,122,0.07), transparent 50%), #0B0B0B',
-        }}
-      >
-        <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
-          {/* Grid: 55% text / 45% coin */}
-          <div className="grid items-center gap-8 lg:grid-cols-[55%_45%] pt-[120px] pb-[80px]">
-
-            {/* ── Left: Text content ── */}
-            <div>
-              <div className="hero-text-anim">
-                {/* Subtitle label */}
-                <p className="text-[14px] tracking-[0.35em] uppercase text-[#D4AF7A]/70 mb-6">
-                  Decentralized Investment Strategies
-                </p>
-                {/* Main title */}
-                <h1
-                  className={`${playfairDisplay.className} text-[42px] sm:text-[56px] lg:text-[72px] font-medium tracking-[0.08em] text-[#D4AF7A] leading-[1.1]`}
-                >
-                  STATERA
-                </h1>
-                {/* Body */}
-                <p
-                  className="mt-6 text-[18px] leading-[1.7] text-white max-w-[520px]"
-                  style={{ opacity: 0.75 }}
-                >
-                  On-chain portfolio strategies with institutional-grade risk management,
-                  delivering transparent exposure through disciplined, rules-based allocation.
-                </p>
-              </div>
-
-              {/* CTA Buttons */}
-              <div className="hero-btns-anim mt-10 flex flex-col sm:flex-row gap-4 items-start">
-                <Link
-                  href="/dashboard/strategy"
-                  className="inline-flex items-center justify-center px-[28px] py-[16px] rounded-lg bg-[#D4AF7A] text-black font-semibold text-sm transition-all duration-[250ms] ease-out hover:brightness-110 focus:outline-none"
-                >
-                  ACCESS PLATFORM
-                </Link>
-                <Link
-                  href="/docs"
-                  className="inline-flex items-center justify-center px-[28px] py-[16px] rounded-lg border border-[rgba(255,255,255,0.15)] text-white font-semibold text-sm transition-all duration-[250ms] ease-out hover:bg-white/5 focus:outline-none"
-                >
-                  View Documentation
-                </Link>
-              </div>
-            </div>
-
-            {/* ── Right: Coin visual (desktop only) ── */}
-            <div className="hero-coin-anim hidden lg:flex items-center justify-center relative min-h-[420px]">
-              {/* "The Art of Volatility" signature */}
-              <p
-                className={`${playfairDisplay.className} absolute bottom-6 right-2 z-10 text-xl italic`}
-                style={{ color: 'rgba(212,175,122,0.8)', transform: 'rotate(-2deg)' }}
-              >
-                The Art of Volatility...
-              </p>
-              {/* Coin with drop-shadow + float animation */}
-              <div
-                className="relative w-full max-w-[500px] aspect-square float-anim"
-                style={{ filter: 'drop-shadow(0 40px 80px rgba(0,0,0,0.8))' }}
-              >
+      
+      {/* Hero Section */}
+      <section className="relative overflow-hidden bg-[#121212]">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0">
+            <div className="max-w-7xl mx-auto h-full px-6 sm:px-8 lg:px-12">
+              <div className="relative h-full">
                 <Image
                   src="/Image-titre.png"
                   alt="Statera visual"
                   fill
-                  className="object-contain"
-                  sizes="(min-width: 1280px) 500px, 45vw"
+                  className="object-contain object-right"
+                  sizes="(min-width: 1280px) 1200px, 100vw"
                   priority
                 />
               </div>
             </div>
           </div>
-
-          {/* BONUS: Ultra thin gold gradient line */}
-          <div className="h-px bg-gradient-to-r from-transparent via-[#D4AF7A]/45 to-transparent" />
-          <div
-            className="h-[3px] w-[25%] mx-auto -mt-px blur-sm"
-            style={{ background: 'rgba(212,175,122,0.2)' }}
-          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#121212] via-[#121212]/80 to-transparent" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_right,rgba(18,18,18,0.35),rgba(18,18,18,0.9))]" />
         </div>
 
-        {/* Trust Strip */}
-        <div className="border-t border-[rgba(255,255,255,0.05)]">
-          <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12 py-6">
-            <div className="flex flex-wrap justify-center items-center gap-x-10 gap-y-3">
-              {[
-                'Non-Custodial',
-                'On-Chain Execution',
-                'Automated Rebalancing',
-                'Full Transparency',
-              ].map((item, i, arr) => (
-                <Fragment key={item}>
-                  <span
-                    className="text-[12px] uppercase tracking-[0.25em] text-white"
-                    style={{ opacity: 0.6 }}
-                  >
-                    {item}
-                  </span>
-                  {i < arr.length - 1 && (
-                    <span className="text-white/25 text-[10px] hidden sm:inline">·</span>
-                  )}
-                </Fragment>
-              ))}
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10 min-h-[75vh] lg:min-h-[85vh] flex flex-col">
+          <div className="flex-1 flex items-center py-16 sm:py-20">
+            <Reveal>
+              <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-center w-full">
+                <div className="text-left max-w-2xl">
+                  <h1 className="text-5xl sm:text-6xl md:text-7xl font-semibold tracking-[0.07em] text-[#C9A36A]">
+                    STATERA
+                  </h1>
+                  <p className="mt-4 text-xs sm:text-sm tracking-[0.14em] uppercase text-[#C9A36A]/80">
+                    Decentralized Investment Strategies
+                  </p>
+                  <p className="mt-6 text-lg sm:text-xl text-[rgba(230,230,230,0.7)] leading-relaxed max-w-xl">
+                    On-chain portfolio strategies with institutional-grade risk management, delivering transparent exposure through disciplined, rules-based allocation.
+                  </p>
+
+                  <div className="mt-8 flex flex-col sm:flex-row gap-4 items-start">
+                    <Link
+                      href="/dashboard/strategy"
+                      className="inline-flex items-center justify-center px-7 py-3 rounded-lg bg-[#C9A36A] text-[#121212] font-semibold text-sm sm:text-base shadow-lg transition-all duration-300 hover:bg-[#b8935f] focus:outline-none focus:ring-2 focus:ring-[#C9A36A]/60 focus:ring-offset-2 focus:ring-offset-[#121212]"
+                    >
+                      ACCESS PLATFORM
+                    </Link>
+
+                    <Link
+                      href="/docs"
+                      className="inline-flex items-center justify-center px-7 py-3 rounded-lg border border-[#C9A36A]/30 text-[#E6E6E6] font-semibold text-sm sm:text-base shadow-lg transition-all duration-300 hover:border-[#C9A36A]/60 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[#C9A36A]/40 focus:ring-offset-2 focus:ring-offset-[#121212]"
+                    >
+                      View Documentation
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="hidden lg:block" />
+              </div>
+            </Reveal>
+          </div>
+
+          <div className="absolute right-56 bottom-60 hidden lg:block text-right">
+            <p className={`${playfairDisplay.className} text-xl lg:text-2xl italic tracking-[0.06em] text-[#C9A36A]/80`}>
+              The Art of Volatility...
+            </p>
+          </div>
+
+          <div className="mt-auto" style={{ paddingBottom: '5px' }}>
+            <div className="mt-3 text-right lg:hidden">
+              <p className={`${playfairDisplay.className} text-base italic tracking-[0.06em] text-[#C9A36A]/80`}>
+                The Art of Volatility...
+              </p>
             </div>
           </div>
         </div>
@@ -187,7 +148,7 @@ export default function Home() {
 
       {/* KPI block */}
       <section className="pt-1 pb-12 sm:pt-2 sm:pb-16 -mt-16 sm:-mt-20 relative z-20">
-        <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {['Total Deposited', 'Active Vaults', 'Total Unique Deposits'].map((label) => (
@@ -248,71 +209,73 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How the protocol works */}
-      <div className="py-16 sm:py-20">
-        <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12">
-          {/* Part A: Headline + Subheadline */}
-          <Reveal delayMs={0}>
-            <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4 leading-relaxed">
-                Web3 investing, simplified and optimized.
-              </h2>
-              <p className="text-lg sm:text-xl text-[rgba(230,230,230,0.7)] max-w-3xl mx-auto">
-                Statera turns DeFi complexity into a streamlined, accessible experience.
-              </p>
-            </div>
-          </Reveal>
+              {/* How the protocol works */}
+              <div className="py-16 sm:py-20">
+                <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+                  {/* Part A: Headline + Subheadline */}
+                  <Reveal delayMs={0}>
+                    <div className="text-center mb-12 sm:mb-16">
+                      <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4 leading-relaxed">
+                        Web3 investing, simplified and optimized.
+                      </h2>
+                      <p className="text-lg sm:text-xl text-[rgba(230,230,230,0.7)] max-w-3xl mx-auto">
+                        Statera turns DeFi complexity into a streamlined, accessible experience.
+                      </p>
+                    </div>
+                  </Reveal>
 
-          {/* Part B: Short narrative */}
-          <div className="space-y-8 sm:space-y-12 mb-16 sm:mb-20">
-            <Reveal delayMs={80}>
-              <div className="max-w-4xl mx-auto text-center">
-                <h3 className="text-2xl sm:text-3xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">
-                  A unified investment experience
-                </h3>
-                <p className="text-base sm:text-lg text-[rgba(230,230,230,0.7)] leading-relaxed">
-                  Statera Index combines DeFi execution with a simple interface. Deposit into strategies that manage positions automatically, providing access to diversified exposure through a single transaction.
-                </p>
+                  {/* Part B: Short narrative */}
+                  <div className="space-y-8 sm:space-y-12 mb-16 sm:mb-20">
+                    {/* Block 1 */}
+                    <Reveal delayMs={80}>
+                      <div className="max-w-4xl mx-auto text-center">
+                        <h3 className="text-2xl sm:text-3xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">
+                          A unified investment experience
+                        </h3>
+                        <p className="text-base sm:text-lg text-[rgba(230,230,230,0.7)] leading-relaxed">
+                          Statera Index combines DeFi execution with a simple interface. Deposit into strategies that manage positions automatically, providing access to diversified exposure through a single transaction.
+                        </p>
+                      </div>
+                    </Reveal>
+
+                    {/* Block 2 */}
+                    <Reveal delayMs={160}>
+                      <div className="max-w-4xl mx-auto text-center">
+                        <h3 className="text-2xl sm:text-3xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">
+                          An intelligent protocol layer
+                        </h3>
+                        <p className="text-base sm:text-lg text-[rgba(230,230,230,0.7)] leading-relaxed">
+                          The protocol manages positions automatically according to strategy rules, designed to improve efficiency and manage risk. Rebalancing occurs when allocations deviate from targets, keeping strategies aligned with their intended exposures.
+                        </p>
+                      </div>
+                    </Reveal>
+                  </div>
+
+                  {/* Part C: Why Statera? */}
+                  <Reveal delayMs={220}>
+                    <h3 className="text-2xl sm:text-3xl font-semibold text-[#C9A36A] tracking-[0.04em] text-center mb-8 sm:mb-12">
+                      Why Statera?
+                    </h3>
+                  </Reveal>
+
+                  <div
+                    className="w-full px-6 sm:px-8 lg:px-12 relative"
+                    style={{
+                      maskImage:
+                        'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.9) 25%, black 35%, black 65%, rgba(0,0,0,0.9) 75%, transparent 100%)',
+                      WebkitMaskImage:
+                        'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.9) 25%, black 35%, black 65%, rgba(0,0,0,0.9) 75%, transparent 100%)',
+                    }}
+                  >
+                    <WhyStateraMarquee />
+                  </div>
+                </div>
               </div>
-            </Reveal>
-
-            <Reveal delayMs={160}>
-              <div className="max-w-4xl mx-auto text-center">
-                <h3 className="text-2xl sm:text-3xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">
-                  An intelligent protocol layer
-                </h3>
-                <p className="text-base sm:text-lg text-[rgba(230,230,230,0.7)] leading-relaxed">
-                  The protocol manages positions automatically according to strategy rules, designed to improve efficiency and manage risk. Rebalancing occurs when allocations deviate from targets, keeping strategies aligned with their intended exposures.
-                </p>
-              </div>
-            </Reveal>
-          </div>
-
-          {/* Part C: Why Statera? */}
-          <Reveal delayMs={220}>
-            <h3 className="text-2xl sm:text-3xl font-semibold text-[#C9A36A] tracking-[0.04em] text-center mb-8 sm:mb-12">
-              Why Statera?
-            </h3>
-          </Reveal>
-
-          <div
-            className="w-full px-6 sm:px-8 lg:px-12 relative"
-            style={{
-              maskImage:
-                'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.9) 25%, black 35%, black 65%, rgba(0,0,0,0.9) 75%, transparent 100%)',
-              WebkitMaskImage:
-                'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.9) 25%, black 35%, black 65%, rgba(0,0,0,0.9) 75%, transparent 100%)',
-            }}
-          >
-            <WhyStateraMarquee />
-          </div>
-        </div>
-      </div>
 
       {/* Vaults Preview */}
       {stats && stats.vaults.length > 0 && (
         <section className="py-16 sm:py-20">
-          <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
             <Reveal delayMs={300}>
               <div className="text-center mb-12">
                 <h2 className="text-3xl sm:text-4xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">
@@ -338,7 +301,7 @@ export default function Home() {
                         {vault.riskLevel}
                       </span>
                     </div>
-
+                    
                     <div className="space-y-2 mb-4">
                       <div className="flex justify-between text-sm">
                         <span className="text-[rgba(230,230,230,0.7)]">TVL</span>
@@ -356,7 +319,7 @@ export default function Home() {
 
                     <Link
                       href="/dashboard/strategy"
-                      className="block w-full text-center px-4 py-2 rounded-lg bg-[#C9A36A] text-black font-semibold text-sm hover:bg-[#b8935f] transition-all"
+                      className="block w-full text-center px-4 py-2 rounded-lg bg-[#C9A36A] text-[#121212] font-semibold text-sm hover:bg-[#b8935f] transition-all"
                     >
                       Open Vault
                     </Link>
@@ -369,8 +332,8 @@ export default function Home() {
       )}
 
       {/* How It Works */}
-      <section className="py-16 sm:py-20 bg-[#0B0B0B]">
-        <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12">
+      <section className="py-16 sm:py-20 bg-[#121212]">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <Reveal delayMs={300}>
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">
@@ -385,7 +348,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Reveal delayMs={200}>
               <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center hover:border-[#C9A36A]/35 transition-colors duration-300">
-                <div className="w-12 h-12 rounded-full bg-[#C9A36A] flex items-center justify-center text-black font-bold text-xl mb-4">
+                <div className="w-12 h-12 rounded-full bg-[#C9A36A] flex items-center justify-center text-[#121212] font-bold text-xl mb-4">
                   1
                 </div>
                 <h3 className="text-lg font-bold text-[#C9A36A] mb-2">Deposit</h3>
@@ -397,7 +360,7 @@ export default function Home() {
 
             <Reveal delayMs={300}>
               <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center hover:border-[#C9A36A]/35 transition-colors duration-300">
-                <div className="w-12 h-12 rounded-full bg-[#C9A36A] flex items-center justify-center text-black font-bold text-xl mb-4">
+                <div className="w-12 h-12 rounded-full bg-[#C9A36A] flex items-center justify-center text-[#121212] font-bold text-xl mb-4">
                   2
                 </div>
                 <h3 className="text-lg font-bold text-[#C9A36A] mb-2">Vault Shares</h3>
@@ -409,7 +372,7 @@ export default function Home() {
 
             <Reveal delayMs={400}>
               <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center hover:border-[#C9A36A]/35 transition-colors duration-300">
-                <div className="w-12 h-12 rounded-full bg-[#C9A36A] flex items-center justify-center text-black font-bold text-xl mb-4">
+                <div className="w-12 h-12 rounded-full bg-[#C9A36A] flex items-center justify-center text-[#121212] font-bold text-xl mb-4">
                   3
                 </div>
                 <h3 className="text-lg font-bold text-[#C9A36A] mb-2">Rebalancing</h3>
@@ -421,7 +384,7 @@ export default function Home() {
 
             <Reveal delayMs={500}>
               <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center hover:border-[#C9A36A]/35 transition-colors duration-300">
-                <div className="w-12 h-12 rounded-full bg-[#C9A36A] flex items-center justify-center text-black font-bold text-xl mb-4">
+                <div className="w-12 h-12 rounded-full bg-[#C9A36A] flex items-center justify-center text-[#121212] font-bold text-xl mb-4">
                   4
                 </div>
                 <h3 className="text-lg font-bold text-[#C9A36A] mb-2">Transparency</h3>
@@ -435,8 +398,8 @@ export default function Home() {
       </section>
 
       {/* Smart Rebalancing */}
-      <section className="py-16 sm:py-20 bg-[#0B0B0B]">
-        <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12">
+      <section className="py-16 sm:py-20 bg-[#121212]">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <Reveal delayMs={300}>
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">
@@ -453,7 +416,7 @@ export default function Home() {
               <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 min-h-[220px] flex flex-col items-center justify-start text-center hover:border-[#C9A36A]/35 transition-colors duration-300">
                 <h3 className="text-xl font-bold text-[#C9A36A] mb-3">Continuous Monitoring</h3>
                 <p className="text-[rgba(230,230,230,0.7)] text-sm leading-relaxed">
-                  Strategies are monitored hourly to track market conditions and portfolio allocations.
+                  Strategies are monitored hourly to track market conditions and portfolio allocations. 
                   Real-time data ensures positions remain aligned with target allocations.
                 </p>
               </div>
@@ -463,7 +426,7 @@ export default function Home() {
               <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 min-h-[220px] flex flex-col items-center justify-start text-center hover:border-[#C9A36A]/35 transition-colors duration-300">
                 <h3 className="text-xl font-bold text-[#C9A36A] mb-3">Threshold-Based Execution</h3>
                 <p className="text-[rgba(230,230,230,0.7)] text-sm leading-relaxed">
-                  Rebalancing occurs when allocations deviate beyond predefined thresholds.
+                  Rebalancing occurs when allocations deviate beyond predefined thresholds. 
                   This approach minimizes unnecessary transactions while maintaining target exposure.
                 </p>
               </div>
@@ -473,7 +436,7 @@ export default function Home() {
               <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 min-h-[220px] flex flex-col items-center justify-start text-center hover:border-[#C9A36A]/35 transition-colors duration-300">
                 <h3 className="text-xl font-bold text-[#C9A36A] mb-3">Execution Advantages</h3>
                 <p className="text-[rgba(230,230,230,0.7)] text-sm leading-relaxed">
-                  Leveraging Hyperliquid's decentralized order book and high-performance infrastructure,
+                  Leveraging Hyperliquid's decentralized order book and high-performance infrastructure, 
                   rebalancing executes with minimal slippage, low fees, and instant settlement.
                 </p>
               </div>
@@ -484,7 +447,7 @@ export default function Home() {
 
       {/* Fees & Transparency */}
       <section className="py-16 sm:py-20">
-        <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <Reveal delayMs={300}>
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">
@@ -525,8 +488,8 @@ export default function Home() {
       </section>
 
       {/* App Features */}
-      <section className="py-16 sm:py-20 bg-[#0B0B0B]">
-        <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12">
+      <section className="py-16 sm:py-20 bg-[#121212]">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <Reveal delayMs={300}>
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">
@@ -543,7 +506,7 @@ export default function Home() {
               <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center hover:border-[#C9A36A]/35 transition-colors duration-300">
                 <h3 className="text-xl font-bold text-[#C9A36A] mb-3">Strategies</h3>
                 <p className="text-[rgba(230,230,230,0.7)] text-sm leading-relaxed">
-                  Users deposit into on-chain vaults implementing predefined strategies.
+                  Users deposit into on-chain vaults implementing predefined strategies. 
                   Vaults manage exposure and rebalancing automatically. Performance and risk are strategy-dependent.
                 </p>
               </div>
@@ -553,7 +516,7 @@ export default function Home() {
               <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center hover:border-[#C9A36A]/35 transition-colors duration-300">
                 <h3 className="text-xl font-bold text-[#C9A36A] mb-3">Dashboard</h3>
                 <p className="text-[rgba(230,230,230,0.7)] text-sm leading-relaxed">
-                  Central interface to monitor deposits, NAV, performance, and positions.
+                  Central interface to monitor deposits, NAV, performance, and positions. 
                   Real-time on-chain data and strategy metrics provide full transparency.
                 </p>
               </div>
@@ -590,7 +553,7 @@ export default function Home() {
               <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center hover:border-[#C9A36A]/35 transition-colors duration-300">
                 <h3 className="text-xl font-bold text-[#C9A36A] mb-3">Referral</h3>
                 <p className="text-[rgba(230,230,230,0.7)] text-sm leading-relaxed">
-                  Referral system allowing users to invite others. Rewards or benefits follow the rules
+                  Referral system allowing users to invite others. Rewards or benefits follow the rules 
                   defined in the referral contracts.
                 </p>
               </div>
@@ -601,7 +564,7 @@ export default function Home() {
 
       {/* Security & Transparency */}
       <section className="py-16 sm:py-20">
-        <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <Reveal delayMs={300}>
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">
@@ -633,8 +596,8 @@ export default function Home() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-16 sm:py-20 bg-[#0B0B0B]">
-        <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12">
+      <section className="py-16 sm:py-20 bg-[#121212]">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <Reveal delayMs={300}>
             <div className="text-center">
               <h2 className="text-3xl sm:text-4xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-6">
@@ -646,13 +609,13 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <Link
                   href="/dashboard/strategy"
-                  className="inline-flex items-center justify-center px-[28px] py-[16px] rounded-lg bg-[#D4AF7A] text-black font-semibold text-base transition-all duration-[250ms] ease-out hover:brightness-110 focus:outline-none"
+                  className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-[#C9A36A] text-[#121212] font-semibold text-base md:text-lg shadow-lg transition-all duration-300 hover:bg-[#b8935f] focus:outline-none focus:ring-2 focus:ring-[#C9A36A]/60 focus:ring-offset-2 focus:ring-offset-[#121212]"
                 >
                   Launch App
                 </Link>
                 <Link
                   href="/docs"
-                  className="inline-flex items-center justify-center px-[28px] py-[16px] rounded-lg border border-[rgba(255,255,255,0.15)] text-white font-semibold text-base transition-all duration-[250ms] ease-out hover:bg-white/5 focus:outline-none"
+                  className="inline-flex items-center justify-center px-8 py-4 rounded-lg border border-[#C9A36A]/30 text-[#E6E6E6] font-semibold text-base md:text-lg shadow-lg transition-all duration-300 hover:border-[#C9A36A]/60 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[#C9A36A]/40 focus:ring-offset-2 focus:ring-offset-[#121212]"
                 >
                   Read Documentation
                 </Link>
@@ -661,7 +624,7 @@ export default function Home() {
           </Reveal>
         </div>
       </section>
-
+      
       <SiteFooter />
     </div>
   );

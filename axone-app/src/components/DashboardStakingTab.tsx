@@ -113,7 +113,7 @@ export function DashboardStakingTab() {
             <div key={pool.pid} className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6 hover:border-[#C9A36A]/35 transition-colors duration-300">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h4 className="text-xl font-bold bg-gradient-to-r from-[#C9A36A] to-[#5a9a9a] bg-clip-text text-transparent">
+                  <h4 className="text-xl font-bold text-[#C9A36A] tracking-[0.03em]">
                     Pool #{pool.pid} — {pool.symbol}
                   </h4>
                   <p className="text-[rgba(230,230,230,0.4)] text-xs mt-1">Weight: {pool.weight}%</p>
@@ -278,7 +278,7 @@ function PoolCard({
       {/* Header */}
       <div className="flex justify-between items-start mb-4">
         <div>
-          <h4 className="text-xl font-bold bg-gradient-to-r from-[#C9A36A] to-[#5a9a9a] bg-clip-text text-transparent">
+          <h4 className="text-xl font-bold text-[#C9A36A] tracking-[0.03em]">
             Pool #{pool.pid} - {symbol}
           </h4>
           {pool.weight !== undefined && (
