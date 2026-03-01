@@ -7,6 +7,13 @@ import { SiteFooter } from '@/components/layout/SiteFooter';
 import { useWhitelistCheck } from '@/hooks/useWhitelistCheck';
 import { usePoints, useLeaderboard, useUserRank } from '@/hooks/usePoints';
 import { ExternalLink } from 'lucide-react';
+import {
+  DEMO_POINTS_TOTAL,
+  DEMO_POINTS_BREAKDOWN,
+  DEMO_LEADERBOARD,
+  DEMO_USER_RANK,
+  formatDemoAddress,
+} from '@/lib/placeholders';
 
 const EXPLORER_URL = 'https://hyperscan-testnet.hyperliquid.xyz';
 
@@ -21,9 +28,18 @@ export default function PointsPage() {
   const { leaderboard, isLoading: leaderboardLoading } = useLeaderboard(100, 0);
   const { rank, isLoading: rankLoading } = useUserRank(address);
 
-  // Get today's points breakdown if available
   const today = new Date().toISOString().split('T')[0];
   const todayPoints = daily?.[today];
+
+  // ─── Mode démo : afficher les données placeholder quand le backend est inactif ───
+  // ⚠️  PLACEHOLDER — À remplacer par les vraies données quand le backend points est actif
+  const isPointsEmpty = !pointsLoading && points === 0;
+  const isLeaderboardEmpty = !leaderboardLoading && leaderboard.length === 0;
+
+  const displayPoints = isPointsEmpty ? DEMO_POINTS_TOTAL : points;
+  const displayLeaderboard = isLeaderboardEmpty ? DEMO_LEADERBOARD : leaderboard;
+  const displayRank = (!rank && isLeaderboardEmpty) ? DEMO_USER_RANK : rank;
+  const isDemoMode = isPointsEmpty || isLeaderboardEmpty;
 
   return (
     <div className="min-h-screen bg-[#121212]">
@@ -32,125 +48,158 @@ export default function PointsPage() {
 
       <main className="w-full pt-[60px] md:pt-[80px]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pl-0 md:pl-64">
-          {/* Title */}
+          {/* Titre */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 sm:mb-8">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#EF9B13] to-[#FAB062]">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-[0.04em] mb-4">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C9A36A] to-[#b8935f]">
                 Points
               </span>
             </h1>
-            <p className="text-white/70 text-sm">Epoch 0</p>
-          </div>
-
-          {/* Big number: user total points */}
-          <div className="text-center mb-8">
-            <div className="text-6xl sm:text-7xl md:text-8xl font-bold text-white mb-2">
-              {pointsLoading ? '...' : points.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </div>
-            {!address && (
-              <p className="text-gray-400 text-sm mt-2">Connect wallet to view your points</p>
+            <p className="text-[rgba(230,230,230,0.5)] text-sm tracking-[0.1em] uppercase">Epoch 0</p>
+            {isDemoMode && (
+              <span className="inline-block mt-3 px-3 py-1 rounded-full text-[0.65rem] font-semibold tracking-[0.12em] uppercase bg-[#C9A36A]/10 text-[#C9A36A]/60 border border-[#C9A36A]/20">
+                Demo Mode — Placeholder data
+              </span>
             )}
           </div>
 
-          {/* Points breakdown (smaller text) */}
-          {address && (todayPoints || pointsLoading) && (
-            <div className="mb-8">
-              <div className="bg-gray-800/50 border border-white/10 rounded-lg p-4 max-w-2xl mx-auto">
-                <h3 className="text-white/70 text-sm font-semibold mb-3 text-center">Points Breakdown</h3>
-                {pointsLoading ? (
-                  <p className="text-gray-400 text-sm text-center">Loading breakdown...</p>
-                ) : todayPoints ? (
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                    <div>
-                      <p className="text-gray-400 text-xs mb-1">Swap</p>
-                      <p className="text-white text-sm font-medium">{todayPoints.swapPoints.toLocaleString()}</p>
+          {/* Total points */}
+          <div className="text-center mb-10">
+            <div className="text-6xl sm:text-7xl md:text-8xl font-bold text-[#C9A36A] mb-2 font-mono tracking-tight">
+              {pointsLoading ? '...' : displayPoints.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </div>
+            <p className="text-[rgba(230,230,230,0.4)] text-sm">total points earned</p>
+            {!address && (
+              <p className="text-[rgba(230,230,230,0.4)] text-sm mt-2">Connect wallet to view your real points</p>
+            )}
+          </div>
+
+          {/* Points breakdown */}
+          <div className="mb-10">
+            <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6 max-w-2xl mx-auto hover:border-[#C9A36A]/25 transition-colors duration-300">
+              <h3 className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)] mb-5 text-center">
+                Points Breakdown
+                {/* ⚠️  PLACEHOLDER — Données provenant de DEMO_POINTS_BREAKDOWN */}
+              </h3>
+              {pointsLoading ? (
+                <p className="text-[rgba(230,230,230,0.4)] text-sm text-center">Loading breakdown...</p>
+              ) : (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                  {[
+                    { label: 'Swap', value: (todayPoints?.swapPoints ?? DEMO_POINTS_BREAKDOWN.swapPoints) },
+                    { label: 'LP', value: (todayPoints?.lpPoints ?? DEMO_POINTS_BREAKDOWN.lpPoints) },
+                    { label: 'Vault', value: (todayPoints?.vaultPoints ?? DEMO_POINTS_BREAKDOWN.vaultPoints) },
+                    { label: 'Referral', value: (todayPoints?.referralPoints ?? DEMO_POINTS_BREAKDOWN.referralPoints) },
+                  ].map(({ label, value }) => (
+                    <div key={label}>
+                      <p className="text-[0.65rem] uppercase tracking-[0.12em] text-[rgba(230,230,230,0.4)] mb-2">{label}</p>
+                      <p className="text-[#E6E6E6] text-lg font-semibold font-mono">
+                        {value.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                      </p>
                     </div>
-                    <div>
-                      <p className="text-gray-400 text-xs mb-1">LP</p>
-                      <p className="text-white text-sm font-medium">{todayPoints.lpPoints.toLocaleString()}</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-400 text-xs mb-1">Vault</p>
-                      <p className="text-white text-sm font-medium">{todayPoints.vaultPoints.toLocaleString()}</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-400 text-xs mb-1">Referral</p>
-                      <p className="text-white text-sm font-medium">{todayPoints.referralPoints.toLocaleString()}</p>
-                    </div>
-                  </div>
-                ) : (
-                  <p className="text-gray-400 text-sm text-center">No points breakdown available yet</p>
-                )}
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Votre rang */}
+          {(displayRank || rankLoading) && (
+            <div className="mb-8 text-center">
+              <div className="inline-block bg-white/5 border border-[#C9A36A]/15 rounded-xl px-8 py-4">
+                <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)] mb-1">Your Rank</p>
+                <p className="text-3xl font-bold text-[#C9A36A] font-mono">
+                  {rankLoading ? '...' : `#${displayRank}`}
+                </p>
               </div>
             </div>
           )}
 
           {/* Leaderboard */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-white mb-6 text-center">Leaderboard</h2>
-            <div className="bg-gray-800/50 border border-white/10 rounded-lg overflow-hidden">
+            <h2 className="text-xl font-bold tracking-[0.04em] text-[#C9A36A] mb-6 text-center uppercase text-sm">
+              Leaderboard
+            </h2>
+            <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl overflow-hidden">
               {leaderboardLoading ? (
                 <div className="text-center py-12">
-                  <p className="text-gray-400">Loading leaderboard...</p>
-                </div>
-              ) : leaderboard.length === 0 ? (
-                <div className="text-center py-12">
-                  <p className="text-gray-400">No leaderboard data available</p>
+                  <p className="text-[rgba(230,230,230,0.4)]">Loading leaderboard...</p>
                 </div>
               ) : (
                 <>
                   <div className="overflow-x-auto">
                     <table className="w-full">
-                      <thead className="bg-gray-900/50">
+                      <thead className="border-b border-[#C9A36A]/15">
                         <tr>
-                          <th className="px-6 py-4 text-left text-sm font-semibold text-white">Rank</th>
-                          <th className="px-6 py-4 text-left text-sm font-semibold text-white">Wallet</th>
-                          <th className="px-6 py-4 text-right text-sm font-semibold text-white">Points</th>
+                          <th className="px-6 py-4 text-left text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)]">Rank</th>
+                          <th className="px-6 py-4 text-left text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)]">Wallet</th>
+                          <th className="px-6 py-4 text-right text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)]">Points</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {leaderboard.map((entry) => (
-                          <tr
-                            key={entry.address}
-                            id={`rank-${entry.rank}`}
-                            className="border-t border-white/10 hover:bg-gray-900/30 transition-colors"
-                          >
-                            <td className="px-6 py-4 text-white font-medium">#{entry.rank}</td>
-                            <td className="px-6 py-4">
-                              <div className="flex items-center gap-2">
-                                <span className="text-white font-mono text-sm">
-                                  {formatAddress(entry.address)}
+                        {displayLeaderboard.map((entry) => {
+                          const isUser = address && entry.address.toLowerCase() === address.toLowerCase();
+                          return (
+                            <tr
+                              key={entry.address}
+                              id={`rank-${entry.rank}`}
+                              className={`border-t border-[#C9A36A]/8 transition-colors ${
+                                isUser
+                                  ? 'bg-[#C9A36A]/8'
+                                  : 'hover:bg-white/3'
+                              }`}
+                            >
+                              <td className="px-6 py-4">
+                                <span className={`font-semibold text-sm ${
+                                  entry.rank === 1 ? 'text-yellow-400' :
+                                  entry.rank === 2 ? 'text-gray-300' :
+                                  entry.rank === 3 ? 'text-amber-600' :
+                                  'text-[rgba(230,230,230,0.6)]'
+                                }`}>
+                                  #{entry.rank}
                                 </span>
-                                <a
-                                  href={`${EXPLORER_URL}/address/${entry.address}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-[#EF9B13] hover:text-[#FAB062] transition-colors"
-                                >
-                                  <ExternalLink className="w-4 h-4" />
-                                </a>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 text-right text-white font-semibold">
-                              {entry.points.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                            </td>
-                          </tr>
-                        ))}
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-[#E6E6E6] font-mono text-sm">
+                                    {formatAddress(entry.address)}
+                                  </span>
+                                  {!isDemoMode && (
+                                    <a
+                                      href={`${EXPLORER_URL}/address/${entry.address}`}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-[#C9A36A]/50 hover:text-[#C9A36A] transition-colors"
+                                    >
+                                      <ExternalLink className="w-3.5 h-3.5" />
+                                    </a>
+                                  )}
+                                  {isUser && (
+                                    <span className="text-[0.6rem] text-[#C9A36A] bg-[#C9A36A]/10 px-1.5 py-0.5 rounded font-semibold">You</span>
+                                  )}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 text-right">
+                                <span className="text-[#E6E6E6] font-semibold font-mono text-sm">
+                                  {entry.points.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>
-                  {address && (
-                    <div className="p-6 border-t border-white/10">
+                  {address && !isDemoMode && (
+                    <div className="p-6 border-t border-[#C9A36A]/15">
                       <button
                         onClick={() => {
-                          // Scroll to user's rank in leaderboard
                           const userEntry = leaderboard.find((e) => e.address.toLowerCase() === address.toLowerCase());
                           if (userEntry) {
-                            const element = document.getElementById(`rank-${userEntry.rank}`);
-                            element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            document.getElementById(`rank-${userEntry.rank}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                           }
                         }}
-                        className="w-full px-6 py-3 bg-[#EF9B13] hover:bg-[#D36A03] text-white rounded-lg transition-colors font-semibold"
+                        className="w-full px-6 py-3 bg-[#C9A36A] text-[#121212] rounded-lg text-sm font-semibold hover:bg-[#b8935f] transition-colors"
                       >
                         Show My Rank
                       </button>

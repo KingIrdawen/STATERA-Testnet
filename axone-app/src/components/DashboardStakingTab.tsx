@@ -8,6 +8,7 @@ import { useStakingData } from '@/hooks/useStakingData';
 import { useStakingActions } from '@/hooks/useStakingActions';
 import { useStakingTokenApproval } from '@/hooks/useStakingTokenApproval';
 import { formatUsd } from '@/lib/format';
+import { DEMO_STAKING_POOLS, DEMO_STAKING_TOTAL_STAKED_USD, DEMO_STAKING_PENDING_REWARDS } from '@/lib/placeholders';
 
 export function DashboardStakingTab() {
   const { address } = useAccount();
@@ -28,7 +29,7 @@ export function DashboardStakingTab() {
   if (!address) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-8 max-w-md text-center">
+        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-8 max-w-md text-center">
           <h3 className="text-2xl font-bold text-white mb-4">Connect Wallet</h3>
           <p className="text-[#5a9a9a]">
             Please connect your wallet to view and interact with staking pools.
@@ -42,14 +43,14 @@ export function DashboardStakingTab() {
   if (!isCorrectChain) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-8 max-w-md text-center">
+        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-8 max-w-md text-center">
           <h3 className="text-2xl font-bold text-white mb-4">Wrong Network</h3>
           <p className="text-[#5a9a9a] mb-6">
             Please switch to HyperEVM Testnet (Chain ID {EXPECTED_CHAIN_ID}) to view staking pools.
           </p>
           <button
             onClick={() => switchChain({ chainId: EXPECTED_CHAIN_ID })}
-            className="w-full px-6 py-3 bg-[#fab062] text-black rounded-lg text-sm font-semibold hover:bg-[#e89a4a] transition-colors"
+            className="w-full px-6 py-3 bg-[#C9A36A] text-[#121212] rounded-lg text-sm font-semibold hover:bg-[#b8935f] transition-colors"
           >
             Switch to HyperEVM Testnet
           </button>
@@ -76,15 +77,68 @@ export function DashboardStakingTab() {
     );
   }
 
-  // No pools
+  // No pools — afficher les données démo
+  // ⚠️  PLACEHOLDER — Pools de staking démo. À remplacer par useStakingPools() quand le contrat est déployé.
   if (!pools || pools.length === 0) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-8 max-w-md text-center">
-          <h3 className="text-2xl font-bold text-white mb-4">No Staking Pools</h3>
-          <p className="text-[#5a9a9a]">
-            No staking pools configured yet.
+      <div className="space-y-6">
+        {/* Banner démo */}
+        <div className="bg-[#C9A36A]/8 border border-[#C9A36A]/20 rounded-xl p-4 text-center">
+          <p className="text-[#C9A36A]/80 text-xs tracking-[0.1em] uppercase font-semibold mb-1">Demo Mode</p>
+          <p className="text-[rgba(230,230,230,0.5)] text-sm">
+            Showing placeholder staking pools — live data available after contract deployment.
           </p>
+        </div>
+
+        {/* Overview démo */}
+        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6">
+          <h3 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">Staking Overview</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              { label: 'Total Pools', value: DEMO_STAKING_POOLS.length.toString() },
+              { label: 'Total Staked (USD)', value: `$${DEMO_STAKING_TOTAL_STAKED_USD.toLocaleString()}` },
+              { label: 'Your Pending Rewards', value: `${DEMO_STAKING_PENDING_REWARDS} STA` },
+            ].map(({ label, value }) => (
+              <div key={label} className="bg-white/3 border border-[#C9A36A]/10 rounded-lg p-4">
+                <p className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)] mb-2">{label}</p>
+                <p className="text-[#C9A36A] text-xl font-bold font-mono">{value}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Pool cards démo */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {DEMO_STAKING_POOLS.map((pool) => (
+            <div key={pool.pid} className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6 hover:border-[#C9A36A]/35 transition-colors duration-300">
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h4 className="text-xl font-bold bg-gradient-to-r from-[#C9A36A] to-[#5a9a9a] bg-clip-text text-transparent">
+                    Pool #{pool.pid} — {pool.symbol}
+                  </h4>
+                  <p className="text-[rgba(230,230,230,0.4)] text-xs mt-1">Weight: {pool.weight}%</p>
+                </div>
+                <span className="px-2 py-0.5 rounded text-[0.6rem] font-semibold tracking-[0.1em] uppercase bg-[#C9A36A]/10 text-[#C9A36A]/60 border border-[#C9A36A]/15">Demo</span>
+              </div>
+              <div className="space-y-2 mb-5">
+                <div className="flex justify-between items-center">
+                  <span className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)]">Total Staked</span>
+                  <span className="text-[#E6E6E6] text-sm font-mono">${pool.totalStakedUsd.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)]">APR</span>
+                  <span className="text-green-400 text-sm font-semibold font-mono">+{pool.aprPercent}%</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)]">Reward Token</span>
+                  <span className="text-[#E6E6E6] text-sm font-mono">{pool.rewardToken}</span>
+                </div>
+              </div>
+              <div className="p-3 bg-[#C9A36A]/5 border border-[#C9A36A]/15 rounded-lg text-center">
+                <p className="text-[rgba(230,230,230,0.4)] text-xs">Available after contract deployment</p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     );
@@ -98,21 +152,21 @@ export function DashboardStakingTab() {
   return (
     <div className="space-y-6">
       {/* Summary Stats */}
-      <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
+      <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6">
         <h3 className="text-2xl font-bold text-white mb-4">Staking Overview</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-gray-800/50 rounded-lg p-4">
-            <p className="text-gray-500 text-xs mb-2">Total Pools</p>
+          <div className="bg-white/3 border border-[#C9A36A]/10 rounded-lg p-4">
+            <p className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)] mb-2">Total Pools</p>
             <p className="text-white text-2xl font-bold">{pools.length}</p>
           </div>
-          <div className="bg-gray-800/50 rounded-lg p-4">
-            <p className="text-gray-500 text-xs mb-2">Your Total Staked</p>
+          <div className="bg-white/3 border border-[#C9A36A]/10 rounded-lg p-4">
+            <p className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)] mb-2">Your Total Staked</p>
             <p className="text-white text-2xl font-bold">
               {totalStaked > 0n ? formatUnits(totalStaked, 18) : '0'}
             </p>
           </div>
-          <div className="bg-gray-800/50 rounded-lg p-4">
-            <p className="text-gray-500 text-xs mb-2">Total Pending Rewards</p>
+          <div className="bg-white/3 border border-[#C9A36A]/10 rounded-lg p-4">
+            <p className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)] mb-2">Total Pending Rewards</p>
             <p className="text-white text-2xl font-bold">
               {totalPendingReward > 0n ? formatUnits(totalPendingReward, 18) : '0'}
             </p>
@@ -220,11 +274,11 @@ function PoolCard({
   const formattedPending = pendingReward > 0n ? formatUnits(pendingReward, 18) : '0'; // Assuming reward token has 18 decimals
 
   return (
-    <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 hover:border-[#fab062]/50 transition-colors">
+    <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 hover:border-[#C9A36A]/35 transition-colors">
       {/* Header */}
       <div className="flex justify-between items-start mb-4">
         <div>
-          <h4 className="text-xl font-bold bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent">
+          <h4 className="text-xl font-bold bg-gradient-to-r from-[#C9A36A] to-[#5a9a9a] bg-clip-text text-transparent">
             Pool #{pool.pid} - {symbol}
           </h4>
           {pool.weight !== undefined && (
@@ -256,7 +310,7 @@ function PoolCard({
           {maxStake > 0 && (
             <button
               onClick={() => onStakeAmountChange(maxStake.toString())}
-              className="text-xs text-[#fab062] hover:text-[#e89a4a] transition-colors font-medium"
+              className="text-xs text-[#C9A36A] hover:text-[#b8935f] transition-colors font-medium"
             >
               MAX: {maxStake.toFixed(6)}
             </button>
@@ -269,7 +323,7 @@ function PoolCard({
             value={stakeAmount}
             onChange={(e) => onStakeAmountChange(e.target.value)}
             placeholder="0.0"
-            className="flex-1 px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm focus:border-[#fab062] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            className="flex-1 px-3 py-2 bg-white/5 border border-[#C9A36A]/20 rounded-lg text-white text-sm focus:border-[#C9A36A]/60 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           />
           {needsApproval ? (
             <button
@@ -283,7 +337,7 @@ function PoolCard({
             <button
               onClick={onStake}
               disabled={isPending || isConfirming || !stakeAmount || parseFloat(stakeAmount) <= 0 || needsApproval}
-              className="px-4 py-2 bg-[#fab062] text-black rounded-lg text-sm font-semibold hover:bg-[#e89a4a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-[#C9A36A] text-[#121212] rounded-lg text-sm font-semibold hover:bg-[#b8935f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isPending || isConfirming ? 'Processing...' : 'Stake'}
             </button>
@@ -299,7 +353,7 @@ function PoolCard({
             {maxWithdraw > 0 && (
               <button
                 onClick={() => onWithdrawAmountChange(maxWithdraw.toString())}
-                className="text-xs text-[#fab062] hover:text-[#e89a4a] transition-colors font-medium"
+                className="text-xs text-[#C9A36A] hover:text-[#b8935f] transition-colors font-medium"
               >
                 MAX: {maxWithdraw.toFixed(6)}
               </button>
@@ -312,7 +366,7 @@ function PoolCard({
               value={withdrawAmount}
               onChange={(e) => onWithdrawAmountChange(e.target.value)}
               placeholder="0.0"
-              className="flex-1 px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm focus:border-[#fab062] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              className="flex-1 px-3 py-2 bg-white/5 border border-[#C9A36A]/20 rounded-lg text-white text-sm focus:border-[#C9A36A]/60 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
             />
             <button
               onClick={onUnstake}

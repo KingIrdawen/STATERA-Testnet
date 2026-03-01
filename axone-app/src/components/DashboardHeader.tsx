@@ -22,7 +22,7 @@ export function DashboardHeader() {
   ];
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-[9999] bg-[#121212]/50 backdrop-blur-md border-b border-gray-800">
+    <header className="fixed left-0 right-0 top-0 z-[9999] bg-[#121212]/80 backdrop-blur-md border-b border-[#C9A36A]/15">
       {/* Bandeau Wrong Network intégré dans le header */}
       {address && !isCorrectChain && (
         <div className="bg-red-600 text-white text-center py-3 px-4 text-sm font-semibold shadow-lg border-b-2 border-red-700">
@@ -71,8 +71,8 @@ export function DashboardHeader() {
                     href={link.href}
                     className={`font-bold text-xs sm:text-sm md:text-base transition-colors tracking-tight ${
                       isActive
-                        ? 'text-[#fab062]'
-                        : 'text-white hover:text-[#fab062]'
+                        ? 'text-[#C9A36A]'
+                        : 'text-white hover:text-[#C9A36A]'
                     }`}
                   >
                     {link.label}
@@ -85,13 +85,13 @@ export function DashboardHeader() {
             <div className="flex items-center gap-4 sm:gap-6">
               <Link
                 href="/docs"
-                className="text-white font-bold text-xs sm:text-sm md:text-base hover:text-[#fab062] transition-colors tracking-tight"
+                className="text-white font-bold text-xs sm:text-sm md:text-base hover:text-[#C9A36A] transition-colors tracking-tight"
               >
                 Docs
               </Link>
               <Link
                 href="/admin"
-                className="text-white font-bold text-xs sm:text-sm md:text-base hover:text-[#fab062] transition-colors tracking-tight"
+                className="text-white font-bold text-xs sm:text-sm md:text-base hover:text-[#C9A36A] transition-colors tracking-tight"
               >
                 Admin
               </Link>

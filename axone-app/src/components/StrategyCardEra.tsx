@@ -14,6 +14,7 @@ import { useStrategyDeposit } from '@/hooks/useStrategyDeposit';
 import { useStrategyWithdraw } from '@/hooks/useStrategyWithdraw';
 import { useStrategyToken1Meta } from '@/hooks/useStrategyToken1Meta';
 import { formatUsd } from '@/lib/format';
+import { DEMO_STRATEGY_METRICS } from '@/lib/placeholders';
 
 interface StrategyCardEraProps {
   strategy: Strategy;
@@ -52,23 +53,32 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
   const maxDeposit = hypeBalance ? Number(formatUnits(hypeBalance.value, 18)) : 0;
   const maxWithdraw = strategyData.userShares ?? 0;
 
+  // ─── Mode démo : utiliser les données placeholder quand on-chain est vide ───
+  const demoMetrics = DEMO_STRATEGY_METRICS[strategy.id];
+  const isDataEmpty = !strategyData.loading && (
+    strategyData.error || strategyData.tvlUsd === 0 || strategyData.tvlUsd === undefined
+  );
+  const isDemoMode = isDataEmpty && !!demoMetrics;
+
+  const displayTvl = isDemoMode ? demoMetrics.tvlUsd : strategyData.tvlUsd;
+  const displayPps = isDemoMode ? demoMetrics.ppsUsd : strategyData.ppsUsd;
+  const displayUserValue = isDemoMode ? demoMetrics.demoUserValueUsd : strategyData.userValueUsd;
+  const displayUserShares = isDemoMode ? demoMetrics.demoUserShares : strategyData.userShares;
+  const displayHypePrice = isDemoMode ? demoMetrics.oracleHypeUsd : strategyData.oracleHypeUsd;
+  const displayToken1Price = isDemoMode ? demoMetrics.oracleToken1Usd : strategyData.oracleToken1Usd;
+  const displayToken1Name = isDemoMode ? demoMetrics.token1Symbol : displayToken1;
+
   // Reset form on success
   useEffect(() => {
-    if (isDepositConfirmed) {
-      setDepositAmount('');
-    }
+    if (isDepositConfirmed) setDepositAmount('');
   }, [isDepositConfirmed]);
 
   useEffect(() => {
-    if (isWithdrawConfirmed) {
-      setWithdrawAmount('');
-    }
+    if (isWithdrawConfirmed) setWithdrawAmount('');
   }, [isWithdrawConfirmed]);
 
   const handleDeposit = async () => {
-    if (!depositAmount || parseFloat(depositAmount) <= 0) {
-      return;
-    }
+    if (!depositAmount || parseFloat(depositAmount) <= 0) return;
     if (!isCorrectChain) {
       await switchChain({ chainId: EXPECTED_CHAIN_ID });
       return;
@@ -81,9 +91,7 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
   };
 
   const handleWithdraw = async () => {
-    if (!withdrawAmount || parseFloat(withdrawAmount) <= 0) {
-      return;
-    }
+    if (!withdrawAmount || parseFloat(withdrawAmount) <= 0) return;
     if (!isCorrectChain) {
       await switchChain({ chainId: EXPECTED_CHAIN_ID });
       return;
@@ -114,12 +122,19 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
   };
 
   return (
-    <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 hover:border-[#fab062]/50 transition-colors h-full flex flex-col">
+    <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6 hover:border-[#C9A36A]/35 transition-colors duration-300 h-full flex flex-col">
       {/* En-tête */}
       <div className="flex justify-between items-start mb-4">
-        <h4 className="text-xl font-bold bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent">
-          {strategy.name}
-        </h4>
+        <div>
+          <h4 className="text-xl font-bold bg-gradient-to-r from-[#C9A36A] to-[#5a9a9a] bg-clip-text text-transparent">
+            {strategy.name}
+          </h4>
+          {isDemoMode && (
+            <span className="inline-block mt-1 px-2 py-0.5 rounded text-[0.6rem] font-semibold tracking-[0.1em] uppercase bg-[#C9A36A]/10 text-[#C9A36A]/60 border border-[#C9A36A]/15">
+              Demo
+            </span>
+          )}
+        </div>
         <div className="flex items-center gap-2">
           {strategy.status && (
             <span className={`px-2 py-1 rounded text-xs font-semibold ${
@@ -138,7 +153,7 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
 
       {/* Description */}
       {strategy.description && (
-        <p className="text-[#5a9a9a] text-sm mb-4">{strategy.description}</p>
+        <p className="text-[rgba(230,230,230,0.5)] text-sm mb-4 leading-relaxed">{strategy.description}</p>
       )}
 
       {/* Network warning */}
@@ -157,60 +172,54 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
       {/* Strategy Data */}
       {strategyData.loading ? (
         <div className="text-center py-4">
-          <p className="text-[#5a9a9a] text-sm">Loading...</p>
-        </div>
-      ) : strategyData.error ? (
-        <div className="mb-4 p-3 bg-red-900/20 border border-red-600/30 rounded-lg">
-          <p className="text-red-400 text-sm">Error: {strategyData.error.message}</p>
+          <p className="text-[rgba(230,230,230,0.5)] text-sm">Loading...</p>
         </div>
       ) : (
         <div className="space-y-3 mb-4">
-          <div className="flex justify-between items-center">
-            <span className="text-gray-500 text-xs">Total in contract (TVL)</span>
-            <span className="text-white text-sm font-mono">
-              {strategyData.tvlUsd !== undefined ? formatUsd(strategyData.tvlUsd, 2) : '-'}
-            </span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-gray-500 text-xs">Your deposit</span>
-            <span className="text-white text-sm font-mono">
-              {strategyData.userValueUsd !== undefined ? formatUsd(strategyData.userValueUsd, 2) : '-'}
-            </span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-gray-500 text-xs">PPS (Price per Share)</span>
-            <span className="text-white text-sm font-mono">
-              {strategyData.ppsUsd !== undefined ? formatUsd(strategyData.ppsUsd, 4) : '-'}
-            </span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-gray-500 text-xs">Your shares (total)</span>
-            <span className="text-white text-sm font-mono">
-              {strategyData.userShares !== undefined ? strategyData.userShares.toFixed(6) : '-'}
-            </span>
-          </div>
-          {strategyData.userSharesStaked !== undefined && strategyData.userSharesStaked > 0 && (
-            <div className="flex justify-between items-center">
-              <span className="text-gray-500 text-xs">Staked shares (staking)</span>
-              <span className="text-white text-sm font-mono">
-                {strategyData.userSharesStaked.toFixed(6)}
+          {/* APR rapide (démo uniquement) */}
+          {isDemoMode && demoMetrics.apr30d !== null && (
+            <div className="flex justify-between items-center py-2 border-b border-[#C9A36A]/10">
+              <span className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.5)]">APR (30D)</span>
+              <span className="text-green-400 text-sm font-semibold font-mono">
+                +{demoMetrics.apr30d.toFixed(1)}%
               </span>
             </div>
           )}
-          {strategyData.oracleHypeUsd !== undefined && (
+
+          <div className="flex justify-between items-center">
+            <span className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.5)]">TVL</span>
+            <span className="text-[#E6E6E6] text-sm font-mono font-semibold">
+              {displayTvl !== undefined ? formatUsd(displayTvl, 2) : '—'}
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.5)]">Your Deposit</span>
+            <span className="text-[#E6E6E6] text-sm font-mono">
+              {displayUserValue !== undefined ? formatUsd(displayUserValue, 2) : '—'}
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.5)]">PPS</span>
+            <span className="text-[#E6E6E6] text-sm font-mono">
+              {displayPps !== undefined ? formatUsd(displayPps, 4) : '—'}
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.5)]">Your Shares</span>
+            <span className="text-[#E6E6E6] text-sm font-mono">
+              {displayUserShares !== undefined ? displayUserShares.toFixed(4) : '—'}
+            </span>
+          </div>
+          {displayHypePrice !== undefined && (
             <div className="flex justify-between items-center">
-              <span className="text-gray-500 text-xs">HYPE</span>
-              <span className="text-white text-sm font-mono">
-                {formatUsd(strategyData.oracleHypeUsd, 2)}
-              </span>
+              <span className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.5)]">HYPE</span>
+              <span className="text-[#E6E6E6] text-sm font-mono">{formatUsd(displayHypePrice, 2)}</span>
             </div>
           )}
-          {strategyData.oracleToken1Usd !== undefined && (
+          {displayToken1Price !== undefined && (
             <div className="flex justify-between items-center">
-              <span className="text-gray-500 text-xs">{displayToken1}</span>
-              <span className="text-white text-sm font-mono">
-                {formatUsd(strategyData.oracleToken1Usd, 2)}
-              </span>
+              <span className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.5)]">{displayToken1Name}</span>
+              <span className="text-[#E6E6E6] text-sm font-mono">{formatUsd(displayToken1Price, 2)}</span>
             </div>
           )}
         </div>
@@ -222,11 +231,11 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
           {/* Deposit */}
           <div>
             <div className="flex justify-between items-center mb-2">
-              <label className="block text-white text-sm font-semibold">Deposit (HYPE)</label>
+              <label className="block text-[#E6E6E6] text-sm font-semibold">Deposit (HYPE)</label>
               {maxDeposit > 0 && (
                 <button
                   onClick={() => setDepositAmount(maxDeposit.toString())}
-                  className="text-xs text-[#fab062] hover:text-[#e89a4a] transition-colors font-medium"
+                  className="text-xs text-[#C9A36A] hover:text-[#b8935f] transition-colors font-medium"
                 >
                   MAX: {maxDeposit.toFixed(6)}
                 </button>
@@ -239,26 +248,21 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
                 value={depositAmount}
                 onChange={(e) => setDepositAmount(e.target.value)}
                 placeholder="0.0"
-                className="flex-1 px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm focus:border-[#fab062] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                className="flex-1 px-3 py-2 bg-white/5 border border-[#C9A36A]/20 rounded-lg text-white text-sm focus:border-[#C9A36A]/60 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
               <button
                 onClick={handleDeposit}
                 disabled={isDepositPending || !depositAmount || parseFloat(depositAmount) <= 0}
-                className="px-4 py-2 bg-[#fab062] text-black rounded-lg text-sm font-semibold hover:bg-[#e89a4a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 bg-[#C9A36A] text-[#121212] rounded-lg text-sm font-semibold hover:bg-[#b8935f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isDepositPending ? 'Depositing...' : 'Deposit'}
               </button>
             </div>
-            {/* Preflight health check warnings */}
-            {strategyData.ppsUsd !== undefined && strategyData.ppsUsd === 0 && (
-              <p className="text-yellow-400 text-xs mt-1">
-                ⚠️ Oracle unavailable or vault not initialized.
-              </p>
+            {strategyData.ppsUsd !== undefined && strategyData.ppsUsd === 0 && !isDemoMode && (
+              <p className="text-yellow-400 text-xs mt-1">⚠️ Oracle unavailable or vault not initialized.</p>
             )}
-            {strategyData.oracleHypeUsd !== undefined && strategyData.oracleHypeUsd === 0 && (
-              <p className="text-yellow-400 text-xs mt-1">
-                ⚠️ HYPE oracle price unavailable.
-              </p>
+            {strategyData.oracleHypeUsd !== undefined && strategyData.oracleHypeUsd === 0 && !isDemoMode && (
+              <p className="text-yellow-400 text-xs mt-1">⚠️ HYPE oracle price unavailable.</p>
             )}
             {depositError && (
               <p className="text-red-400 text-xs mt-1">{depositError.message}</p>
@@ -268,23 +272,20 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
           {/* Withdraw */}
           {showWithdraw && (
             <div>
-              {/* Display shares breakdown */}
               {strategyData.userSharesStaked !== undefined && strategyData.userSharesStaked > 0 && (
-                <div className="mb-3 p-2 bg-gray-800/50 rounded-lg border border-gray-700">
-                  {strategyData.userSharesStaked !== undefined && strategyData.userSharesStaked > 0 && (
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="text-gray-400">Staked shares (staking):</span>
-                      <span className="text-white font-mono">{strategyData.userSharesStaked.toFixed(6)}</span>
-                    </div>
-                  )}
+                <div className="mb-3 p-2 bg-white/5 rounded-lg border border-[#C9A36A]/15">
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="text-[rgba(230,230,230,0.5)]">Staked shares:</span>
+                    <span className="text-[#E6E6E6] font-mono">{strategyData.userSharesStaked.toFixed(6)}</span>
+                  </div>
                 </div>
               )}
               <div className="flex justify-between items-center mb-2">
-                <label className="block text-white text-sm font-semibold">Withdraw (Shares)</label>
+                <label className="block text-[#E6E6E6] text-sm font-semibold">Withdraw (Shares)</label>
                 {maxWithdraw > 0 && (
                   <button
                     onClick={() => setWithdrawAmount(maxWithdraw.toString())}
-                    className="text-xs text-[#fab062] hover:text-[#e89a4a] transition-colors font-medium"
+                    className="text-xs text-[#C9A36A] hover:text-[#b8935f] transition-colors font-medium"
                   >
                     MAX: {maxWithdraw.toFixed(6)}
                   </button>
@@ -297,12 +298,12 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
                   value={withdrawAmount}
                   onChange={(e) => setWithdrawAmount(e.target.value)}
                   placeholder="0.0"
-                  className="flex-1 px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm focus:border-[#fab062] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="flex-1 px-3 py-2 bg-white/5 border border-[#C9A36A]/20 rounded-lg text-white text-sm focus:border-[#C9A36A]/60 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
                 <button
                   onClick={handleWithdraw}
                   disabled={isWithdrawPending || !withdrawAmount || parseFloat(withdrawAmount) <= 0}
-                  className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 bg-red-600/80 text-white rounded-lg text-sm font-semibold hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isWithdrawPending ? 'Withdrawing...' : 'Withdraw'}
                 </button>
@@ -316,23 +317,23 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
       )}
 
       {!address && (
-        <div className="mt-auto p-3 bg-yellow-900/20 border border-yellow-600/30 rounded-lg">
-          <p className="text-yellow-400 text-sm text-center">Connect wallet to deposit</p>
+        <div className="mt-auto p-3 bg-[#C9A36A]/5 border border-[#C9A36A]/20 rounded-lg">
+          <p className="text-[rgba(230,230,230,0.6)] text-sm text-center">Connect wallet to deposit</p>
         </div>
       )}
 
-      {/* View More button - only for dashboard tab */}
+      {/* View More button */}
       {showViewMore && (
-        <div className="mt-4 pt-4 border-t border-gray-700">
+        <div className="mt-4 pt-4 border-t border-[#C9A36A]/15">
           {strategy.id ? (
             <Link
               href={`/dashboard/strategy/${strategy.id}`}
-              className="block w-full text-center text-xs text-[#5a9a9a] hover:text-[#fab062] transition-colors"
+              className="block w-full text-center text-xs text-[#5a9a9a] hover:text-[#C9A36A] transition-colors"
             >
               View more →
             </Link>
           ) : (
-            <div className="block w-full text-center text-xs text-gray-600 cursor-not-allowed">
+            <div className="block w-full text-center text-xs text-[rgba(230,230,230,0.2)] cursor-not-allowed">
               View more (ID missing)
             </div>
           )}
@@ -341,4 +342,3 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
     </div>
   );
 }
-

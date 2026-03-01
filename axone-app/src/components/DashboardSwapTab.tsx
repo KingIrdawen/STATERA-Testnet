@@ -146,7 +146,7 @@ function SwapTabContent() {
       )}
 
       {/* Strategy selection - Cards grid */}
-      <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
+      <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6">
         <label className="block text-white text-sm font-semibold mb-4">Select Strategy</label>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {swapStrategies.map((swapStrategy) => (
@@ -172,7 +172,7 @@ function SwapTabContent() {
 
       {/* Swap form */}
       {selected && (
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
+        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6">
           <h4 className="text-lg font-bold text-white mb-4">Swap</h4>
 
           {/* Direction toggle */}
@@ -184,7 +184,7 @@ function SwapTabContent() {
               }}
               className={`flex-1 px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
                 direction === 'HYPE_TO_VAULT'
-                  ? 'bg-[#fab062] text-black'
+                  ? 'bg-[#C9A36A] text-black'
                   : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
               }`}
             >
@@ -197,7 +197,7 @@ function SwapTabContent() {
               }}
               className={`flex-1 px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
                 direction === 'VAULT_TO_HYPE'
-                  ? 'bg-[#fab062] text-black'
+                  ? 'bg-[#C9A36A] text-black'
                   : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
               }`}
             >
@@ -223,7 +223,7 @@ function SwapTabContent() {
               value={amountIn}
               onChange={(e) => setAmountIn(e.target.value)}
               placeholder="0.0"
-              className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-[#fab062] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-[#C9A36A] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
             />
           </div>
 
@@ -306,7 +306,7 @@ function SwapTabContent() {
               !isCorrectChain ||
               (direction === 'VAULT_TO_HYPE' && needsApproval)
             }
-            className="w-full px-6 py-3 bg-[#fab062] text-black rounded-lg text-sm font-semibold hover:bg-[#e89a4a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full px-6 py-3 bg-[#C9A36A] text-black rounded-lg text-sm font-semibold hover:bg-[#b8935f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isPending || isConfirming
               ? 'Processing...'

@@ -71,7 +71,7 @@ export default function StrategyStatsPage() {
             <p className="text-[#5a9a9a] text-lg mb-4">Strategy not found</p>
             <Link
               href="/dashboard/strategy"
-              className="text-[#fab062] hover:text-[#e89a4a] transition-colors"
+              className="text-[#C9A36A] hover:text-[#b8935f] transition-colors"
             >
               Back to Dashboard
             </Link>
@@ -404,7 +404,7 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
           {/* Back button */}
           <Link
             href="/dashboard/strategy"
-            className="inline-flex items-center gap-2 text-[#5a9a9a] hover:text-[#fab062] transition-colors mb-6"
+            className="inline-flex items-center gap-2 text-[#5a9a9a] hover:text-[#C9A36A] transition-colors mb-6"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -415,7 +415,7 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
           {/* Strategy Header */}
           <div className="mb-8">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-[#fab062] to-[#5a9a9a] bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[#C9A36A] to-[#5a9a9a] bg-clip-text text-transparent">
                 {strategy?.name ?? 'Strategy'}
               </span>
             </h1>
@@ -475,12 +475,12 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
           )}
 
           {/* SECTION A — Key Metrics */}
-          <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 sm:p-8 mb-6">
+          <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 sm:p-8 mb-6">
             <h2 className="text-2xl sm:text-3xl font-bold mb-8 text-white">Key Metrics</h2>
             
             {strategyData.loading ? (
               <div className="text-center py-12">
-                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#fab062]"></div>
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#C9A36A]"></div>
                 <p className="text-[#5a9a9a] text-sm mt-4">Loading metrics...</p>
               </div>
             ) : strategyData.error && !rpcErrorMessage ? (
@@ -491,10 +491,10 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
               <div className="space-y-8">
                 {/* Primary Metrics - TVL, PPS, Total Shares */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-                  <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 border border-gray-700/50 rounded-xl p-5 sm:p-6 hover:border-[#fab062]/30 transition-all duration-300 hover:shadow-lg hover:shadow-[#fab062]/10">
+                  <div className="bg-gradient-to-br from-white/5 to-white/3 border border-[#C9A36A]/15 rounded-xl p-5 sm:p-6 hover:border-[#C9A36A]/35 transition-all duration-300 hover:shadow-lg hover:shadow-[#C9A36A]/10">
                     <div className="flex items-center justify-between mb-3">
                       <p className="text-gray-400 text-xs sm:text-sm font-medium uppercase tracking-wide">TVL</p>
-                      <svg className="w-5 h-5 text-[#fab062]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-[#C9A36A]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
@@ -504,10 +504,10 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
                     <p className="text-gray-500 text-xs">Total Value Locked</p>
                   </div>
 
-                  <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 border border-gray-700/50 rounded-xl p-5 sm:p-6 hover:border-[#fab062]/30 transition-all duration-300 hover:shadow-lg hover:shadow-[#fab062]/10">
+                  <div className="bg-gradient-to-br from-white/5 to-white/3 border border-[#C9A36A]/15 rounded-xl p-5 sm:p-6 hover:border-[#C9A36A]/35 transition-all duration-300 hover:shadow-lg hover:shadow-[#C9A36A]/10">
                     <div className="flex items-center justify-between mb-3">
                       <p className="text-gray-400 text-xs sm:text-sm font-medium uppercase tracking-wide">PPS</p>
-                      <svg className="w-5 h-5 text-[#fab062]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-[#C9A36A]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                       </svg>
                     </div>
@@ -517,10 +517,10 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
                     <p className="text-gray-500 text-xs">Price Per Share</p>
                   </div>
 
-                  <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 border border-gray-700/50 rounded-xl p-5 sm:p-6 hover:border-[#fab062]/30 transition-all duration-300 hover:shadow-lg hover:shadow-[#fab062]/10">
+                  <div className="bg-gradient-to-br from-white/5 to-white/3 border border-[#C9A36A]/15 rounded-xl p-5 sm:p-6 hover:border-[#C9A36A]/35 transition-all duration-300 hover:shadow-lg hover:shadow-[#C9A36A]/10">
                     <div className="flex items-center justify-between mb-3">
                       <p className="text-gray-400 text-xs sm:text-sm font-medium uppercase tracking-wide">Total Shares</p>
-                      <svg className="w-5 h-5 text-[#fab062]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-[#C9A36A]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                       </svg>
                     </div>
@@ -533,13 +533,13 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
 
                 {/* User Metrics - Only shown if connected */}
                 {address && (strategyData.userShares !== undefined || strategyData.userValueUsd !== undefined) && (
-                  <div className="border-t border-gray-700/50 pt-8">
+                  <div className="border-t border-[#C9A36A]/15 pt-8">
                     <h3 className="text-lg font-semibold text-gray-300 mb-4">Your Position</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                      <div className="bg-gradient-to-br from-[#fab062]/10 to-[#fab062]/5 border border-[#fab062]/20 rounded-xl p-5 sm:p-6 hover:border-[#fab062]/40 transition-all duration-300">
+                      <div className="bg-gradient-to-br from-[#C9A36A]/10 to-[#C9A36A]/5 border border-[#C9A36A]/20 rounded-xl p-5 sm:p-6 hover:border-[#C9A36A]/40 transition-all duration-300">
                         <div className="flex items-center justify-between mb-3">
-                          <p className="text-[#fab062] text-xs sm:text-sm font-medium uppercase tracking-wide">Your Shares</p>
-                          <svg className="w-5 h-5 text-[#fab062]/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <p className="text-[#C9A36A] text-xs sm:text-sm font-medium uppercase tracking-wide">Your Shares</p>
+                          <svg className="w-5 h-5 text-[#C9A36A]/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                           </svg>
                         </div>
@@ -549,10 +549,10 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
                         <p className="text-gray-400 text-xs">Your total shares (wallet + staked)</p>
                       </div>
 
-                      <div className="bg-gradient-to-br from-[#fab062]/10 to-[#fab062]/5 border border-[#fab062]/20 rounded-xl p-5 sm:p-6 hover:border-[#fab062]/40 transition-all duration-300">
+                      <div className="bg-gradient-to-br from-[#C9A36A]/10 to-[#C9A36A]/5 border border-[#C9A36A]/20 rounded-xl p-5 sm:p-6 hover:border-[#C9A36A]/40 transition-all duration-300">
                         <div className="flex items-center justify-between mb-3">
-                          <p className="text-[#fab062] text-xs sm:text-sm font-medium uppercase tracking-wide">Your Value</p>
-                          <svg className="w-5 h-5 text-[#fab062]/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <p className="text-[#C9A36A] text-xs sm:text-sm font-medium uppercase tracking-wide">Your Value</p>
+                          <svg className="w-5 h-5 text-[#C9A36A]/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
                         </div>
@@ -566,7 +566,7 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
                 )}
 
                 {/* APR Metrics */}
-                <div className="border-t border-gray-700/50 pt-8">
+                <div className="border-t border-[#C9A36A]/15 pt-8">
                   <h3 className="text-lg font-semibold text-gray-300 mb-4">Performance (APR)</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
                     {(['1D', '7D', '30D'] as const).map((period) => {
@@ -583,7 +583,7 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
                               ? 'from-green-900/20 to-green-800/10 border-green-700/30 hover:border-green-600/50 hover:shadow-green-500/10'
                               : isNegative
                               ? 'from-red-900/20 to-red-800/10 border-red-700/30 hover:border-red-600/50 hover:shadow-red-500/10'
-                              : 'from-gray-800/60 to-gray-900/60 border-gray-700/50 hover:border-gray-600/50'
+                              : 'from-white/5 to-white/3 border-[#C9A36A]/15 hover:border-[#C9A36A]/30'
                           }`}
                         >
                           <div className="flex items-center justify-between mb-3">
@@ -632,7 +632,7 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
           {address && isCorrectChain && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               {/* Deposit Card */}
-              <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
+              <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6">
                 <h3 className="text-xl font-bold mb-4 text-white">Deposit</h3>
                 <div className="space-y-4">
                   <div>
@@ -642,7 +642,7 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
                       </label>
                       <button
                         onClick={setMaxDeposit}
-                        className="text-xs text-[#fab062] hover:text-[#e89a4a] transition-colors"
+                        className="text-xs text-[#C9A36A] hover:text-[#b8935f] transition-colors"
                       >
                         Max
                       </button>
@@ -653,7 +653,7 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
                       value={depositAmount}
                       onChange={(e) => setDepositAmount(e.target.value)}
                       placeholder="0.0"
-                      className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm focus:border-[#fab062] focus:outline-none"
+                      className="w-full px-4 py-2 bg-white/5 border border-[#C9A36A]/20 rounded-lg text-white text-sm focus:border-[#C9A36A]/60 focus:outline-none"
                       step="0.000001"
                       min="0"
                     />
@@ -664,7 +664,7 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
                   <button
                     onClick={handleDeposit}
                     disabled={isDepositPending || !depositAmount || Number(depositAmount) <= 0}
-                    className="w-full px-6 py-3 bg-[#fab062] text-black rounded-lg text-sm font-semibold hover:bg-[#e89a4a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full px-6 py-3 bg-[#C9A36A] text-black rounded-lg text-sm font-semibold hover:bg-[#b8935f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isDepositPending ? 'Processing...' : 'Deposit'}
                   </button>
@@ -672,7 +672,7 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
               </div>
 
               {/* Withdraw Card */}
-              <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
+              <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6">
                 <h3 className="text-xl font-bold mb-4 text-white">Withdraw</h3>
                 <div className="space-y-4">
                   <div>
@@ -682,7 +682,7 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
                       </label>
                       <button
                         onClick={setMaxWithdraw}
-                        className="text-xs text-[#fab062] hover:text-[#e89a4a] transition-colors"
+                        className="text-xs text-[#C9A36A] hover:text-[#b8935f] transition-colors"
                       >
                         Max
                       </button>
@@ -693,7 +693,7 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
                       value={withdrawAmount}
                       onChange={(e) => setWithdrawAmount(e.target.value)}
                       placeholder="0.0"
-                      className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm focus:border-[#fab062] focus:outline-none"
+                      className="w-full px-4 py-2 bg-white/5 border border-[#C9A36A]/20 rounded-lg text-white text-sm focus:border-[#C9A36A]/60 focus:outline-none"
                       step="0.000001"
                       min="0"
                     />
@@ -704,7 +704,7 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
                   <button
                     onClick={handleWithdraw}
                     disabled={isWithdrawPending || !withdrawAmount || Number(withdrawAmount) <= 0}
-                    className="w-full px-6 py-3 bg-[#fab062] text-black rounded-lg text-sm font-semibold hover:bg-[#e89a4a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full px-6 py-3 bg-[#C9A36A] text-black rounded-lg text-sm font-semibold hover:bg-[#b8935f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isWithdrawPending ? 'Processing...' : 'Withdraw'}
                   </button>
@@ -714,13 +714,13 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
           )}
 
           {!address && (
-            <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-6 text-center">
+            <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 mb-6 text-center">
               <p className="text-[#5a9a9a] text-sm mb-4">Connect your wallet to deposit or withdraw</p>
             </div>
           )}
 
           {/* SECTION C — Token Composition */}
-          <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6 mb-6">
+          <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 mb-6">
             <h2 className="text-2xl font-bold mb-6 text-white">Token Composition</h2>
             
             {!tokenComposition || tokenComposition.length === 0 ? (
@@ -731,7 +731,7 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-gray-700">
+                    <tr className="border-b border-[#C9A36A]/15">
                       <th className="text-left py-3 px-4 text-sm font-semibold text-gray-400">Token Name</th>
                       <th className="text-left py-3 px-4 text-sm font-semibold text-gray-400">Token ID</th>
                       <th className="text-right py-3 px-4 text-sm font-semibold text-gray-400">Balance in Strategy</th>
@@ -741,7 +741,7 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
                   </thead>
                   <tbody>
                     {(tokenComposition ?? []).map((token, idx) => (
-                      <tr key={idx} className="border-b border-gray-800/50">
+                      <tr key={idx} className="border-b border-[#C9A36A]/8">
                         <td className="py-3 px-4 text-sm text-white">{token.name}</td>
                         <td className="py-3 px-4 text-sm text-gray-400 font-mono">{token.tokenId}</td>
                         <td className="py-3 px-4 text-sm text-white text-right">{token.balance.toFixed(6)}</td>

@@ -70,7 +70,7 @@ export function DashboardSidebar() {
         maxHeight: `calc(100vh - ${headerHeight}px)`,
       }}
     >
-      <div className="h-full bg-[#121212] overflow-y-auto">
+      <div className="h-full bg-[#121212] border-r border-[#C9A36A]/10 overflow-y-auto">
         <div className="p-6 space-y-2">
           {menuItems.map((item) => {
             const active = isActive(item.href);
@@ -80,8 +80,8 @@ export function DashboardSidebar() {
                 href={item.href}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                   active
-                    ? 'text-white bg-gray-800/50'
-                    : 'text-gray-500 hover:text-gray-300'
+                    ? 'text-[#C9A36A] bg-[#C9A36A]/10 border border-[#C9A36A]/20'
+                    : 'text-[rgba(230,230,230,0.5)] hover:text-[#E6E6E6] hover:bg-white/5'
                 }`}
               >
                 {item.icon}

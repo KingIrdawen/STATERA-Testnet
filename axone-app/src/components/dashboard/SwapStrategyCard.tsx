@@ -22,15 +22,15 @@ export function SwapStrategyCard({ strategy, poolAddress, isSelected, onClick }:
       onClick={onClick}
       className={`w-full text-left p-4 rounded-lg border-2 transition-all duration-200 ${
         isSelected
-          ? 'border-[#fab062] bg-[#fab062]/10 shadow-lg scale-[1.02]'
-          : 'border-gray-700 bg-[#001a1f] hover:border-[#fab062]/50 hover:bg-[#001a1f]/80'
+          ? 'border-[#C9A36A] bg-[#C9A36A]/10 shadow-lg scale-[1.02]'
+          : 'border-[#C9A36A]/15 bg-white/5 hover:border-[#C9A36A]/35 hover:bg-white/8'
       }`}
     >
       {/* Strategy name */}
       <div className="flex items-center justify-between mb-3">
         <h4 className="text-base font-bold text-white truncate pr-2">{strategy.name}</h4>
         {isSelected && (
-          <div className="w-5 h-5 rounded-full bg-[#fab062] flex items-center justify-center flex-shrink-0">
+          <div className="w-5 h-5 rounded-full bg-[#C9A36A] flex items-center justify-center flex-shrink-0">
             <svg className="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
             </svg>

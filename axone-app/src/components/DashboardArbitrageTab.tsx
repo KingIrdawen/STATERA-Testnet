@@ -17,14 +17,14 @@ export function DashboardArbitrageTab() {
   if (address && !isCorrectChain) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-8 max-w-md text-center">
+        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-8 max-w-md text-center">
           <h3 className="text-2xl font-bold text-white mb-4">Wrong Network</h3>
           <p className="text-[#5a9a9a] mb-6">
             Please switch to HyperEVM Testnet (Chain ID {EXPECTED_CHAIN_ID}) to view arbitrage opportunities.
           </p>
           <button
             onClick={() => switchChain({ chainId: EXPECTED_CHAIN_ID })}
-            className="w-full px-6 py-3 bg-[#fab062] text-black rounded-lg text-sm font-semibold hover:bg-[#e89a4a] transition-colors"
+            className="w-full px-6 py-3 bg-[#C9A36A] text-black rounded-lg text-sm font-semibold hover:bg-[#b8935f] transition-colors"
           >
             Switch to HyperEVM Testnet
           </button>
@@ -55,7 +55,7 @@ export function DashboardArbitrageTab() {
   if (!opportunities || opportunities.length === 0) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-8 max-w-md text-center">
+        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-8 max-w-md text-center">
           <h3 className="text-2xl font-bold text-white mb-4">No Arbitrage Opportunities</h3>
           <p className="text-[#5a9a9a] mb-2">
             No arbitrage opportunities available right now.
@@ -70,7 +70,7 @@ export function DashboardArbitrageTab() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-[#001a1f] border border-gray-700 rounded-lg p-6">
+      <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6">
         <h3 className="text-2xl font-bold text-white mb-4">Arbitrage Opportunities</h3>
         <p className="text-[#5a9a9a] text-sm mb-6">
           Compare prices between vault deposits and swap pools. Positive difference means swap is more favorable.
@@ -98,7 +98,7 @@ export function DashboardArbitrageTab() {
                   <td className="py-4 px-4">
                     <Link
                       href={`/dashboard/strategy/${opp.strategy.id}`}
-                      className="block hover:text-[#fab062] transition-colors"
+                      className="block hover:text-[#C9A36A] transition-colors"
                     >
                       <div className="font-semibold text-white">{opp.strategy.name}</div>
                       {opp.strategy.description && (
