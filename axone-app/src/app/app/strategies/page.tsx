@@ -34,7 +34,7 @@ function DemoStrategyCard({ demo }: { demo: typeof DEMO_EXTRA_STRATEGIES[0] }) {
       {/* Header */}
       <div className="flex justify-between items-start mb-4">
         <div>
-          <h4 className="text-xl font-bold bg-gradient-to-r from-[#C9A36A] to-[#5a9a9a] bg-clip-text text-transparent">
+          <h4 className="text-xl font-bold text-[#C9A36A] tracking-[0.03em]">
             {demo.name}
           </h4>
           <span className="inline-block mt-1 px-2 py-0.5 rounded text-[0.6rem] font-semibold tracking-[0.1em] uppercase bg-[#C9A36A]/10 text-[#C9A36A]/60 border border-[#C9A36A]/15">
@@ -115,7 +115,7 @@ export default function StrategiesPage() {
           <div className="text-center mb-12">
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-[0.04em] mb-4">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C9A36A] to-[#b8935f]">
-                Strategies
+                Market
               </span>
             </h1>
             <p className="text-[rgba(230,230,230,0.5)] text-sm tracking-[0.1em] uppercase">

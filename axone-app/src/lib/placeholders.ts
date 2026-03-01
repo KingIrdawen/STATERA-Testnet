@@ -181,6 +181,81 @@ export const DEMO_STAKING_POOLS = [
 export const DEMO_STAKING_TOTAL_STAKED_USD = 859_700;
 export const DEMO_STAKING_PENDING_REWARDS = 324.75; // STA tokens
 
+// ─── SWAP ─────────────────────────────────────────────────────────────────────
+
+/**
+ * ⚠️  PLACEHOLDER — Pools de swap démo
+ * À remplacer par useSwapStrategies() quand le contrat SwapPoolFactory est déployé.
+ */
+export const DEMO_SWAP_STRATEGIES = [
+  {
+    id: 'demo-swap-btc',
+    strategyName: 'HYPE / BTC Index',
+    description: '50% HYPE / 50% BTC',
+    poolAddress: '0x0000000000000000000000000000000000000001' as `0x${string}`,
+    priceHypeToVault: 0.9234, // 1 HYPE = 0.9234 ERA shares
+    priceVaultToHype: 1.0829, // 1 ERA share = 1.0829 HYPE
+    liquidity: 245_000,
+    volume24h: 38_400,
+  },
+  {
+    id: 'demo-swap-eth',
+    strategyName: 'HYPE / ETH Index',
+    description: '50% HYPE / 50% ETH',
+    poolAddress: '0x0000000000000000000000000000000000000002' as `0x${string}`,
+    priceHypeToVault: 0.8912,
+    priceVaultToHype: 1.1220,
+    liquidity: 189_500,
+    volume24h: 21_200,
+  },
+  {
+    id: 'demo-swap-stable',
+    strategyName: 'HYPE Stable',
+    description: '80% HYPE / 20% USDC',
+    poolAddress: '0x0000000000000000000000000000000000000003' as `0x${string}`,
+    priceHypeToVault: 0.9701,
+    priceVaultToHype: 1.0308,
+    liquidity: 98_200,
+    volume24h: 9_800,
+  },
+];
+
+// ─── ARBITRAGE ────────────────────────────────────────────────────────────────
+
+/**
+ * ⚠️  PLACEHOLDER — Opportunités d'arbitrage démo
+ * À remplacer par useArbitrageOpportunities() quand les contrats sont déployés.
+ */
+export const DEMO_ARBITRAGE_OPPORTUNITIES = [
+  {
+    id: 'demo-arb-btc',
+    strategyName: 'HYPE / BTC Index',
+    priceViaVault: 1.0842,
+    priceViaSwap: 1.0829,
+    differencePercent: -0.12,
+    recommendation: 'vault' as const, // vault légèrement plus avantageux
+    potentialProfitUsd: 14.40,
+  },
+  {
+    id: 'demo-arb-eth',
+    strategyName: 'HYPE / ETH Index',
+    priceViaVault: 1.1234,
+    priceViaSwap: 1.1220,
+    differencePercent: +0.31,
+    recommendation: 'swap' as const, // swap plus avantageux
+    potentialProfitUsd: 32.80,
+  },
+  {
+    id: 'demo-arb-stable',
+    strategyName: 'HYPE Stable',
+    priceViaVault: 1.0312,
+    priceViaSwap: 1.0308,
+    differencePercent: -0.04,
+    recommendation: 'neutral' as const,
+    potentialProfitUsd: 0,
+  },
+];
+
 // ─── UTILITAIRES ─────────────────────────────────────────────────────────────
 
 /** Formate une adresse wallet en version courte pour l'affichage */

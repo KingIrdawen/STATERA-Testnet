@@ -10,6 +10,7 @@ import { useVaultTokenApproval } from '@/hooks/useVaultTokenApproval';
 import { SwapStrategyCard } from '@/components/dashboard/SwapStrategyCard';
 import { getStrategyContracts } from '@/lib/strategyContracts';
 import { formatUsd } from '@/lib/format';
+import { DEMO_SWAP_STRATEGIES } from '@/lib/placeholders';
 
 function SwapTabContent() {
   const { address } = useAccount();
@@ -119,11 +120,89 @@ function SwapTabContent() {
     );
   }
 
+  // ⚠️  PLACEHOLDER — Mode démo quand aucun pool configuré
   if (swapStrategies.length === 0) {
     return (
-      <div className="text-center py-12">
-        <p className="text-[#5a9a9a] text-lg mb-4">No swap pools available</p>
-        <p className="text-gray-500 text-sm">No strategies have a swap pool configured yet</p>
+      <div className="space-y-6 max-w-4xl mx-auto">
+        {/* Banner démo */}
+        <div className="bg-[#C9A36A]/8 border border-[#C9A36A]/20 rounded-xl p-4 text-center">
+          <p className="text-[#C9A36A]/80 text-xs tracking-[0.1em] uppercase font-semibold mb-1">Demo Mode</p>
+          <p className="text-[rgba(230,230,230,0.5)] text-sm">
+            {/* ⚠️  PLACEHOLDER — Pools de swap fictifs. À remplacer par les vrais pools quand le contrat SwapPoolFactory est déployé. */}
+            Showing placeholder swap pools — live data available after contract deployment.
+          </p>
+        </div>
+
+        {/* Sélection stratégie démo */}
+        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6">
+          <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)] mb-4">Select Strategy</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {DEMO_SWAP_STRATEGIES.map((pool, i) => (
+              <div
+                key={pool.id}
+                className={`p-4 rounded-xl border cursor-default transition-colors duration-200 ${
+                  i === 0
+                    ? 'border-[#C9A36A]/35 bg-[#C9A36A]/8'
+                    : 'border-[#C9A36A]/15 bg-white/3 hover:border-[#C9A36A]/25'
+                }`}
+              >
+                <p className="text-[#C9A36A] font-semibold text-sm mb-1">{pool.strategyName}</p>
+                <p className="text-[rgba(230,230,230,0.4)] text-xs">{pool.description}</p>
+                <div className="flex justify-between mt-3">
+                  <span className="text-[0.6rem] text-[rgba(230,230,230,0.3)] uppercase tracking-wide">Liquidity</span>
+                  <span className="text-[0.7rem] text-[#E6E6E6] font-mono">${pool.liquidity.toLocaleString()}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Formulaire démo (premier pool pré-sélectionné) */}
+        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6">
+          <div className="flex gap-2 mb-5">
+            <div className="flex-1 px-4 py-2 rounded-lg bg-[#C9A36A] text-[#121212] text-sm font-semibold text-center">
+              HYPE → Vault
+            </div>
+            <div className="flex-1 px-4 py-2 rounded-lg bg-white/5 text-[rgba(230,230,230,0.4)] text-sm font-semibold text-center border border-[#C9A36A]/15">
+              Vault → HYPE
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-[#E6E6E6] text-sm font-semibold">Amount (HYPE)</label>
+              <span className="text-[rgba(230,230,230,0.4)] text-xs">Balance: — HYPE</span>
+            </div>
+            <input
+              type="number"
+              placeholder="0.0"
+              disabled
+              className="w-full px-4 py-2 bg-white/5 border border-[#C9A36A]/20 rounded-lg text-[rgba(230,230,230,0.4)] focus:outline-none [appearance:textfield] cursor-not-allowed"
+            />
+          </div>
+
+          {/* Quote démo */}
+          <div className="mb-5 p-4 bg-white/3 border border-[#C9A36A]/15 rounded-xl">
+            <p className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)] mb-2">
+              {/* ⚠️  PLACEHOLDER — Taux de change démo */}
+              Estimated Output
+            </p>
+            <p className="text-[#E6E6E6] text-lg font-semibold font-mono">
+              ≈ {DEMO_SWAP_STRATEGIES[0].priceHypeToVault.toFixed(4)} ERA shares / HYPE
+            </p>
+            <div className="flex justify-between mt-2">
+              <span className="text-[0.6rem] text-[rgba(230,230,230,0.3)]">Vol. 24h</span>
+              <span className="text-[0.7rem] text-[rgba(230,230,230,0.4)] font-mono">${DEMO_SWAP_STRATEGIES[0].volume24h.toLocaleString()}</span>
+            </div>
+          </div>
+
+          <button
+            disabled
+            className="w-full px-6 py-3 bg-[#C9A36A]/30 text-[#C9A36A]/50 rounded-lg text-sm font-semibold cursor-not-allowed"
+          >
+            Connect Wallet to Swap
+          </button>
+        </div>
       </div>
     );
   }

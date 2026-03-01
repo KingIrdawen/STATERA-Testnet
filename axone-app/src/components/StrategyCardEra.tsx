@@ -126,7 +126,7 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
       {/* En-tête */}
       <div className="flex justify-between items-start mb-4">
         <div>
-          <h4 className="text-xl font-bold bg-gradient-to-r from-[#C9A36A] to-[#5a9a9a] bg-clip-text text-transparent">
+          <h4 className="text-xl font-bold text-[#C9A36A] tracking-[0.03em]">
             {strategy.name}
           </h4>
           {isDemoMode && (

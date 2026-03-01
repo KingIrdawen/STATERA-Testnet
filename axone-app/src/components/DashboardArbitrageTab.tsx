@@ -3,6 +3,7 @@
 import { useAccount, useChainId, useSwitchChain } from 'wagmi';
 import { useArbitrageOpportunities } from '@/hooks/useArbitrageOpportunities';
 import Link from 'next/link';
+import { DEMO_ARBITRAGE_OPPORTUNITIES } from '@/lib/placeholders';
 
 export function DashboardArbitrageTab() {
   const { address } = useAccount();
@@ -51,18 +52,89 @@ export function DashboardArbitrageTab() {
     );
   }
 
-  // No opportunities
+  // No opportunities — mode démo
+  // ⚠️  PLACEHOLDER — Opportunités d'arbitrage fictives. À remplacer par useArbitrageOpportunities() quand les contrats sont déployés.
   if (!opportunities || opportunities.length === 0) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-8 max-w-md text-center">
-          <h3 className="text-2xl font-bold text-white mb-4">No Arbitrage Opportunities</h3>
-          <p className="text-[#5a9a9a] mb-2">
-            No arbitrage opportunities available right now.
+      <div className="space-y-6">
+        {/* Banner démo */}
+        <div className="bg-[#C9A36A]/8 border border-[#C9A36A]/20 rounded-xl p-4 text-center">
+          <p className="text-[#C9A36A]/80 text-xs tracking-[0.1em] uppercase font-semibold mb-1">Demo Mode</p>
+          <p className="text-[rgba(230,230,230,0.5)] text-sm">
+            Showing placeholder arbitrage opportunities — live data available after contract deployment.
           </p>
-          <p className="text-gray-500 text-sm">
-            Make sure vaults have active liquidity pools.
+        </div>
+
+        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6">
+          <h3 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] mb-2">Arbitrage Opportunities</h3>
+          <p className="text-[rgba(230,230,230,0.4)] text-sm mb-6">
+            Compare prices between vault deposits and swap pools. Positive difference means swap is more favorable.
           </p>
+
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-[#C9A36A]/15">
+                  <th className="text-left py-3 px-4 text-[0.65rem] uppercase tracking-[0.12em] text-[rgba(230,230,230,0.4)]">Strategy</th>
+                  <th className="text-right py-3 px-4 text-[0.65rem] uppercase tracking-[0.12em] text-[rgba(230,230,230,0.4)]">Via Vault</th>
+                  <th className="text-right py-3 px-4 text-[0.65rem] uppercase tracking-[0.12em] text-[rgba(230,230,230,0.4)]">Via Swap</th>
+                  <th className="text-right py-3 px-4 text-[0.65rem] uppercase tracking-[0.12em] text-[rgba(230,230,230,0.4)]">Δ%</th>
+                  <th className="text-center py-3 px-4 text-[0.65rem] uppercase tracking-[0.12em] text-[rgba(230,230,230,0.4)]">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {DEMO_ARBITRAGE_OPPORTUNITIES.map((opp) => (
+                  <tr key={opp.id} className="border-t border-[#C9A36A]/8 hover:bg-white/2 transition-colors">
+                    <td className="py-4 px-4">
+                      <p className="text-[#E6E6E6] font-semibold text-sm">{opp.strategyName}</p>
+                      <p className="text-[rgba(230,230,230,0.3)] text-xs mt-0.5">⚠️ Demo data</p>
+                    </td>
+                    <td className="py-4 px-4 text-right">
+                      <span className="text-[#E6E6E6] font-mono text-sm">${opp.priceViaVault.toFixed(4)}</span>
+                    </td>
+                    <td className="py-4 px-4 text-right">
+                      <span className="text-[#E6E6E6] font-mono text-sm">${opp.priceViaSwap.toFixed(4)}</span>
+                    </td>
+                    <td className="py-4 px-4 text-right">
+                      <span className={`font-mono font-semibold text-sm ${
+                        opp.recommendation === 'swap' ? 'text-green-400' :
+                        opp.recommendation === 'vault' ? 'text-red-400' :
+                        'text-[rgba(230,230,230,0.4)]'
+                      }`}>
+                        {opp.differencePercent >= 0 ? '+' : ''}{opp.differencePercent.toFixed(2)}%
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 text-center">
+                      {opp.recommendation === 'swap' ? (
+                        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-green-400/20 text-green-400 border border-green-400/30">
+                          Use Swap
+                        </span>
+                      ) : opp.recommendation === 'vault' ? (
+                        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-red-400/20 text-red-400 border border-red-400/30">
+                          Use Vault
+                        </span>
+                      ) : (
+                        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[#C9A36A]/10 text-[#C9A36A]/60 border border-[#C9A36A]/20">
+                          Neutral
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Résumé opportunité */}
+          <div className="mt-6 pt-4 border-t border-[#C9A36A]/15">
+            <div className="flex items-center justify-between">
+              <p className="text-[rgba(230,230,230,0.4)] text-xs">Best opportunity (demo)</p>
+              <p className="text-green-400 text-sm font-semibold font-mono">
+                {/* ⚠️  PLACEHOLDER — Profit potentiel */}
+                +$32.80 via HYPE/ETH Swap
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     );

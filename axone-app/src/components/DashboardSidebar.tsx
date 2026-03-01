@@ -27,7 +27,7 @@ export function DashboardSidebar() {
     },
     {
       href: '/app/strategies',
-      label: 'Strategies',
+      label: 'Market',
       icon: <StateraLayersIcon size={20} className="shrink-0" />,
     },
     {
