@@ -105,7 +105,7 @@ export default function StrategiesPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#121212]">
+    <div className="min-h-screen bg-black">
       <DashboardHeader />
       <DashboardSidebar />
 
@@ -114,13 +114,15 @@ export default function StrategiesPage() {
           {/* Titre */}
           <div className="text-center mb-12">
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-[0.04em] mb-4">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C9A36A] to-[#b8935f]">
+              <span className="text-[#C9A36A]">
                 Market
               </span>
             </h1>
             <p className="text-[rgba(230,230,230,0.5)] text-sm tracking-[0.1em] uppercase">
               Automated · Diversified · Rebalanced
             </p>
+            <span className="title-glow-line" />
+            <span className="title-glow-blur" />
           </div>
 
           {/* Grille de stratégies */}

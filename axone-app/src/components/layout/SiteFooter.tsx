@@ -14,7 +14,7 @@ export function SiteFooter() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative w-full bg-[#121212] overflow-hidden">
+    <footer className="relative w-full bg-black overflow-hidden">
       {/* Stars background effect */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(201,163,106,0.15)_1px,transparent_0)] [background-size:32px_32px]" />

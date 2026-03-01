@@ -10,11 +10,11 @@
 
 html, body {
   overflow-x: hidden;
-  background-color: #121212;
+  background-color: #000000;
 }
 
 body {
-  background-color: #121212;
+  background-color: #000000;
 }
 
 @theme inline {
@@ -147,6 +147,23 @@ body {
   animation: breathe 1s ease-in-out;
 }
 
+/* Golden glow line under page titles */
+.title-glow-line {
+  display: block;
+  width: 180px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(201, 163, 106, 0.55), transparent);
+  margin: 10px auto 0;
+}
+.title-glow-blur {
+  display: block;
+  width: 80px;
+  height: 3px;
+  background: rgba(201, 163, 106, 0.25);
+  margin: -2px auto 0;
+  filter: blur(4px);
+}
+
 /* Utilitaires safe-area */
 .header-safe {
   padding-top: calc(1rem + var(--safe-top));
@@ -172,7 +189,7 @@ body {
   --rk-fonts-body: var(--font-inter), system-ui, sans-serif;
   --rk-fonts-heading: var(--font-inter), system-ui, sans-serif;
   --rk-colors-accentColor: #C9A36A;
-  --rk-colors-accentColorForeground: #121212;
+  --rk-colors-accentColorForeground: #000000;
   --rk-colors-actionButtonBorder: #333333;
   --rk-colors-actionButtonBorderMobile: #333333;
   --rk-colors-actionButtonSecondaryBackground: #1a1a1a;
@@ -180,7 +197,7 @@ body {
   --rk-colors-closeButtonBackground: #1a1a1a;
   --rk-colors-connectButtonBackground: #C9A36A;
   --rk-colors-connectButtonBackgroundError: #ff6b6b;
-  --rk-colors-connectButtonInnerBackground: #121212;
+  --rk-colors-connectButtonInnerBackground: #000000;
   --rk-colors-connectButtonText: #121212;
   --rk-colors-connectButtonTextError: #ffffff;
   --rk-colors-connectionIndicator: #4ade80;

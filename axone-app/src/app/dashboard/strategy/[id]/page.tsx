@@ -55,7 +55,7 @@ export default function StrategyStatsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#121212] text-white">
+      <div className="min-h-screen bg-black text-white">
         <div className="flex items-center justify-center min-h-screen">
           <p className="text-[#5a9a9a] text-lg">Loading strategy...</p>
         </div>
@@ -65,7 +65,7 @@ export default function StrategyStatsPage() {
 
   if (!strategy) {
     return (
-      <div className="min-h-screen bg-[#121212] text-white">
+      <div className="min-h-screen bg-black text-white">
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
             <p className="text-[#5a9a9a] text-lg mb-4">Strategy not found</p>
@@ -394,7 +394,7 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
     : null;
 
   return (
-    <div className="min-h-screen bg-[#121212] text-white">
+    <div className="min-h-screen bg-black text-white">
       {/* Header with navigation */}
       <DashboardHeader />
 

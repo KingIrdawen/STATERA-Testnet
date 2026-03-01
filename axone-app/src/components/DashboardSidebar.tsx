@@ -70,22 +70,25 @@ export function DashboardSidebar() {
         maxHeight: `calc(100vh - ${headerHeight}px)`,
       }}
     >
-      <div className="h-full bg-[#121212] border-r border-[#C9A36A]/10 overflow-y-auto">
-        <div className="p-6 space-y-2">
+      <div className="h-full bg-black border-r border-[#C9A36A]/15 overflow-y-auto">
+        <div className="p-6 space-y-1">
           {menuItems.map((item) => {
             const active = isActive(item.href);
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors relative ${
                   active
-                    ? 'text-[#C9A36A] bg-[#C9A36A]/10 border border-[#C9A36A]/20'
-                    : 'text-[rgba(230,230,230,0.5)] hover:text-[#E6E6E6] hover:bg-white/5'
+                    ? 'text-white'
+                    : 'text-[rgba(230,230,230,0.45)] hover:text-[rgba(230,230,230,0.75)] hover:bg-white/3'
                 }`}
               >
                 {item.icon}
-                <span className="font-semibold">{item.label}</span>
+                <span className={active ? 'font-bold' : 'font-medium'}>{item.label}</span>
+                {active && (
+                  <span className="absolute right-0 top-2 bottom-2 w-[2px] bg-[#C9A36A] rounded-l-full" />
+                )}
               </Link>
             );
           })}

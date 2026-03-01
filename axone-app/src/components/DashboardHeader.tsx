@@ -22,7 +22,7 @@ export function DashboardHeader() {
   ];
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-[9999] bg-[#121212]/80 backdrop-blur-md border-b border-[#C9A36A]/15">
+    <header className="fixed left-0 right-0 top-0 z-[9999] bg-black/95 backdrop-blur-md relative">
       {/* Bandeau Wrong Network intégré dans le header */}
       {address && !isCorrectChain && (
         <div className="bg-red-600 text-white text-center py-3 px-4 text-sm font-semibold shadow-lg border-b-2 border-red-700">
@@ -113,6 +113,9 @@ export function DashboardHeader() {
           </div>
         </div>
       </div>
+      {/* Golden glow separator line */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C9A36A]/45 to-transparent pointer-events-none" />
+      <div className="absolute bottom-0 left-1/4 right-1/4 h-[3px] blur-[3px] bg-[#C9A36A]/20 pointer-events-none" />
     </header>
   );
 }

@@ -42,7 +42,7 @@ export default function PointsPage() {
   const isDemoMode = isPointsEmpty || isLeaderboardEmpty;
 
   return (
-    <div className="min-h-screen bg-[#121212]">
+    <div className="min-h-screen bg-black">
       <DashboardHeader />
       <DashboardSidebar />
 
@@ -51,7 +51,7 @@ export default function PointsPage() {
           {/* Titre */}
           <div className="text-center mb-12">
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-[0.04em] mb-4">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C9A36A] to-[#b8935f]">
+              <span className="text-[#C9A36A]">
                 Points
               </span>
             </h1>
@@ -61,6 +61,8 @@ export default function PointsPage() {
                 Demo Mode — Placeholder data
               </span>
             )}
+            <span className="title-glow-line" />
+            <span className="title-glow-blur" />
           </div>
 
           {/* Total points */}
@@ -199,7 +201,7 @@ export default function PointsPage() {
                             document.getElementById(`rank-${userEntry.rank}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                           }
                         }}
-                        className="w-full px-6 py-3 bg-[#C9A36A] text-[#121212] rounded-lg text-sm font-semibold hover:bg-[#b8935f] transition-colors"
+                        className="w-full px-6 py-3 bg-[#C9A36A] text-black rounded-lg text-sm font-semibold hover:bg-[#b8935f] transition-colors"
                       >
                         Show My Rank
                       </button>
