@@ -47,7 +47,7 @@ export default function PointsPage() {
       <DashboardSidebar />
 
       <main className="w-full pt-[60px] md:pt-[80px]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pl-0 md:pl-64">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pl-0 md:pl-52">
           {/* Titre */}
           <div className="text-center mb-12">
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-[0.04em] mb-4">

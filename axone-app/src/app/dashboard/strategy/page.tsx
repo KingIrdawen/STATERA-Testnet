@@ -9,6 +9,7 @@ import { SiteFooter } from '@/components/layout/SiteFooter';
 import { useWhitelistCheck } from '@/hooks/useWhitelistCheck';
 import { DEMO_STRATEGY_METRICS, DEMO_EXTRA_STRATEGIES } from '@/lib/placeholders';
 import { formatUsd } from '@/lib/format';
+import Link from 'next/link';
 import type { Strategy } from '@/types/strategy';
 
 // ─── Portfolio Overview (démo) ────────────────────────────────────────────────
@@ -146,29 +147,41 @@ function StakingSummarySection() {
     <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-5 hover:border-[#C9A36A]/25 transition-colors">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-semibold text-[#C9A36A] tracking-[0.08em] uppercase">{label}</h3>
-        <a href={href} className="text-[0.6rem] tracking-[0.12em] uppercase text-[rgba(230,230,230,0.4)] hover:text-[#C9A36A] transition-colors">View All →</a>
+        <Link href={href} className="text-[0.6rem] tracking-[0.12em] uppercase text-[rgba(230,230,230,0.4)] hover:text-[#C9A36A] transition-colors">View All →</Link>
       </div>
-      <div className="space-y-3">
-        {pools.map(pool => (
-          <div key={pool.pid} className="flex flex-wrap items-center gap-3 py-2 border-t border-[#C9A36A]/10 first:border-0 first:pt-0">
-            <div className="flex-1 min-w-[100px]">
-              <p className="text-sm text-white font-semibold">Pool #{pool.pid} — {pool.symbol}</p>
-              <p className="text-[0.6rem] text-green-400 font-mono">APR: {pool.aprPercent}%</p>
+      {pools.length === 0 ? (
+        <div className="text-center py-6">
+          <p className="text-[rgba(230,230,230,0.4)] text-xs mb-4">No active staking positions.</p>
+          <Link
+            href={href}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-[#C9A36A]/15 border border-[#C9A36A]/30 text-[#C9A36A] rounded-lg text-xs font-semibold hover:bg-[#C9A36A]/25 transition-colors"
+          >
+            Start Staking →
+          </Link>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {pools.map(pool => (
+            <div key={pool.pid} className="flex flex-wrap items-center gap-3 py-2 border-t border-[#C9A36A]/10 first:border-0 first:pt-0">
+              <div className="flex-1 min-w-[100px]">
+                <p className="text-sm text-white font-semibold">Pool #{pool.pid} — {pool.symbol}</p>
+                <p className="text-[0.6rem] text-green-400 font-mono">APR: {pool.aprPercent}%</p>
+              </div>
+              <div className="flex gap-4 text-xs text-[rgba(230,230,230,0.5)]">
+                <span>Staked: <span className="text-white font-mono">{pool.stakedAmount}</span></span>
+                <span>Rewards: <span className="text-green-400 font-mono">{pool.pendingRewards} {pool.rewardToken}</span></span>
+              </div>
+              <button
+                disabled
+                className="px-3 py-1.5 text-[0.6rem] tracking-[0.10em] uppercase bg-[#C9A36A]/30 text-[#C9A36A]/50 rounded font-semibold cursor-not-allowed"
+                title="Available after contract deployment"
+              >
+                Claim
+              </button>
             </div>
-            <div className="flex gap-4 text-xs text-[rgba(230,230,230,0.5)]">
-              <span>Staked: <span className="text-white font-mono">{pool.stakedAmount}</span></span>
-              <span>Rewards: <span className="text-green-400 font-mono">{pool.pendingRewards} {pool.rewardToken}</span></span>
-            </div>
-            <button
-              disabled
-              className="px-3 py-1.5 text-[0.6rem] tracking-[0.10em] uppercase bg-[#C9A36A]/30 text-[#C9A36A]/50 rounded font-semibold cursor-not-allowed"
-              title="Available after contract deployment"
-            >
-              Claim
-            </button>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 
@@ -200,6 +213,20 @@ function ActiveStrategiesGrid({ strategies, loading }: { strategies: Strategy[];
     strategy.contracts.handlerAddress &&
     strategy.contracts.coreViewsAddress
   );
+
+  if (!loading && validStrategies.length === 0 && DEMO_EXTRA_STRATEGIES.length === 0) {
+    return (
+      <div className="text-center py-16">
+        <p className="text-[rgba(230,230,230,0.5)] mb-6">No active strategies yet.</p>
+        <Link
+          href="/app/strategies"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-[#C9A36A]/20 border border-[#C9A36A]/40 text-[#C9A36A] rounded-lg font-semibold text-sm hover:bg-[#C9A36A]/30 transition-colors"
+        >
+          Go to Market →
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-wrap justify-center gap-6">
@@ -238,7 +265,7 @@ export default function StrategyPage() {
       <DashboardSidebar />
 
       <main className={`w-full ${address && !isCorrectChain ? 'pt-[104px] md:pt-[124px]' : 'pt-[60px] md:pt-[80px]'}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pl-0 md:pl-64">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pl-0 md:pl-52">
           {/* Titre */}
           <div className="text-center mb-12">
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-[0.04em] mb-4">

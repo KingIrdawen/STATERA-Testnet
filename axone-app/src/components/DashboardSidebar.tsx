@@ -52,30 +52,29 @@ export function DashboardSidebar() {
       ),
     },
     {
-      href: '/dashboard/referral',
-      label: 'Referral',
+      href: '/dashboard/swap',
+      label: 'Swap',
       icon: (
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="shrink-0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="10" cy="6" r="3" />
-          <path d="M6 12C6 10.3431 7.79086 9 10 9C12.2091 9 14 10.3431 14 12V16H6V12Z" />
+          <path d="M4 7h12M13 4l3 3-3 3M16 13H4M7 10l-3 3 3 3" />
         </svg>
       ),
     },
     {
-      href: '/dashboard/points',
-      label: 'Points',
+      href: '/dashboard/arbitrage',
+      label: 'Arbitrage',
       icon: (
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="shrink-0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M10 3L12.163 7.60714L17 8.34286L13.5 11.7857L14.326 16.5L10 14.3571L5.674 16.5L6.5 11.7857L3 8.34286L7.837 7.60714L10 3Z" />
+          <path d="M3 10h14M10 3l7 7-7 7" />
         </svg>
       ),
     },
   ];
 
-  // Déterminer si un item est actif (pour Dashboard, vérifier si on est sur une page dashboard)
+  // Déterminer si un item est actif
   const isActive = (href: string) => {
     if (href === '/dashboard/strategy') {
-      return pathname?.startsWith('/dashboard/strategy') || pathname === '/dashboard/swap' || pathname === '/dashboard/arbitrage';
+      return pathname?.startsWith('/dashboard/strategy');
     }
     return pathname === href || pathname?.startsWith(href + '/');
   };
@@ -85,7 +84,7 @@ export function DashboardSidebar() {
 
   return (
     <aside 
-      className={`fixed left-0 w-64 z-[9998] hidden md:block`}
+      className={`fixed left-0 w-52 z-[9998] hidden md:block`}
       style={{
         top: `${headerHeight}px`,
         maxHeight: `calc(100vh - ${headerHeight}px)`,
