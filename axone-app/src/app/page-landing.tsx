@@ -112,9 +112,10 @@ export default function Home() {
               <Image
                 src="/logo-hero-detoure.png"
                 alt="Statera"
-                width={300}
-                height={300}
-                className="mx-auto drop-shadow-[0_0_64px_rgba(180,110,40,0.40)]"
+                width={600}
+                height={600}
+                className="mx-auto drop-shadow-[0_0_80px_rgba(180,110,40,0.50)]"
+                style={{ filter: 'brightness(1.25) contrast(0.95)' }}
               />
             </div>
 
