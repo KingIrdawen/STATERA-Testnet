@@ -4,17 +4,43 @@ import Header from '@/components/Header';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import { Reveal } from '@/components/landing/Reveal';
 import Link from 'next/link';
+import { cinzel } from '@/lib/fonts';
 
 export default function UsersRiskPage() {
   return (
-    <div className="min-h-screen bg-[#121212] text-white brand-typography">
+    <div className={`${cinzel.className} min-h-screen bg-[#0A0A0A] text-white`}>
+      <style>{`
+        .legal-content h1,
+        .legal-content h2 span,
+        .legal-content h3,
+        .legal-content h4 {
+          background: linear-gradient(135deg, #7A4F28 0%, #C98B3D 25%, #F0CA7A 50%, #C98B3D 75%, #7A4F28 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+        .legal-content p,
+        .legal-content li,
+        .legal-content td {
+          color: rgba(230, 230, 230, 0.65);
+          font-weight: 300;
+          letter-spacing: 0.04em;
+        }
+        .legal-content strong {
+          color: rgba(230, 230, 230, 0.9);
+          -webkit-text-fill-color: rgba(230, 230, 230, 0.9);
+        }
+        .legal-content th {
+          color: rgba(230, 230, 230, 0.9);
+        }
+      `}</style>
       <Header />
-      
+
       <main className="pt-[60px] md:pt-[80px] pb-16">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-12">
           <Reveal delayMs={100}>
             <div className="mb-12">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#C9A36A] tracking-[0.04em] mb-4 leading-relaxed">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-[0.08em] mb-4 leading-relaxed">
                 Risks
               </h1>
               <p className="text-white leading-relaxed">
@@ -26,7 +52,7 @@ export default function UsersRiskPage() {
             </div>
           </Reveal>
 
-          <div className="prose prose-invert max-w-none space-y-8">
+          <div className="legal-content prose prose-invert max-w-none space-y-8">
             <Reveal delayMs={200}>
               <section>
                 <h2 className="text-2xl font-bold mb-6">

@@ -88,19 +88,7 @@ export default function Home() {
 
         <div className="relative z-10 flex flex-col items-center text-center px-6 sm:px-8 lg:px-12 py-28 sm:py-36 w-full max-w-4xl mx-auto">
           <Reveal>
-            {/* Sphere logo — bigger & centered */}
-            <div className="mb-10 sm:mb-14">
-              <Image
-                src="/logo-hero-detoure.png"
-                alt="Statera"
-                width={300}
-                height={300}
-                className="mx-auto drop-shadow-[0_0_64px_rgba(180,110,40,0.40)]"
-                priority
-              />
-            </div>
-
-            {/* Title — white with slight luminosity like the reference */}
+            {/* Title */}
             <h1
               className="text-5xl sm:text-6xl md:text-7xl font-semibold tracking-[0.22em] mb-4"
               style={goldGradient}
@@ -118,6 +106,17 @@ export default function Home() {
               On-chain portfolio strategies with institutional-grade risk management. Transparent,
               non-custodial allocation frameworks designed for disciplined capital deployment.
             </p>
+
+            {/* Sphere logo — centered between description and CTA */}
+            <div className="mb-10 sm:mb-12">
+              <Image
+                src="/logo-hero-detoure.png"
+                alt="Statera"
+                width={300}
+                height={300}
+                className="mx-auto drop-shadow-[0_0_64px_rgba(180,110,40,0.40)]"
+              />
+            </div>
 
             {/* CTA buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 sm:mb-20">
