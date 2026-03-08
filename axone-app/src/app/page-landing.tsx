@@ -8,7 +8,7 @@ import { Reveal } from '@/components/landing/Reveal';
 import { AnimatedCounter } from '@/components/landing/AnimatedCounter';
 import { WhyStateraMarquee } from '@/components/landing/WhyStateraMarquee';
 import Link from 'next/link';
-import { playfairDisplay } from '@/lib/fonts';
+import { playfairDisplay, cinzel } from '@/lib/fonts';
 
 interface LandingStats {
   vaultCount: number;
@@ -69,80 +69,81 @@ export default function Home() {
   const topVaults = stats?.vaults.slice(0, 6) || [];
 
   return (
-    <div className="min-h-screen bg-[#121212] text-white">
+    <div className="min-h-screen bg-[#0A0A0A] text-white">
       <Header />
-      
+
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-[#121212]">
+      <section className="relative overflow-hidden bg-[#0A0A0A] min-h-[90vh] flex flex-col items-center justify-center">
+        {/* Subtle radial glow behind logo */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute inset-0">
-            <div className="max-w-7xl mx-auto h-full px-6 sm:px-8 lg:px-12">
-              <div className="relative h-full">
-                <Image
-                  src="/Image-titre.png"
-                  alt="Statera visual"
-                  fill
-                  className="object-contain object-right"
-                  sizes="(min-width: 1280px) 1200px, 100vw"
-                  priority
-                />
-              </div>
-            </div>
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-r from-[#121212] via-[#121212]/80 to-transparent" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_right,rgba(18,18,18,0.35),rgba(18,18,18,0.9))]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_40%,rgba(180,110,50,0.10),transparent)]" />
         </div>
 
-        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10 min-h-[75vh] lg:min-h-[85vh] flex flex-col">
-          <div className="flex-1 flex items-center py-16 sm:py-20">
-            <Reveal>
-              <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-center w-full">
-                <div className="text-left max-w-2xl">
-                  <h1 className="text-5xl sm:text-6xl md:text-7xl font-semibold tracking-[0.07em] text-[#C9A36A]">
-                    STATERA
-                  </h1>
-                  <p className="mt-4 text-xs sm:text-sm tracking-[0.14em] uppercase text-[#C9A36A]/80">
-                    Decentralized Investment Strategies
-                  </p>
-                  <p className="mt-6 text-lg sm:text-xl text-[rgba(230,230,230,0.7)] leading-relaxed max-w-xl">
-                    On-chain portfolio strategies with institutional-grade risk management, delivering transparent exposure through disciplined, rules-based allocation.
-                  </p>
-
-                  <div className="mt-8 flex flex-col sm:flex-row gap-4 items-start">
-                    <Link
-                      href="/dashboard/strategy"
-                      className="inline-flex items-center justify-center px-7 py-3 rounded-lg bg-[#C9A36A] text-[#121212] font-semibold text-sm sm:text-base shadow-lg transition-all duration-300 hover:bg-[#b8935f] focus:outline-none focus:ring-2 focus:ring-[#C9A36A]/60 focus:ring-offset-2 focus:ring-offset-[#121212]"
-                    >
-                      ACCESS PLATFORM
-                    </Link>
-
-                    <Link
-                      href="/docs"
-                      className="inline-flex items-center justify-center px-7 py-3 rounded-lg border border-[#C9A36A]/30 text-[#E6E6E6] font-semibold text-sm sm:text-base shadow-lg transition-all duration-300 hover:border-[#C9A36A]/60 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[#C9A36A]/40 focus:ring-offset-2 focus:ring-offset-[#121212]"
-                    >
-                      View Documentation
-                    </Link>
-                  </div>
-                </div>
-
-                <div className="hidden lg:block" />
-              </div>
-            </Reveal>
-          </div>
-
-          <div className="absolute right-56 bottom-60 hidden lg:block text-right">
-            <p className={`${playfairDisplay.className} text-xl lg:text-2xl italic tracking-[0.06em] text-[#C9A36A]/80`}>
-              The Art of Volatility...
-            </p>
-          </div>
-
-          <div className="mt-auto" style={{ paddingBottom: '5px' }}>
-            <div className="mt-3 text-right lg:hidden">
-              <p className={`${playfairDisplay.className} text-base italic tracking-[0.06em] text-[#C9A36A]/80`}>
-                The Art of Volatility...
-              </p>
+        <div className="relative z-10 flex flex-col items-center text-center px-6 sm:px-8 lg:px-12 py-24 sm:py-32 w-full max-w-4xl mx-auto">
+          <Reveal>
+            {/* Sphere logo */}
+            <div className="mb-10 sm:mb-12">
+              <Image
+                src="/logo-hero-detoure.png"
+                alt="Statera"
+                width={220}
+                height={220}
+                className="mx-auto drop-shadow-[0_0_48px_rgba(180,110,50,0.35)]"
+                priority
+              />
             </div>
-          </div>
+
+            {/* Title */}
+            <h1 className={`${cinzel.className} text-5xl sm:text-6xl md:text-7xl font-semibold tracking-[0.18em] text-white mb-4`}>
+              STATERA
+            </h1>
+
+            {/* Subtitle */}
+            <p className={`${cinzel.className} text-[0.65rem] sm:text-xs tracking-[0.28em] uppercase text-[#C9A36A] mb-8`}>
+              Decentralized Investment Strategies
+            </p>
+
+            {/* Description */}
+            <p className="text-base sm:text-lg text-[rgba(230,230,230,0.6)] leading-relaxed max-w-2xl mx-auto mb-10">
+              On-chain portfolio strategies with institutional-grade risk management. Transparent,
+              non-custodial allocation frameworks designed for disciplined capital deployment.
+            </p>
+
+            {/* CTA buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 sm:mb-20">
+              <Link
+                href="/dashboard/strategy"
+                className={`${cinzel.className} inline-flex items-center justify-center px-8 py-3 rounded-none border border-[#C9A36A] bg-[#C9A36A] text-[#0A0A0A] font-semibold text-xs tracking-[0.18em] uppercase shadow-lg transition-all duration-300 hover:bg-[#b8935f] hover:border-[#b8935f] focus:outline-none focus:ring-2 focus:ring-[#C9A36A]/60`}
+              >
+                Access Platform
+              </Link>
+              <Link
+                href="/docs"
+                className={`${cinzel.className} inline-flex items-center justify-center px-8 py-3 rounded-none border border-[#C9A36A]/40 text-[#E6E6E6] font-semibold text-xs tracking-[0.18em] uppercase shadow-lg transition-all duration-300 hover:border-[#C9A36A] hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[#C9A36A]/40`}
+              >
+                View Documentation
+              </Link>
+            </div>
+
+            {/* Bottom tagline */}
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6">
+              {['Non-Custodial Architecture', 'Rules-Based Allocation', 'On-Chain Transparency'].map((item, i) => (
+                <span key={i} className="flex items-center gap-3 sm:gap-6">
+                  {i > 0 && <span className="text-[#C9A36A]/40 text-xs">•</span>}
+                  <span className={`${cinzel.className} text-[0.6rem] tracking-[0.22em] uppercase text-[rgba(230,230,230,0.45)]`}>
+                    {item}
+                  </span>
+                </span>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+
+        {/* Bottom italic quote */}
+        <div className="absolute bottom-6 right-8 hidden lg:block">
+          <p className={`${playfairDisplay.className} text-base italic tracking-[0.06em] text-[#C9A36A]/50`}>
+            The Art of Volatility...
+          </p>
         </div>
       </section>
 
@@ -339,7 +340,7 @@ export default function Home() {
       )}
 
       {/* How It Works */}
-      <section className="py-16 sm:py-20 bg-[#121212]">
+      <section className="py-16 sm:py-20 bg-[#0A0A0A]">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <Reveal delayMs={300}>
             <div className="text-center mb-12">
@@ -405,7 +406,7 @@ export default function Home() {
       </section>
 
       {/* Smart Rebalancing */}
-      <section className="py-16 sm:py-20 bg-[#121212]">
+      <section className="py-16 sm:py-20 bg-[#0A0A0A]">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <Reveal delayMs={300}>
             <div className="text-center mb-12">
@@ -495,7 +496,7 @@ export default function Home() {
       </section>
 
       {/* App Features */}
-      <section className="py-16 sm:py-20 bg-[#121212]">
+      <section className="py-16 sm:py-20 bg-[#0A0A0A]">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <Reveal delayMs={300}>
             <div className="text-center mb-12">
@@ -603,7 +604,7 @@ export default function Home() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-16 sm:py-20 bg-[#121212]">
+      <section className="py-16 sm:py-20 bg-[#0A0A0A]">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <Reveal delayMs={300}>
             <div className="text-center">
@@ -616,13 +617,13 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <Link
                   href="/dashboard/strategy"
-                  className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-[#C9A36A] text-[#121212] font-semibold text-base md:text-lg shadow-lg transition-all duration-300 hover:bg-[#b8935f] focus:outline-none focus:ring-2 focus:ring-[#C9A36A]/60 focus:ring-offset-2 focus:ring-offset-[#121212]"
+                  className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-[#C9A36A] text-[#121212] font-semibold text-base md:text-lg shadow-lg transition-all duration-300 hover:bg-[#b8935f] focus:outline-none focus:ring-2 focus:ring-[#C9A36A]/60 focus:ring-offset-2 focus:ring-offset-[#0A0A0A]"
                 >
                   Launch App
                 </Link>
                 <Link
                   href="/docs"
-                  className="inline-flex items-center justify-center px-8 py-4 rounded-lg border border-[#C9A36A]/30 text-[#E6E6E6] font-semibold text-base md:text-lg shadow-lg transition-all duration-300 hover:border-[#C9A36A]/60 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[#C9A36A]/40 focus:ring-offset-2 focus:ring-offset-[#121212]"
+                  className="inline-flex items-center justify-center px-8 py-4 rounded-lg border border-[#C9A36A]/30 text-[#E6E6E6] font-semibold text-base md:text-lg shadow-lg transition-all duration-300 hover:border-[#C9A36A]/60 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[#C9A36A]/40 focus:ring-offset-2 focus:ring-offset-[#0A0A0A]"
                 >
                   Read Documentation
                 </Link>

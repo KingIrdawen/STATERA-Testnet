@@ -1,9 +1,15 @@
-import { Playfair_Display } from 'next/font/google';
+import { Playfair_Display, Cinzel } from 'next/font/google';
 
 export const playfairDisplay = Playfair_Display({
   subsets: ['latin'],
   style: ['italic'],
   weight: ['400', '500'],
+  display: 'swap',
+});
+
+export const cinzel = Cinzel({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
   display: 'swap',
 });
 
