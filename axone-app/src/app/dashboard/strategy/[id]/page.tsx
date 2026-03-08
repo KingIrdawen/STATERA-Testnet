@@ -475,7 +475,7 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
           )}
 
           {/* SECTION A — Key Metrics */}
-          <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 sm:p-8 mb-6">
+          <div className="landing-card rounded-lg p-6 sm:p-8 mb-6">
             <h2 className="text-2xl sm:text-3xl font-bold mb-8 text-white">Key Metrics</h2>
             
             {strategyData.loading ? (
@@ -632,7 +632,7 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
           {address && isCorrectChain && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               {/* Deposit Card */}
-              <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6">
+              <div className="landing-card rounded-lg p-6">
                 <h3 className="text-xl font-bold mb-4 text-white">Deposit</h3>
                 <div className="space-y-4">
                   <div>
@@ -672,7 +672,7 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
               </div>
 
               {/* Withdraw Card */}
-              <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6">
+              <div className="landing-card rounded-lg p-6">
                 <h3 className="text-xl font-bold mb-4 text-white">Withdraw</h3>
                 <div className="space-y-4">
                   <div>
@@ -714,13 +714,13 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
           )}
 
           {!address && (
-            <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 mb-6 text-center">
+            <div className="landing-card rounded-lg p-6 mb-6 text-center">
               <p className="text-[#5a9a9a] text-sm mb-4">Connect your wallet to deposit or withdraw</p>
             </div>
           )}
 
           {/* SECTION C — Token Composition */}
-          <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 mb-6">
+          <div className="landing-card rounded-lg p-6 mb-6">
             <h2 className="text-2xl font-bold mb-6 text-white">Token Composition</h2>
             
             {!tokenComposition || tokenComposition.length === 0 ? (

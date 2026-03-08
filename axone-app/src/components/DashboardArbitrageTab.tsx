@@ -18,7 +18,7 @@ export function DashboardArbitrageTab() {
   if (address && !isCorrectChain) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-8 max-w-md text-center">
+        <div className="landing-card rounded-lg p-8 max-w-md text-center">
           <h3 className="text-2xl font-bold text-white mb-4">Wrong Network</h3>
           <p className="text-[#5a9a9a] mb-6">
             Please switch to HyperEVM Testnet (Chain ID {EXPECTED_CHAIN_ID}) to view arbitrage opportunities.
@@ -65,7 +65,7 @@ export function DashboardArbitrageTab() {
           </p>
         </div>
 
-        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6">
+        <div className="landing-card rounded-xl p-6">
           <h3 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] mb-2">Arbitrage Opportunities</h3>
           <p className="text-[rgba(230,230,230,0.4)] text-sm mb-6">
             Compare prices between vault deposits and swap pools. Positive difference means swap is more favorable.
@@ -142,7 +142,7 @@ export function DashboardArbitrageTab() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6">
+      <div className="landing-card rounded-lg p-6">
         <h3 className="text-2xl font-bold text-white mb-4">Arbitrage Opportunities</h3>
         <p className="text-[#5a9a9a] text-sm mb-6">
           Compare prices between vault deposits and swap pools. Positive difference means swap is more favorable.

@@ -56,7 +56,7 @@ function getRiskBg(risk: string) {
 // ─── Demo card (unchanged) ───────────────────────────────────────────────────
 function DemoStrategyCard({ demo }: { demo: typeof DEMO_EXTRA_STRATEGIES[0] }) {
   return (
-    <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6 hover:border-[#C9A36A]/35 transition-colors duration-300 h-full flex flex-col">
+    <div className="landing-card rounded-xl p-6 transition-colors duration-300 h-full flex flex-col">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h4 className="text-xl font-bold text-[#C9A36A] tracking-[0.03em]">{demo.name}</h4>
@@ -94,7 +94,7 @@ function DemoStrategyCard({ demo }: { demo: typeof DEMO_EXTRA_STRATEGIES[0] }) {
 // ─── Demo list row ────────────────────────────────────────────────────────────
 function DemoListRow({ demo }: { demo: typeof DEMO_EXTRA_STRATEGIES[0] }) {
   return (
-    <div className="flex flex-wrap items-center gap-3 p-4 bg-white/5 border border-[#C9A36A]/15 rounded-lg hover:border-[#C9A36A]/30 transition-colors">
+    <div className="landing-card flex flex-wrap items-center gap-3 p-4 rounded-lg hover:border-[#C9A36A]/30 transition-colors">
       <div className="flex-1 min-w-[140px]">
         <p className="text-[#C9A36A] font-semibold text-sm">{demo.name}</p>
         <span className="inline-block px-2 py-0.5 rounded text-[0.55rem] font-semibold tracking-[0.1em] uppercase bg-[#C9A36A]/10 text-[#C9A36A]/60 border border-[#C9A36A]/15">Demo</span>
@@ -115,7 +115,7 @@ function DemoListRow({ demo }: { demo: typeof DEMO_EXTRA_STRATEGIES[0] }) {
 // ─── Real strategy list row ────────────────────────────────────────────────────
 function StrategyListRow({ strategy }: { strategy: Strategy }) {
   return (
-    <div className="flex flex-wrap items-center gap-3 p-4 bg-white/5 border border-[#C9A36A]/15 rounded-lg hover:border-[#C9A36A]/30 transition-colors">
+    <div className="landing-card flex flex-wrap items-center gap-3 p-4 rounded-lg hover:border-[#C9A36A]/30 transition-colors">
       <div className="flex-1 min-w-[140px]">
         <p className="text-[#C9A36A] font-semibold text-sm">{strategy.name}</p>
         <p className="text-[rgba(230,230,230,0.4)] text-[0.6rem] uppercase tracking-wide">{strategy.riskLevel}</p>

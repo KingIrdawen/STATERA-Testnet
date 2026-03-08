@@ -182,7 +182,7 @@ export function DashboardReferralTab() {
       : null;
 
     return (
-      <div className="p-4 bg-white/5 border border-[#C9A36A]/15 rounded-lg">
+      <div className="landing-card p-4 rounded-lg">
         <div className="flex items-center justify-between gap-4 mb-2">
           <span className="font-mono bg-[#121212] border border-[#C9A36A]/10 px-3 py-1.5 rounded text-[#E6E6E6] flex-1 min-w-0 text-sm">
             {code}
@@ -220,7 +220,7 @@ export function DashboardReferralTab() {
         </div>
 
         {/* Section 1: Statut (démo) */}
-        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6">
+        <div className="landing-card rounded-xl p-6">
           <h3 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">Your Referral Status</h3>
           <div className="space-y-3">
             <div className="flex items-center justify-between p-3 bg-white/3 border border-[#C9A36A]/10 rounded-lg">
@@ -236,7 +236,7 @@ export function DashboardReferralTab() {
         </div>
 
         {/* Section 2: Statistiques (démo) */}
-        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6">
+        <div className="landing-card rounded-xl p-6">
           <h3 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">Statistics</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
@@ -254,7 +254,7 @@ export function DashboardReferralTab() {
         </div>
 
         {/* Section 3: Codes créés (démo) */}
-        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6">
+        <div className="landing-card rounded-xl p-6">
           <h3 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">Your Referral Codes</h3>
           <div className="grid gap-4">
             {/* ⚠️  PLACEHOLDER — codes de DEMO_REFERRAL.unusedCodes */}
@@ -284,7 +284,7 @@ export function DashboardReferralTab() {
   if (!isCorrectChain) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-8 max-w-md text-center">
+        <div className="landing-card rounded-xl p-8 max-w-md text-center">
           <h3 className="text-2xl font-bold text-[#C9A36A] mb-4 tracking-[0.04em]">Wrong Network</h3>
           <p className="text-[rgba(230,230,230,0.5)] mb-6">
             Please switch to HyperEVM Testnet (Chain ID {EXPECTED_CHAIN_ID}) to use the referral system.
@@ -304,7 +304,7 @@ export function DashboardReferralTab() {
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
       {/* Section 1: Statut */}
-      <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6">
+      <div className="landing-card rounded-xl p-6">
         <h3 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">Your Referral Status</h3>
         <div className="space-y-3">
           <div className="flex items-center justify-between p-3 bg-white/3 border border-[#C9A36A]/10 rounded-lg">
@@ -333,7 +333,7 @@ export function DashboardReferralTab() {
 
       {/* Section 2: Utiliser un code */}
       {!isWhitelisted && (
-        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6">
+        <div className="landing-card rounded-xl p-6">
           <h3 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">Use a Referral Code</h3>
           <div className="space-y-4">
             <div>
@@ -363,7 +363,7 @@ export function DashboardReferralTab() {
 
       {/* Section 3: Statistiques */}
       {isWhitelisted && (
-        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6">
+        <div className="landing-card rounded-xl p-6">
           <h3 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">Statistics</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
@@ -382,7 +382,7 @@ export function DashboardReferralTab() {
 
       {/* Section 4: Créer un code */}
       {isWhitelisted && hasReferrer && (
-        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6">
+        <div className="landing-card rounded-xl p-6">
           <h3 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] mb-2">Create Code</h3>
           <p className="text-[rgba(230,230,230,0.5)] text-sm mb-4">
             Generate a new one-time use referral code. The code will expire after 30 days.
@@ -403,7 +403,7 @@ export function DashboardReferralTab() {
 
       {/* Section 5: Tous les codes */}
       {isWhitelisted && (
-        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6">
+        <div className="landing-card rounded-xl p-6">
           <h3 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">All Created Codes</h3>
           {isLoadingUnusedCodes ? (
             <div className="text-center py-8">

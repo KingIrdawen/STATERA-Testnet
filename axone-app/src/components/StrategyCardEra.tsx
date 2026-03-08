@@ -122,7 +122,7 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
   };
 
   return (
-    <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6 hover:border-[#C9A36A]/35 transition-colors duration-300 h-full flex flex-col">
+    <div className="landing-card rounded-xl p-6 transition-colors duration-300 h-full flex flex-col">
       {/* En-tête */}
       <div className="flex justify-between items-start mb-4">
         <div>

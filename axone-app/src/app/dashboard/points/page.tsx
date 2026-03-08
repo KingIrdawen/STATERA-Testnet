@@ -77,7 +77,7 @@ export default function PointsPage() {
 
           {/* Points breakdown */}
           <div className="mb-10">
-            <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6 max-w-2xl mx-auto hover:border-[#C9A36A]/25 transition-colors duration-300">
+            <div className="landing-card rounded-xl p-6 max-w-2xl mx-auto transition-colors duration-300">
               <h3 className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)] mb-5 text-center">
                 Points Breakdown
                 {/* ⚠️  PLACEHOLDER — Données provenant de DEMO_POINTS_BREAKDOWN */}
@@ -107,7 +107,7 @@ export default function PointsPage() {
           {/* Votre rang */}
           {(displayRank || rankLoading) && (
             <div className="mb-8 text-center">
-              <div className="inline-block bg-white/5 border border-[#C9A36A]/15 rounded-xl px-8 py-4">
+              <div className="landing-card inline-block rounded-xl px-8 py-4">
                 <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)] mb-1">Your Rank</p>
                 <p className="text-3xl font-bold text-[#C9A36A] font-mono">
                   {rankLoading ? '...' : `#${displayRank}`}
@@ -121,7 +121,7 @@ export default function PointsPage() {
             <h2 className="text-xl font-bold tracking-[0.04em] mb-6 text-center uppercase text-sm" style={{ background: 'linear-gradient(135deg, #7A4F28 0%, #C98B3D 25%, #F0CA7A 50%, #C98B3D 75%, #7A4F28 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
               Leaderboard
             </h2>
-            <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl overflow-hidden">
+            <div className="landing-card rounded-xl overflow-hidden">
               {leaderboardLoading ? (
                 <div className="text-center py-12">
                   <p className="text-[rgba(230,230,230,0.4)]">Loading leaderboard...</p>

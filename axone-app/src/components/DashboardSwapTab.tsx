@@ -134,7 +134,7 @@ function SwapTabContent() {
         </div>
 
         {/* Sélection stratégie démo */}
-        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6">
+        <div className="landing-card rounded-xl p-6">
           <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)] mb-4">Select Strategy</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {DEMO_SWAP_STRATEGIES.map((pool, i) => (
@@ -158,7 +158,7 @@ function SwapTabContent() {
         </div>
 
         {/* Formulaire démo (premier pool pré-sélectionné) */}
-        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6">
+        <div className="landing-card rounded-xl p-6">
           <div className="flex gap-2 mb-5">
             <div className="flex-1 px-4 py-2 rounded-lg bg-[#C9A36A] text-[#121212] text-sm font-semibold text-center">
               HYPE → ERA
@@ -225,7 +225,7 @@ function SwapTabContent() {
       )}
 
       {/* Strategy selection - Cards grid */}
-      <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6">
+      <div className="landing-card rounded-lg p-6">
         <label className="block text-white text-sm font-semibold mb-4">Select Strategy</label>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {swapStrategies.map((swapStrategy) => (
@@ -251,7 +251,7 @@ function SwapTabContent() {
 
       {/* Swap form */}
       {selected && (
-        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6">
+        <div className="landing-card rounded-lg p-6">
           <h4 className="text-lg font-bold text-white mb-4">Swap</h4>
 
           {/* Direction toggle */}

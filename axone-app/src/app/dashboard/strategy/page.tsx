@@ -22,7 +22,7 @@ function DemoPortfolioOverview() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-      <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-5 hover:border-[#C9A36A]/35 transition-colors duration-300 flex flex-col items-center justify-center text-center">
+      <div className="landing-card rounded-xl p-5 transition-colors duration-300 flex flex-col items-center justify-center text-center">
         <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)] mb-2">
           Total Portfolio Value
         </p>
@@ -31,7 +31,7 @@ function DemoPortfolioOverview() {
         </p>
         <p className="text-[0.65rem] text-[rgba(230,230,230,0.25)] mt-1 tracking-[0.08em] uppercase">Demo data</p>
       </div>
-      <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-5 hover:border-[#C9A36A]/35 transition-colors duration-300 flex flex-col items-center justify-center text-center">
+      <div className="landing-card rounded-xl p-5 transition-colors duration-300 flex flex-col items-center justify-center text-center">
         <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)] mb-2">
           24h PnL
         </p>
@@ -40,7 +40,7 @@ function DemoPortfolioOverview() {
         </p>
         <p className="text-[0.65rem] text-[rgba(230,230,230,0.25)] mt-1 tracking-[0.08em] uppercase">Demo data</p>
       </div>
-      <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-5 hover:border-[#C9A36A]/35 transition-colors duration-300 flex flex-col items-center justify-center text-center">
+      <div className="landing-card rounded-xl p-5 transition-colors duration-300 flex flex-col items-center justify-center text-center">
         <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)] mb-2">
           24h Return
         </p>
@@ -73,7 +73,7 @@ function DemoStrategyCard({ demo }: { demo: typeof DEMO_EXTRA_STRATEGIES[0] }) {
   };
 
   return (
-    <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6 hover:border-[#C9A36A]/35 transition-colors duration-300 h-full flex flex-col">
+    <div className="landing-card rounded-xl p-6 transition-colors duration-300 h-full flex flex-col">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h4 className="text-xl font-bold text-[#C9A36A] tracking-[0.03em]">
@@ -145,7 +145,7 @@ function StakingSummarySection() {
   ];
 
   const StakingRow = ({ label, pools, href }: { label: string; pools: typeof eraStaking; href: string }) => (
-    <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-5 hover:border-[#C9A36A]/25 transition-colors">
+    <div className="landing-card rounded-xl p-5 transition-colors">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-semibold text-[#C9A36A] tracking-[0.08em] uppercase">{label}</h3>
         <Link href={href} className="text-[0.6rem] tracking-[0.12em] uppercase text-[rgba(230,230,230,0.4)] hover:text-[#C9A36A] transition-colors">View All →</Link>

@@ -81,7 +81,7 @@ function ControlsBar({
 // ─── Demo list row ─────────────────────────────────────────────────────────────
 function DemoListRow({ pool }: { pool: typeof DEMO_STAKING_POOLS[0] }) {
   return (
-    <div className="flex flex-wrap items-center gap-3 p-4 bg-white/5 border border-[#C9A36A]/15 rounded-lg hover:border-[#C9A36A]/30 transition-colors">
+    <div className="landing-card flex flex-wrap items-center gap-3 p-4 rounded-lg hover:border-[#C9A36A]/30 transition-colors">
       <div className="flex-1 min-w-[140px]">
         <p className="text-[#C9A36A] font-semibold text-sm">Pool #{pool.pid} — {pool.symbol}</p>
         <p className="text-[rgba(230,230,230,0.35)] text-[0.6rem] tracking-wide">Weight: {pool.weight}%</p>
@@ -105,7 +105,7 @@ function DemoListRow({ pool }: { pool: typeof DEMO_STAKING_POOLS[0] }) {
 // ─── Demo card (existing style) ───────────────────────────────────────────────
 function DemoCard({ pool }: { pool: typeof DEMO_STAKING_POOLS[0] }) {
   return (
-    <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6 hover:border-[#C9A36A]/35 transition-colors duration-300">
+    <div className="landing-card rounded-xl p-6 transition-colors duration-300">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h4 className="text-xl font-bold text-[#C9A36A] tracking-[0.03em]">Pool #{pool.pid} — {pool.symbol}</h4>
@@ -155,7 +155,7 @@ function LiveListRow({ pool, stakedAmount, pendingReward, onStake, onHarvest, on
   const formattedTvl = pool.totalStaked > 0n ? Number(formatUnits(pool.totalStaked, decimals)).toFixed(2) : '0';
 
   return (
-    <div className="flex flex-wrap items-center gap-3 p-4 bg-white/5 border border-[#C9A36A]/15 rounded-lg hover:border-[#C9A36A]/30 transition-colors">
+    <div className="landing-card flex flex-wrap items-center gap-3 p-4 rounded-lg hover:border-[#C9A36A]/30 transition-colors">
       <div className="flex-1 min-w-[140px]">
         <p className="text-[#C9A36A] font-semibold text-sm">Pool #{pool.pid} — {symbol}</p>
         {pool.weight !== undefined && <p className="text-[rgba(230,230,230,0.35)] text-[0.6rem]">Weight: {(pool.weight * 100).toFixed(2)}%</p>}
@@ -210,7 +210,7 @@ export function DashboardStakingTab({ variant = 'ERA' }: DashboardStakingTabProp
   if (!address) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-8 max-w-md text-center">
+        <div className="landing-card rounded-lg p-8 max-w-md text-center">
           <h3 className="text-2xl font-bold text-white mb-4">Connect Wallet</h3>
           <p className="text-[rgba(230,230,230,0.5)]">Please connect your wallet to view staking pools.</p>
         </div>
@@ -221,7 +221,7 @@ export function DashboardStakingTab({ variant = 'ERA' }: DashboardStakingTabProp
   if (!isCorrectChain) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-8 max-w-md text-center">
+        <div className="landing-card rounded-lg p-8 max-w-md text-center">
           <h3 className="text-2xl font-bold text-white mb-4">Wrong Network</h3>
           <p className="text-[rgba(230,230,230,0.5)] mb-6">Switch to HyperEVM Testnet (Chain ID {EXPECTED_CHAIN_ID}).</p>
           <button onClick={() => switchChain({ chainId: EXPECTED_CHAIN_ID })} className="w-full px-6 py-3 bg-[#C9A36A] text-[#121212] rounded-lg text-sm font-semibold hover:bg-[#b8935f] transition-colors">
@@ -265,7 +265,7 @@ export function DashboardStakingTab({ variant = 'ERA' }: DashboardStakingTabProp
           </p>
         </div>
 
-        <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6">
+        <div className="landing-card rounded-xl p-6">
           <h3 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">{variant} Staking Overview</h3>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-white/3 border border-[#C9A36A]/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
@@ -310,7 +310,7 @@ export function DashboardStakingTab({ variant = 'ERA' }: DashboardStakingTabProp
   // ── LIVE MODE ──────────────────────────────────────────────────────────────
   return (
     <div className="space-y-6">
-      <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6">
+      <div className="landing-card rounded-lg p-6">
         <h3 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] mb-4">{variant} Staking Overview</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-white/3 border border-[#C9A36A]/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
@@ -420,7 +420,7 @@ function PoolCard({ pool, stakedAmount, pendingReward, stakeAmount, withdrawAmou
   const formattedPending = pendingReward > 0n ? formatUnits(pendingReward, 18) : '0';
 
   return (
-    <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 hover:border-[#C9A36A]/35 transition-colors">
+    <div className="landing-card rounded-lg p-6 transition-colors">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h4 className="text-xl font-bold text-[#C9A36A] tracking-[0.03em]">Pool #{pool.pid} - {symbol}</h4>

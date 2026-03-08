@@ -77,39 +77,6 @@ export default function Home() {
 
   return (
     <div className={`${cinzel.className} min-h-screen bg-[#0A0A0A] text-white`}>
-      <style>{`
-        .landing-card {
-          background: rgba(255,255,255,0.05);
-          border: 1px solid rgba(140,90,30,0.22);
-          position: relative;
-          transition: border-color 0.35s ease;
-        }
-        .landing-card::before {
-          content: '';
-          position: absolute;
-          top: -1px;
-          left: 12%;
-          right: 12%;
-          height: 1px;
-          background: linear-gradient(90deg,
-            transparent 0%,
-            rgba(240,202,122,0.80) 50%,
-            transparent 100%
-          );
-          pointer-events: none;
-          transition: opacity 0.35s ease;
-        }
-        .landing-card:hover {
-          border-color: rgba(180,120,40,0.38);
-        }
-        .landing-card:hover::before {
-          background: linear-gradient(90deg,
-            transparent 0%,
-            rgba(252,218,148,1.0) 50%,
-            transparent 100%
-          );
-        }
-      `}</style>
       <Header />
 
       {/* ── Hero ── */}
