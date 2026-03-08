@@ -79,26 +79,35 @@ export default function Home() {
     <div className={`${cinzel.className} min-h-screen bg-[#0A0A0A] text-white`}>
       <style>{`
         .landing-card {
-          background:
-            linear-gradient(rgba(255,255,255,0.05), rgba(255,255,255,0.05)) padding-box,
-            linear-gradient(180deg,
-              rgba(240,202,122,0.70) 0%,
-              rgba(201,163,106,0.30) 30%,
-              rgba(122,79,40,0.12) 70%,
-              rgba(80,50,20,0.08) 100%
-            ) border-box;
-          border: 1px solid transparent;
-          transition: background 0.35s ease;
+          background: rgba(255,255,255,0.05);
+          border: 1px solid rgba(140,90,30,0.22);
+          position: relative;
+          transition: border-color 0.35s ease;
+        }
+        .landing-card::before {
+          content: '';
+          position: absolute;
+          top: -1px;
+          left: 12%;
+          right: 12%;
+          height: 1px;
+          background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(240,202,122,0.80) 50%,
+            transparent 100%
+          );
+          pointer-events: none;
+          transition: opacity 0.35s ease;
         }
         .landing-card:hover {
-          background:
-            linear-gradient(rgba(255,255,255,0.05), rgba(255,255,255,0.05)) padding-box,
-            linear-gradient(180deg,
-              rgba(250,215,140,1.0) 0%,
-              rgba(220,175,100,0.65) 28%,
-              rgba(160,105,50,0.28) 65%,
-              rgba(100,60,20,0.14) 100%
-            ) border-box;
+          border-color: rgba(180,120,40,0.38);
+        }
+        .landing-card:hover::before {
+          background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(252,218,148,1.0) 50%,
+            transparent 100%
+          );
         }
       `}</style>
       <Header />
