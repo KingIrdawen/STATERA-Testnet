@@ -31,6 +31,27 @@ export function DashboardSidebar() {
       icon: <StateraLayersIcon size={20} className="shrink-0" />,
     },
     {
+      href: '/dashboard/staking',
+      label: 'ERA Staking',
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="shrink-0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="10" cy="10" r="7" />
+          <path d="M7 10h6M10 7v6" />
+        </svg>
+      ),
+    },
+    {
+      href: '/dashboard/staking-sta',
+      label: 'STA Staking',
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="shrink-0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="10" cy="10" r="7" />
+          <path d="M7.5 12.5c0 0 .8 1 2.5 1s2.5-1 2.5-2.5S12 9 10 8.5 7.5 7.5 7.5 6.5 8.3 5 10 5s2.5 1 2.5 1" />
+          <path d="M10 4v1M10 15v1" />
+        </svg>
+      ),
+    },
+    {
       href: '/dashboard/referral',
       label: 'Referral',
       icon: (
@@ -54,9 +75,9 @@ export function DashboardSidebar() {
   // Déterminer si un item est actif (pour Dashboard, vérifier si on est sur une page dashboard)
   const isActive = (href: string) => {
     if (href === '/dashboard/strategy') {
-      return pathname?.startsWith('/dashboard/strategy') || pathname === '/dashboard/staking' || pathname === '/dashboard/swap' || pathname === '/dashboard/arbitrage';
+      return pathname?.startsWith('/dashboard/strategy') || pathname === '/dashboard/swap' || pathname === '/dashboard/arbitrage';
     }
-    return pathname === href;
+    return pathname === href || pathname?.startsWith(href + '/');
   };
 
   const headerHeight = address && !isCorrectChain ? 104 : 60;

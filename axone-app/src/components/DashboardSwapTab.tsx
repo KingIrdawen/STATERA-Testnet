@@ -161,10 +161,10 @@ function SwapTabContent() {
         <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-6">
           <div className="flex gap-2 mb-5">
             <div className="flex-1 px-4 py-2 rounded-lg bg-[#C9A36A] text-[#121212] text-sm font-semibold text-center">
-              HYPE → Vault
+              HYPE → ERA
             </div>
             <div className="flex-1 px-4 py-2 rounded-lg bg-white/5 text-[rgba(230,230,230,0.4)] text-sm font-semibold text-center border border-[#C9A36A]/15">
-              Vault → HYPE
+              ERA → HYPE
             </div>
           </div>
 
@@ -267,7 +267,7 @@ function SwapTabContent() {
                   : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
               }`}
             >
-              HYPE → Vault
+              HYPE → ERA
             </button>
             <button
               onClick={() => {
@@ -280,7 +280,7 @@ function SwapTabContent() {
                   : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
               }`}
             >
-              Vault → HYPE
+              ERA → HYPE
             </button>
           </div>
 
@@ -288,7 +288,7 @@ function SwapTabContent() {
           <div className="mb-4">
             <div className="flex items-center justify-between mb-2">
               <label className="block text-white text-sm font-semibold">
-                Amount ({direction === 'HYPE_TO_VAULT' ? 'HYPE' : 'Vault Shares'})
+                Amount ({direction === 'HYPE_TO_VAULT' ? 'HYPE' : 'ERA Shares'})
               </label>
               {address && isCorrectChain && availableBalance > 0 && (
                 <span className="text-gray-400 text-xs">
@@ -311,7 +311,7 @@ function SwapTabContent() {
             <div className="mb-4 p-3 bg-gray-800/50 border border-gray-700 rounded-lg">
               <p className="text-gray-400 text-xs mb-1">Estimated Output</p>
               <p className="text-white text-lg font-semibold">
-                {quote.amountOutFormatted} {direction === 'HYPE_TO_VAULT' ? 'Vault Shares' : 'HYPE'}
+                {quote.amountOutFormatted} {direction === 'HYPE_TO_VAULT' ? 'ERA Shares' : 'HYPE'}
               </p>
               {quote.loading && (
                 <p className="text-[#5a9a9a] text-xs mt-1">Calculating...</p>
@@ -355,7 +355,7 @@ function SwapTabContent() {
                   ? 'Connect Wallet'
                   : !isCorrectChain
                   ? 'Switch Network'
-                  : 'Approve Vault Tokens'}
+                  : 'Approve ERA Tokens'}
               </button>
               {approveError && (
                 <p className="text-red-400 text-xs mt-2 text-center">

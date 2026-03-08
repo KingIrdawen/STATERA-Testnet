@@ -131,6 +131,60 @@ function DemoStrategyCard({ demo }: { demo: typeof DEMO_EXTRA_STRATEGIES[0] }) {
   );
 }
 
+// ─── Staking Summary (below active strategies) ─────────────────────────────
+function StakingSummarySection() {
+  // ⚠️ PLACEHOLDER — Replace with real on-chain staking data when contracts are deployed
+  const eraStaking = [
+    { pid: 0, symbol: 'ERA', aprPercent: 42, stakedAmount: '—', pendingRewards: '—', rewardToken: 'STA' },
+    { pid: 1, symbol: 'ERA-LP', aprPercent: 28, stakedAmount: '—', pendingRewards: '—', rewardToken: 'STA' },
+  ];
+  const staStaking = [
+    { pid: 0, symbol: 'STA', aprPercent: 18, stakedAmount: '—', pendingRewards: '—', rewardToken: 'HYPE' },
+  ];
+
+  const StakingRow = ({ label, pools, href }: { label: string; pools: typeof eraStaking; href: string }) => (
+    <div className="bg-white/5 border border-[#C9A36A]/15 rounded-xl p-5 hover:border-[#C9A36A]/25 transition-colors">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-sm font-semibold text-[#C9A36A] tracking-[0.08em] uppercase">{label}</h3>
+        <a href={href} className="text-[0.6rem] tracking-[0.12em] uppercase text-[rgba(230,230,230,0.4)] hover:text-[#C9A36A] transition-colors">View All →</a>
+      </div>
+      <div className="space-y-3">
+        {pools.map(pool => (
+          <div key={pool.pid} className="flex flex-wrap items-center gap-3 py-2 border-t border-[#C9A36A]/10 first:border-0 first:pt-0">
+            <div className="flex-1 min-w-[100px]">
+              <p className="text-sm text-white font-semibold">Pool #{pool.pid} — {pool.symbol}</p>
+              <p className="text-[0.6rem] text-green-400 font-mono">APR: {pool.aprPercent}%</p>
+            </div>
+            <div className="flex gap-4 text-xs text-[rgba(230,230,230,0.5)]">
+              <span>Staked: <span className="text-white font-mono">{pool.stakedAmount}</span></span>
+              <span>Rewards: <span className="text-green-400 font-mono">{pool.pendingRewards} {pool.rewardToken}</span></span>
+            </div>
+            <button
+              disabled
+              className="px-3 py-1.5 text-[0.6rem] tracking-[0.10em] uppercase bg-[#C9A36A]/30 text-[#C9A36A]/50 rounded font-semibold cursor-not-allowed"
+              title="Available after contract deployment"
+            >
+              Claim
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="mt-12">
+      <div className="text-center mb-6">
+        <h2 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] uppercase">Active Staking</h2>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <StakingRow label="ERA Staking" pools={eraStaking} href="/dashboard/staking" />
+        <StakingRow label="STA Staking" pools={staStaking} href="/dashboard/staking-sta" />
+      </div>
+    </div>
+  );
+}
+
 // ─── Grille des stratégies actives ───────────────────────────────────────────
 function ActiveStrategiesGrid({ strategies, loading }: { strategies: Strategy[]; loading: boolean }) {
   if (loading) {
@@ -211,6 +265,8 @@ export default function StrategyPage() {
 
           {/* Grille des stratégies */}
           <ActiveStrategiesGrid strategies={strategies} loading={loading} />
+
+          <StakingSummarySection />
         </div>
       </main>
 
