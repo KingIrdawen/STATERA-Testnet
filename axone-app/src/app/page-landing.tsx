@@ -77,6 +77,30 @@ export default function Home() {
 
   return (
     <div className={`${cinzel.className} min-h-screen bg-[#0A0A0A] text-white`}>
+      <style>{`
+        .landing-card {
+          background:
+            linear-gradient(rgba(255,255,255,0.05), rgba(255,255,255,0.05)) padding-box,
+            linear-gradient(180deg,
+              rgba(240,202,122,0.70) 0%,
+              rgba(201,163,106,0.30) 30%,
+              rgba(122,79,40,0.12) 70%,
+              rgba(80,50,20,0.08) 100%
+            ) border-box;
+          border: 1px solid transparent;
+          transition: background 0.35s ease;
+        }
+        .landing-card:hover {
+          background:
+            linear-gradient(rgba(255,255,255,0.05), rgba(255,255,255,0.05)) padding-box,
+            linear-gradient(180deg,
+              rgba(250,215,140,1.0) 0%,
+              rgba(220,175,100,0.65) 28%,
+              rgba(160,105,50,0.28) 65%,
+              rgba(100,60,20,0.14) 100%
+            ) border-box;
+        }
+      `}</style>
       <Header />
 
       {/* ── Hero ── */}
@@ -156,7 +180,7 @@ export default function Home() {
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {['Total Deposited', 'Active Vaults', 'Total Unique Deposits'].map((label) => (
-                <div key={label} className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
+                <div key={label} className="landing-card rounded-xl px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
                   <p className="text-[0.6rem] uppercase tracking-[0.18em] text-[rgba(230,230,230,0.6)] mb-3">{label}</p>
                   <p className="text-3xl sm:text-4xl font-semibold" style={goldGradient}>—</p>
                 </div>
@@ -165,7 +189,7 @@ export default function Home() {
           ) : error ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {['Total Deposited', 'Active Vaults', 'Total Unique Deposits'].map((label) => (
-                <div key={label} className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
+                <div key={label} className="landing-card rounded-xl px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
                   <p className="text-[0.6rem] uppercase tracking-[0.18em] text-[rgba(230,230,230,0.6)] mb-3">{label}</p>
                   <p className="text-3xl sm:text-4xl font-semibold" style={goldGradient}>—</p>
                 </div>
@@ -173,19 +197,19 @@ export default function Home() {
             </div>
           ) : stats ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
+              <div className="landing-card rounded-xl px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
                 <p className="text-[0.6rem] uppercase tracking-[0.18em] text-[rgba(230,230,230,0.6)] mb-3">Total Deposited</p>
                 <p className="text-3xl sm:text-4xl font-semibold" style={goldGradient}>
                   <AnimatedCounter value={stats.totalDepositedUsd} duration={2000} formatter={(val) => formatUsd(val)} />
                 </p>
               </div>
-              <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
+              <div className="landing-card rounded-xl px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
                 <p className="text-[0.6rem] uppercase tracking-[0.18em] text-[rgba(230,230,230,0.6)] mb-3">Active Vaults</p>
                 <p className="text-3xl sm:text-4xl font-semibold" style={goldGradient}>
                   <AnimatedCounter value={stats.vaultCount} duration={2000} formatter={(val) => Math.floor(val).toString()} />
                 </p>
               </div>
-              <div className="rounded-xl bg-white/5 border border-[#C9A36A]/15 px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
+              <div className="landing-card rounded-xl px-6 py-6 flex flex-col items-center justify-center text-center min-h-[140px]">
                 <p className="text-[0.6rem] uppercase tracking-[0.18em] text-[rgba(230,230,230,0.6)] mb-3">Total Unique Deposits</p>
                 <p className="text-3xl sm:text-4xl font-semibold" style={goldGradient} title="Number of deposit transactions across all deployed vaults">
                   <AnimatedCounter value={stats.totalDepositCount} duration={2000} formatter={(val) => Math.floor(val).toLocaleString()} />
@@ -270,7 +294,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {topVaults.map((vault, index) => (
                 <Reveal key={vault.id} delayMs={200 + index * 100}>
-                  <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 hover:border-[#C9A36A]/35 transition-colors">
+                  <div className="landing-card rounded-lg p-6 transition-colors">
                     <div className="flex items-start justify-between mb-4">
                       <h3 className="text-base font-semibold tracking-[0.08em]" style={goldGradient}>{vault.name}</h3>
                       <span className={`px-2 py-1 rounded text-[0.6rem] tracking-[0.12em] font-semibold uppercase ${
@@ -333,7 +357,7 @@ export default function Home() {
               { n: '4', title: 'Transparency', text: "All positions, rebalancing, and fees are recorded on-chain. View your strategy's performance in real-time." },
             ].map((item, i) => (
               <Reveal key={item.n} delayMs={200 + i * 100}>
-                <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center hover:border-[#C9A36A]/35 transition-colors duration-300">
+                <div className="landing-card rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center transition-colors duration-300">
                   <div className="w-11 h-11 rounded-full bg-[#C9A36A] flex items-center justify-center text-[#0A0A0A] font-bold text-base mb-4 tracking-normal">
                     {item.n}
                   </div>
@@ -367,7 +391,7 @@ export default function Home() {
               { title: 'Execution Advantages', text: "Leveraging Hyperliquid's decentralized order book and high-performance infrastructure, rebalancing executes with minimal slippage, low fees, and instant settlement." },
             ].map((item, i) => (
               <Reveal key={item.title} delayMs={200 + i * 100}>
-                <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 min-h-[220px] flex flex-col items-center justify-start text-center hover:border-[#C9A36A]/35 transition-colors duration-300">
+                <div className="landing-card rounded-lg p-6 min-h-[220px] flex flex-col items-center justify-start text-center transition-colors duration-300">
                   <h3 className="text-sm font-semibold tracking-[0.10em] mb-3" style={goldGradient}>{item.title}</h3>
                   <p className="text-[rgba(230,230,230,0.6)] text-xs leading-relaxed font-light tracking-wide">{item.text}</p>
                 </div>
@@ -397,7 +421,7 @@ export default function Home() {
               { title: 'External Fees', sub: 'Network and execution costs', text: 'Hypercore fees related to Hyperliquid infrastructure. All fees are recorded on-chain and verifiable via block explorer.' },
             ].map((item, i) => (
               <Reveal key={item.title} delayMs={200 + i * 100}>
-                <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center hover:border-[#C9A36A]/35 transition-colors duration-300">
+                <div className="landing-card rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center transition-colors duration-300">
                   <h3 className="text-sm font-semibold tracking-[0.10em] mb-4" style={goldGradient}>{item.title}</h3>
                   <p className="text-[#E6E6E6] text-xs font-medium mb-2 tracking-wide">{item.sub}</p>
                   <p className="text-[rgba(230,230,230,0.6)] text-xs font-light tracking-wide">{item.text}</p>
@@ -432,7 +456,7 @@ export default function Home() {
               { title: 'Referral', text: 'Referral system allowing users to invite others. Rewards or benefits follow the rules defined in the referral contracts.' },
             ].map((item, i) => (
               <Reveal key={item.title} delayMs={200 + i * 50}>
-                <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center hover:border-[#C9A36A]/35 transition-colors duration-300">
+                <div className="landing-card rounded-lg p-6 min-h-[200px] flex flex-col items-center justify-start text-center transition-colors duration-300">
                   <h3 className="text-sm font-semibold tracking-[0.10em] mb-3" style={goldGradient}>{item.title}</h3>
                   <p className="text-[rgba(230,230,230,0.6)] text-xs leading-relaxed font-light tracking-wide">{item.text}</p>
                 </div>
@@ -459,7 +483,7 @@ export default function Home() {
               { title: 'On-Chain Accounting', text: 'All deposits, withdrawals, and rebalancing operations are recorded on-chain. Verify everything via block explorer.' },
             ].map((item, i) => (
               <Reveal key={item.title} delayMs={200 + i * 100}>
-                <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-6 min-h-[180px] flex flex-col items-center justify-start text-center hover:border-[#C9A36A]/35 transition-colors duration-300">
+                <div className="landing-card rounded-lg p-6 min-h-[180px] flex flex-col items-center justify-start text-center transition-colors duration-300">
                   <h3 className="text-sm font-semibold tracking-[0.10em] mb-3" style={goldGradient}>{item.title}</h3>
                   <p className="text-[rgba(230,230,230,0.6)] text-xs leading-relaxed font-light tracking-wide">{item.text}</p>
                 </div>
