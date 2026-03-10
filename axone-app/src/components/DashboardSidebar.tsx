@@ -107,7 +107,10 @@ export function DashboardSidebar() {
                 {item.icon}
                 <span className={active ? 'font-bold' : 'font-medium'}>{item.label}</span>
                 {active && (
-                  <span className="absolute right-0 top-2 bottom-2 w-[2px] bg-[#C9A36A] rounded-l-full" />
+                  <span
+                    className="absolute right-0 top-2 bottom-2 w-[2px] rounded-l-full"
+                    style={{ background: 'linear-gradient(to bottom, transparent 0%, rgba(240,202,122,0.80) 50%, transparent 100%)' }}
+                  />
                 )}
               </Link>
             );
