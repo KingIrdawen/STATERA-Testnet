@@ -79,7 +79,7 @@ export function DashboardHeader() {
             </Link>
 
             {/* Navigation centrée — desktop only */}
-            <nav className="hidden md:flex items-center gap-4 sm:gap-6 absolute left-1/2 transform -translate-x-1/2">
+            <nav className="hidden lg:flex items-center gap-4 sm:gap-6 absolute left-1/2 transform -translate-x-1/2">
               {centerLinks.map((link) => (
                 <Link
                   key={link.href}
