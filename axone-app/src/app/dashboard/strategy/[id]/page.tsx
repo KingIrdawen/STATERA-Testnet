@@ -8,6 +8,7 @@ import { formatUnits } from 'viem';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import { DashboardHeader } from '@/components/DashboardHeader';
 import { useWhitelistCheck } from '@/hooks/useWhitelistCheck';
+import { cinzel } from '@/lib/fonts';
 import type { Strategy } from '@/types/strategy';
 import { useStrategies } from '@/hooks/useStrategies';
 import { useStrategyData } from '@/hooks/useStrategyDataEra';
@@ -422,7 +423,7 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
     : null;
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className={`min-h-screen bg-[#0A0A0A] text-white ${cinzel.className}`}>
       {/* Header with navigation */}
       <DashboardHeader />
 
@@ -432,42 +433,52 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
           {/* Back button */}
           <Link
             href="/dashboard/strategy"
-            className="inline-flex items-center gap-2 text-[#5a9a9a] hover:text-[#C9A36A] transition-colors mb-6"
+            className="inline-flex items-center gap-2 text-[rgba(230,230,230,0.4)] hover:text-[#C9A36A] transition-colors mb-8 text-sm tracking-wide"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             Back to Dashboard
           </Link>
 
-          {/* Strategy Header */}
-          <div className="mb-8">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-[#C9A36A] to-[#5a9a9a] bg-clip-text text-transparent">
-                {strategy?.name ?? 'Strategy'}
-              </span>
+          {/* Strategy Header — même style que les autres pages */}
+          <div className="text-center mb-10">
+            <h1
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-[0.04em] mb-4"
+              style={{
+                background: 'linear-gradient(135deg, #7A4F28 0%, #C98B3D 25%, #F0CA7A 50%, #C98B3D 75%, #7A4F28 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
+              {strategy?.name ?? 'Strategy'}
             </h1>
-            <p className="text-[#5a9a9a] text-lg mb-4">Strategy statistics and actions</p>
             {strategy?.description && (
-              <p className="text-gray-400 text-sm mb-4">{strategy.description}</p>
+              <p className="text-[rgba(230,230,230,0.5)] text-sm tracking-[0.08em] mb-4 max-w-2xl mx-auto">
+                {strategy.description}
+              </p>
             )}
-            <div className="flex items-center gap-4">
-              {strategy?.riskLevel && (
-                <span className={`px-3 py-1 rounded-full text-sm font-semibold border ${
-                  strategy.riskLevel === 'low' ? 'bg-green-400/20 border-green-400/30 text-green-400' :
-                  strategy.riskLevel === 'medium' ? 'bg-yellow-400/20 border-yellow-400/30 text-yellow-400' :
-                  'bg-red-400/20 border-red-400/30 text-red-400'
-                }`}>
-                  {strategy.riskLevel}
-                </span>
-              )}
+            <span className="title-glow-line" />
+            <span className="title-glow-blur" />
+            {/* Badges risk / status */}
+            <div className="flex items-center justify-center gap-3 mt-4">
               {strategy?.status && (
-                <span className={`px-3 py-1 rounded text-sm font-semibold ${
+                <span className={`px-3 py-1 rounded text-xs font-semibold tracking-wide ${
                   strategy.status === 'open' ? 'bg-green-400/20 text-green-400' :
                   strategy.status === 'paused' ? 'bg-yellow-400/20 text-yellow-400' :
                   'bg-red-400/20 text-red-400'
                 }`}>
-                  {strategy.status}
+                  {strategy.status.toUpperCase()}
+                </span>
+              )}
+              {strategy?.riskLevel && (
+                <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${
+                  strategy.riskLevel === 'low' ? 'bg-green-400/20 border-green-400/30 text-green-400' :
+                  strategy.riskLevel === 'medium' ? 'bg-yellow-400/20 border-yellow-400/30 text-yellow-400' :
+                  'bg-red-400/20 border-red-400/30 text-red-400'
+                }`}>
+                  {strategy.riskLevel.toUpperCase()}
                 </span>
               )}
             </div>

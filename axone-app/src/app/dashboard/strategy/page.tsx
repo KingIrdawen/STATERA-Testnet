@@ -1,5 +1,6 @@
 'use client';
 
+import { useCallback, useState, useEffect } from 'react';
 import { useAccount, useChainId } from 'wagmi';
 import { useStrategies } from '@/hooks/useStrategies';
 import { StrategyCardEra } from '@/components/StrategyCardEra';
@@ -7,49 +8,82 @@ import { DashboardHeader } from '@/components/DashboardHeader';
 import { DashboardSidebar } from '@/components/DashboardSidebar';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import { useWhitelistCheck } from '@/hooks/useWhitelistCheck';
-import { DEMO_STRATEGY_METRICS } from '@/lib/placeholders';
+import { useStrategyData } from '@/hooks/useStrategyDataEra';
 import { formatUsd } from '@/lib/format';
 import Link from 'next/link';
 import type { Strategy } from '@/types/strategy';
 import { cinzel } from '@/lib/fonts';
 
-// ─── Portfolio Overview (démo) ────────────────────────────────────────────────
-function DemoPortfolioOverview() {
-  // ⚠️  PLACEHOLDER — Données portfolio démo. À remplacer par les vraies valeurs on-chain.
-  const demoTotalValue = 5_000;
-  const demoDailyPnl = +127.50;
-  const demoDailyPct = +2.55;
+// ─── Tracker silencieux : lit la valeur on-chain pour UNE stratégie ───────────
+function StrategyValueTracker({
+  strategy,
+  onValue,
+}: {
+  strategy: Strategy;
+  onValue: (id: string, value: number | undefined) => void;
+}) {
+  const data = useStrategyData(strategy);
+  useEffect(() => {
+    onValue(strategy.id, data.userValueUsd);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [strategy.id, data.userValueUsd]);
+  return null;
+}
+
+// ─── Portfolio Overview — valeurs on-chain réelles ────────────────────────────
+function PortfolioOverview({ strategies }: { strategies: Strategy[] }) {
+  const { address } = useAccount();
+  const [values, setValues] = useState<Record<string, number>>({});
+
+  const handleValue = useCallback((id: string, value: number | undefined) => {
+    if (value !== undefined && value > 0) {
+      setValues(prev => ({ ...prev, [id]: value }));
+    }
+  }, []);
+
+  const totalValue = Object.values(values).reduce((sum, v) => sum + v, 0);
+  const activePositions = Object.values(values).filter(v => v > 0).length;
+
+  if (!address) {
+    return (
+      <div className="landing-card rounded-xl p-5 mb-10 text-center">
+        <p className="text-[rgba(230,230,230,0.4)] text-sm">Connect your wallet to see your portfolio.</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-      <div className="landing-card rounded-xl p-5 transition-colors duration-300 flex flex-col items-center justify-center text-center">
-        <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)] mb-2">
-          Total Portfolio Value
-        </p>
-        <p className="text-3xl font-semibold text-[#C9A36A] font-mono">
-          {formatUsd(demoTotalValue, 2)}
-        </p>
-        <p className="text-[0.65rem] text-[rgba(230,230,230,0.25)] mt-1 tracking-[0.08em] uppercase">Demo data</p>
+    <>
+      {/* Trackers silencieux — un par stratégie */}
+      {strategies.map(s => (
+        <StrategyValueTracker key={s.id} strategy={s} onValue={handleValue} />
+      ))}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+        <div className="landing-card rounded-xl p-5 transition-colors duration-300 flex flex-col items-center justify-center text-center">
+          <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)] mb-2">
+            Total Portfolio Value
+          </p>
+          <p className="text-3xl font-semibold text-[#C9A36A] font-mono">
+            {totalValue > 0 ? formatUsd(totalValue, 2) : '—'}
+          </p>
+          <p className="text-[0.65rem] text-[rgba(230,230,230,0.25)] mt-1 tracking-[0.08em] uppercase">
+            Live on-chain
+          </p>
+        </div>
+        <div className="landing-card rounded-xl p-5 transition-colors duration-300 flex flex-col items-center justify-center text-center">
+          <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)] mb-2">
+            Active Positions
+          </p>
+          <p className="text-3xl font-semibold text-[#C9A36A] font-mono">
+            {activePositions > 0 ? activePositions : '—'}
+          </p>
+          <p className="text-[0.65rem] text-[rgba(230,230,230,0.25)] mt-1 tracking-[0.08em] uppercase">
+            Vault{activePositions !== 1 ? 's' : ''} with deposits
+          </p>
+        </div>
       </div>
-      <div className="landing-card rounded-xl p-5 transition-colors duration-300 flex flex-col items-center justify-center text-center">
-        <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)] mb-2">
-          24h PnL
-        </p>
-        <p className="text-3xl font-semibold text-green-400 font-mono">
-          +{formatUsd(demoDailyPnl, 2)}
-        </p>
-        <p className="text-[0.65rem] text-[rgba(230,230,230,0.25)] mt-1 tracking-[0.08em] uppercase">Demo data</p>
-      </div>
-      <div className="landing-card rounded-xl p-5 transition-colors duration-300 flex flex-col items-center justify-center text-center">
-        <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)] mb-2">
-          24h Return
-        </p>
-        <p className="text-3xl font-semibold text-green-400 font-mono">
-          +{demoDailyPct.toFixed(2)}%
-        </p>
-        <p className="text-[0.65rem] text-[rgba(230,230,230,0.25)] mt-1 tracking-[0.08em] uppercase">Demo data</p>
-      </div>
-    </div>
+    </>
   );
 }
 
@@ -189,8 +223,7 @@ export default function StrategyPage() {
             <span className="title-glow-blur" />
           </div>
 
-          {/* ⚠️  PLACEHOLDER — Portfolio overview. À remplacer par les vraies valeurs on-chain. */}
-          <DemoPortfolioOverview />
+          <PortfolioOverview strategies={strategies} />
 
           {/* Section titre stratégies */}
           <div className="text-center mb-6">
