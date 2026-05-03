@@ -46,50 +46,6 @@ export const DEMO_STRATEGY_METRICS: Record<string, DemoStrategyMetrics> = {
   },
 };
 
-/**
- * ⚠️  PLACEHOLDER — Stratégies démo supplémentaires (UI only, sans contrats)
- * Ces cartes sont purement visuelles pour montrer à quoi ressemblera l'app.
- * À supprimer / remplacer quand les vraies stratégies seront déployées.
- */
-export const DEMO_EXTRA_STRATEGIES = [
-  {
-    id: 'demo-hype-eth',
-    name: 'HYPE / ETH Index',
-    description: '50% HYPE / 50% ETH — Growth strategy with Ethereum exposure',
-    riskLevel: 'medium' as const,
-    status: 'open' as const,
-    tokens: ['HYPE', 'ETH'],
-    allocations: [50, 50],
-    metrics: {
-      tvlUsd: 890_500,
-      ppsUsd: 1.1234,
-      apr1d: 19.8,
-      apr7d: 28.3,
-      apr30d: 24.7,
-      oracleHypeUsd: 28.45,
-      oracleToken1Usd: 3_180,
-    },
-  },
-  {
-    id: 'demo-hype-stable',
-    name: 'HYPE Stable',
-    description: '80% HYPE / 20% USDC — Conservative strategy with stability',
-    riskLevel: 'low' as const,
-    status: 'open' as const,
-    tokens: ['HYPE', 'USDC'],
-    allocations: [80, 20],
-    metrics: {
-      tvlUsd: 456_200,
-      ppsUsd: 1.0312,
-      apr1d: 7.5,
-      apr7d: 9.1,
-      apr30d: 8.2,
-      oracleHypeUsd: 28.45,
-      oracleToken1Usd: 1.0,
-    },
-  },
-];
-
 // ─── POINTS ──────────────────────────────────────────────────────────────────
 
 /**

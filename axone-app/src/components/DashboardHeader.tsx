@@ -42,7 +42,7 @@ export function DashboardHeader() {
   };
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-[9999] bg-black/95 backdrop-blur-md relative">
+    <header className="fixed left-0 right-0 top-0 z-[9999] bg-black/95 backdrop-blur-md">
       {/* Bandeau Wrong Network intégré dans le header */}
       {address && !isCorrectChain && (
         <div className="bg-red-600 text-white text-center py-3 px-4 text-sm font-semibold shadow-lg border-b-2 border-red-700">
@@ -62,9 +62,9 @@ export function DashboardHeader() {
       )}
       <div className="w-full">
         <div className="w-full px-6 sm:px-8 lg:px-12">
-          <div className={`flex items-center justify-between py-4 ${address && !isCorrectChain ? '' : ''}`}>
-            {/* Logo et nom */}
-            <Link href="/" className="flex items-center gap-3 sm:gap-4">
+          <div className="grid grid-cols-3 items-center py-4">
+            {/* Colonne gauche — Logo */}
+            <Link href="/" className="flex items-center gap-3 sm:gap-4 justify-self-start">
               <Image
                 src="/Logo-Statera-sandy-brown-détouré.png"
                 alt="Statera Logo"
@@ -78,8 +78,8 @@ export function DashboardHeader() {
               </span>
             </Link>
 
-            {/* Navigation centrée — desktop only */}
-            <nav className="hidden lg:flex items-center gap-4 sm:gap-6 absolute left-1/2 transform -translate-x-1/2">
+            {/* Colonne centrale — Navigation Referral / Points / Docs */}
+            <nav className="hidden lg:flex items-center justify-center gap-4 sm:gap-6">
               {centerLinks.map((link) => (
                 <Link
                   key={link.href}
@@ -95,8 +95,8 @@ export function DashboardHeader() {
               ))}
             </nav>
 
-            {/* Navigation droite */}
-            <div className="flex items-center gap-4 sm:gap-6">
+            {/* Colonne droite — Admin + Wallet */}
+            <div className="flex items-center gap-4 sm:gap-6 justify-self-end">
               <Link
                 href="/admin"
                 className="hidden md:inline-flex text-white font-bold text-xs sm:text-sm md:text-base hover:text-[#C9A36A] transition-colors tracking-tight"
@@ -132,6 +132,7 @@ export function DashboardHeader() {
           </div>
         </div>
       </div>
+
       {/* Golden glow separator line */}
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C9A36A]/45 to-transparent pointer-events-none" />
       <div className="absolute bottom-0 left-1/4 right-1/4 h-[3px] blur-[3px] bg-[#C9A36A]/20 pointer-events-none" />
