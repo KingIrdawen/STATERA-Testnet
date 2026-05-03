@@ -45,7 +45,7 @@ const BLANK_V3: StrategyInput = {
   },
 };
 
-// Nouveaux vaults v3 déployés (2026-04-30)
+// Vaults v3 (2026-04-30) + v4 (2026-05-01)
 const V3_PRESETS = [
   {
     name: 'HYPE / SOVY (équilibré)',
@@ -67,6 +67,13 @@ const V3_PRESETS = [
     riskLevel: 'high' as const,
     status: 'open' as const,
     vaultAddress: '0xcdcdc574d4f13f510ec2d12bcfd23003cb330f9a',
+  },
+  {
+    name: 'HYPE / UETH / UNIT (multi)',
+    description: '33% HYPE / 33% UETH / 34% UNIT — RebalancingVault v4 — maxSingleDeposit: 10 HYPE',
+    riskLevel: 'medium' as const,
+    status: 'open' as const,
+    vaultAddress: '0x3DBCd84FB3C5C8Ae0D228c6C80f207325a5B8bA6',
   },
 ];
 

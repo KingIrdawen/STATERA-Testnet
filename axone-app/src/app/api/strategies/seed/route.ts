@@ -1,13 +1,14 @@
 /**
  * POST /api/strategies/seed
- * Ajoute les 3 vaults v3 déployés le 2026-04-30 si absents du KV.
+ * Ajoute les vaults v3 (2026-04-30) et v4 (2026-05-01) si absents du KV.
  * Appeler une seule fois depuis l'admin ou via curl.
  */
 import { NextResponse } from 'next/server';
 import { getAllStrategies, saveStrategy } from '@/lib/strategyRepo';
 import type { StrategyInput } from '@/types/strategy';
 
-const V3_VAULTS: StrategyInput[] = [
+const ALL_VAULTS: StrategyInput[] = [
+  // ─── Vaults v3 (déployés le 2026-04-30) ──────────────────────────────────
   {
     name: 'HYPE / SOVY (équilibré)',
     description: '48% HYPE / 48% SOVY / 4% USDC — RebalancingVault v3 — Symbol: stHSOVY3',
@@ -53,6 +54,22 @@ const V3_VAULTS: StrategyInput[] = [
       depositIsNative: true,
     },
   },
+  // ─── Vault v4 (déployé le 2026-05-01) — multi-counterpart ────────────────
+  {
+    name: 'HYPE / UETH / UNIT (multi)',
+    description: '33% HYPE / 33% UETH / 34% UNIT — RebalancingVault v4 — maxSingleDeposit: 10 HYPE',
+    riskLevel: 'medium',
+    status: 'open',
+    contracts: {
+      chainId: 998,
+      vaultVersion: 'v3',
+      vaultAddress: '0x3DBCd84FB3C5C8Ae0D228c6C80f207325a5B8bA6',
+      shareDecimals: 18,
+      hypeDecimals: 18,
+      usdcDecimals: 6,
+      depositIsNative: true,
+    },
+  },
 ];
 
 export async function POST() {
@@ -63,7 +80,7 @@ export async function POST() {
     );
 
     const added: string[] = [];
-    for (const vault of V3_VAULTS) {
+    for (const vault of ALL_VAULTS) {
       const addr = vault.contracts.vaultAddress.toLowerCase();
       if (!existingAddresses.has(addr)) {
         await saveStrategy(vault);
@@ -74,7 +91,7 @@ export async function POST() {
     return NextResponse.json({
       message: added.length > 0
         ? `${added.length} vault(s) ajouté(s) : ${added.join(', ')}`
-        : 'Tous les vaults v3 sont déjà présents.',
+        : 'Tous les vaults sont déjà présents.',
       added,
     });
   } catch (error) {
