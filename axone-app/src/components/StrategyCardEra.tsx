@@ -291,21 +291,21 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
                   </button>
                 )}
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 min-w-0">
                 <input
                   type="number"
                   step="0.0001"
                   value={withdrawAmount}
                   onChange={(e) => setWithdrawAmount(e.target.value)}
                   placeholder="0.0"
-                  className="flex-1 px-3 py-2 bg-white/5 border border-[#C9A36A]/20 rounded-lg text-white text-sm focus:border-[#C9A36A]/60 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="flex-1 min-w-0 px-3 py-2 bg-white/5 border border-[#C9A36A]/20 rounded-lg text-white text-sm focus:border-[#C9A36A]/60 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
                 <button
                   onClick={handleWithdraw}
                   disabled={isWithdrawPending || !withdrawAmount || parseFloat(withdrawAmount) <= 0}
-                  className="px-4 py-2 bg-red-600/80 text-white rounded-lg text-sm font-semibold hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="shrink-0 px-4 py-2 bg-red-600/80 text-white rounded-lg text-sm font-semibold hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isWithdrawPending ? 'Withdrawing...' : 'Withdraw'}
+                  {isWithdrawPending ? '...' : 'Withdraw'}
                 </button>
               </div>
               {withdrawError && (

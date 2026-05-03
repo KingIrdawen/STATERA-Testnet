@@ -9,6 +9,8 @@ import { DashboardHeader } from '@/components/DashboardHeader';
 import { DashboardSidebar } from '@/components/DashboardSidebar';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import { useWhitelistCheck } from '@/hooks/useWhitelistCheck';
+import { useStrategyData } from '@/hooks/useStrategyDataEra';
+import { formatUsd } from '@/lib/format';
 import { cinzel } from '@/lib/fonts';
 import type { Strategy } from '@/types/strategy';
 
@@ -36,30 +38,76 @@ function GridIcon() {
 
 function getRiskColor(risk: string) {
   switch (risk) {
-    case 'low': return 'text-green-400';
-    case 'medium': return 'text-yellow-400';
-    case 'high': return 'text-red-400';
-    default: return 'text-gray-400';
+    case 'low': return 'text-green-400 bg-green-400/15 border-green-400/25';
+    case 'medium': return 'text-yellow-400 bg-yellow-400/15 border-yellow-400/25';
+    case 'high': return 'text-red-400 bg-red-400/15 border-red-400/25';
+    default: return 'text-gray-400 bg-gray-400/15 border-gray-400/25';
   }
 }
 
-// ─── Real strategy list row ────────────────────────────────────────────────────
+// ─── Vue liste enrichie avec données on-chain ─────────────────────────────────
 function StrategyListRow({ strategy }: { strategy: Strategy }) {
+  const data = useStrategyData(strategy);
+
   return (
-    <div className="landing-card flex flex-wrap items-center gap-3 p-4 rounded-lg hover:border-[#C9A36A]/30 transition-colors">
-      <div className="flex-1 min-w-[140px]">
-        <p className="text-[#C9A36A] font-semibold text-sm">{strategy.name}</p>
-        <p className="text-[rgba(230,230,230,0.4)] text-[0.6rem] uppercase tracking-wide">{strategy.riskLevel}</p>
+    <div className="landing-card rounded-xl p-5 hover:border-[#C9A36A]/30 transition-colors">
+      {/* Ligne principale : nom + badges + bouton */}
+      <div className="flex flex-wrap items-start gap-3 mb-3">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap mb-1">
+            <p className="text-[#C9A36A] font-semibold text-sm">{strategy.name}</p>
+            {strategy.status && (
+              <span className={`px-1.5 py-0.5 rounded text-[0.55rem] font-bold uppercase border ${
+                strategy.status === 'open'
+                  ? 'text-green-400 bg-green-400/15 border-green-400/25'
+                  : 'text-yellow-400 bg-yellow-400/15 border-yellow-400/25'
+              }`}>
+                {strategy.status}
+              </span>
+            )}
+            <span className={`px-1.5 py-0.5 rounded text-[0.55rem] font-bold uppercase border ${getRiskColor(strategy.riskLevel)}`}>
+              {strategy.riskLevel}
+            </span>
+          </div>
+          {strategy.description && (
+            <p className="text-[rgba(230,230,230,0.45)] text-xs leading-relaxed">{strategy.description}</p>
+          )}
+        </div>
+        <Link
+          href={`/dashboard/strategy/${strategy.id}`}
+          className="shrink-0 px-4 py-2 text-[0.6rem] tracking-[0.12em] uppercase bg-[#C9A36A] text-[#0A0A0A] rounded font-semibold hover:bg-[#b8935f] transition-colors"
+        >
+          Invest
+        </Link>
       </div>
-      <div className="flex gap-4 text-xs text-[rgba(230,230,230,0.5)] flex-wrap">
-        <span>Status: <span className={`font-semibold ${strategy.status === 'open' ? 'text-green-400' : 'text-yellow-400'}`}>{strategy.status}</span></span>
+
+      {/* Métriques on-chain */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-1.5 pt-3 border-t border-[#C9A36A]/10">
+        <div>
+          <p className="text-[0.6rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)] mb-0.5">TVL</p>
+          <p className="text-[#E6E6E6] text-xs font-mono font-semibold">
+            {data.loading ? '…' : data.tvlUsd !== undefined ? formatUsd(data.tvlUsd, 2) : '—'}
+          </p>
+        </div>
+        <div>
+          <p className="text-[0.6rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)] mb-0.5">Your Deposit</p>
+          <p className="text-[#E6E6E6] text-xs font-mono">
+            {data.loading ? '…' : data.userValueUsd !== undefined ? formatUsd(data.userValueUsd, 2) : '—'}
+          </p>
+        </div>
+        <div>
+          <p className="text-[0.6rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)] mb-0.5">PPS</p>
+          <p className="text-[#E6E6E6] text-xs font-mono">
+            {data.loading ? '…' : data.ppsUsd !== undefined ? formatUsd(data.ppsUsd, 4) : '—'}
+          </p>
+        </div>
+        <div>
+          <p className="text-[0.6rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)] mb-0.5">Your Shares</p>
+          <p className="text-[#E6E6E6] text-xs font-mono">
+            {data.loading ? '…' : data.userShares !== undefined ? data.userShares.toFixed(4) : '—'}
+          </p>
+        </div>
       </div>
-      <Link
-        href={`/dashboard/strategy/${strategy.id}`}
-        className="px-4 py-2 text-[0.6rem] tracking-[0.12em] uppercase bg-[#C9A36A] text-[#0A0A0A] rounded font-semibold hover:bg-[#b8935f] transition-colors shrink-0"
-      >
-        Invest
-      </Link>
     </div>
   );
 }

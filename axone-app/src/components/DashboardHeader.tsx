@@ -62,9 +62,9 @@ export function DashboardHeader() {
       )}
       <div className="w-full">
         <div className="w-full px-6 sm:px-8 lg:px-12">
-          <div className="grid grid-cols-3 items-center py-4">
-            {/* Colonne gauche — Logo */}
-            <Link href="/" className="flex items-center gap-3 sm:gap-4 justify-self-start">
+          <div className="flex items-center justify-between py-4 relative">
+            {/* Logo — gauche */}
+            <Link href="/" className="flex items-center gap-3 sm:gap-4 z-10">
               <Image
                 src="/Logo-Statera-sandy-brown-détouré.png"
                 alt="Statera Logo"
@@ -78,8 +78,8 @@ export function DashboardHeader() {
               </span>
             </Link>
 
-            {/* Colonne centrale — Navigation Referral / Points / Docs */}
-            <nav className="hidden lg:flex items-center justify-center gap-4 sm:gap-6">
+            {/* Navigation centrale — positionnée absolument pour centrage parfait sur le viewport */}
+            <nav className="hidden lg:flex items-center gap-4 sm:gap-6 absolute left-1/2 -translate-x-1/2">
               {centerLinks.map((link) => (
                 <Link
                   key={link.href}
@@ -95,8 +95,8 @@ export function DashboardHeader() {
               ))}
             </nav>
 
-            {/* Colonne droite — Admin + Wallet */}
-            <div className="flex items-center gap-4 sm:gap-6 justify-self-end">
+            {/* Admin + Wallet — droite */}
+            <div className="flex items-center gap-4 sm:gap-6 z-10">
               <Link
                 href="/admin"
                 className="hidden md:inline-flex text-white font-bold text-xs sm:text-sm md:text-base hover:text-[#C9A36A] transition-colors tracking-tight"
