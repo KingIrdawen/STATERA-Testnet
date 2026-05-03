@@ -1,19 +1,29 @@
 // axone-app/src/lib/kv.ts
-// Utilise l'export automatique de @vercel/kv qui lit KV_REST_API_URL et KV_REST_API_TOKEN
-import { kv as vercelKv } from "@vercel/kv";
+// Utilise @upstash/redis avec Redis.fromEnv() qui lit automatiquement
+// KV_REST_API_URL et KV_REST_API_TOKEN (variables injectées par Vercel/Upstash)
+import { Redis } from '@upstash/redis';
+
+let redisClient: Redis | null = null;
+
+function getRedis(): Redis {
+  if (!redisClient) {
+    redisClient = Redis.fromEnv();
+  }
+  return redisClient;
+}
 
 export function getKv() {
-  return vercelKv;
+  return getRedis();
 }
 
 export const kv = {
   get: async <T>(key: string): Promise<T | null> => {
-    return vercelKv.get<T>(key);
+    return getRedis().get<T>(key);
   },
   set: async (key: string, value: any): Promise<void> => {
-    await vercelKv.set(key, value);
+    await getRedis().set(key, value);
   },
   lrange: async <T>(key: string, start: number, stop: number): Promise<T[]> => {
-    return vercelKv.lrange<T>(key, start, stop);
+    return getRedis().lrange<T>(key, start, stop);
   },
 };
