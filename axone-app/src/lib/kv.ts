@@ -1,18 +1,23 @@
 // axone-app/src/lib/kv.ts
 import { createClient } from "@vercel/kv";
 
-// Créer le client KV — accepte les noms Vercel natifs ou Upstash marketplace
+// Créer le client KV — accepte tous les noms possibles selon l'intégration utilisée
 function createKvClient() {
   const url =
-    process.env.strategies_KV_REST_API_URL ||
-    process.env.KV_REST_API_URL;
+    process.env.strategies_KV_REST_API_URL ||    // nom historique custom
+    process.env.KV_REST_API_URL ||               // Vercel KV natif
+    process.env.STORAGE_KV_REST_API_URL ||       // Upstash marketplace (préfixe STORAGE)
+    process.env.UPSTASH_REDIS_REST_URL;          // Upstash direct
+
   const token =
-    process.env.strategies_KV_REST_API_TOKEN ||
-    process.env.KV_REST_API_TOKEN;
+    process.env.strategies_KV_REST_API_TOKEN ||  // nom historique custom
+    process.env.KV_REST_API_TOKEN ||             // Vercel KV natif
+    process.env.STORAGE_KV_REST_API_TOKEN ||     // Upstash marketplace (préfixe STORAGE)
+    process.env.UPSTASH_REDIS_REST_TOKEN;        // Upstash direct
 
   if (!url || !token) {
     throw new Error(
-      'Vercel KV credentials not configured. Please set KV_REST_API_URL and KV_REST_API_TOKEN (or strategies_KV_REST_API_URL / strategies_KV_REST_API_TOKEN)'
+      `Vercel KV credentials not configured. Tried: KV_REST_API_URL, STORAGE_KV_REST_API_URL, UPSTASH_REDIS_REST_URL. Please set one of these in your Vercel environment variables.`
     );
   }
 
