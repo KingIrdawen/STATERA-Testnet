@@ -4,7 +4,7 @@ import { defineChain } from 'viem';
 
 // Configuration de la chaîne HyperEVM Testnet
 // Utiliser une variable d'environnement pour l'URL RPC si disponible, sinon utiliser l'URL Chainstack par défaut
-const rpcUrl = process.env.NEXT_PUBLIC_HYPEREVM_RPC_URL || 'https://hyperliquid-testnet.core.chainstack.com/98107cd968ac1c4168c442fa6b1fe200/evm';
+const rpcUrl = process.env.NEXT_PUBLIC_HYPEREVM_RPC_URL || 'https://rpc.hyperliquid-testnet.xyz/evm';
 
 export const hyperevmTestnet = defineChain({
   id: 998,

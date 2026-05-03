@@ -68,8 +68,9 @@ function SwapTabContent() {
   // Get vault token balance for VAULT_TO_HYPE direction
   const vaultContracts = selected?.strategy ? getStrategyContracts(selected.strategy) : null;
   const shareDecimals = selected?.strategy?.contracts?.shareDecimals ?? 18;
+  const vaultForRead = vaultContracts?.vault as any;
   const { data: vaultTokenBalanceRaw } = useReadContract({
-    ...vaultContracts?.vault,
+    ...vaultForRead,
     functionName: 'balanceOf',
     args: address ? [address] : undefined,
     query: {

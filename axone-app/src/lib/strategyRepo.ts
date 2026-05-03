@@ -31,16 +31,13 @@ export async function getAllStrategies(): Promise<Strategy[]> {
 
     const contracts = item?.contracts;
     
-    // Check if already in new format
+    // Check if already in new format (v1 or v3)
     if (
       contracts &&
       typeof contracts === "object" &&
-      typeof contracts.vaultAddress === "string" &&
-      typeof contracts.handlerAddress === "string" &&
-      typeof contracts.coreViewsAddress === "string" &&
-      typeof contracts.l1ReadAddress === "string"
+      typeof contracts.vaultAddress === "string"
     ) {
-      // Already valid, keep as is
+      // Already valid — keep as is (v3 vaults don't require handler/views/l1Read)
       migrated.push(item as Strategy);
       continue;
     }
@@ -52,11 +49,7 @@ export async function getAllStrategies(): Promise<Strategy[]> {
     const legacyCoreViewsAddress = (item as any).coreViewsAddress;
     const legacyCoreWriterAddress = (item as any).coreWriterAddress;
 
-    if (
-      typeof legacyVaultAddress === "string" &&
-      typeof legacyHandlerAddress === "string" &&
-      typeof legacyL1ReadAddress === "string"
-    ) {
+    if (typeof legacyVaultAddress === "string") {
       // Migrate legacy strategy
       const migratedStrategy: Strategy = {
         id: (item as any).id || crypto.randomUUID(),
@@ -66,10 +59,15 @@ export async function getAllStrategies(): Promise<Strategy[]> {
         status: (item as any).status || "open",
         contracts: {
           chainId: DEFAULT_CHAIN_ID,
+          vaultVersion: 'v1',
           vaultAddress: legacyVaultAddress as `0x${string}`,
-          handlerAddress: legacyHandlerAddress as `0x${string}`,
-          coreViewsAddress: (legacyCoreViewsAddress || process.env.NEXT_PUBLIC_CORE_VIEWS_ADDRESS || '0x0000000000000000000000000000000000000000') as `0x${string}`,
-          l1ReadAddress: legacyL1ReadAddress as `0x${string}`,
+          handlerAddress: legacyHandlerAddress ? (legacyHandlerAddress as `0x${string}`) : undefined,
+          coreViewsAddress: legacyCoreViewsAddress
+            ? (legacyCoreViewsAddress as `0x${string}`)
+            : process.env.NEXT_PUBLIC_CORE_VIEWS_ADDRESS
+              ? (process.env.NEXT_PUBLIC_CORE_VIEWS_ADDRESS as `0x${string}`)
+              : undefined,
+          l1ReadAddress: legacyL1ReadAddress ? (legacyL1ReadAddress as `0x${string}`) : undefined,
           coreWriterAddress: (legacyCoreWriterAddress || DEFAULT_CORE_WRITER) as `0x${string}`,
           shareDecimals: (item as any).shareDecimals ?? 18,
           hypeDecimals: (item as any).hypeDecimals ?? 18,

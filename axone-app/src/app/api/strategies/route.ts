@@ -30,17 +30,17 @@ export async function POST(req: Request) {
       );
     }
     
-    // Convertir les adresses string en 0x${string}
+    const c = parsed.data.contracts;
     const strategyInput = {
       ...parsed.data,
       contracts: {
-        ...parsed.data.contracts,
-        vaultAddress: parsed.data.contracts.vaultAddress as `0x${string}`,
-        handlerAddress: parsed.data.contracts.handlerAddress as `0x${string}`,
-        coreViewsAddress: parsed.data.contracts.coreViewsAddress as `0x${string}`,
-        l1ReadAddress: parsed.data.contracts.l1ReadAddress as `0x${string}`,
-        coreWriterAddress: parsed.data.contracts.coreWriterAddress as `0x${string}`,
-        usdcAddress: parsed.data.contracts.usdcAddress ? (parsed.data.contracts.usdcAddress as `0x${string}`) : undefined,
+        ...c,
+        vaultAddress: c.vaultAddress as `0x${string}`,
+        handlerAddress: c.handlerAddress ? (c.handlerAddress as `0x${string}`) : undefined,
+        coreViewsAddress: c.coreViewsAddress ? (c.coreViewsAddress as `0x${string}`) : undefined,
+        l1ReadAddress: c.l1ReadAddress ? (c.l1ReadAddress as `0x${string}`) : undefined,
+        coreWriterAddress: c.coreWriterAddress ? (c.coreWriterAddress as `0x${string}`) : undefined,
+        usdcAddress: c.usdcAddress ? (c.usdcAddress as `0x${string}`) : undefined,
       },
     };
     

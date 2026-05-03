@@ -74,7 +74,7 @@ export function useStrategyDeposit(strategy: Strategy | null) {
       } else {
         // Fallback to direct vault.deposit() for strategies without swap pool
         writeContract({
-          ...contracts.vault,
+          ...(contracts.vault as any),
           functionName: 'deposit',
           args: [],
           value,

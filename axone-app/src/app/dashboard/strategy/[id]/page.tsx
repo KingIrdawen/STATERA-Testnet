@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAccount, useChainId, useSwitchChain, useBalance, useReadContracts } from 'wagmi';
@@ -13,6 +13,7 @@ import { useStrategies } from '@/hooks/useStrategies';
 import { useStrategyData } from '@/hooks/useStrategyDataEra';
 import { useStrategyDeposit } from '@/hooks/useStrategyDeposit';
 import { useStrategyWithdraw } from '@/hooks/useStrategyWithdraw';
+import { useRebalancingRedeem } from '@/hooks/useRebalancingRedeem';
 import { useStrategyToken1Meta } from '@/hooks/useStrategyToken1Meta';
 import { getStrategyContracts } from '@/lib/strategyContracts';
 import { formatUsd } from '@/lib/format';
@@ -99,9 +100,36 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
   const vaultAddress = strategy?.contracts?.vaultAddress;
   const { data: ppsHistory } = usePpsHistory(vaultAddress, 1000); // Get enough history for 30D
 
+  const isV3 = strategy?.contracts?.vaultVersion === 'v3';
+
   // Deposit/Withdraw hooks
   const { deposit, isPending: isDepositPending } = useStrategyDeposit(strategy);
-  const { withdraw, isPending: isWithdrawPending } = useStrategyWithdraw(strategy);
+  const {
+    withdraw,
+    receipt: withdrawReceipt,
+    isPending: isWithdrawPending,
+    isConfirmed: isWithdrawConfirmed,
+    txHash: withdrawTxHash,
+  } = useStrategyWithdraw(strategy);
+
+  // v3 only : claimBatch flow
+  const {
+    pendingRedemptions,
+    claimBatch,
+    removePending,
+    addPendingFromReceipt,
+    isClaimPending,
+    isClaimConfirming,
+    claimError,
+  } = useRebalancingRedeem(strategy);
+
+  // Après confirmation de requestRedeem, stocker le batchId
+  const [lastWithdrawShares, setLastWithdrawShares] = useState('');
+  useEffect(() => {
+    if (isV3 && isWithdrawConfirmed && withdrawTxHash && withdrawReceipt) {
+      addPendingFromReceipt(withdrawTxHash, withdrawReceipt, lastWithdrawShares);
+    }
+  }, [isV3, isWithdrawConfirmed, withdrawTxHash, withdrawReceipt, addPendingFromReceipt, lastWithdrawShares]);
 
   // HYPE balance for deposit
   const isCorrectChain = strategy?.contracts ? chainId === strategy.contracts.chainId : false;
@@ -262,10 +290,10 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
   const handleWithdraw = async () => {
     if (!withdrawAmount || !strategy) return;
     try {
+      setLastWithdrawShares(withdrawAmount);
       await withdraw(withdrawAmount);
       setWithdrawAmount('');
     } catch (err) {
-      // Error is handled by toast system
       if (process.env.NODE_ENV === 'development') {
         console.error('[StrategyClient] Withdraw error:', err);
       }
@@ -673,12 +701,18 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
 
               {/* Withdraw Card */}
               <div className="landing-card rounded-lg p-6">
-                <h3 className="text-xl font-bold mb-4 text-white">Withdraw</h3>
+                <h3 className="text-xl font-bold mb-2 text-white">Withdraw</h3>
+                {isV3 && (
+                  <p className="text-xs text-[#5a9a9a] mb-4">
+                    Retrait en 2 étapes : demander → attendre le keeper → réclamer
+                  </p>
+                )}
                 <div className="space-y-4">
+                  {/* Step 1 : request */}
                   <div>
                     <div className="flex items-center justify-between mb-2">
                       <label htmlFor="withdraw-amount" className="text-sm text-gray-400">
-                        Shares to withdraw
+                        {isV3 ? 'Étape 1 — Shares à retirer' : 'Shares to withdraw'}
                       </label>
                       <button
                         onClick={setMaxWithdraw}
@@ -706,8 +740,69 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
                     disabled={isWithdrawPending || !withdrawAmount || Number(withdrawAmount) <= 0}
                     className="w-full px-6 py-3 bg-[#C9A36A] text-black rounded-lg text-sm font-semibold hover:bg-[#b8935f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isWithdrawPending ? 'Processing...' : 'Withdraw'}
+                    {isWithdrawPending
+                      ? 'Processing...'
+                      : isV3
+                      ? 'Demander le retrait (Step 1)'
+                      : 'Withdraw'}
                   </button>
+
+                  {/* Step 2 (v3 only) : claim pending redemptions */}
+                  {isV3 && pendingRedemptions.length > 0 && (
+                    <div className="border-t border-[#C9A36A]/15 pt-4 mt-2">
+                      <p className="text-sm font-semibold text-gray-300 mb-3">
+                        Étape 2 — Réclamer vos retraits
+                      </p>
+                      <div className="space-y-2">
+                        {pendingRedemptions.map((r) => (
+                          <div
+                            key={r.batchId + r.txHash}
+                            className="flex items-center justify-between bg-white/5 border border-[#C9A36A]/15 rounded-lg px-3 py-2"
+                          >
+                            <div>
+                              <p className="text-xs text-white font-mono">
+                                Batch #{r.batchId !== 'unknown' ? r.batchId : '?'}
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                {r.shares} shares · {new Date(r.requestedAt).toLocaleString()}
+                              </p>
+                            </div>
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => {
+                                  claimBatch(r.batchId);
+                                  removePending(r.batchId);
+                                }}
+                                disabled={isClaimPending || isClaimConfirming || r.batchId === 'unknown'}
+                                className="px-3 py-1 bg-[#5a9a9a] text-black rounded text-xs font-semibold hover:bg-[#4a8a8a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
+                                {isClaimPending || isClaimConfirming ? '...' : 'Claim'}
+                              </button>
+                              <button
+                                onClick={() => removePending(r.batchId)}
+                                className="px-2 py-1 text-gray-500 hover:text-red-400 text-xs transition-colors"
+                                title="Supprimer de la liste"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      {claimError && (
+                        <p className="text-xs text-red-400 mt-2">
+                          Erreur: {claimError instanceof Error ? claimError.message : String(claimError)}
+                        </p>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Instructions v3 si pas de pending */}
+                  {isV3 && pendingRedemptions.length === 0 && (
+                    <p className="text-xs text-gray-500 mt-1">
+                      Après la demande, le keeper (~60s) traitera le settlement. Revenez ici pour réclamer votre HYPE.
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -719,7 +814,8 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
             </div>
           )}
 
-          {/* SECTION C — Token Composition */}
+          {/* SECTION C — Token Composition (v1 only) */}
+          {!isV3 && (
           <div className="landing-card rounded-lg p-6 mb-6">
             <h2 className="text-2xl font-bold mb-6 text-white">Token Composition</h2>
             
@@ -754,6 +850,30 @@ function StrategyClient({ strategy }: { strategy: Strategy }) {
               </div>
             )}
           </div>
+          )}
+
+          {/* SECTION C — Info v3 (si pas de composition on-chain) */}
+          {isV3 && (
+            <div className="landing-card rounded-lg p-6 mb-6">
+              <h2 className="text-2xl font-bold mb-4 text-white">Allocation cible</h2>
+              <p className="text-[#5a9a9a] text-sm mb-4">
+                Ce vault v3 (RebalancingVault) est géré automatiquement par un keeper qui rebalance le portefeuille toutes les ~60 secondes.
+              </p>
+              {strategy?.description && (
+                <p className="text-gray-400 text-sm">{strategy.description}</p>
+              )}
+              <div className="mt-4 grid grid-cols-2 gap-4">
+                <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-4">
+                  <p className="text-xs text-gray-500 mb-1">Vault address</p>
+                  <p className="text-xs text-white font-mono truncate">{strategy?.contracts?.vaultAddress}</p>
+                </div>
+                <div className="bg-white/5 border border-[#C9A36A]/15 rounded-lg p-4">
+                  <p className="text-xs text-gray-500 mb-1">Version</p>
+                  <p className="text-xs text-[#C9A36A] font-semibold">RebalancingVault v3</p>
+                </div>
+              </div>
+            </div>
+          )}
 
         </div>
       </main>

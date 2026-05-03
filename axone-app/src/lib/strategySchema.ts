@@ -5,14 +5,19 @@
  */
 import { z } from "zod";
 
+const addressRegex = /^0x[a-fA-F0-9]{40}$/;
+const optionalAddress = z.string().regex(addressRegex, "Invalid address").optional();
+
 const StrategyContractsSchema = z.object({
   chainId: z.number().default(998),
-  vaultAddress: z.string().regex(/^0x[a-fA-F0-9]{40}$/, "Invalid address"),
-  handlerAddress: z.string().regex(/^0x[a-fA-F0-9]{40}$/, "Invalid address"),
-  coreViewsAddress: z.string().regex(/^0x[a-fA-F0-9]{40}$/, "Invalid address"),
-  l1ReadAddress: z.string().regex(/^0x[a-fA-F0-9]{40}$/, "Invalid address"),
-  coreWriterAddress: z.string().regex(/^0x[a-fA-F0-9]{40}$/, "Invalid address").default("0x3333333333333333333333333333333333333333"),
-  usdcAddress: z.string().regex(/^0x[a-fA-F0-9]{40}$/, "Invalid address").optional(),
+  vaultVersion: z.enum(['v1', 'v3']).optional(),
+  vaultAddress: z.string().regex(addressRegex, "Invalid address"),
+  // v1 uniquement (ERA) — optionnels pour v3
+  handlerAddress: optionalAddress,
+  coreViewsAddress: optionalAddress,
+  l1ReadAddress: optionalAddress,
+  coreWriterAddress: optionalAddress,
+  usdcAddress: optionalAddress,
   shareDecimals: z.number().default(18),
   hypeDecimals: z.number().default(18),
   usdcDecimals: z.number().default(6),
