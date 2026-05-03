@@ -1,13 +1,22 @@
 // axone-app/src/lib/kv.ts
-// Utilise @upstash/redis avec Redis.fromEnv() qui lit automatiquement
-// KV_REST_API_URL et KV_REST_API_TOKEN (variables injectées par Vercel/Upstash)
+// Utilise @upstash/redis avec les variables KV_REST_API_URL / KV_REST_API_TOKEN
+// injectées automatiquement par l'intégration Upstash via Vercel marketplace
 import { Redis } from '@upstash/redis';
 
 let redisClient: Redis | null = null;
 
 function getRedis(): Redis {
   if (!redisClient) {
-    redisClient = Redis.fromEnv();
+    const url = process.env.KV_REST_API_URL;
+    const token = process.env.KV_REST_API_TOKEN;
+
+    if (!url || !token) {
+      throw new Error(
+        'KV_REST_API_URL et KV_REST_API_TOKEN sont requis. Vérifie les variables d\'environnement Vercel.'
+      );
+    }
+
+    redisClient = new Redis({ url, token });
   }
   return redisClient;
 }
