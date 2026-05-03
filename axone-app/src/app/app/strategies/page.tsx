@@ -142,9 +142,9 @@ export default function StrategiesPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('card');
   useWhitelistCheck();
 
+  // v1 requiert handlerAddress + coreViewsAddress ; v3 (RebalancingVault) n'en a pas besoin
   const validStrategies = strategies.filter(strategy =>
-    strategy && strategy.contracts && strategy.contracts.vaultAddress &&
-    strategy.contracts.handlerAddress && strategy.contracts.coreViewsAddress
+    strategy && strategy.contracts && strategy.contracts.vaultAddress
   );
 
   return (
