@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState, useEffect, useMemo } from 'react';
 import { useAccount, useChainId } from 'wagmi';
 import { useStrategies } from '@/hooks/useStrategies';
 import { StrategyCardEra } from '@/components/StrategyCardEra';
@@ -9,40 +9,89 @@ import { DashboardSidebar } from '@/components/DashboardSidebar';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import { useWhitelistCheck } from '@/hooks/useWhitelistCheck';
 import { useStrategyData } from '@/hooks/useStrategyDataEra';
+import { usePpsHistory } from '@/hooks/usePpsHistory';
 import { formatUsd } from '@/lib/format';
 import Link from 'next/link';
 import type { Strategy } from '@/types/strategy';
 import { cinzel } from '@/lib/fonts';
 
-// ─── Tracker silencieux : lit la valeur on-chain pour UNE stratégie ───────────
-function StrategyValueTracker({
+// ─── Données agrégées pour une seule stratégie ────────────────────────────────
+interface StrategyPortfolioData {
+  valueUsd: number;
+  shares: number;
+  ppsUsd: number;
+  pps24hAgo: number | null; // null si pas d'historique encore
+}
+
+// ─── Tracker silencieux : lit les données on-chain + historique PPS ───────────
+function StrategyPortfolioTracker({
   strategy,
-  onValue,
+  onData,
 }: {
   strategy: Strategy;
-  onValue: (id: string, value: number | undefined) => void;
+  onData: (id: string, data: StrategyPortfolioData) => void;
 }) {
-  const data = useStrategyData(strategy);
+  const d = useStrategyData(strategy);
+  const { data: history } = usePpsHistory(strategy.contracts.vaultAddress);
+
   useEffect(() => {
-    onValue(strategy.id, data.userValueUsd);
+    if (d.userValueUsd === undefined || d.userShares === undefined || d.ppsUsd === undefined) return;
+
+    // Cherche l'entrée la plus récente qui a au moins 24h
+    const h24ago = Date.now() - 24 * 60 * 60 * 1000;
+    const entry = history?.entries?.find(e => e.timestamp <= h24ago) ?? null;
+    const pps24hAgo = entry ? parseFloat(entry.pps) : null;
+
+    onData(strategy.id, {
+      valueUsd: d.userValueUsd,
+      shares: d.userShares,
+      ppsUsd: d.ppsUsd,
+      pps24hAgo,
+    });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [strategy.id, data.userValueUsd]);
+  }, [strategy.id, d.userValueUsd, d.userShares, d.ppsUsd, history]);
+
   return null;
 }
 
-// ─── Portfolio Overview — valeurs on-chain réelles ────────────────────────────
+// ─── Portfolio Overview — valeurs on-chain + 24h PnL/Return ──────────────────
 function PortfolioOverview({ strategies }: { strategies: Strategy[] }) {
   const { address } = useAccount();
-  const [values, setValues] = useState<Record<string, number>>({});
+  const [data, setData] = useState<Record<string, StrategyPortfolioData>>({});
 
-  const handleValue = useCallback((id: string, value: number | undefined) => {
-    if (value !== undefined && value > 0) {
-      setValues(prev => ({ ...prev, [id]: value }));
-    }
+  const handleData = useCallback((id: string, d: StrategyPortfolioData) => {
+    setData(prev => ({ ...prev, [id]: d }));
   }, []);
 
-  const totalValue = Object.values(values).reduce((sum, v) => sum + v, 0);
-  const activePositions = Object.values(values).filter(v => v > 0).length;
+  const totalValue = useMemo(
+    () => Object.values(data).reduce((sum, d) => sum + d.valueUsd, 0),
+    [data]
+  );
+  const activePositions = useMemo(
+    () => Object.values(data).filter(d => d.valueUsd > 0).length,
+    [data]
+  );
+
+  // 24h PnL = Σ(shares × (ppsActuel - pps24hAgo))
+  const pnl24h = useMemo(() => {
+    let total = 0;
+    let hasHistory = false;
+    for (const d of Object.values(data)) {
+      if (d.pps24hAgo !== null && d.shares > 0) {
+        total += d.shares * (d.ppsUsd - d.pps24hAgo);
+        hasHistory = true;
+      }
+    }
+    return hasHistory ? total : null;
+  }, [data]);
+
+  // 24h Return = pnl24h / valeur_portfolio_hier × 100
+  const return24h = useMemo(() => {
+    if (pnl24h === null || totalValue <= 0) return null;
+    const valueYesterday = totalValue - pnl24h;
+    if (valueYesterday <= 0) return null;
+    return (pnl24h / valueYesterday) * 100;
+  }, [pnl24h, totalValue]);
 
   if (!address) {
     return (
@@ -56,10 +105,11 @@ function PortfolioOverview({ strategies }: { strategies: Strategy[] }) {
     <>
       {/* Trackers silencieux — un par stratégie */}
       {strategies.map(s => (
-        <StrategyValueTracker key={s.id} strategy={s} onValue={handleValue} />
+        <StrategyPortfolioTracker key={s.id} strategy={s} onData={handleData} />
       ))}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+        {/* Total Portfolio Value */}
         <div className="landing-card rounded-xl p-5 transition-colors duration-300 flex flex-col items-center justify-center text-center">
           <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)] mb-2">
             Total Portfolio Value
@@ -68,18 +118,41 @@ function PortfolioOverview({ strategies }: { strategies: Strategy[] }) {
             {totalValue > 0 ? formatUsd(totalValue, 2) : '—'}
           </p>
           <p className="text-[0.65rem] text-[rgba(230,230,230,0.25)] mt-1 tracking-[0.08em] uppercase">
-            Live on-chain
+            {activePositions > 0 ? `${activePositions} vault${activePositions > 1 ? 's' : ''}` : 'Live on-chain'}
           </p>
         </div>
+
+        {/* 24h PnL */}
         <div className="landing-card rounded-xl p-5 transition-colors duration-300 flex flex-col items-center justify-center text-center">
           <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)] mb-2">
-            Active Positions
+            24h PnL
           </p>
-          <p className="text-3xl font-semibold text-[#C9A36A] font-mono">
-            {activePositions > 0 ? activePositions : '—'}
-          </p>
+          {pnl24h !== null ? (
+            <p className={`text-3xl font-semibold font-mono ${pnl24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+              {pnl24h >= 0 ? '+' : ''}{formatUsd(pnl24h, 2)}
+            </p>
+          ) : (
+            <p className="text-3xl font-semibold text-[rgba(230,230,230,0.3)] font-mono">—</p>
+          )}
           <p className="text-[0.65rem] text-[rgba(230,230,230,0.25)] mt-1 tracking-[0.08em] uppercase">
-            Vault{activePositions !== 1 ? 's' : ''} with deposits
+            {pnl24h !== null ? 'On-chain' : 'Collecting history…'}
+          </p>
+        </div>
+
+        {/* 24h Return */}
+        <div className="landing-card rounded-xl p-5 transition-colors duration-300 flex flex-col items-center justify-center text-center">
+          <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)] mb-2">
+            24h Return
+          </p>
+          {return24h !== null ? (
+            <p className={`text-3xl font-semibold font-mono ${return24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+              {return24h >= 0 ? '+' : ''}{return24h.toFixed(2)}%
+            </p>
+          ) : (
+            <p className="text-3xl font-semibold text-[rgba(230,230,230,0.3)] font-mono">—</p>
+          )}
+          <p className="text-[0.65rem] text-[rgba(230,230,230,0.25)] mt-1 tracking-[0.08em] uppercase">
+            {return24h !== null ? 'On-chain' : 'Collecting history…'}
           </p>
         </div>
       </div>
