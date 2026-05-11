@@ -63,7 +63,7 @@ const ALL_VAULTS: StrategyInput[] = [
     contracts: {
       chainId: 998,
       vaultVersion: 'v3',
-      vaultAddress: '0x3DBCd84FB3C5C8Ae0D228c6C80f207325a5B8bA6',
+      vaultAddress: '0x533abf396c20e241f8100a8640cbb5414b0f8873',
       shareDecimals: 18,
       hypeDecimals: 18,
       usdcDecimals: 6,

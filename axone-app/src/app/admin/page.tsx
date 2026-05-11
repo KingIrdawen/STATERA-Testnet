@@ -73,7 +73,7 @@ const V3_PRESETS = [
     description: '33% HYPE / 33% UETH / 34% UNIT — RebalancingVault v4 — maxSingleDeposit: 10 HYPE',
     riskLevel: 'medium' as const,
     status: 'open' as const,
-    vaultAddress: '0x3DBCd84FB3C5C8Ae0D228c6C80f207325a5B8bA6',
+    vaultAddress: '0x533abf396c20e241f8100a8640cbb5414b0f8873',
   },
 ];
 
