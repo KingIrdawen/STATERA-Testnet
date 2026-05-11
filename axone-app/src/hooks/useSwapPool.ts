@@ -2,9 +2,10 @@
  * Hook pour lire les données on-chain d'un SwapPool :
  * réserves, adresse LP token, balances LP de l'utilisateur, total supply LP.
  */
-import { useAccount, useReadContracts } from 'wagmi';
+import { useAccount, useReadContracts, useReadContract } from 'wagmi';
 import { formatUnits } from 'viem';
 import { swapPool, lpToken } from '@/contracts/swapContracts';
+import { lpTokenAbi } from '@/lib/abi/lpToken';
 
 const QUERY_OPTIONS = {
   staleTime: 30_000,
@@ -59,21 +60,20 @@ export function useSwapPool(
 
   const lpContract = lpTokenAddress ? lpToken(lpTokenAddress) : null;
 
-  // ─── Étape 2 : lire totalSupply + balance user sur le LP token ───────────
-  const { data: step2, isLoading: step2Loading, error: step2Error } = useReadContracts({
-    contracts: lpContract
-      ? [
-          { ...lpContract, functionName: 'totalSupply' as const },
-          ...(userAddress
-            ? [{ ...lpContract, functionName: 'balanceOf' as const, args: [userAddress] as const }]
-            : []),
-        ]
-      : [],
+  // ─── Étape 2a : totalSupply du LP token ──────────────────────────────────
+  const { data: lpTotalSupply, isLoading: tsLoading, error: tsError } = useReadContract({
+    ...(lpContract ?? { address: undefined as any, abi: lpTokenAbi }),
+    functionName: 'totalSupply' as const,
     query: { ...QUERY_OPTIONS, enabled: !!lpTokenAddress },
   });
 
-  const lpTotalSupply = step2?.[0]?.result as bigint | undefined;
-  const lpBalance = (userAddress ? step2?.[1]?.result : undefined) as bigint | undefined;
+  // ─── Étape 2b : balance LP de l'utilisateur ──────────────────────────────
+  const { data: lpBalance, isLoading: balLoading, error: balError } = useReadContract({
+    ...(lpContract ?? { address: undefined as any, abi: lpTokenAbi }),
+    functionName: 'balanceOf' as const,
+    args: userAddress ? [userAddress] : undefined,
+    query: { ...QUERY_OPTIONS, enabled: !!lpTokenAddress && !!userAddress },
+  });
 
   // ─── Calculs dérivés ─────────────────────────────────────────────────────
   const hypeReserveFormatted = hypeReserve !== undefined
@@ -101,8 +101,8 @@ export function useSwapPool(
     : undefined;
 
   return {
-    loading: step1Loading || step2Loading,
-    error: (step1Error || step2Error) as Error | null,
+    loading: step1Loading || tsLoading || balLoading,
+    error: (step1Error || tsError || balError) as Error | null,
     hypeReserve,
     vaultTokenReserve,
     hypeReserveFormatted,
