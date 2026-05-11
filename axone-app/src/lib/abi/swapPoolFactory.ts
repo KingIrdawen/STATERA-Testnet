@@ -9,6 +9,13 @@ export const swapPoolFactoryAbi = [
   },
   {
     type: 'function',
+    name: 'createPool',
+    stateMutability: 'nonpayable',
+    inputs: [{ name: 'vault', type: 'address' }],
+    outputs: [{ name: 'pool', type: 'address' }],
+  },
+  {
+    type: 'function',
     name: 'swapFeeBps',
     stateMutability: 'view',
     inputs: [],
@@ -22,4 +29,3 @@ export const swapPoolFactoryAbi = [
     outputs: [{ name: 'recipient', type: 'address' }],
   },
 ] as const;
-
