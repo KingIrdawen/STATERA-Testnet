@@ -54,10 +54,10 @@ const ALL_VAULTS: StrategyInput[] = [
       depositIsNative: true,
     },
   },
-  // ─── Vault v4 (déployé le 2026-05-01) — multi-counterpart ────────────────
+  // ─── Vault v4 (déployé via factory 0x3e0a2144…) — HYPE/SOVY/ZIGG ─────────
   {
-    name: 'HYPE / UETH / UNIT (multi)',
-    description: '33% HYPE / 33% UETH / 34% UNIT — RebalancingVault v4 — maxSingleDeposit: 10 HYPE',
+    name: 'HYPE / SOVY / ZIGG (v4)',
+    description: '33% HYPE / 33% SOVY / 34% ZIGG — RebalancingVault v4 — Symbol: sV4',
     riskLevel: 'medium',
     status: 'open',
     contracts: {

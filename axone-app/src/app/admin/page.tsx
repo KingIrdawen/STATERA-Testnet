@@ -69,8 +69,8 @@ const V3_PRESETS = [
     vaultAddress: '0xcdcdc574d4f13f510ec2d12bcfd23003cb330f9a',
   },
   {
-    name: 'HYPE / UETH / UNIT (multi)',
-    description: '33% HYPE / 33% UETH / 34% UNIT — RebalancingVault v4 — maxSingleDeposit: 10 HYPE',
+    name: 'HYPE / SOVY / ZIGG (v4)',
+    description: '33% HYPE / 33% SOVY / 34% ZIGG — RebalancingVault v4 — Symbol: sV4',
     riskLevel: 'medium' as const,
     status: 'open' as const,
     vaultAddress: '0x533abf396c20e241f8100a8640cbb5414b0f8873',
