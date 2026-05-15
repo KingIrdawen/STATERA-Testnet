@@ -33,11 +33,21 @@ jobs:
     steps:
       - name: Call snapshot endpoint
         run: |
+          APP_URL="${{ secrets.VERCEL_APP_URL }}"
+          CRON_SECRET="${{ secrets.CRON_SECRET }}"
+
+          # Si les secrets ne sont pas configurés, on skip sans erreur
+          if [ -z "$APP_URL" ]; then
+            echo "⚠️  VERCEL_APP_URL non configuré — snapshot ignoré"
+            echo "Configure ce secret dans : GitHub → Settings → Secrets → Actions"
+            exit 0
+          fi
+
           echo "Triggering PPS snapshot at $(date -u)"
 
           RESPONSE=$(curl -s -w "\n%{http_code}" \
-            -X POST "${{ secrets.VERCEL_APP_URL }}/api/cron/snapshot-pps" \
-            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -X POST "${APP_URL}/api/cron/snapshot-pps" \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
             -H "Content-Type: application/json" \
             --max-time 30)
 
