@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { usePublicClient } from 'wagmi';
 import type { Strategy } from '@/types/strategy';
 import { useStrategies } from './useStrategies';
-import { swapPoolFactory, SWAP_POOL_FACTORY_ADDRESS } from '@/contracts/swapContracts';
+import { swapPoolFactory, SWAP_POOL_FACTORY_ADDRESS, KNOWN_POOLS } from '@/contracts/swapContracts';
 
 export interface SwapStrategy {
   strategy: Strategy;
@@ -39,19 +39,34 @@ export function useSwapStrategies() {
           
           try {
             if (!publicClient || !swapPoolFactory) break;
-            
-            const pool = (await publicClient.readContract({
-              address: swapPoolFactory.address,
-              abi: swapPoolFactory.abi,
-              functionName: 'getPool',
-              args: [vaultAddress],
-            })) as `0x${string}`;
 
-            if (pool && pool !== `0x0000000000000000000000000000000000000000`) {
+            let pool: `0x${string}` = '0x0000000000000000000000000000000000000000';
+
+            try {
+              pool = (await publicClient.readContract({
+                address: swapPoolFactory.address,
+                abi: swapPoolFactory.abi,
+                functionName: 'getPool',
+                args: [vaultAddress],
+              })) as `0x${string}`;
+            } catch (rpcErr) {
+              console.debug(`[useSwapStrategies] getPool RPC error for ${strategy.id}:`, rpcErr);
+            }
+
+            // Fallback : pool hardcodé si getPool renvoie zéro
+            const ZERO = '0x0000000000000000000000000000000000000000';
+            if ((!pool || pool === ZERO)) {
+              const known = KNOWN_POOLS[vaultAddress.toLowerCase()];
+              if (known) {
+                pool = known;
+                console.debug(`[useSwapStrategies] Using hardcoded pool for ${strategy.id}: ${pool}`);
+              }
+            }
+
+            if (pool && pool !== ZERO) {
               results.push({ strategy, poolAddress: pool });
             }
           } catch (e) {
-            // Skip strategies that fail (no pool or error)
             console.debug(`[useSwapStrategies] No pool for strategy ${strategy.id}:`, e);
           }
         }
