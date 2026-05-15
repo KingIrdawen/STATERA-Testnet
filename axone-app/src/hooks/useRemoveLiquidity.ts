@@ -6,6 +6,7 @@
  */
 import { useEffect, useMemo } from 'react';
 import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { useQueryClient } from '@tanstack/react-query';
 import { parseUnits, formatUnits } from 'viem';
 import { swapPool } from '@/contracts/swapContracts';
 import { useToast } from '@/components/Toast';
@@ -21,6 +22,7 @@ export function useRemoveLiquidity(
 ) {
   const { address } = useAccount();
   const { showToast } = useToast();
+  const queryClient = useQueryClient();
 
   const percent = Math.max(0, Math.min(100, parseFloat(percentStr) || 0));
 
@@ -55,8 +57,11 @@ export function useRemoveLiquidity(
     useWaitForTransactionReceipt({ hash: removeHash });
 
   useEffect(() => {
-    if (isRemoveSuccess && removeHash) showToast('success', 'Liquidité retirée', removeHash);
-  }, [isRemoveSuccess, removeHash, showToast]);
+    if (isRemoveSuccess && removeHash) {
+      showToast('success', 'Liquidité retirée', removeHash);
+      queryClient.invalidateQueries();
+    }
+  }, [isRemoveSuccess, removeHash, showToast, queryClient]);
 
   useEffect(() => {
     if (removeWriteError) {

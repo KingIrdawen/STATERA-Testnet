@@ -6,6 +6,7 @@
  */
 import { useEffect, useMemo } from 'react';
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { useQueryClient } from '@tanstack/react-query';
 import { parseUnits, maxUint256 } from 'viem';
 import { swapPool } from '@/contracts/swapContracts';
 import { lpTokenAbi } from '@/lib/abi/lpToken';
@@ -21,6 +22,7 @@ export function useAddLiquidity(
 ) {
   const { address } = useAccount();
   const { showToast } = useToast();
+  const queryClient = useQueryClient();
   const contracts = strategy ? getStrategyContracts(strategy) : null;
   const vaultAddress = contracts?.vault.address;
   const shareDecimals = strategy?.contracts.shareDecimals ?? 18;
@@ -78,8 +80,12 @@ export function useAddLiquidity(
   const { isLoading: isAddConfirming, isSuccess: isAddSuccess } = useWaitForTransactionReceipt({ hash: addHash });
 
   useEffect(() => {
-    if (isAddSuccess && addHash) showToast('success', 'Liquidité ajoutée', addHash);
-  }, [isAddSuccess, addHash, showToast]);
+    if (isAddSuccess && addHash) {
+      showToast('success', 'Liquidité ajoutée', addHash);
+      // Invalide tout le cache on-chain pour rafraîchir la balance LP immédiatement
+      queryClient.invalidateQueries();
+    }
+  }, [isAddSuccess, addHash, showToast, queryClient]);
 
   useEffect(() => {
     if (addWriteError) {
