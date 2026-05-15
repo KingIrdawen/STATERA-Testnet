@@ -116,7 +116,18 @@ export async function POST(req: Request) {
   }
 }
 
-// GET pour tester manuellement dans le navigateur
-export async function GET(req: Request) {
-  return POST(req);
+// GET — statut public pour vérifier que l'endpoint est vivant
+export async function GET() {
+  try {
+    const strategies = await getAllStrategies();
+    const v3 = strategies.filter(s => s.contracts?.vaultVersion === 'v3');
+    return NextResponse.json({
+      ok: true,
+      message: 'PPS snapshot endpoint is alive. POST to trigger a snapshot (requires QStash signature).',
+      v3VaultsConfigured: v3.length,
+      vaults: v3.map(s => ({ name: s.name, address: s.contracts.vaultAddress })),
+    });
+  } catch {
+    return NextResponse.json({ ok: true, message: 'Endpoint alive.' });
+  }
 }
