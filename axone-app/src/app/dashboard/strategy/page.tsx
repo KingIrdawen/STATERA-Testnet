@@ -10,6 +10,8 @@ import { SiteFooter } from '@/components/layout/SiteFooter';
 import { useWhitelistCheck } from '@/hooks/useWhitelistCheck';
 import { useStrategyData } from '@/hooks/useStrategyDataEra';
 import { usePpsHistory } from '@/hooks/usePpsHistory';
+import { useSwapStrategies, type SwapStrategy } from '@/hooks/useSwapStrategies';
+import { useSwapPool } from '@/hooks/useSwapPool';
 import { formatUsd } from '@/lib/format';
 import Link from 'next/link';
 import type { Strategy } from '@/types/strategy';
@@ -160,6 +162,187 @@ function PortfolioOverview({ strategies }: { strategies: Strategy[] }) {
   );
 }
 
+// ─── Icônes toggle ────────────────────────────────────────────────────────────
+function ListIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+      <line x1="3" y1="4" x2="13" y2="4" /><line x1="3" y1="8" x2="13" y2="8" /><line x1="3" y1="12" x2="13" y2="12" />
+    </svg>
+  );
+}
+function GridIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+      <rect x="2" y="2" width="5" height="5" /><rect x="9" y="2" width="5" height="5" />
+      <rect x="2" y="9" width="5" height="5" /><rect x="9" y="9" width="5" height="5" />
+    </svg>
+  );
+}
+
+// ─── Carte/ligne d'un pool actif ──────────────────────────────────────────────
+function ActivePoolCard({ swapStrategy, viewMode }: { swapStrategy: SwapStrategy; viewMode: 'card' | 'list' }) {
+  const { strategy, poolAddress } = swapStrategy;
+  const poolData = useSwapPool(poolAddress, strategy.contracts?.shareDecimals ?? 18);
+
+  const hasLp = poolData.lpBalanceFormatted !== undefined && poolData.lpBalanceFormatted > 0;
+  if (!hasLp) return null;
+
+  const lpPct = poolData.lpShare !== undefined ? (poolData.lpShare * 100).toFixed(2) : '—';
+  const hype = poolData.hypeReserveFormatted?.toFixed(4) ?? '—';
+  const vault = poolData.vaultTokenReserveFormatted?.toFixed(4) ?? '—';
+  const lpBal = poolData.lpBalanceFormatted?.toFixed(6) ?? '—';
+  const withdrawHype = poolData.withdrawableHype?.toFixed(4) ?? '—';
+  const withdrawVault = poolData.withdrawableVaultToken?.toFixed(4) ?? '—';
+
+  if (viewMode === 'list') {
+    return (
+      <div className="landing-card rounded-xl p-5 hover:border-[#C9A36A]/30 transition-colors">
+        <div className="flex flex-wrap items-start gap-3 mb-3">
+          <div className="flex-1 min-w-0">
+            <p className="text-[#C9A36A] font-semibold text-sm mb-0.5">{strategy.name}</p>
+            {strategy.description && (
+              <p className="text-[rgba(230,230,230,0.4)] text-xs">{strategy.description}</p>
+            )}
+          </div>
+          <Link
+            href="/dashboard/swap"
+            className="shrink-0 px-4 py-2 text-[0.6rem] tracking-[0.12em] uppercase bg-[#C9A36A] text-[#0A0A0A] rounded font-semibold hover:bg-[#b8935f] transition-colors"
+          >
+            Manage →
+          </Link>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-x-6 gap-y-1.5 pt-3 border-t border-[#C9A36A]/10">
+          {[
+            { label: 'Your LP', value: lpBal },
+            { label: 'Pool Share', value: `${lpPct}%` },
+            { label: 'Withdrawable HYPE', value: withdrawHype },
+            { label: `Withdrawable Vault`, value: withdrawVault },
+            { label: 'Fee', value: '0.5%' },
+          ].map(({ label, value }) => (
+            <div key={label}>
+              <p className="text-[0.6rem] text-[rgba(230,230,230,0.4)] uppercase tracking-wide mb-0.5">{label}</p>
+              <p className="text-[#E6E6E6] text-xs font-mono font-semibold">{poolData.loading ? '…' : value}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="landing-card rounded-xl p-5 flex flex-col transition-colors hover:border-[#C9A36A]/30">
+      <div className="mb-3">
+        <p className="text-[#C9A36A] font-semibold text-sm mb-1">{strategy.name}</p>
+        {strategy.description && (
+          <p className="text-[rgba(230,230,230,0.4)] text-[0.65rem] leading-relaxed">{strategy.description}</p>
+        )}
+      </div>
+      <div className="grid grid-cols-2 gap-x-4 gap-y-2.5 pt-3 border-t border-[#C9A36A]/10 mb-4">
+        {[
+          { label: 'Your LP', value: lpBal },
+          { label: 'Pool Share', value: `${lpPct}%` },
+          { label: 'HYPE Reserve', value: hype },
+          { label: 'Vault Reserve', value: vault },
+          { label: 'Withdrawable HYPE', value: withdrawHype },
+          { label: 'Withdrawable Vault', value: withdrawVault },
+        ].map(({ label, value }) => (
+          <div key={label}>
+            <p className="text-[0.6rem] text-[rgba(230,230,230,0.4)] uppercase tracking-wide mb-0.5">{label}</p>
+            <p className="text-[#E6E6E6] text-xs font-mono font-semibold">{poolData.loading ? '…' : value}</p>
+          </div>
+        ))}
+      </div>
+      <Link
+        href="/dashboard/swap"
+        className="mt-auto w-full text-center px-4 py-2 text-[0.6rem] tracking-[0.12em] uppercase bg-[#C9A36A] text-[#0A0A0A] rounded font-semibold hover:bg-[#b8935f] transition-colors"
+      >
+        Manage →
+      </Link>
+    </div>
+  );
+}
+
+// ─── Section Active Pools ─────────────────────────────────────────────────────
+function ActivePoolsSection() {
+  const { address } = useAccount();
+  const { swapStrategies, loading } = useSwapStrategies();
+  const [viewMode, setViewMode] = useState<'card' | 'list'>('card');
+
+  if (!address) return null;
+
+  return (
+    <div className="mt-12">
+      <div className="flex items-center justify-between mb-6">
+        <div className="text-center flex-1">
+          <h2 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] uppercase">Active Pools</h2>
+        </div>
+        <div className="flex items-center gap-1 p-1 bg-white/5 border border-[#C9A36A]/15 rounded-lg">
+          <button
+            onClick={() => setViewMode('card')}
+            className={`p-1.5 rounded transition-colors ${viewMode === 'card' ? 'bg-[#C9A36A] text-[#121212]' : 'text-[rgba(230,230,230,0.5)] hover:text-[#E6E6E6]'}`}
+          >
+            <GridIcon />
+          </button>
+          <button
+            onClick={() => setViewMode('list')}
+            className={`p-1.5 rounded transition-colors ${viewMode === 'list' ? 'bg-[#C9A36A] text-[#121212]' : 'text-[rgba(230,230,230,0.5)] hover:text-[#E6E6E6]'}`}
+          >
+            <ListIcon />
+          </button>
+        </div>
+      </div>
+
+      {loading ? (
+        <div className="text-center py-8">
+          <p className="text-[rgba(230,230,230,0.4)] text-sm">Loading pools…</p>
+        </div>
+      ) : swapStrategies.length === 0 ? (
+        <div className="landing-card rounded-xl p-8 text-center">
+          <p className="text-[rgba(230,230,230,0.4)] text-sm mb-4">No liquidity pools available.</p>
+          <Link href="/dashboard/swap" className="inline-flex items-center gap-2 px-4 py-2 bg-[#C9A36A]/15 border border-[#C9A36A]/30 text-[#C9A36A] rounded-lg text-xs font-semibold hover:bg-[#C9A36A]/25 transition-colors">
+            Go to Swap →
+          </Link>
+        </div>
+      ) : (
+        <>
+          <div className={viewMode === 'card'
+            ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'
+            : 'flex flex-col gap-3'
+          }>
+            {swapStrategies.map((s) => (
+              <ActivePoolCard key={s.strategy.id} swapStrategy={s} viewMode={viewMode} />
+            ))}
+          </div>
+          {/* Message si aucune position active */}
+          <_NoActivePools swapStrategies={swapStrategies} />
+        </>
+      )}
+    </div>
+  );
+}
+
+function _NoActivePools({ swapStrategies }: { swapStrategies: SwapStrategy[] }) {
+  // Ce composant est rendu APRES les cartes — si elles retournent toutes null,
+  // on affiche un message d'encouragement
+  const [allNull, setAllNull] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setAllNull(true), 3000);
+    return () => clearTimeout(timer);
+  }, [swapStrategies]);
+
+  if (!allNull) return null;
+
+  return (
+    <div className="mt-4 text-center">
+      <p className="text-[rgba(230,230,230,0.3)] text-xs">
+        No active LP positions — add liquidity in{' '}
+        <Link href="/dashboard/swap" className="text-[#C9A36A] hover:underline">Swap</Link>.
+      </p>
+    </div>
+  );
+}
+
 // ─── Staking Summary (below active strategies) ─────────────────────────────
 function StakingSummarySection() {
   // ⚠️ PLACEHOLDER — Replace with real on-chain staking data when contracts are deployed
@@ -226,28 +409,21 @@ function StakingSummarySection() {
   );
 }
 
-// ─── Grille des stratégies actives ───────────────────────────────────────────
+// ─── Grille/liste des stratégies actives ─────────────────────────────────────
 function ActiveStrategiesGrid({ strategies, loading }: { strategies: Strategy[]; loading: boolean }) {
+  const [viewMode, setViewMode] = useState<'card' | 'list'>('card');
+
+  const validStrategies = strategies.filter(s => s?.contracts?.vaultAddress);
+
   if (loading) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-[rgba(230,230,230,0.5)]">Loading strategies...</p>
-      </div>
-    );
+    return <div className="text-center py-12"><p className="text-[rgba(230,230,230,0.5)]">Loading strategies...</p></div>;
   }
 
-  const validStrategies = strategies.filter(strategy =>
-    strategy?.contracts?.vaultAddress
-  );
-
-  if (!loading && validStrategies.length === 0) {
+  if (validStrategies.length === 0) {
     return (
       <div className="text-center py-16">
         <p className="text-[rgba(230,230,230,0.5)] mb-6">No active strategies yet.</p>
-        <Link
-          href="/app/strategies"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-[#C9A36A]/20 border border-[#C9A36A]/40 text-[#C9A36A] rounded-lg font-semibold text-sm hover:bg-[#C9A36A]/30 transition-colors"
-        >
+        <Link href="/app/strategies" className="inline-flex items-center gap-2 px-6 py-3 bg-[#C9A36A]/20 border border-[#C9A36A]/40 text-[#C9A36A] rounded-lg font-semibold text-sm hover:bg-[#C9A36A]/30 transition-colors">
           Go to Market →
         </Link>
       </div>
@@ -255,16 +431,61 @@ function ActiveStrategiesGrid({ strategies, loading }: { strategies: Strategy[];
   }
 
   return (
-    <div className="flex flex-wrap justify-center gap-6">
-      {validStrategies.map(strategy => (
-        <div key={strategy.id} className="w-full lg:w-[calc(50%-12px)] xl:w-[calc(33.333%-16px)] min-w-0">
-          <StrategyCardEra
-            strategy={strategy}
-            showWithdraw={true}
-            showViewMore={true}
-          />
+    <>
+      {/* Toggle */}
+      <div className="flex justify-end mb-4">
+        <div className="flex items-center gap-1 p-1 bg-white/5 border border-[#C9A36A]/15 rounded-lg">
+          <button onClick={() => setViewMode('card')} className={`p-1.5 rounded transition-colors ${viewMode === 'card' ? 'bg-[#C9A36A] text-[#121212]' : 'text-[rgba(230,230,230,0.5)] hover:text-[#E6E6E6]'}`}><GridIcon /></button>
+          <button onClick={() => setViewMode('list')} className={`p-1.5 rounded transition-colors ${viewMode === 'list' ? 'bg-[#C9A36A] text-[#121212]' : 'text-[rgba(230,230,230,0.5)] hover:text-[#E6E6E6]'}`}><ListIcon /></button>
         </div>
-      ))}
+      </div>
+
+      {viewMode === 'card' ? (
+        <div className="flex flex-wrap justify-center gap-6">
+          {validStrategies.map(strategy => (
+            <div key={strategy.id} className="w-full lg:w-[calc(50%-12px)] xl:w-[calc(33.333%-16px)] min-w-0">
+              <StrategyCardEra strategy={strategy} showWithdraw={true} showViewMore={true} />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col gap-3">
+          {validStrategies.map(strategy => (
+            <StrategyListRow key={strategy.id} strategy={strategy} />
+          ))}
+        </div>
+      )}
+    </>
+  );
+}
+
+// ─── Vue liste d'une stratégie ────────────────────────────────────────────────
+function StrategyListRow({ strategy }: { strategy: Strategy }) {
+  const data = useStrategyData(strategy);
+  return (
+    <div className="landing-card rounded-xl p-5 hover:border-[#C9A36A]/30 transition-colors">
+      <div className="flex flex-wrap items-start gap-3 mb-3">
+        <div className="flex-1 min-w-0">
+          <p className="text-[#C9A36A] font-semibold text-sm mb-0.5">{strategy.name}</p>
+          {strategy.description && <p className="text-[rgba(230,230,230,0.4)] text-xs">{strategy.description}</p>}
+        </div>
+        <Link href={`/dashboard/strategy/${strategy.id}`} className="shrink-0 px-4 py-2 text-[0.6rem] tracking-[0.12em] uppercase bg-[#C9A36A] text-[#0A0A0A] rounded font-semibold hover:bg-[#b8935f] transition-colors">
+          View →
+        </Link>
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-1.5 pt-3 border-t border-[#C9A36A]/10">
+        {[
+          { label: 'TVL', value: data.tvlUsd !== undefined ? formatUsd(data.tvlUsd, 2) : '—' },
+          { label: 'Your Deposit', value: data.userValueUsd !== undefined ? formatUsd(data.userValueUsd, 2) : '—' },
+          { label: 'PPS', value: data.ppsUsd !== undefined ? formatUsd(data.ppsUsd, 4) : '—' },
+          { label: 'Your Shares', value: data.userShares !== undefined ? data.userShares.toFixed(4) : '—' },
+        ].map(({ label, value }) => (
+          <div key={label}>
+            <p className="text-[0.6rem] text-[rgba(230,230,230,0.4)] uppercase tracking-wide mb-0.5">{label}</p>
+            <p className="text-[#E6E6E6] text-xs font-mono font-semibold">{data.loading ? '…' : value}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -307,6 +528,9 @@ export default function StrategyPage() {
 
           {/* Grille des stratégies */}
           <ActiveStrategiesGrid strategies={strategies} loading={loading} />
+
+          {/* Section pools de swap actifs */}
+          <ActivePoolsSection />
 
           <StakingSummarySection />
         </div>

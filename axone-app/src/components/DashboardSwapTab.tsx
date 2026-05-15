@@ -15,8 +15,26 @@ import { getStrategyContracts } from '@/lib/strategyContracts';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type TabId = 'swap' | 'add' | 'remove';
+type ViewMode = 'card' | 'list';
 
-// ─── Composant interne — sélection de stratégie ───────────────────────────────
+// ─── Icônes toggle ────────────────────────────────────────────────────────────
+function ListIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+      <line x1="3" y1="4" x2="13" y2="4" /><line x1="3" y1="8" x2="13" y2="8" /><line x1="3" y1="12" x2="13" y2="12" />
+    </svg>
+  );
+}
+function GridIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+      <rect x="2" y="2" width="5" height="5" /><rect x="9" y="2" width="5" height="5" />
+      <rect x="2" y="9" width="5" height="5" /><rect x="9" y="9" width="5" height="5" />
+    </svg>
+  );
+}
+
+// ─── Composant interne — sélection de pool ────────────────────────────────────
 function StrategySelector({
   strategies,
   selected,
@@ -26,18 +44,42 @@ function StrategySelector({
   selected: SwapStrategy | null;
   onSelect: (s: SwapStrategy) => void;
 }) {
+  const [viewMode, setViewMode] = useState<ViewMode>('card');
+
   return (
     <div className="landing-card rounded-xl p-6">
-      <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)] mb-4">
-        Select a Pool
-      </p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(230,230,230,0.5)]">
+          Select a Pool
+        </p>
+        <div className="flex items-center gap-1 p-1 bg-white/5 border border-[#C9A36A]/15 rounded-lg">
+          <button
+            onClick={() => setViewMode('card')}
+            className={`p-1.5 rounded transition-colors ${viewMode === 'card' ? 'bg-[#C9A36A] text-[#121212]' : 'text-[rgba(230,230,230,0.5)] hover:text-[#E6E6E6]'}`}
+            title="Vue cartes"
+          >
+            <GridIcon />
+          </button>
+          <button
+            onClick={() => setViewMode('list')}
+            className={`p-1.5 rounded transition-colors ${viewMode === 'list' ? 'bg-[#C9A36A] text-[#121212]' : 'text-[rgba(230,230,230,0.5)] hover:text-[#E6E6E6]'}`}
+            title="Vue liste"
+          >
+            <ListIcon />
+          </button>
+        </div>
+      </div>
+
+      {/* Grille ou liste */}
+      <div className={viewMode === 'card' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4' : 'flex flex-col gap-3'}>
         {strategies.map((s) => (
           <SwapStrategyCard
             key={s.strategy.id}
             strategy={s.strategy}
             poolAddress={s.poolAddress}
             isSelected={selected?.strategy.id === s.strategy.id}
+            viewMode={viewMode}
             onClick={() => onSelect(s)}
           />
         ))}
