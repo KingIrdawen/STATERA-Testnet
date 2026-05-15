@@ -477,10 +477,10 @@ function RemoveLiquidityPanel({
             <button
               key={p}
               onClick={() => setPercentStr(String(p))}
-              className={`text-xs px-2 py-1 rounded transition-colors ${
+              className={`text-xs px-3 py-1 rounded border transition-colors ${
                 percentStr === String(p)
-                  ? 'bg-[#C9A36A] text-[#121212] font-semibold'
-                  : 'text-[rgba(230,230,230,0.5)] hover:text-[#C9A36A]'
+                  ? 'bg-[#C9A36A] text-[#121212] font-semibold border-[#C9A36A]'
+                  : 'text-[rgba(230,230,230,0.75)] border-[#C9A36A]/25 hover:border-[#C9A36A]/60 hover:text-[#C9A36A]'
               }`}
             >
               {p}%
