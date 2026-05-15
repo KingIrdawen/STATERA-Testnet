@@ -13,6 +13,7 @@ import { useStrategyData } from '@/hooks/useStrategyDataEra';
 import { useStrategyDeposit } from '@/hooks/useStrategyDeposit';
 import { useStrategyWithdraw } from '@/hooks/useStrategyWithdraw';
 import { useStrategyToken1Meta } from '@/hooks/useStrategyToken1Meta';
+import { useVaultPerf24h } from '@/hooks/useVaultPerf24h';
 import { formatUsd } from '@/lib/format';
 import { DEMO_STRATEGY_METRICS } from '@/lib/placeholders';
 
@@ -66,6 +67,10 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
   const displayUserShares = isDemoMode ? demoMetrics.demoUserShares : strategyData.userShares;
   const displayHypePrice = isDemoMode ? demoMetrics.oracleHypeUsd : strategyData.oracleHypeUsd;
   const displayToken1Price = isDemoMode ? demoMetrics.oracleToken1Usd : strategyData.oracleToken1Usd;
+
+  // Performance 24h du vault (publique — indépendante du wallet)
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const perf24h = useVaultPerf24h(strategy.contracts.vaultAddress);
   const displayToken1Name = isDemoMode ? demoMetrics.token1Symbol : displayToken1;
 
   // Reset form on success
@@ -209,6 +214,16 @@ export function StrategyCardEra({ strategy, showWithdraw = false, showViewMore =
             <span className="text-[#E6E6E6] text-sm font-mono">
               {displayUserShares !== undefined ? displayUserShares.toFixed(4) : '—'}
             </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-[0.65rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.5)]">Perf 24h</span>
+            {perf24h.perf24h !== null ? (
+              <span className={`text-sm font-mono font-semibold ${perf24h.perf24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                {perf24h.perf24h >= 0 ? '+' : ''}{perf24h.perf24h.toFixed(2)}%
+              </span>
+            ) : (
+              <span className="text-[rgba(230,230,230,0.3)] text-sm font-mono">—</span>
+            )}
           </div>
           {displayHypePrice !== undefined && (
             <div className="flex justify-between items-center">

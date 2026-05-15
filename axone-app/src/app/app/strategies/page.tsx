@@ -10,6 +10,7 @@ import { DashboardSidebar } from '@/components/DashboardSidebar';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import { useWhitelistCheck } from '@/hooks/useWhitelistCheck';
 import { useStrategyData } from '@/hooks/useStrategyDataEra';
+import { useVaultPerf24h } from '@/hooks/useVaultPerf24h';
 import { formatUsd } from '@/lib/format';
 import { cinzel } from '@/lib/fonts';
 import type { Strategy } from '@/types/strategy';
@@ -48,6 +49,7 @@ function getRiskColor(risk: string) {
 // ─── Vue liste enrichie avec données on-chain ─────────────────────────────────
 function StrategyListRow({ strategy }: { strategy: Strategy }) {
   const data = useStrategyData(strategy);
+  const perf = useVaultPerf24h(strategy.contracts.vaultAddress);
 
   return (
     <div className="landing-card rounded-xl p-5 hover:border-[#C9A36A]/30 transition-colors">
@@ -82,7 +84,7 @@ function StrategyListRow({ strategy }: { strategy: Strategy }) {
       </div>
 
       {/* Métriques on-chain */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-1.5 pt-3 border-t border-[#C9A36A]/10">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-x-6 gap-y-1.5 pt-3 border-t border-[#C9A36A]/10">
         <div>
           <p className="text-[0.6rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)] mb-0.5">TVL</p>
           <p className="text-[#E6E6E6] text-xs font-mono font-semibold">
@@ -106,6 +108,18 @@ function StrategyListRow({ strategy }: { strategy: Strategy }) {
           <p className="text-[#E6E6E6] text-xs font-mono">
             {data.loading ? '…' : data.userShares !== undefined ? data.userShares.toFixed(4) : '—'}
           </p>
+        </div>
+        <div>
+          <p className="text-[0.6rem] uppercase tracking-[0.1em] text-[rgba(230,230,230,0.4)] mb-0.5">Perf 24h</p>
+          {perf.loading ? (
+            <p className="text-[rgba(230,230,230,0.4)] text-xs font-mono">…</p>
+          ) : perf.perf24h !== null ? (
+            <p className={`text-xs font-mono font-semibold ${perf.perf24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+              {perf.perf24h >= 0 ? '+' : ''}{perf.perf24h.toFixed(2)}%
+            </p>
+          ) : (
+            <p className="text-[rgba(230,230,230,0.3)] text-xs font-mono">—</p>
+          )}
         </div>
       </div>
     </div>

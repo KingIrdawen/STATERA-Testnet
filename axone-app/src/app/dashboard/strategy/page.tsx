@@ -12,6 +12,7 @@ import { useStrategyData } from '@/hooks/useStrategyDataEra';
 import { usePpsHistory } from '@/hooks/usePpsHistory';
 import { useSwapStrategies, type SwapStrategy } from '@/hooks/useSwapStrategies';
 import { useSwapPool } from '@/hooks/useSwapPool';
+import { useVaultPerf24h } from '@/hooks/useVaultPerf24h';
 import { formatUsd } from '@/lib/format';
 import Link from 'next/link';
 import type { Strategy } from '@/types/strategy';
@@ -431,6 +432,7 @@ function ActiveStrategiesGrid({ strategies, loading, viewMode }: { strategies: S
 // ─── Vue liste d'une stratégie ────────────────────────────────────────────────
 function StrategyListRow({ strategy }: { strategy: Strategy }) {
   const data = useStrategyData(strategy);
+  const perf = useVaultPerf24h(strategy.contracts.vaultAddress);
   return (
     <div className="landing-card rounded-xl p-5 hover:border-[#C9A36A]/30 transition-colors">
       <div className="flex flex-wrap items-start gap-3 mb-3">
@@ -442,18 +444,35 @@ function StrategyListRow({ strategy }: { strategy: Strategy }) {
           View →
         </Link>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-1.5 pt-3 border-t border-[#C9A36A]/10">
-        {[
-          { label: 'TVL', value: data.tvlUsd !== undefined ? formatUsd(data.tvlUsd, 2) : '—' },
-          { label: 'Your Deposit', value: data.userValueUsd !== undefined ? formatUsd(data.userValueUsd, 2) : '—' },
-          { label: 'PPS', value: data.ppsUsd !== undefined ? formatUsd(data.ppsUsd, 4) : '—' },
-          { label: 'Your Shares', value: data.userShares !== undefined ? data.userShares.toFixed(4) : '—' },
-        ].map(({ label, value }) => (
-          <div key={label}>
-            <p className="text-[0.6rem] text-[rgba(230,230,230,0.4)] uppercase tracking-wide mb-0.5">{label}</p>
-            <p className="text-[#E6E6E6] text-xs font-mono font-semibold">{data.loading ? '…' : value}</p>
-          </div>
-        ))}
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-x-6 gap-y-1.5 pt-3 border-t border-[#C9A36A]/10">
+        <div>
+          <p className="text-[0.6rem] text-[rgba(230,230,230,0.4)] uppercase tracking-wide mb-0.5">TVL</p>
+          <p className="text-[#E6E6E6] text-xs font-mono font-semibold">{data.loading ? '…' : data.tvlUsd !== undefined ? formatUsd(data.tvlUsd, 2) : '—'}</p>
+        </div>
+        <div>
+          <p className="text-[0.6rem] text-[rgba(230,230,230,0.4)] uppercase tracking-wide mb-0.5">Your Deposit</p>
+          <p className="text-[#E6E6E6] text-xs font-mono font-semibold">{data.loading ? '…' : data.userValueUsd !== undefined ? formatUsd(data.userValueUsd, 2) : '—'}</p>
+        </div>
+        <div>
+          <p className="text-[0.6rem] text-[rgba(230,230,230,0.4)] uppercase tracking-wide mb-0.5">PPS</p>
+          <p className="text-[#E6E6E6] text-xs font-mono font-semibold">{data.loading ? '…' : data.ppsUsd !== undefined ? formatUsd(data.ppsUsd, 4) : '—'}</p>
+        </div>
+        <div>
+          <p className="text-[0.6rem] text-[rgba(230,230,230,0.4)] uppercase tracking-wide mb-0.5">Your Shares</p>
+          <p className="text-[#E6E6E6] text-xs font-mono font-semibold">{data.loading ? '…' : data.userShares !== undefined ? data.userShares.toFixed(4) : '—'}</p>
+        </div>
+        <div>
+          <p className="text-[0.6rem] text-[rgba(230,230,230,0.4)] uppercase tracking-wide mb-0.5">Perf 24h</p>
+          {perf.loading ? (
+            <p className="text-[rgba(230,230,230,0.4)] text-xs font-mono">…</p>
+          ) : perf.perf24h !== null ? (
+            <p className={`text-xs font-mono font-semibold ${perf.perf24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+              {perf.perf24h >= 0 ? '+' : ''}{perf.perf24h.toFixed(2)}%
+            </p>
+          ) : (
+            <p className="text-[rgba(230,230,230,0.3)] text-xs font-mono">—</p>
+          )}
+        </div>
       </div>
     </div>
   );
