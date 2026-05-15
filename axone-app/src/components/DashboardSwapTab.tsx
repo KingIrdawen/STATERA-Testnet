@@ -472,15 +472,19 @@ function RemoveLiquidityPanel({
           onChange={(e) => setPercentStr(e.target.value)}
           className="w-full accent-[#C9A36A]"
         />
-        <div className="flex justify-between mt-1">
+        <div className="relative h-6 mt-1">
           {[25, 50, 75, 100].map((p) => (
             <button
               key={p}
               onClick={() => setPercentStr(String(p))}
-              className={`text-xs px-3 py-1 rounded border transition-colors ${
+              style={{
+                left: `${p}%`,
+                transform: p === 100 ? 'translateX(-100%)' : 'translateX(-50%)',
+              }}
+              className={`absolute text-xs px-2 py-0.5 rounded transition-colors ${
                 percentStr === String(p)
-                  ? 'bg-[#C9A36A] text-[#121212] font-semibold border-[#C9A36A]'
-                  : 'text-[rgba(230,230,230,0.75)] border-[#C9A36A]/25 hover:border-[#C9A36A]/60 hover:text-[#C9A36A]'
+                  ? 'bg-[#C9A36A] text-[#121212] font-semibold'
+                  : 'text-[rgba(230,230,230,0.5)] hover:text-[#C9A36A]'
               }`}
             >
               {p}%
