@@ -263,33 +263,16 @@ function ActivePoolCard({ swapStrategy, viewMode }: { swapStrategy: SwapStrategy
 }
 
 // ─── Section Active Pools ─────────────────────────────────────────────────────
-function ActivePoolsSection() {
+function ActivePoolsSection({ viewMode }: { viewMode: 'card' | 'list' }) {
   const { address } = useAccount();
   const { swapStrategies, loading } = useSwapStrategies();
-  const [viewMode, setViewMode] = useState<'card' | 'list'>('card');
 
   if (!address) return null;
 
   return (
     <div className="mt-12">
-      <div className="flex items-center justify-between mb-6">
-        <div className="text-center flex-1">
-          <h2 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] uppercase">Active Pools</h2>
-        </div>
-        <div className="flex items-center gap-1 p-1 bg-white/5 border border-[#C9A36A]/15 rounded-lg">
-          <button
-            onClick={() => setViewMode('card')}
-            className={`p-1.5 rounded transition-colors ${viewMode === 'card' ? 'bg-[#C9A36A] text-[#121212]' : 'text-[rgba(230,230,230,0.5)] hover:text-[#E6E6E6]'}`}
-          >
-            <GridIcon />
-          </button>
-          <button
-            onClick={() => setViewMode('list')}
-            className={`p-1.5 rounded transition-colors ${viewMode === 'list' ? 'bg-[#C9A36A] text-[#121212]' : 'text-[rgba(230,230,230,0.5)] hover:text-[#E6E6E6]'}`}
-          >
-            <ListIcon />
-          </button>
-        </div>
+      <div className="text-center mb-6">
+        <h2 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] uppercase">Active Pools</h2>
       </div>
 
       {loading ? (
@@ -410,9 +393,7 @@ function StakingSummarySection() {
 }
 
 // ─── Grille/liste des stratégies actives ─────────────────────────────────────
-function ActiveStrategiesGrid({ strategies, loading }: { strategies: Strategy[]; loading: boolean }) {
-  const [viewMode, setViewMode] = useState<'card' | 'list'>('card');
-
+function ActiveStrategiesGrid({ strategies, loading, viewMode }: { strategies: Strategy[]; loading: boolean; viewMode: 'card' | 'list' }) {
   const validStrategies = strategies.filter(s => s?.contracts?.vaultAddress);
 
   if (loading) {
@@ -430,32 +411,20 @@ function ActiveStrategiesGrid({ strategies, loading }: { strategies: Strategy[];
     );
   }
 
-  return (
-    <>
-      {/* Toggle */}
-      <div className="flex justify-end mb-4">
-        <div className="flex items-center gap-1 p-1 bg-white/5 border border-[#C9A36A]/15 rounded-lg">
-          <button onClick={() => setViewMode('card')} className={`p-1.5 rounded transition-colors ${viewMode === 'card' ? 'bg-[#C9A36A] text-[#121212]' : 'text-[rgba(230,230,230,0.5)] hover:text-[#E6E6E6]'}`}><GridIcon /></button>
-          <button onClick={() => setViewMode('list')} className={`p-1.5 rounded transition-colors ${viewMode === 'list' ? 'bg-[#C9A36A] text-[#121212]' : 'text-[rgba(230,230,230,0.5)] hover:text-[#E6E6E6]'}`}><ListIcon /></button>
+  return viewMode === 'card' ? (
+    <div className="flex flex-wrap justify-center gap-6">
+      {validStrategies.map(strategy => (
+        <div key={strategy.id} className="w-full lg:w-[calc(50%-12px)] xl:w-[calc(33.333%-16px)] min-w-0">
+          <StrategyCardEra strategy={strategy} showWithdraw={true} showViewMore={true} />
         </div>
-      </div>
-
-      {viewMode === 'card' ? (
-        <div className="flex flex-wrap justify-center gap-6">
-          {validStrategies.map(strategy => (
-            <div key={strategy.id} className="w-full lg:w-[calc(50%-12px)] xl:w-[calc(33.333%-16px)] min-w-0">
-              <StrategyCardEra strategy={strategy} showWithdraw={true} showViewMore={true} />
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="flex flex-col gap-3">
-          {validStrategies.map(strategy => (
-            <StrategyListRow key={strategy.id} strategy={strategy} />
-          ))}
-        </div>
-      )}
-    </>
+      ))}
+    </div>
+  ) : (
+    <div className="flex flex-col gap-3">
+      {validStrategies.map(strategy => (
+        <StrategyListRow key={strategy.id} strategy={strategy} />
+      ))}
+    </div>
   );
 }
 
@@ -496,6 +465,7 @@ export default function StrategyPage() {
   const EXPECTED_CHAIN_ID = 998;
   const isCorrectChain = chainId === EXPECTED_CHAIN_ID;
   const { strategies, loading } = useStrategies();
+  const [viewMode, setViewMode] = useState<'card' | 'list'>('card');
   useWhitelistCheck();
 
   return (
@@ -505,8 +475,8 @@ export default function StrategyPage() {
 
       <main className={`w-full ${address && !isCorrectChain ? 'pt-[104px] md:pt-[124px]' : 'pt-[60px] md:pt-[80px]'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:pr-8 py-8 pl-0 md:pl-52">
-          {/* Titre */}
-          <div className="text-center mb-12">
+          {/* Titre + toggle global */}
+          <div className="relative text-center mb-12">
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-[0.04em] mb-4" style={{ background: 'linear-gradient(135deg, #7A4F28 0%, #C98B3D 25%, #F0CA7A 50%, #C98B3D 75%, #7A4F28 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
               Dashboard
             </h1>
@@ -515,22 +485,35 @@ export default function StrategyPage() {
             </p>
             <span className="title-glow-line" />
             <span className="title-glow-blur" />
+            {/* Toggle unique — positionné en haut à droite */}
+            <div className="absolute right-0 top-0 flex items-center gap-1 p-1 bg-white/5 border border-[#C9A36A]/15 rounded-lg">
+              <button
+                onClick={() => setViewMode('card')}
+                title="Vue cartes"
+                className={`p-1.5 rounded transition-colors ${viewMode === 'card' ? 'bg-[#C9A36A] text-[#121212]' : 'text-[rgba(230,230,230,0.5)] hover:text-[#E6E6E6]'}`}
+              >
+                <GridIcon />
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                title="Vue liste"
+                className={`p-1.5 rounded transition-colors ${viewMode === 'list' ? 'bg-[#C9A36A] text-[#121212]' : 'text-[rgba(230,230,230,0.5)] hover:text-[#E6E6E6]'}`}
+              >
+                <ListIcon />
+              </button>
+            </div>
           </div>
 
           <PortfolioOverview strategies={strategies} />
 
-          {/* Section titre stratégies */}
+          {/* Section Active Strategies */}
           <div className="text-center mb-6">
-            <h2 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] uppercase">
-              Active Strategies
-            </h2>
+            <h2 className="text-lg font-semibold text-[#C9A36A] tracking-[0.04em] uppercase">Active Strategies</h2>
           </div>
+          <ActiveStrategiesGrid strategies={strategies} loading={loading} viewMode={viewMode} />
 
-          {/* Grille des stratégies */}
-          <ActiveStrategiesGrid strategies={strategies} loading={loading} />
-
-          {/* Section pools de swap actifs */}
-          <ActivePoolsSection />
+          {/* Section Active Pools */}
+          <ActivePoolsSection viewMode={viewMode} />
 
           <StakingSummarySection />
         </div>
