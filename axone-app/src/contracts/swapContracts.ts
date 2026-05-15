@@ -16,13 +16,24 @@ export const swapPoolFactory = {
 
 /**
  * Pools connus hardcodés (testnet chainId 998).
- * Utilisés en fallback si SwapPoolFactory.getPool() renvoie zéro
- * (vault déployé avant le hook auto-pool).
- * Clé : vaultAddress lowercase → valeur : poolAddress
+ * Ces pools s'affichent TOUJOURS dans l'onglet Swap, même si la stratégie
+ * n'est pas encore dans Vercel KV.
+ * Clé : vaultAddress lowercase
  */
-export const KNOWN_POOLS: Record<string, Address> = {
-  // v4 demo — HYPE/SOVY/ZIGG
-  '0x533abf396c20e241f8100a8640cbb5414b0f8873': '0x250fbaF854787626dd793a8E85deeE6608Ce5EB4',
+export interface KnownPool {
+  poolAddress: Address;
+  name: string;
+  description: string;
+  riskLevel: 'low' | 'medium' | 'high';
+}
+
+export const KNOWN_POOLS: Record<string, KnownPool> = {
+  '0x533abf396c20e241f8100a8640cbb5414b0f8873': {
+    poolAddress: '0x250fbaF854787626dd793a8E85deeE6608Ce5EB4',
+    name: 'HYPE / SOVY / ZIGG (v4)',
+    description: '33% HYPE / 33% SOVY / 34% ZIGG — RebalancingVault v4 — Symbol: sV4',
+    riskLevel: 'medium',
+  },
 };
 
 export const swapPool = (address: Address) =>

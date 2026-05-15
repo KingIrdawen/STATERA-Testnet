@@ -9,6 +9,8 @@ export interface SwapStrategy {
   poolAddress: `0x${string}`;
 }
 
+const ZERO = '0x0000000000000000000000000000000000000000' as const;
+
 export function useSwapStrategies() {
   const { strategies, loading: strategiesLoading } = useStrategies();
   const publicClient = usePublicClient();
@@ -17,10 +19,7 @@ export function useSwapStrategies() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (strategiesLoading || !strategies.length || !publicClient || !SWAP_POOL_FACTORY_ADDRESS || !swapPoolFactory) {
-      if (!SWAP_POOL_FACTORY_ADDRESS) {
-        setError('NEXT_PUBLIC_SWAP_POOL_FACTORY_ADDRESS not configured');
-      }
+    if (strategiesLoading || !publicClient) {
       setSwapStrategies([]);
       setLoading(false);
       return;
@@ -31,67 +30,78 @@ export function useSwapStrategies() {
     async function loadPools() {
       setLoading(true);
       setError(null);
+
       try {
-        const results: SwapStrategy[] = [];
+        // Mappe vaultAddress.toLowerCase() → Strategy (depuis KV)
+        const strategyByVault = new Map<string, Strategy>(
+          strategies.map((s) => [s.contracts.vaultAddress.toLowerCase(), s])
+        );
 
-        for (const strategy of strategies) {
-          const vaultAddress = strategy.contracts.vaultAddress;
-          
-          try {
-            if (!publicClient || !swapPoolFactory) break;
+        // Mappe vaultAddress.toLowerCase() → poolAddress (résultats déjà trouvés)
+        const results = new Map<string, SwapStrategy>();
 
-            let pool: `0x${string}` = '0x0000000000000000000000000000000000000000';
-
+        // ─── Étape 1 : vaults en KV → interroger la factory on-chain ─────────
+        if (publicClient && swapPoolFactory && SWAP_POOL_FACTORY_ADDRESS) {
+          for (const strategy of strategies) {
+            const vaultKey = strategy.contracts.vaultAddress.toLowerCase();
             try {
-              pool = (await publicClient.readContract({
+              const pool = (await publicClient.readContract({
                 address: swapPoolFactory.address,
                 abi: swapPoolFactory.abi,
                 functionName: 'getPool',
-                args: [vaultAddress],
+                args: [strategy.contracts.vaultAddress],
               })) as `0x${string}`;
-            } catch (rpcErr) {
-              console.debug(`[useSwapStrategies] getPool RPC error for ${strategy.id}:`, rpcErr);
-            }
 
-            // Fallback : pool hardcodé si getPool renvoie zéro
-            const ZERO = '0x0000000000000000000000000000000000000000';
-            if ((!pool || pool === ZERO)) {
-              const known = KNOWN_POOLS[vaultAddress.toLowerCase()];
-              if (known) {
-                pool = known;
-                console.debug(`[useSwapStrategies] Using hardcoded pool for ${strategy.id}: ${pool}`);
+              if (pool && pool !== ZERO) {
+                results.set(vaultKey, { strategy, poolAddress: pool });
               }
+            } catch (e) {
+              // getPool RPC error — on continue, le fallback KNOWN_POOLS prendra le relais
+              console.debug(`[useSwapStrategies] getPool failed for ${strategy.id}:`, e);
             }
-
-            if (pool && pool !== ZERO) {
-              results.push({ strategy, poolAddress: pool });
-            }
-          } catch (e) {
-            console.debug(`[useSwapStrategies] No pool for strategy ${strategy.id}:`, e);
           }
         }
 
+        // ─── Étape 2 : KNOWN_POOLS — toujours inclus, même sans KV ───────────
+        for (const [vaultAddr, known] of Object.entries(KNOWN_POOLS)) {
+          if (results.has(vaultAddr)) continue; // déjà trouvé via on-chain
+
+          // Cherche la stratégie dans KV, sinon crée un objet minimal
+          const strategy: Strategy = strategyByVault.get(vaultAddr) ?? {
+            id: `known-${vaultAddr}`,
+            name: known.name,
+            description: known.description,
+            riskLevel: known.riskLevel,
+            contracts: {
+              chainId: 998,
+              vaultVersion: 'v3',
+              vaultAddress: vaultAddr as `0x${string}`,
+              shareDecimals: 18,
+              hypeDecimals: 18,
+              usdcDecimals: 6,
+              depositIsNative: true,
+            },
+          };
+
+          results.set(vaultAddr, { strategy, poolAddress: known.poolAddress });
+        }
+
         if (!cancelled) {
-          setSwapStrategies(results);
+          setSwapStrategies([...results.values()]);
         }
       } catch (e: any) {
         if (!cancelled) {
-          console.error('[useSwapStrategies] Error loading pools', e);
-          setError(e?.message ?? 'Erreur lors du chargement des pools de swap');
+          console.error('[useSwapStrategies] Error:', e);
+          setError(e?.message ?? 'Erreur lors du chargement des pools');
         }
       } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
+        if (!cancelled) setLoading(false);
       }
     }
 
     loadPools();
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [strategies, strategiesLoading, publicClient]);
 
   return { swapStrategies, loading: loading || strategiesLoading, error };
 }
-
