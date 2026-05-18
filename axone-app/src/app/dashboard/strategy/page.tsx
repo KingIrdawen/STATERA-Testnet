@@ -290,11 +290,13 @@ function ActivePoolsSection({ viewMode }: { viewMode: 'card' | 'list' }) {
       ) : (
         <>
           <div className={viewMode === 'card'
-            ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'
+            ? 'flex flex-wrap justify-center gap-6'
             : 'flex flex-col gap-3'
           }>
             {swapStrategies.map((s) => (
-              <ActivePoolCard key={s.strategy.id} swapStrategy={s} viewMode={viewMode} />
+              <div key={s.strategy.id} className={viewMode === 'card' ? 'w-full lg:w-[calc(50%-12px)] xl:w-[calc(33.333%-16px)] min-w-0' : undefined}>
+                <ActivePoolCard swapStrategy={s} viewMode={viewMode} />
+              </div>
             ))}
           </div>
           {/* Message si aucune position active */}

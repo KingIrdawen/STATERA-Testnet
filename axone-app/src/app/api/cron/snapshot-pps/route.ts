@@ -71,8 +71,9 @@ export async function POST(req: Request) {
 
   try {
     const strategies = await getAllStrategies();
+    // Snapshote les vaults v3 ET v4 (les deux exposent sharePriceUsdc8)
     const v3Strategies = strategies.filter(
-      (s) => s.contracts?.vaultVersion === 'v3' && s.contracts?.vaultAddress
+      (s) => (s.contracts?.vaultVersion === 'v3' || s.contracts?.vaultVersion === 'v4') && s.contracts?.vaultAddress
     );
 
     const results: { vault: string; pps: string; error?: string }[] = [];
@@ -116,16 +117,40 @@ export async function POST(req: Request) {
   }
 }
 
-// GET — statut public pour vérifier que l'endpoint est vivant
+// GET — statut public + diagnostic KV (dernière entrée enregistrée par vault)
 export async function GET() {
   try {
     const strategies = await getAllStrategies();
-    const v3 = strategies.filter(s => s.contracts?.vaultVersion === 'v3');
+    const vaults = strategies.filter(
+      s => (s.contracts?.vaultVersion === 'v3' || s.contracts?.vaultVersion === 'v4') && s.contracts?.vaultAddress
+    );
+    const kv = getKv();
+
+    const vaultStatus = await Promise.all(
+      vaults.map(async (s) => {
+        const key = `pps:${s.contracts.vaultAddress.toLowerCase()}`;
+        try {
+          const entries = await kv.lrange<{ timestamp: number; pps: string }>(key, 0, 0);
+          const last = Array.isArray(entries) && entries.length > 0 ? entries[0] : null;
+          const count = await kv.llen(key);
+          return {
+            name: s.name,
+            address: s.contracts.vaultAddress,
+            version: s.contracts.vaultVersion,
+            entriesStored: count ?? 0,
+            lastSnapshot: last ? { pps: last.pps, at: new Date(last.timestamp).toISOString() } : null,
+          };
+        } catch {
+          return { name: s.name, address: s.contracts.vaultAddress, version: s.contracts.vaultVersion, entriesStored: 0, lastSnapshot: null };
+        }
+      })
+    );
+
     return NextResponse.json({
       ok: true,
-      message: 'PPS snapshot endpoint is alive. POST to trigger a snapshot (requires QStash signature).',
-      v3VaultsConfigured: v3.length,
-      vaults: v3.map(s => ({ name: s.name, address: s.contracts.vaultAddress })),
+      message: 'PPS snapshot endpoint is alive. POST to trigger (requires QStash signature).',
+      vaultsConfigured: vaults.length,
+      vaults: vaultStatus,
     });
   } catch {
     return NextResponse.json({ ok: true, message: 'Endpoint alive.' });
