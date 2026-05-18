@@ -4,7 +4,7 @@
  * v3 : vault auto-suffisant (RebalancingVault), pas de handler/views/l1Read
  */
 
-export type VaultVersion = 'v1' | 'v3';
+export type VaultVersion = 'v1' | 'v3' | 'v4';
 
 export interface StrategyContracts {
   chainId: number; // e.g. 998 for HyperEVM Testnet
