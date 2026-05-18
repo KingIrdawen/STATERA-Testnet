@@ -17,6 +17,7 @@ import { getPublicClient } from '@/lib/publicClient';
 import { getKv } from '@/lib/kv';
 
 export const runtime = 'nodejs';
+export const maxDuration = 60; // Vercel Pro/Hobby : 60s max — évite les timeouts RPC
 
 export interface PpsSnapshotEntry {
   timestamp: number;
@@ -76,32 +77,33 @@ export async function POST(req: Request) {
       (s) => (s.contracts?.vaultVersion === 'v3' || s.contracts?.vaultVersion === 'v4') && s.contracts?.vaultAddress
     );
 
-    const results: { vault: string; pps: string; error?: string }[] = [];
+    // Lecture parallèle pour éviter les timeouts (chaque appel RPC ~1-3s)
+    const results = await Promise.all(
+      v3Strategies.map(async (strategy) => {
+        const vaultAddress = strategy.contracts.vaultAddress;
+        try {
+          const raw = await client.readContract({
+            address: vaultAddress,
+            abi: SHARE_PRICE_ABI,
+            functionName: 'sharePriceUsdc8',
+          });
 
-    for (const strategy of v3Strategies) {
-      const vaultAddress = strategy.contracts.vaultAddress;
-      try {
-        const raw = await client.readContract({
-          address: vaultAddress,
-          abi: SHARE_PRICE_ABI,
-          functionName: 'sharePriceUsdc8',
-        });
+          const ppsUsd = (Number(raw) / 1e8).toFixed(6);
+          const entry: PpsSnapshotEntry = { timestamp: now, pps: ppsUsd };
+          const key = `pps:${vaultAddress.toLowerCase()}`;
 
-        const ppsUsd = (Number(raw) / 1e8).toFixed(6);
-        const entry: PpsSnapshotEntry = { timestamp: now, pps: ppsUsd };
-        const key = `pps:${vaultAddress.toLowerCase()}`;
+          await kv.lpush(key, entry);
+          await kv.ltrim(key, 0, MAX_ENTRIES - 1);
 
-        await kv.lpush(key, entry);
-        await kv.ltrim(key, 0, MAX_ENTRIES - 1);
-
-        results.push({ vault: vaultAddress, pps: ppsUsd });
-        console.log(`[snapshot-pps] ✓ ${strategy.name} → $${ppsUsd}`);
-      } catch (err) {
-        const msg = err instanceof Error ? err.message : String(err);
-        results.push({ vault: vaultAddress, pps: '', error: msg });
-        console.error(`[snapshot-pps] ✗ ${strategy.name}:`, msg);
-      }
-    }
+          console.log(`[snapshot-pps] ✓ ${strategy.name} → $${ppsUsd}`);
+          return { vault: vaultAddress, pps: ppsUsd };
+        } catch (err) {
+          const msg = err instanceof Error ? err.message : String(err);
+          console.error(`[snapshot-pps] ✗ ${strategy.name}:`, msg);
+          return { vault: vaultAddress, pps: '', error: msg };
+        }
+      })
+    );
 
     return NextResponse.json({
       ok: true,
