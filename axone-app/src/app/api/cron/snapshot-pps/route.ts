@@ -17,7 +17,6 @@ import { getPublicClient } from '@/lib/publicClient';
 import { getKv } from '@/lib/kv';
 
 export const runtime = 'nodejs';
-export const maxDuration = 60; // Vercel Pro/Hobby : 60s max — évite les timeouts RPC
 
 export interface PpsSnapshotEntry {
   timestamp: number;
